@@ -1,0 +1,1 @@
+<p>Seller {{$employee_name}} will leave "{{$job_name}}" in two week!

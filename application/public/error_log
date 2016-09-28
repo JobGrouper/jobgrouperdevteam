@@ -1,0 +1,359 @@
+[30-Jun-2016 12:30:15 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 12
+[30-Jun-2016 13:09:48 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/jobgrou2/public_html/application/app/Services/SocialAccountService.php on line 34
+[30-Jun-2016 13:27:42 UTC] PHP Parse error:  syntax error, unexpected '=', expecting ']' in /home/jobgrou2/public_html/application/app/Services/SocialAccountService.php on line 36
+[30-Jun-2016 14:27:42 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/RegistrateController.php on line 108
+[30-Jun-2016 14:42:26 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 20
+[30-Jun-2016 14:46:33 UTC] PHP Fatal error:  Class 'App\Http\Controllers\User' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 20
+[30-Jun-2016 16:59:59 UTC] PHP Fatal error:  Call to a member function user() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/RegistrateController.php on line 73
+[01-Jul-2016 07:23:30 UTC] PHP Fatal error:  Call to a member function user() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/RegistrateController.php on line 73
+[01-Jul-2016 10:16:23 UTC] PHP Fatal error:  Class 'App\Http\Controllers\DB' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 18
+[01-Jul-2016 10:20:10 UTC] PHP Parse error:  syntax error, unexpected '$dialogs' (T_VARIABLE) in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 19
+[01-Jul-2016 10:20:33 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 18
+[01-Jul-2016 10:24:38 UTC] PHP Fatal error:  Call to a member function toArray() on array in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 24
+[01-Jul-2016 10:26:51 UTC] PHP Fatal error:  Call to a member function toArray() on array in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 32
+[01-Jul-2016 10:27:00 UTC] PHP Fatal error:  Call to a member function toArray() on array in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 32
+[01-Jul-2016 10:27:05 UTC] PHP Fatal error:  Call to a member function toArray() on array in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 32
+[01-Jul-2016 13:25:47 UTC] PHP Parse error:  syntax error, unexpected 's' (T_STRING) in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 27
+[01-Jul-2016 13:25:48 UTC] PHP Parse error:  syntax error, unexpected 's' (T_STRING) in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 27
+[01-Jul-2016 13:26:28 UTC] PHP Warning:  Uncaught exception 'ErrorException' with message 'Object of class stdClass could not be converted to string' in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php:32
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(4096, 'Object of class...', '/home/jobgrou2/...', 32, Array)
+#1 /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php(32): array_unique(Array)
+#2 [internal function]: App\Http\Controllers\MessageController->getDialogs()
+#3 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(80): call_user_func_array(Array, Array)
+#4 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('getDialogs', Array)
+#5 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(94): Illuminate\Routing\ControllerDi in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 32
+[01-Jul-2016 13:26:28 UTC] PHP Fatal error:  Object of class stdClass could not be converted to string in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 32
+[01-Jul-2016 13:26:29 UTC] PHP Warning:  Uncaught exception 'ErrorException' with message 'Object of class stdClass could not be converted to string' in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php:32
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(4096, 'Object of class...', '/home/jobgrou2/...', 32, Array)
+#1 /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php(32): array_unique(Array)
+#2 [internal function]: App\Http\Controllers\MessageController->getDialogs()
+#3 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(80): call_user_func_array(Array, Array)
+#4 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('getDialogs', Array)
+#5 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(94): Illuminate\Routing\ControllerDi in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 32
+[01-Jul-2016 13:26:29 UTC] PHP Fatal error:  Object of class stdClass could not be converted to string in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 32
+[01-Jul-2016 13:27:20 UTC] PHP Warning:  Uncaught exception 'ErrorException' with message 'Object of class stdClass could not be converted to string' in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php:33
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(4096, 'Object of class...', '/home/jobgrou2/...', 33, Array)
+#1 /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php(33): array_unique(Array)
+#2 [internal function]: App\Http\Controllers\MessageController->getDialogs()
+#3 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(80): call_user_func_array(Array, Array)
+#4 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('getDialogs', Array)
+#5 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(94): Illuminate\Routing\ControllerDi in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 33
+[01-Jul-2016 13:27:20 UTC] PHP Fatal error:  Object of class stdClass could not be converted to string in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 32
+[01-Jul-2016 13:27:21 UTC] PHP Warning:  Uncaught exception 'ErrorException' with message 'Object of class stdClass could not be converted to string' in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php:33
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(4096, 'Object of class...', '/home/jobgrou2/...', 33, Array)
+#1 /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php(33): array_unique(Array)
+#2 [internal function]: App\Http\Controllers\MessageController->getDialogs()
+#3 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(80): call_user_func_array(Array, Array)
+#4 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('getDialogs', Array)
+#5 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(94): Illuminate\Routing\ControllerDi in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 33
+[01-Jul-2016 13:27:21 UTC] PHP Fatal error:  Object of class stdClass could not be converted to string in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 32
+[01-Jul-2016 13:27:22 UTC] PHP Warning:  Uncaught exception 'ErrorException' with message 'Object of class stdClass could not be converted to string' in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php:33
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(4096, 'Object of class...', '/home/jobgrou2/...', 33, Array)
+#1 /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php(33): array_unique(Array)
+#2 [internal function]: App\Http\Controllers\MessageController->getDialogs()
+#3 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(80): call_user_func_array(Array, Array)
+#4 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('getDialogs', Array)
+#5 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(94): Illuminate\Routing\ControllerDi in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 33
+[01-Jul-2016 13:27:22 UTC] PHP Fatal error:  Object of class stdClass could not be converted to string in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 32
+[01-Jul-2016 13:34:53 UTC] PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FUNCTION) in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 41
+[01-Jul-2016 13:34:56 UTC] PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FUNCTION) in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 41
+[01-Jul-2016 13:35:01 UTC] PHP Fatal error:  Call to a member function toArray() on array in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 26
+[01-Jul-2016 13:36:20 UTC] PHP Parse error:  syntax error, unexpected '/' in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 30
+[01-Jul-2016 13:38:08 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 37
+[01-Jul-2016 13:38:14 UTC] PHP Fatal error:  Call to a member function first() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 37
+[01-Jul-2016 14:47:33 UTC] PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 62
+[01-Jul-2016 14:54:05 UTC] PHP Fatal error:  Call to undefined function App\Http\Controllers\orderBy() in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 62
+[01-Jul-2016 15:03:37 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 68
+[01-Jul-2016 15:04:15 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 71
+[01-Jul-2016 15:08:17 UTC] PHP Fatal error:  Call to a member function format() on string in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 75
+[01-Jul-2016 15:12:11 UTC] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 76
+[01-Jul-2016 16:02:56 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 13
+[01-Jul-2016 16:03:05 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 13
+[03-Jul-2016 09:51:55 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 13
+[03-Jul-2016 12:05:40 UTC] PHP Parse error:  syntax error, unexpected '''' (T_CONSTANT_ENCAPSED_STRING), expecting identifier (T_STRING) in /home/jobgrou2/public_html/application/storage/framework/views/75140a09d8a4d7b1ea96847e26864ecfbcf0fdf2.php on line 103
+[03-Jul-2016 12:53:19 UTC] PHP Parse error:  syntax error, unexpected '$imageUrl' (T_VARIABLE) in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 55
+[03-Jul-2016 12:53:20 UTC] PHP Parse error:  syntax error, unexpected '$imageUrl' (T_VARIABLE) in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 55
+[03-Jul-2016 14:52:32 UTC] PHP Fatal error:  Class 'Bus' not found in /home/jobgrou2/public_html/application/app/Http/routes.php on line 56
+[03-Jul-2016 14:53:30 UTC] PHP Fatal error:  Class 'Bus' not found in /home/jobgrou2/public_html/application/app/Http/routes.php on line 53
+[03-Jul-2016 14:53:31 UTC] PHP Fatal error:  Class 'Bus' not found in /home/jobgrou2/public_html/application/app/Http/routes.php on line 53
+[03-Jul-2016 14:55:04 UTC] PHP Fatal error:  Class 'ChatServer' not found in /home/jobgrou2/public_html/application/app/Http/routes.php on line 54
+[03-Jul-2016 14:57:23 UTC] PHP Fatal error:  Call to a member function writeln() on null in /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Console/Command.php on line 388
+[03-Jul-2016 15:12:52 UTC] PHP Parse error:  syntax error, unexpected ')', expecting ']' in /home/jobgrou2/public_html/application/storage/framework/views/75140a09d8a4d7b1ea96847e26864ecfbcf0fdf2.php on line 16
+[03-Jul-2016 15:12:54 UTC] PHP Parse error:  syntax error, unexpected ')', expecting ']' in /home/jobgrou2/public_html/application/storage/framework/views/75140a09d8a4d7b1ea96847e26864ecfbcf0fdf2.php on line 16
+[03-Jul-2016 15:51:17 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[04-Jul-2016 12:18:33 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 13
+[04-Jul-2016 12:18:37 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 13
+[04-Jul-2016 13:16:38 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 13
+[04-Jul-2016 13:16:40 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 13
+[04-Jul-2016 13:43:04 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/104dc3aea9ce757f872041b6abfc479c40212a6d.php on line 13
+[04-Jul-2016 13:43:05 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/104dc3aea9ce757f872041b6abfc479c40212a6d.php on line 13
+[04-Jul-2016 13:43:13 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/104dc3aea9ce757f872041b6abfc479c40212a6d.php on line 13
+[04-Jul-2016 13:43:18 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/104dc3aea9ce757f872041b6abfc479c40212a6d.php on line 13
+[04-Jul-2016 13:43:19 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/104dc3aea9ce757f872041b6abfc479c40212a6d.php on line 13
+[04-Jul-2016 13:54:31 UTC] PHP Fatal error:  Call to undefined function assets() in /home/jobgrou2/public_html/application/storage/framework/views/104dc3aea9ce757f872041b6abfc479c40212a6d.php on line 15
+[04-Jul-2016 14:12:47 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Jobs' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 12
+[04-Jul-2016 14:12:48 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Jobs' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 12
+[04-Jul-2016 14:12:58 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Jobs' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 13
+[04-Jul-2016 14:12:59 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Jobs' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 13
+[04-Jul-2016 14:12:59 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Jobs' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 13
+[04-Jul-2016 14:15:10 UTC] PHP Fatal error:  Class 'App\Http\Controllers\DB' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 13
+[04-Jul-2016 14:15:11 UTC] PHP Fatal error:  Class 'App\Http\Controllers\DB' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 13
+[04-Jul-2016 14:16:55 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/jobgrou2/public_html/application/storage/framework/views/0c3c77fc87c072f1182922a55563e3dc5bf255c4.php on line 52
+[04-Jul-2016 14:17:39 UTC] PHP Fatal error:  Call to a member function paginate() on array in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 13
+[04-Jul-2016 14:18:14 UTC] PHP Fatal error:  Call to a member function paginate() on array in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 13
+[04-Jul-2016 14:21:20 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/jobgrou2/public_html/application/storage/framework/views/0c3c77fc87c072f1182922a55563e3dc5bf255c4.php on line 52
+[04-Jul-2016 14:21:44 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/jobgrou2/public_html/application/storage/framework/views/0c3c77fc87c072f1182922a55563e3dc5bf255c4.php on line 53
+[04-Jul-2016 14:26:26 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Paginator' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 13
+[04-Jul-2016 14:27:15 UTC] PHP Fatal error:  Call to protected method Illuminate\Pagination\Paginator::setCurrentPage() from context 'App\Http\Controllers\PagesController' in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 14
+[04-Jul-2016 14:27:16 UTC] PHP Fatal error:  Call to protected method Illuminate\Pagination\Paginator::setCurrentPage() from context 'App\Http\Controllers\PagesController' in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 14
+[04-Jul-2016 14:29:47 UTC] PHP Fatal error:  Call to protected method Illuminate\Pagination\Paginator::setCurrentPage() from context 'App\Http\Controllers\PagesController' in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 14
+[04-Jul-2016 14:30:05 UTC] PHP Fatal error:  Call to protected method Illuminate\Pagination\Paginator::setCurrentPage() from context 'App\Http\Controllers\PagesController' in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 14
+[04-Jul-2016 14:30:18 UTC] PHP Fatal error:  Call to protected method Illuminate\Pagination\Paginator::setCurrentPage() from context 'App\Http\Controllers\PagesController' in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 14
+[04-Jul-2016 16:04:16 UTC] PHP Fatal error:  Class 'App\Sales' not found in /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php on line 876
+[04-Jul-2016 16:30:36 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/jobgrou2/public_html/application/storage/framework/views/0c3c77fc87c072f1182922a55563e3dc5bf255c4.php on line 51
+[05-Jul-2016 09:43:00 UTC] PHP Fatal error:  Class 'App\Providers\Auth' not found in /home/jobgrou2/public_html/application/app/Providers/AppServiceProvider.php on line 16
+[05-Jul-2016 09:45:10 UTC] PHP Fatal error:  Class 'App\Providers\AppServiceProvider' not found in /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Foundation/ProviderRepository.php on line 146
+[05-Jul-2016 09:47:01 UTC] PHP Parse error:  syntax error, unexpected '::' (T_PAAMAYIM_NEKUDOTAYIM) in /home/jobgrou2/public_html/application/app/Providers/AppServiceProvider.php on line 16
+[05-Jul-2016 12:59:19 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[05-Jul-2016 14:15:01 UTC] PHP Fatal error:  Cannot access protected property Illuminate\Pagination\LengthAwarePaginator::$lastPage in /home/jobgrou2/public_html/application/storage/framework/views/104dc3aea9ce757f872041b6abfc479c40212a6d.php on line 81
+[05-Jul-2016 14:15:05 UTC] PHP Fatal error:  Cannot access protected property Illuminate\Pagination\LengthAwarePaginator::$lastPage in /home/jobgrou2/public_html/application/storage/framework/views/104dc3aea9ce757f872041b6abfc479c40212a6d.php on line 81
+[05-Jul-2016 14:23:44 UTC] PHP Fatal error:  Cannot access protected property Illuminate\Pagination\LengthAwarePaginator::$lastPage in /home/jobgrou2/public_html/application/storage/framework/views/104dc3aea9ce757f872041b6abfc479c40212a6d.php on line 2
+[05-Jul-2016 14:45:15 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 13
+[05-Jul-2016 14:45:18 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 13
+[05-Jul-2016 16:04:16 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 13
+[06-Jul-2016 11:28:29 UTC] PHP Parse error:  syntax error, unexpected '<' in /home/jobgrou2/public_html/application/storage/framework/views/104dc3aea9ce757f872041b6abfc479c40212a6d.php on line 1
+[06-Jul-2016 11:28:30 UTC] PHP Parse error:  syntax error, unexpected '<' in /home/jobgrou2/public_html/application/storage/framework/views/104dc3aea9ce757f872041b6abfc479c40212a6d.php on line 1
+[06-Jul-2016 11:57:35 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 13
+[07-Jul-2016 14:34:14 UTC] PHP Parse error:  syntax error, unexpected 'count' (T_STRING) in /home/jobgrou2/public_html/application/storage/framework/views/6b97a56f38e820f4b7e4479c6ab9961dea427cbe.php on line 1
+[07-Jul-2016 14:34:15 UTC] PHP Parse error:  syntax error, unexpected 'count' (T_STRING) in /home/jobgrou2/public_html/application/storage/framework/views/6b97a56f38e820f4b7e4479c6ab9961dea427cbe.php on line 1
+[07-Jul-2016 22:42:59 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 16
+[08-Jul-2016 07:28:22 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 16
+[08-Jul-2016 08:25:08 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/ExperienceController.php on line 23
+[08-Jul-2016 08:25:32 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/ExperienceController.php on line 23
+[08-Jul-2016 08:28:11 UTC] PHP Fatal error:  Call to a member function experience() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/ExperienceController.php on line 27
+[08-Jul-2016 08:28:43 UTC] PHP Fatal error:  Call to a member function experience() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/ExperienceController.php on line 27
+[08-Jul-2016 09:02:27 UTC] PHP Fatal error:  Call to a member function delete() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/ExperienceController.php on line 56
+[08-Jul-2016 09:06:25 UTC] PHP Fatal error:  Class 'App\Http\Requests\Experience' not found in /home/jobgrou2/public_html/application/app/Http/Requests/EditExperienceRequest.php on line 16
+[08-Jul-2016 11:32:44 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/EducationController.php on line 60
+[08-Jul-2016 11:33:33 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/EducationController.php on line 60
+[08-Jul-2016 11:33:41 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/EducationController.php on line 60
+[08-Jul-2016 11:33:54 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/EducationController.php on line 60
+[08-Jul-2016 11:36:30 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/EducationController.php on line 60
+[08-Jul-2016 11:36:31 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/EducationController.php on line 60
+[08-Jul-2016 11:36:40 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/EducationController.php on line 60
+[08-Jul-2016 11:36:41 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/EducationController.php on line 60
+[08-Jul-2016 11:36:41 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/EducationController.php on line 60
+[08-Jul-2016 11:38:10 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/EducationController.php on line 60
+[08-Jul-2016 11:39:02 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/EducationController.php on line 60
+[08-Jul-2016 11:40:38 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/EducationController.php on line 60
+[08-Jul-2016 11:44:49 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/jobgrou2/public_html/application/storage/framework/views/6b97a56f38e820f4b7e4479c6ab9961dea427cbe.php on line 157
+[08-Jul-2016 11:44:51 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/jobgrou2/public_html/application/storage/framework/views/6b97a56f38e820f4b7e4479c6ab9961dea427cbe.php on line 157
+[08-Jul-2016 11:58:37 UTC] PHP Fatal error:  Call to a member function addition() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/AdditionController.php on line 22
+[08-Jul-2016 13:13:48 UTC] PHP Fatal error:  Class 'App\Http\Controllers\User' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/SkillController.php on line 18
+[08-Jul-2016 13:14:27 UTC] PHP Fatal error:  Class 'App\Http\Controllers\User' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/SkillController.php on line 18
+[10-Jul-2016 01:06:25 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/UserController.php on line 16
+[11-Jul-2016 09:30:20 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/ff9c3b4826f24e716c8751d59033fb53255d0930.php on line 38
+[11-Jul-2016 09:30:50 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/ff9c3b4826f24e716c8751d59033fb53255d0930.php on line 38
+[11-Jul-2016 13:25:05 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[11-Jul-2016 13:25:07 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[11-Jul-2016 13:59:15 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[13-Jul-2016 12:23:37 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[13-Jul-2016 12:49:55 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[14-Jul-2016 12:50:47 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[14-Jul-2016 16:12:01 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[14-Jul-2016 22:20:40 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[18-Jul-2016 11:52:21 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/jobgrou2/public_html/application/storage/framework/views/6652d07a114d77c9956c12fd23c06017516b1a1d.php on line 1
+[18-Jul-2016 11:53:14 UTC] PHP Parse error:  syntax error, unexpected '?>' in /home/jobgrou2/public_html/application/storage/framework/views/6652d07a114d77c9956c12fd23c06017516b1a1d.php on line 1
+[18-Jul-2016 12:05:21 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Auth\Session' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/Auth/MyAuth.php on line 21
+[19-Jul-2016 09:47:43 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/jobgrou2/public_html/application/app/Http/Controllers/JobController.php on line 44
+[19-Jul-2016 09:57:11 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/6652d07a114d77c9956c12fd23c06017516b1a1d.php on line 103
+[19-Jul-2016 10:03:20 UTC] PHP Fatal error:  Cannot break/continue 1 level in /home/jobgrou2/public_html/application/storage/framework/views/6652d07a114d77c9956c12fd23c06017516b1a1d.php on line 105
+[19-Jul-2016 10:03:20 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Session' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/RegistrateController.php on line 115
+[20-Jul-2016 12:58:56 UTC] PHP Fatal error:  Call to undefined method Carbon\Carbon::diffInMonth() in /home/jobgrou2/public_html/application/storage/framework/views/63ec59414ad953553cd75082c0db1a470225aa91.php on line 31
+[20-Jul-2016 12:58:57 UTC] PHP Fatal error:  Call to undefined method Carbon\Carbon::diffInMonth() in /home/jobgrou2/public_html/application/storage/framework/views/63ec59414ad953553cd75082c0db1a470225aa91.php on line 31
+[20-Jul-2016 14:45:31 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Session' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/RegistrateController.php on line 115
+[21-Jul-2016 10:12:37 UTC] PHP Fatal error:  Call to a member function user() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/RegistrateController.php on line 69
+[21-Jul-2016 10:13:47 UTC] PHP Fatal error:  Call to a member function user() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/RegistrateController.php on line 69
+[21-Jul-2016 10:18:33 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Session' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/RegistrateController.php on line 115
+[21-Jul-2016 14:53:11 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[21-Jul-2016 14:57:17 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[21-Jul-2016 15:15:01 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[21-Jul-2016 15:15:09 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[21-Jul-2016 15:15:44 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[21-Jul-2016 15:20:10 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[21-Jul-2016 15:20:24 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[21-Jul-2016 15:21:31 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[21-Jul-2016 15:21:58 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[21-Jul-2016 15:22:27 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[22-Jul-2016 08:02:31 UTC] PHP Fatal error:  Call to a member function experience() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/ExperienceController.php on line 28
+[22-Jul-2016 08:03:01 UTC] PHP Fatal error:  Call to a member function experience() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/ExperienceController.php on line 28
+[22-Jul-2016 08:03:34 UTC] PHP Fatal error:  Call to a member function skills() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/SkillController.php on line 21
+[22-Jul-2016 08:03:46 UTC] PHP Fatal error:  Call to a member function skills() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/SkillController.php on line 21
+[22-Jul-2016 08:03:51 UTC] PHP Fatal error:  Call to a member function skills() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/SkillController.php on line 21
+[22-Jul-2016 08:04:02 UTC] PHP Fatal error:  Call to a member function skills() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/SkillController.php on line 21
+[22-Jul-2016 08:04:40 UTC] PHP Fatal error:  Call to a member function additions() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/AdditionController.php on line 20
+[22-Jul-2016 08:13:07 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[22-Jul-2016 08:13:30 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[22-Jul-2016 08:14:00 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[22-Jul-2016 09:02:56 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[22-Jul-2016 09:03:03 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[22-Jul-2016 09:03:04 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[22-Jul-2016 09:38:16 UTC] PHP Fatal error:  Class 'App\Providers\ViewComposerServiceProvider' not found in /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Foundation/ProviderRepository.php on line 146
+[22-Jul-2016 09:54:29 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[22-Jul-2016 10:17:55 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[22-Jul-2016 10:18:06 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[22-Jul-2016 11:53:27 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/CloseOrderRequestController.php on line 15
+[22-Jul-2016 11:56:28 UTC] PHP Fatal error:  Class 'App\Http\Controllers\User' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/CloseOrderRequestController.php on line 18
+[22-Jul-2016 12:03:01 UTC] PHP Fatal error:  Call to a member function close_order_requests() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/CloseOrderRequestController.php on line 38
+[22-Jul-2016 12:03:19 UTC] PHP Fatal error:  Call to a member function close_order_requests() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/CloseOrderRequestController.php on line 38
+[22-Jul-2016 12:04:28 UTC] PHP Fatal error:  Call to a member function close_order_requests() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/CloseOrderRequestController.php on line 38
+[22-Jul-2016 13:23:40 UTC] PHP Parse error:  syntax error, unexpected '--' (T_DEC) in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 14
+[22-Jul-2016 13:23:49 UTC] PHP Parse error:  syntax error, unexpected '--' (T_DEC) in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 14
+[22-Jul-2016 13:23:51 UTC] PHP Parse error:  syntax error, unexpected '--' (T_DEC) in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 14
+[23-Jul-2016 14:08:22 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[23-Jul-2016 15:09:50 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[24-Jul-2016 02:28:52 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[25-Jul-2016 08:57:11 UTC] PHP Fatal error:  Call to a member function count() on array in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 46
+[25-Jul-2016 10:03:20 UTC] PHP Fatal error:  Call to a member function toDateString() on string in /home/jobgrou2/public_html/application/app/Experience.php on line 33
+[25-Jul-2016 10:03:21 UTC] PHP Fatal error:  Call to a member function toDateString() on string in /home/jobgrou2/public_html/application/app/Experience.php on line 33
+[25-Jul-2016 10:03:21 UTC] PHP Fatal error:  Call to a member function toDateString() on string in /home/jobgrou2/public_html/application/app/Experience.php on line 33
+[25-Jul-2016 10:03:26 UTC] PHP Fatal error:  Call to a member function toDateString() on string in /home/jobgrou2/public_html/application/app/Experience.php on line 33
+[25-Jul-2016 10:03:31 UTC] PHP Fatal error:  Call to a member function toDateString() on string in /home/jobgrou2/public_html/application/app/Experience.php on line 33
+[25-Jul-2016 10:04:48 UTC] PHP Fatal error:  Call to a member function toDateString() on string in /home/jobgrou2/public_html/application/app/Experience.php on line 34
+[25-Jul-2016 10:04:48 UTC] PHP Fatal error:  Call to a member function toDateString() on string in /home/jobgrou2/public_html/application/app/Experience.php on line 34
+[25-Jul-2016 10:08:24 UTC] PHP Fatal error:  Class 'App\Carbon' not found in /home/jobgrou2/public_html/application/app/Education.php on line 33
+[25-Jul-2016 10:08:52 UTC] PHP Fatal error:  Class 'App\Carbon' not found in /home/jobgrou2/public_html/application/app/Education.php on line 33
+[25-Jul-2016 12:48:01 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[25-Jul-2016 12:55:02 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[25-Jul-2016 13:27:21 UTC] PHP Fatal error:  Call to a member function toArray() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/MessageController.php on line 20
+[25-Jul-2016 15:51:41 UTC] PHP Fatal error:  Call to undefined method Stripe\Stripe::setApiKedy() in /home/jobgrou2/public_html/application/app/Http/Controllers/CreditCardController.php on line 19
+[26-Jul-2016 07:11:07 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/jobgrou2/public_html/application/storage/framework/views/952517c8f807de8080f418acb1abedf81920ba60.php on line 79
+[26-Jul-2016 07:11:08 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/jobgrou2/public_html/application/storage/framework/views/952517c8f807de8080f418acb1abedf81920ba60.php on line 79
+[26-Jul-2016 07:35:04 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/OrderController.php on line 12
+[26-Jul-2016 07:35:05 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/OrderController.php on line 12
+[26-Jul-2016 07:35:05 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/OrderController.php on line 12
+[26-Jul-2016 07:41:33 UTC] PHP Parse error:  syntax error, unexpected 'endif' (T_ENDIF) in /home/jobgrou2/public_html/application/storage/framework/views/53c55ec50ff4f5754787451ff2b16b90402056b9.php on line 13
+[26-Jul-2016 08:11:35 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Session' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/OrderController.php on line 25
+[26-Jul-2016 08:11:53 UTC] PHP Parse error:  syntax error, unexpected 'class' (T_CLASS), expecting ',' or ';' in /home/jobgrou2/public_html/application/app/Http/Controllers/OrderController.php on line 11
+[26-Jul-2016 09:24:13 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/jobgrou2/public_html/application/app/Http/routes.php on line 113
+[26-Jul-2016 09:24:29 UTC] PHP Fatal error:  Class 'Job' not found in /home/jobgrou2/public_html/application/app/Http/routes.php on line 94
+[26-Jul-2016 09:24:31 UTC] PHP Fatal error:  Class 'Job' not found in /home/jobgrou2/public_html/application/app/Http/routes.php on line 94
+[26-Jul-2016 09:24:49 UTC] PHP Parse error:  syntax error, unexpected 'use' (T_USE) in /home/jobgrou2/public_html/application/app/Http/routes.php on line 93
+[27-Jul-2016 08:35:33 UTC] PHP Parse error:  syntax error, unexpected '$receiverEmail' (T_VARIABLE) in /home/jobgrou2/public_html/application/storage/framework/views/53c55ec50ff4f5754787451ff2b16b90402056b9.php on line 155
+[27-Jul-2016 08:39:08 UTC] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN), expecting variable (T_VARIABLE) or '$' in /home/jobgrou2/public_html/application/app/Http/Controllers/OrderController.php on line 34
+[27-Jul-2016 09:12:35 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/jobgrou2/public_html/application/storage/framework/views/63ec59414ad953553cd75082c0db1a470225aa91.php on line 2
+[27-Jul-2016 09:13:03 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/jobgrou2/public_html/application/storage/framework/views/63ec59414ad953553cd75082c0db1a470225aa91.php on line 19
+[27-Jul-2016 09:13:14 UTC] PHP Parse error:  syntax error, unexpected '$employee' (T_VARIABLE) in /home/jobgrou2/public_html/application/storage/framework/views/63ec59414ad953553cd75082c0db1a470225aa91.php on line 20
+[28-Jul-2016 08:26:02 UTC] PHP Fatal error:  Class 'App\Carbon' not found in /home/jobgrou2/public_html/application/app/User.php on line 70
+[28-Jul-2016 08:41:03 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/jobgrou2/public_html/application/storage/framework/views/c46ff82dc2f70342707fc9390f17ce1be1ac0f89.php on line 23
+[28-Jul-2016 08:44:58 UTC] PHP Parse error:  syntax error, unexpected 'endif' (T_ENDIF) in /home/jobgrou2/public_html/application/storage/framework/views/2df71abbe089eb8949c08e66f0a0e68fc528768e.php on line 24
+[28-Jul-2016 12:55:23 UTC] PHP Fatal error:  Class 'App\Carbon' not found in /home/jobgrou2/public_html/application/app/Payment.php on line 43
+[28-Jul-2016 12:55:24 UTC] PHP Fatal error:  Class 'App\Carbon' not found in /home/jobgrou2/public_html/application/app/Payment.php on line 43
+[28-Jul-2016 12:55:25 UTC] PHP Fatal error:  Class 'App\Carbon' not found in /home/jobgrou2/public_html/application/app/Payment.php on line 43
+[28-Jul-2016 14:47:58 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Job' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/CategoryController.php on line 18
+[29-Jul-2016 06:36:05 UTC] PHP Fatal error:  Class 'App\Carbon' not found in /home/jobgrou2/public_html/application/app/EmployeeRequest.php on line 28
+[29-Jul-2016 07:08:35 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/CategoryController.php on line 41
+[29-Jul-2016 07:09:45 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/CategoryController.php on line 41
+[29-Jul-2016 07:10:36 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/CategoryController.php on line 41
+[29-Jul-2016 07:55:31 UTC] PHP Fatal error:  Class 'App\Http\Middleware\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Middleware/BlockedUser.php on line 19
+[29-Jul-2016 07:55:43 UTC] PHP Fatal error:  Class 'App\Http\Middleware\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Middleware/BlockedUser.php on line 19
+[29-Jul-2016 07:55:49 UTC] PHP Fatal error:  Class 'App\Http\Middleware\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Middleware/BlockedUser.php on line 19
+[29-Jul-2016 07:55:53 UTC] PHP Fatal error:  Class 'App\Http\Middleware\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Middleware/BlockedUser.php on line 19
+[29-Jul-2016 09:21:16 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/jobgrou2/public_html/application/storage/framework/views/1e06b6df74876c0aac907403a40a0b803a6fae0f.php on line 39
+[29-Jul-2016 13:09:29 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Sale' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/EmployeeRequestController.php on line 65
+[01-Aug-2016 15:18:53 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/JobController.php on line 135
+[01-Aug-2016 15:40:53 UTC] PHP Parse error:  syntax error, unexpected ',', expecting ']' in /home/jobgrou2/public_html/application/app/Http/routes.php on line 77
+[09-Aug-2016 09:47:14 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Mail' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/EmployeeRequestController.php on line 77
+[09-Aug-2016 11:11:26 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Mail' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/OrderController.php on line 131
+[09-Aug-2016 11:11:36 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Mail' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/OrderController.php on line 131
+[09-Aug-2016 11:12:07 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Mail' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/OrderController.php on line 131
+[09-Aug-2016 11:14:43 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/jobgrou2/public_html/application/storage/framework/views/b0a3312afc1751eee32125411ff3f59414e36afa.php on line 17
+[10-Aug-2016 14:50:13 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Auth' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/RateController.php on line 14
+[10-Aug-2016 14:50:34 UTC] PHP Fatal error:  Call to a member function rates() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/RateController.php on line 21
+[10-Aug-2016 14:50:48 UTC] PHP Fatal error:  Call to a member function rates() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/RateController.php on line 22
+[10-Aug-2016 14:50:50 UTC] PHP Fatal error:  Call to a member function rates() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/RateController.php on line 22
+[10-Aug-2016 14:53:39 UTC] PHP Fatal error:  Call to a member function rates() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/RateController.php on line 21
+[10-Aug-2016 16:46:53 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 89
+[10-Aug-2016 16:46:54 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 89
+[10-Aug-2016 16:47:05 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 89
+[10-Aug-2016 16:47:06 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 89
+[29-Aug-2016 09:54:33 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/JobController.php on line 137
+[29-Aug-2016 09:56:11 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/JobController.php on line 137
+[29-Aug-2016 09:57:51 UTC] PHP Fatal error:  Call to a member function fill() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/JobController.php on line 137
+[30-Aug-2016 08:40:44 UTC] PHP Fatal error:  Class 'Sale' not found in /home/jobgrou2/public_html/application/app/Http/routes.php on line 126
+[31-Aug-2016 09:42:07 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Log' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/PayPalController.php on line 14
+[31-Aug-2016 11:42:59 UTC] PHP Fatal error:  Call to undefined method PayPal\Api\Order::find() in /home/jobgrou2/public_html/application/app/Http/Controllers/PayPalController.php on line 153
+[31-Aug-2016 13:09:51 UTC] PHP Fatal error:  Call to a member function buyer() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/PayPalController.php on line 23
+[31-Aug-2016 13:52:48 UTC] PHP Fatal error:  Call to a member function buyer() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/PayPalController.php on line 23
+[31-Aug-2016 14:16:26 UTC] PHP Fatal error:  Call to a member function buyer() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/PayPalController.php on line 23
+[01-Sep-2016 08:04:40 UTC] PHP Fatal error:  Class 'App\Mail' not found in /home/jobgrou2/public_html/application/app/Job.php on line 112
+[01-Sep-2016 16:36:35 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Job' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/EmployeeExitRequestController.php on line 19
+[01-Sep-2016 16:38:48 UTC] PHP Fatal error:  Class 'App\Http\Controllers\EmployeeExitRequest' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/EmployeeExitRequestController.php on line 48
+[02-Sep-2016 12:47:28 UTC] PHP Fatal error:  Class 'App\Http\Controllers\Mail' not found in /home/jobgrou2/public_html/application/app/Http/Controllers/EmployeeExitRequestController.php on line 78
+[02-Sep-2016 12:52:54 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 21
+[02-Sep-2016 12:53:40 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 21
+[02-Sep-2016 12:53:42 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 21
+[02-Sep-2016 12:53:43 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 21
+[02-Sep-2016 12:56:17 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 19
+[02-Sep-2016 12:56:18 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 19
+[02-Sep-2016 12:56:24 UTC] PHP Parse error:  syntax error, unexpected ':', expecting '(' in /home/jobgrou2/public_html/application/storage/framework/views/c8cc62b1dc39aa044fb31dd638f4f4c5c179f3c6.php on line 19
+[07-Sep-2016 13:15:39 UTC] PHP Fatal error:  Class 'PayPal\Api\CredfitCard' not found in /home/jobgrou2/public_html/application/app/Http/routes.php on line 135
+[07-Sep-2016 13:26:07 UTC] PHP Fatal error:  Class 'ResultPrinter' not found in /home/jobgrou2/public_html/application/app/Http/routes.php on line 214
+[08-Sep-2016 12:25:05 UTC] PHP Fatal error:  Cannot access private property PayPal\Exception\PayPalConnectionException::$data in /home/jobgrou2/public_html/application/app/Http/Controllers/CreditCardController.php on line 53
+[08-Sep-2016 12:29:32 UTC] PHP Parse error:  syntax error, unexpected 'endif' (T_ENDIF) in /home/jobgrou2/public_html/application/storage/framework/views/952517c8f807de8080f418acb1abedf81920ba60.php on line 103
+[08-Sep-2016 12:29:42 UTC] PHP Parse error:  syntax error, unexpected 'endif' (T_ENDIF) in /home/jobgrou2/public_html/application/storage/framework/views/952517c8f807de8080f418acb1abedf81920ba60.php on line 103
+[08-Sep-2016 12:29:43 UTC] PHP Parse error:  syntax error, unexpected 'endif' (T_ENDIF) in /home/jobgrou2/public_html/application/storage/framework/views/952517c8f807de8080f418acb1abedf81920ba60.php on line 103
+[08-Sep-2016 12:42:49 UTC] PHP Fatal error:  Call to undefined function App\Http\Controllers\cardType() in /home/jobgrou2/public_html/application/app/Http/Controllers/CreditCardController.php on line 41
+[09-Sep-2016 13:35:41 UTC] PHP Fatal error:  Call to undefined method Carbon\Carbon::diffInMonth() in /home/jobgrou2/public_html/application/app/Job.php on line 130
+[09-Sep-2016 13:39:12 UTC] PHP Fatal error:  Class 'App\Job' not found in /home/jobgrou2/public_html/application/app/Http/routes.php on line 145
+[09-Sep-2016 13:57:20 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/jobgrou2/public_html/application/app/Http/routes.php on line 200
+[09-Sep-2016 14:06:20 UTC] PHP Fatal error:  Class 'Carbon' not found in /home/jobgrou2/public_html/application/app/Http/routes.php on line 197
+[09-Sep-2016 14:13:46 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/jobgrou2/public_html/application/app/Http/routes.php on line 146
+[09-Sep-2016 14:19:01 UTC] PHP Parse error:  syntax error, unexpected '$apiContext' (T_VARIABLE) in /home/jobgrou2/public_html/application/app/Http/routes.php on line 148
+[09-Sep-2016 14:19:07 UTC] PHP Parse error:  syntax error, unexpected '$apiContext' (T_VARIABLE) in /home/jobgrou2/public_html/application/app/Http/routes.php on line 148
+[09-Sep-2016 14:42:55 UTC] PHP Fatal error:  Call to a member function job() on null in /home/jobgrou2/public_html/application/app/Http/Controllers/OrderController.php on line 300
+[14-Sep-2016 13:29:32 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 112
+[14-Sep-2016 13:29:38 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 112
+[14-Sep-2016 13:29:43 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 112
+[14-Sep-2016 13:29:50 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 112
+[14-Sep-2016 13:29:55 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 112
+[14-Sep-2016 13:30:39 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 112
+[14-Sep-2016 13:30:41 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 112
+[14-Sep-2016 13:31:45 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 112
+[14-Sep-2016 13:34:29 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 112
+[14-Sep-2016 13:35:42 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 111
+[14-Sep-2016 13:37:23 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 111
+[14-Sep-2016 13:37:42 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 111
+[14-Sep-2016 13:37:46 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 111
+[14-Sep-2016 13:38:42 UTC] PHP Fatal error:  Call to a member function getNewMessages() on null in /home/jobgrou2/public_html/application/storage/framework/views/2b875d941e6b7c7db191bc4d5ab9910e9d8c453d.php on line 111
+[14-Sep-2016 14:05:15 UTC] PHP Parse error:  syntax error, unexpected '?>' in /home/jobgrou2/public_html/application/storage/framework/views/952517c8f807de8080f418acb1abedf81920ba60.php on line 96
+[14-Sep-2016 14:10:17 UTC] PHP Parse error:  syntax error, unexpected '?>' in /home/jobgrou2/public_html/application/storage/framework/views/952517c8f807de8080f418acb1abedf81920ba60.php on line 96
+[14-Sep-2016 14:13:01 UTC] PHP Parse error:  syntax error, unexpected '?>' in /home/jobgrou2/public_html/application/storage/framework/views/952517c8f807de8080f418acb1abedf81920ba60.php on line 96
+[15-Sep-2016 13:04:59 UTC] PHP Fatal error:  Class 'Carbon' not found in /home/jobgrou2/public_html/application/storage/framework/views/63ec59414ad953553cd75082c0db1a470225aa91.php on line 71
+[15-Sep-2016 13:08:08 UTC] PHP Fatal error:  Call to undefined function addMinutes() in /home/jobgrou2/public_html/application/storage/framework/views/63ec59414ad953553cd75082c0db1a470225aa91.php on line 71
+[15-Sep-2016 13:08:10 UTC] PHP Fatal error:  Call to undefined function addMinutes() in /home/jobgrou2/public_html/application/storage/framework/views/63ec59414ad953553cd75082c0db1a470225aa91.php on line 71
+[15-Sep-2016 13:08:30 UTC] PHP Fatal error:  Call to undefined function addMinutes() in /home/jobgrou2/public_html/application/storage/framework/views/63ec59414ad953553cd75082c0db1a470225aa91.php on line 71
+[19-Sep-2016 13:18:27 UTC] PHP Parse error:  syntax error, unexpected 's' (T_STRING), expecting function (T_FUNCTION) in /home/jobgrou2/public_html/application/app/Job.php on line 39
+[21-Sep-2016 15:16:56 UTC] PHP Warning:  Uncaught exception 'ErrorException' with message 'Object of class Illuminate\Database\Eloquent\Collection could not be converted to int' in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php:15
+Stack trace:
+#0 /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php(15): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Object of class...', '/home/jobgrou2/...', 15, Array)
+#1 [internal function]: App\Http\Controllers\PagesController->home()
+#2 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(80): call_user_func_array(Array, Array)
+#3 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('home', Array)
+#4 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(94): Illuminate\Routing\ControllerDispatcher->call(Object(App\Http\Contro in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 15
+[21-Sep-2016 15:16:56 UTC] PHP Fatal error:  Unsupported operand types in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 15
+[21-Sep-2016 15:16:58 UTC] PHP Warning:  Uncaught exception 'ErrorException' with message 'Object of class Illuminate\Database\Eloquent\Collection could not be converted to int' in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php:15
+Stack trace:
+#0 /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php(15): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Object of class...', '/home/jobgrou2/...', 15, Array)
+#1 [internal function]: App\Http\Controllers\PagesController->home()
+#2 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(80): call_user_func_array(Array, Array)
+#3 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('home', Array)
+#4 /home/jobgrou2/public_html/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(94): Illuminate\Routing\ControllerDispatcher->call(Object(App\Http\Contro in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 15
+[21-Sep-2016 15:16:58 UTC] PHP Fatal error:  Unsupported operand types in /home/jobgrou2/public_html/application/app/Http/Controllers/PagesController.php on line 15
+[21-Sep-2016 15:27:35 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/jobgrou2/public_html/application/app/Providers/ViewComposerServiceProvider.php on line 45
+[21-Sep-2016 15:27:43 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/jobgrou2/public_html/application/app/Providers/ViewComposerServiceProvider.php on line 45
