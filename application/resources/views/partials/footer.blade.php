@@ -19,11 +19,11 @@
 
                     <ul>
 
-                        <li><a href="https://uk-ua.facebook.com/" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://www.facebook.com/jobgrouper" target="_blank"><i class="fa fa-facebook"></i></a></li>
 
-                        <li><a href="https://twitter.com/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://twitter.com/jobgrouper" target="_blank"><i class="fa fa-twitter"></i></a></li>
 
-                        <li><a href="https://plus.google.com/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+                        <li><a href="https://plus.google.com/114795186810549107951" target="_blank"><i class="fa fa-google-plus"></i></a></li>
 
                     </ul>
 

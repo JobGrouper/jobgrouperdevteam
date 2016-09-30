@@ -2,7 +2,7 @@
 
 
 
-@section('title', 'JobGrouper')
+@section('title', 'JobGrouper - employment marketplace')
 
 
 
