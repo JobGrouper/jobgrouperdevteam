@@ -1,0 +1,1 @@
+<p>You was discharged of work "{{$job_name}}"!</p>

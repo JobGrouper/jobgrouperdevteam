@@ -1,0 +1,1 @@
+<p>Your request for the "{{$job_name}}" has been approved!</p>

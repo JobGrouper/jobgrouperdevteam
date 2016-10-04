@@ -1,0 +1,722 @@
+/*@media only screen and (max-width : 1200px) {*/
+
+	/*.addcard_wrapper .sidebar {*/
+
+		/*position: absolute;*/
+
+		/*left: -330px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content {*/
+
+		/*width: 100%;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .add_form {*/
+
+		/*margin: 0 auto;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_header h1 button {*/
+
+		/*display: block;*/
+
+		/*left: -50px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_header h1 {*/
+
+		/*margin-left: 70px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .sidebar_logo a {*/
+
+		/*display: none;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .userslist_wrapper {*/
+
+		/*padding-right: 50px;*/
+
+	/*}*/
+
+/*}*/
+
+
+
+/*@media only screen and (max-width : 992px) {*/
+
+	/*.addcard_wrapper .content_form {*/
+
+		/*padding-left: 20px;*/
+
+		/*padding-right: 20px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .userslist_wrapper {*/
+
+		/*padding-right: 0px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .userslist_wrapper__item .img_wrapper {*/
+
+		/*display: block;*/
+
+		/*margin: 0 auto;*/
+
+		/*margin-bottom: 15px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .userslist_wrapper__item .name {*/
+
+		/*display: block;*/
+
+		/*margin: 0 auto;*/
+
+		/*text-align: center;*/
+
+		/*margin-bottom: 15px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .userslist_wrapper__item .type {*/
+
+		/*display: block;*/
+
+		/*margin: 0 auto;*/
+
+		/*margin-bottom: 15px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .userslist_wrapper__item .floatbtn {*/
+
+		/*float: none;*/
+
+		/*display: block;*/
+
+		/*margin: 0 auto;*/
+
+		/*position: static;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .userslist_wrapper__item .regdate {*/
+
+		/*display: block;*/
+
+		/*margin: 0 auto;*/
+
+		/*margin-bottom: 15px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .userslist_wrapper__item {*/
+
+		/*padding-top: 30px;*/
+
+		/*padding-bottom: 30px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .add_form {*/
+
+		/*width: 100%;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .list_wrapper__item .item_info {*/
+
+		/*text-align: center;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .list_wrapper__item .title {*/
+
+		/*display: block;*/
+
+		/*margin: 20px auto;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .list_wrapper__item .item_info .buttons {*/
+
+		/*float: none;*/
+
+		/*margin: 0 auto;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .list_wrapper {*/
+
+		/*padding-right: 0;*/
+
+	/*}*/
+
+/*}*/
+
+
+
+/*@media only screen and (max-width : 768px) {*/
+
+	/*.addcard_wrapper .content_header .user {*/
+
+		/*margin-right: 20px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .list_wrapper__item .item_info__numbers span {*/
+
+		/*width: 140px;*/
+
+		/*padding: 5px 0;*/
+
+		/*font-size: 13px;*/
+
+	/*}*/
+
+/*}*/
+
+
+
+/*@media only screen and (max-width : 480px) {*/
+
+	/*.addcard_wrapper .content_form .add_form .upload button {*/
+
+		/*float: none;*/
+
+		/*display: block;*/
+
+		/*margin: 0 auto;*/
+
+		/*width: 100px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .list_wrapper__item .item_info__numbers span {*/
+
+		/*width: 110px;*/
+
+		/*font-size: 11px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .list_wrapper__item h2 {*/
+
+		/*line-height: 1.1;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .list_wrapper__item {*/
+
+		/*padding: 30px 20px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .add_form {*/
+
+		/*padding-left: 25px;*/
+
+		/*padding-right: 25px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_form .add_form .upload input {*/
+
+		/*width: 100%;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_header h1 {*/
+
+		/*font-size: 16px;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_header .user .img_wrapper {*/
+
+		/*display: none;*/
+
+	/*}*/
+
+	/*.addcard_wrapper .content_header .user {*/
+
+		/*padding-top: 25px;*/
+
+	/*}*/
+
+/*}*/
+
+@media only screen and (min-width : 1200px) {
+	.addcard_wrapper .sidebar_logo2 {
+		display: none;
+	}
+}
+
+
+@media only screen and (max-width : 1200px) {
+
+	.addcard_wrapper .sidebar {
+
+		position: absolute;
+
+		left: -330px;
+
+	}
+
+	.addcard_wrapper .sidebar_logo2 {
+		width: 100%;
+		height: 86px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		background-color: rgba(0,0,0, .8);
+		border-top: 1px solid #fff;
+	}
+	.addcard_wrapper .sidebar_logo2 img {
+		width: 70%;
+		position: relative;
+		top: 20px;
+	}
+	.addcard_wrapper .sidebar_content {
+		padding-top: 100px;
+		position: relative;
+	}
+	.addcard_wrapper .content_header h1 button.mobile {
+		margin-left: -36px;
+	}
+
+	.addcard_wrapper .content {
+
+		width: 100%;
+
+	}
+
+
+	.addcard_wrapper .content_header h1 button {
+
+		display: block;
+
+		left: -50px;
+
+	}
+
+	.addcard_wrapper .content_header h1 {
+
+		margin-left: 70px;
+
+	}
+
+	.addcard_wrapper .sidebar_logo a {
+
+		display: none;
+
+	}
+
+	.addcard_wrapper .content_form .userslist_wrapper {
+
+		padding-right: 50px;
+
+	}
+
+}
+
+
+
+@media only screen and (max-width : 992px) {
+
+	.addcard_wrapper .content_form {
+
+		padding-left: 20px;
+
+		padding-right: 20px;
+
+	}
+
+	.admintext_wrapper__item input {
+		width: 100%;
+	}
+	.admintext_wrapper__item .save {
+		right: 50%;
+		top: 75%;
+	}
+	.admintext_wrapper__item .cancel {
+		width: auto;
+    top: 75%;
+    right: 50%;
+    margin-right: -75px;
+	}
+	.addcard_wrapper .content_form .userslist_wrapper__item .buttons {
+		float: none;
+		margin: 0 auto;
+		text-align: center;
+	}
+	.addcard_wrapper .content_form .userslist_wrapper__item .buttons button {
+		display: inline-block;
+	}
+	.addcard_wrapper .content_form .userslist_wrapper__item .buttons .approve {
+		margin-right: 0px;
+	}
+
+	.admincat_wrapper__new input {
+
+		width: 45%;
+
+	}
+
+	.admincat_wrapper__items {
+
+		margin-right: 0;
+
+	}
+
+	.admintext_wrapper {
+
+		width: 100%;
+
+	}
+
+	.addcard_wrapper .content_form .userslist_wrapper {
+
+		padding-right: 0px;
+
+	}
+
+	.addcard_wrapper .content_form .userslist_wrapper__item .img_wrapper {
+
+		display: block;
+
+		margin: 0 auto;
+
+		margin-bottom: 15px;
+
+	}
+
+	.addcard_wrapper .content_form .userslist_wrapper__item .name {
+
+		display: block;
+
+		margin: 0 auto;
+
+		text-align: center;
+
+		margin-bottom: 15px;
+
+	}
+
+	.addcard_wrapper .content_form .userslist_wrapper__item .type {
+
+		display: block;
+
+		margin: 0 auto;
+
+		margin-bottom: 15px;
+
+	}
+
+	.addcard_wrapper .content_form .userslist_wrapper__item .floatbtn {
+
+		float: none;
+
+		display: block;
+
+		margin: 0 auto;
+
+		position: static;
+
+	}
+
+	.addcard_wrapper .content_form .userslist_wrapper__item .regdate {
+
+		display: block;
+
+		margin: 0 auto;
+
+		margin-bottom: 15px;
+
+	}
+
+	.addcard_wrapper .content_form .userslist_wrapper__item {
+
+		padding-top: 30px;
+
+		padding-bottom: 30px;
+
+	}
+
+	.addcard_wrapper .content_form .add_form {
+
+		width: 100%;
+
+	}
+
+	.addcard_wrapper .content_form .list_wrapper__item .item_info {
+
+		text-align: center;
+
+	}
+
+	.addcard_wrapper .content_form .list_wrapper__item .title {
+
+		display: block;
+
+		margin: 20px auto;
+
+	}
+
+	.addcard_wrapper .content_form .list_wrapper__item .item_info .buttons {
+
+		float: none;
+
+		margin: 0 auto;
+
+	}
+
+	.addcard_wrapper .content_form .list_wrapper {
+
+		padding-right: 0;
+
+	}
+
+}
+
+
+
+@media only screen and (max-width : 768px) {
+
+	.addcard_wrapper .content_header .user {
+
+		margin-right: 20px;
+
+	}
+
+	.addcard_wrapper .content_form .add_form .upload .img_wrapper {
+		width: 200px;
+	}
+	.admincat_wrapper__items .item p {
+		width: 100%;
+	}
+
+	.admincat_wrapper__items .item .buttons {
+
+		position: static;
+
+		margin: 0 auto;
+
+		margin-top: 25px;
+
+		text-align: center;
+
+	}
+	.addcard_wrapper .content_form .add_form {
+		margin-right: 0;
+	}
+
+
+	.addcard_wrapper .content_form .add_form .create {
+		margin-left: auto;
+		margin-right: auto;
+		display: block;
+	}
+	.addcard_wrapper .content_form .add_form .create_buttons .cancel {
+		margin-left: auto;
+	}
+	.addcard_wrapper .content_form .add_form .double >div {
+		display: block !important; 
+		float: none !important;
+		width: 100% !important;
+	}
+
+	.addcard_wrapper .content_form .list_wrapper__item .item_info__numbers span {
+
+		width: 140px;
+
+		padding: 5px 0;
+
+		font-size: 13px;
+
+	}
+
+	.admincat_wrapper__new input {
+
+		width: 100%;
+
+		display: block;
+
+		margin-bottom: 15px;
+
+	}
+
+	.admincat_wrapper__new button {
+
+		display: block;
+
+		margin: 0 auto;
+
+	}
+
+	.admintext_wrapper__item p {
+
+		width: 70%;
+
+	}
+
+}
+
+
+
+@media only screen and (max-width : 480px) {
+
+	.addcard_wrapper .content_form .add_form .upload button {
+
+		float: none;
+
+		display: block;
+
+		margin: 0 auto;
+
+		width: 100px;
+
+	}
+
+
+	.addcard_wrapper .content_form .add_form .create_buttons .cancel {
+		margin-top: 20px;
+	}
+
+	.admincat_wrapper__items .item {
+		text-align: center;
+	}
+
+	.admincat_wrapper__items .item >button {
+		margin-top: 20px;
+	}
+	.addcard_wrapper .content_header h1 button.mobile {
+		left: 70px;
+	}
+
+	.admincat_wrapper__new button {
+		width: 100%;
+	}
+
+	.addcard_wrapper .content_header {
+		height: 185px;
+	}
+
+	.addcard_wrapper .content_header .user {
+		float: none;
+		margin: auto;
+		display: block;
+		text-align: center;
+	}
+	.addcard_wrapper .content_header h1 {
+		float: none;
+	}
+
+	.addcard_wrapper .content_form .add_form .upload label {
+		float: none;
+		margin: auto;
+		margin-top: 20px;
+		width: 100px;
+	}
+	.addcard_wrapper .content_form .add_form .upload .img_wrapper {
+		float: none;
+		margin: auto;
+		width: 200px;
+		height: 200px;
+	}
+	.admincat_wrapper__items .item input {
+		width: 100%;
+	}
+
+	.admincat_wrapper__items .item p {
+
+		width: 100%;
+
+	}
+
+	.admincat_wrapper__items .item p {
+
+		text-align: center;
+
+	}
+
+	.admincat_wrapper__items {
+
+		padding-left: 15px;
+
+		padding-right: 15px;
+
+	}
+
+
+	.admintext_wrapper {
+
+		padding: 30px 15px;
+
+	}
+
+	.addcard_wrapper .content_form .list_wrapper__item .item_info__numbers span {
+
+		width: 110px;
+
+		font-size: 11px;
+
+	}
+
+	.addcard_wrapper .content_form .list_wrapper__item h2 {
+
+		line-height: 1.1;
+
+	}
+
+	.addcard_wrapper .content_form .list_wrapper__item {
+
+		padding: 30px 20px;
+
+	}
+
+	.addcard_wrapper .content_form .add_form {
+
+		padding-left: 25px;
+
+		padding-right: 25px;
+
+	}
+
+	.addcard_wrapper .content_form .add_form .upload input {
+
+		width: 100%;
+
+	}
+
+	.addcard_wrapper .content_header h1 {
+
+		font-size: 16px;
+
+	}
+
+	.addcard_wrapper .content_header .user .img_wrapper {
+
+		display: none;
+
+	}
+
+
+}
+
+
+
+
+
+
+

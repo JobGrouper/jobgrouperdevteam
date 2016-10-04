@@ -1,0 +1,752 @@
+@media only screen and (max-width : 1200px) {
+	.slider_more {
+		width: 100%;
+		height: 280px;
+    position: absolute;
+    bottom: -45px;
+    z-index: 1;
+    background-color: transparent;
+	}
+	.view_content img {
+		width: 100%;
+	}
+	.slider_img h3 {
+		margin-top: 70px;
+		padding-right: 10px;
+	}
+	.slider_img p {
+		width: auto;
+		padding-right: 10px;
+	}
+	.slider_img {
+		width: 100%;
+		margin-bottom: 50px;
+		padding-bottom: 260px;
+		height: auto;
+		position: relative;
+	}
+	.slider_more__text .orange {
+		color: #fff;
+	}
+	.items {
+		margin-top: 0;
+	}
+	.slider_img h3, .slider_img p {
+		position: relative;
+	}
+	.slider_img::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0,0,0, .5);
+		top: 0;
+		left: 0;
+	}
+	.slider_more__text .bordered {
+		color: #fff;
+	}
+	.items .slider {
+		position: relative;
+	}
+	.view_content {
+		float: none;
+		width: 100%;
+		margin-bottom: 30px;
+		padding-bottom: 30px;
+		border-bottom: 1px solid #ececec;
+	}
+	.view_sidebar {
+		width: 100%;
+		float: none;
+	}
+	.items_item {
+		width: 100%;
+	}
+	.view_sidebar .salary_info .purchase {
+		text-align: center;
+	}
+	.payments {
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.payments_content {
+		width: 100%;
+		overflow-x: auto;
+	}
+	.payments .payments_content table {
+		width: 1160px;
+	}
+	.payments .payments_content table thead {
+		font-size: 16px;
+	}
+	.payments .payments_content table tbody {
+		font-size: 16px;
+	}
+	.payments .payments_head {
+		font-size: 18px;
+	}
+}
+
+
+@media only screen and (min-width : 992px) {
+	.myjobs .workers_item .purchasebtn {
+		right: 0;
+		top: 70px;
+	}
+	.myjobs .workers_item .cancelbtn {
+		top: 120px;
+	}
+}
+
+
+@media only screen and (max-width : 992px) {
+	.main_header__buttons .email {
+		margin-right: auto;
+		margin-bottom: 30px;
+	}
+
+	.job_item h1 .myjobs_text {
+		width: 100%;
+		text-align: center;
+	}
+	.myjobs h1 .request_close {
+		position: static;
+		display: block;
+		margin: auto;
+		margin-top: 20px;
+	}
+	.job_item h1 {
+		padding-bottom: 35px;
+	}
+
+	.job_item h1 .job_item__title {
+		font-size: 26px;
+		padding-right: 15px !important;
+		text-align: center;
+		padding: 15px;
+	}
+
+	.job_item h1 .job_item__title span {
+		position: static;
+		display: block;
+		margin-top: 20px;
+	}
+
+	.myjobs h1 .sent {
+		position: relative;
+		right: auto;
+		margin: auto;
+		margin-bottom: 20px;
+	}
+
+	.myjobs h1 {
+		padding-right: 0;
+	}
+
+	.main_footer__social ul li a .fa {
+		left: 0;
+	}
+	.main_footer__social {
+		float: none;
+		display: block;
+		margin: 20px auto 0 auto;
+	}
+	.main_header__logo {
+		padding-top: 47px;
+	}
+	.dark_header__line .name {
+		/*float: none;
+    position: relative;
+    top: 55px;
+    height: 35px;
+    width: 350px;
+    margin: 0 auto;
+    line-height: 30px;
+    background-color: #437FCE;
+    border-radius: 0 0 40px 40px;*/
+    display: none;
+	}
+	.mobile_dark {
+		display: block;
+		border-top: 2px solid #fff;
+    padding-top: 25px;
+    margin-top: 50px;
+	}
+	.mobile_dark ul {
+		list-style-type: none;
+	}
+	.dark_header__line .name span:hover .name_hover {
+		top: 40px;
+	}
+	.myjobs .workers_item .order_salary {
+		width: 100%;
+	}
+	.main_footer .content {
+		padding-top: 5px;
+	}
+	.dark_header__line .name > a {
+		margin-right: 15px;
+	}
+	.main_header .dark_header__categories {
+		position: absolute;
+	}
+	.message_scroll .item {
+		text-align: center;
+		padding-left: 0;
+	}
+	.message_scroll .item .img_wrapper {
+		float: none;
+		display: inline-block;
+	}
+	.message_scroll .item .name {
+		margin-left: 0;
+		width: 100%;
+		margin-top: 20px;
+	}
+	.profile_info .rating {
+		float: none;
+	}
+	.main_header__buttons button {
+		display: block;
+		margin: 0 auto;
+	}
+	.main_header {
+		height: auto;
+		padding-bottom: 50px;
+		background-position: center;
+	}
+	.dark_header__categories {
+		position: relative;
+	}
+	.help .faq_item:last-child {
+		border-bottom: 1px solid #D6D6D6;
+	}
+	.help {
+		padding-bottom: 220px;
+	}
+	.myjobs .workers_item .rating {
+		margin-right: 0;
+	}
+	.myjobs .workers_item .img_wrapper, .myjobs .workers_item .rating,.myjobs .workers_item .salary {
+		float: none;
+		display: block;
+		margin: 0 auto;
+	}
+	.myjobs .workers_item .rating {
+		margin-left: 0;
+		width: auto;
+		margin-top: 15px;
+		margin-bottom: 15px;
+	}
+	.myjobs .workers_item .rating .stars {
+		display: inline-block;
+	}
+	.myjobs .workers_item .salary {
+		padding-top: 10px;
+	}
+	.myjobs {
+		padding-bottom: 220px;
+	}
+	.myjobs .workers_item {
+		padding-bottom: 140px;
+		text-align: center;
+	}
+	.myjobs .workers_item .purchasebtn {
+		top: auto;
+		bottom: 70px;
+	}
+	.myjobs .workers_item button {
+		left: 50%;
+		margin-left: -85px;
+		bottom: 20px;
+		top: auto;
+		margin-top: 0;
+	}
+	.myorders .workers_item .order_salary {
+		float: none;
+		margin: 0 auto;
+		margin-top: 30px;
+		margin-bottom: 30px;
+	}
+	.myorders .workers_item .salary {
+		width: 100%;
+	}
+	.main_footer .links {
+		position: static;
+		margin-left: 0;
+		margin-top: 0;
+	}
+	.main_header__logo {
+		text-align: center;
+		left: 0;
+	}
+	.main_header__btn {
+		padding-top: 95px;
+		z-index: 0;
+	}
+	.main_header__btn {
+		float: none;
+		text-align: center;
+	}
+	.main_footer .content {
+		float: none;
+	}
+	.main_footer {
+		text-align: center;
+	}
+}
+
+@media only screen and (max-width : 768px) {
+	.main_header__how {
+		background-image: none;
+	}
+	.items_item .img_wrapper {
+		height: 190px;
+	}
+	.profile_info .social {
+		display: block;
+		text-align: left;
+	}
+	.profile_info .social span {
+		-ms-word-break: break-all;
+		word-break: break-all;
+		display: block;
+		padding-left: 20px;
+	}
+	.profile_info .social .name {
+		text-align: center;
+	}
+	.items .no_job {
+		padding-left: 15px;
+	}
+	.view_sidebar .user .social .fb, .view_sidebar .user .social .twitter {
+		word-break: break-all;
+		white-space: normal;
+	}
+	.main_header .dark_header__categories {
+		background-color: #252525;
+		width: 80%;
+		height: 100%;
+		left: -80%;
+		-webkit-transition: left .3s ease;
+		-o-transition: left .3s ease;
+		transition: left .3s ease;
+		padding-top: 60px;
+	}
+	.main_header .dark_header__categories .container {
+		padding: 0;
+	}
+	.main_header .dark_header__categories::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 3px;
+		background-color: #1C1C1C;
+		left: 0;
+		top: 60px;
+	}
+	.dark_header__categories a {
+		padding-top: 12px;
+		padding-bottom: 12px;
+		padding-left: 15px;
+		padding-right: 15px;
+		margin-bottom: 0;
+		border-bottom: 1px solid #1c1c1c;
+		-webkit-transition: background-color .3s ease;
+		-o-transition: background-color .3s ease;
+		transition: background-color .3s ease;
+	}
+	.dark_header__categories a:hover {
+		background-color: #0080D3;
+	}
+	.main_header .dark_header__categories.active {
+		left: 0;
+	}
+	.main_header__logo.hide_logo {
+		position: relative;
+		z-index: -1;
+	}
+	.dark_bg.active {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0,0,0,.5);
+		z-index: 1;
+	}
+	.addcard_wrapper .content_form .add_form .upload .img_wrapper {
+		width: 200px;
+	}
+	.main_header__logo {
+		padding-top: 15px;
+	}
+	.main_header__btn button {
+		width: 170px;
+	}
+	.main_header__btn button {
+		display: block;
+		margin: 0 auto;
+		margin-bottom: 15px;
+	}
+	.main_header .dark_header__line .ham {
+		left: 10px;
+		top: 0;
+	}
+	.view {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+	.message_scroll {
+		width: 100%;
+		padding-right: 0;
+		margin-bottom: 50px;
+		padding-bottom: 20px;
+		border-bottom: 2px solid #ececec;
+	}
+	.message_chat {
+		float: none;
+		width: 100%;
+		padding-left: 0;
+	}
+	.profile_info .rating {
+		text-align: center;
+		margin-top: 30px;
+	}
+	.profile_info .rating button {
+		margin: 0 auto;
+	}
+	.help .faq_item {
+		padding-right: 0;
+	}
+	.profile_info .social .name {
+		font-size: 32px;
+	}
+	.profile_info {
+		text-align: center;
+	}
+	.profile_info .img_wrapper {
+		margin-right: 15px;
+	}
+	.main_header__title {
+		padding-top: 95px;
+	}
+	.slider_img {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+	.categories_wrapper h2 {
+		padding-left: 15px;
+	}
+	.myjobs {
+		padding-right: 15px;
+		padding-left: 15px;
+	}
+	.main_wrapper .alert_window__block {
+		width: 90%;
+		display: inline-block;
+		margin-left: 0;
+		left: 0;
+		position: relative;
+		height: auto;
+	}
+	.main_wrapper .alert_window {
+		text-align: center;
+	}
+	.profile_info .social {
+		margin-top: 30px;
+	}
+	.profile_text textarea {
+		width: 100%;
+		max-width: 100%;
+	}
+	.profile_text .edit_paypal input {
+		width: 100%;
+	}
+	.profile_text button {
+		margin-top: 15px;
+	}
+	.alert_window__block {
+		width: 100%;
+		left: 0;
+		margin-left: 0;
+		height: auto;
+	}
+}
+
+@media only screen and (max-width : 480px) {
+	.slider_more {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+	.items_item .img_wrapper {
+		height: 170px;
+	}
+	.profile_portfolio .block .mixed .close {
+		margin-right: 15px;
+	}
+	.creditcard_info {
+		height: auto;
+		padding-bottom: 80px;
+	}
+	.creditcard_info .success {
+		padding-top: 80px;
+		padding-bottom: 80px;
+	}
+	#small-dialog4 {
+		width: 100%;
+	}
+	#small-dialog4 .text {
+		padding-left: 25px;
+		padding-right: 25px;
+	}
+	.main_header__btn {
+		padding-top: 50px;
+	}
+	.main_header__title {
+		padding-top: 50px;
+	}
+	.help {
+		padding-top: 85px;
+	}
+	.myjobs {
+		padding-top: 85px;
+	}
+	.message {
+		padding-top: 85px;
+	}
+	.creditcard_info {
+		padding-top: 85px;
+	}
+	.view {
+		padding-top: 85px;
+	}
+	.categories_wrapper {
+		padding-top: 85px;
+	}
+	.profile {
+		padding-top: 85px;
+	}
+	.view_sidebar .user .img_wrapper {
+		left: 50%;
+		margin-left: -30.5px;
+	}
+	.dark_header__line .name {
+		width: 100%;
+		height: 70px;
+	}
+	.dark_header__line .name #newMessagesCount {
+		position: relative;
+		display: inline;
+	}
+	.dark_header__line .name span {
+		display: block;
+	}
+	.profile_info input {
+		display: block;
+		width: 100%;
+		margin-right: 0;
+		margin-top: 15px;
+	}
+	.profile_portfolio .block .work_block, .profile_portfolio .block .education_block, .profile_portfolio .block .additional_block {
+		margin-bottom: 30px;
+		padding-bottom: 35px;
+		padding-top: 20px;
+		border-bottom: 1px solid #4281D0;
+	}
+	.profile_portfolio .block .edit_profile {
+		top: -25px;
+		right: auto;
+		bottom: auto;
+		left: 50%;
+    margin-left: -20px;
+	}
+	.profile_portfolio .block .work_edit .longinput {
+		width: 100%;
+	}
+	.profile_portfolio .block .work_edit .work_edit__btn .delete {
+		width: 100%;
+		margin-left: 0;
+	}
+	.profile_portfolio .block .work_edit .work_edit__btn button {
+		width: 100%;
+		margin-bottom: 10px;
+	}
+	.profile_portfolio .work_edit__btn {
+		text-align: center;
+	}
+	.profile_portfolio .block .work_edit input {
+		width: 100%;
+		margin-right: 0;
+	}
+	.login_social span .fa {
+		left: 10px;
+	}
+	.main_wrapper .alert_window__block h2 {
+		background-image: none;
+	}
+	.view_sidebar .user {
+		display: block;
+		text-align: center;
+		padding-left: 0;
+		margin: 0 auto;
+		padding-top: 70px;
+		margin-bottom: 30px;
+	}
+	.view_sidebar .salary_info {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.view_sidebar .recent {
+		width: 100%;
+	}
+	.view_sidebar .recent .wrapper .recent_item .img_wrapper {
+		display: block;
+		margin: 0 auto;
+	}
+	.view_sidebar .recent .wrapper .recent_item .text {
+		text-align: center;
+		display: block;
+		margin: 0 auto;
+		margin-top: 20px;
+	}
+
+	.message_chat .all_sms .sms .head span {
+		display: block;
+		text-align: center;
+		margin-bottom: 10px;
+	}
+	.profile_info .social {
+		display: block;
+		margin-top: 30px;
+	}
+	/*.dark_header__line .name a {
+		display: none;
+	}*/
+	.forgotpass_form {
+		width: 90%;
+	}
+	.help .faq_item > p {
+		padding-left: 30px;
+	}
+	.help .faq {
+		padding-right: 0;
+	}
+	.creditcard_info__form {
+		width: 100%;
+	}
+	.creditcard_info__form .cards .card:nth-child(1) {
+		display: block;
+		float: left;
+		margin-right: 0;
+	}
+	.creditcard_info__form .cards .card:nth-child(2) {
+		display: block;
+		float: right;
+		margin-right: 0;
+	}
+	.creditcard_info__form .cards .card:nth-child(3) {
+		display: block;
+		float: left;
+		margin-right: 0;
+		position: relative;
+		left: -60px;
+		top: 75px;
+	}
+	.login_social button .fa {
+		position: relative;
+		margin-right: 5px;
+		top: 3px;
+		left: 0;
+	}
+	.login .forgot {
+		font-size: 13px;
+	}
+	.creditcard_info__form .cards {
+		padding-bottom: 100px;
+		width: 95%;
+		margin: 0 auto;
+	}
+	.creditcard_info__form .datecvv .item {
+		width: 100%;
+	}
+	.creditcard_info__form .datecvv .cvv {
+		float: none;
+		width: 100%;
+		margin-top: 15px;
+	}
+	.creditcard_info__form .cards .card:nth-child(4) {
+		display: block;
+		float: right;
+		margin-right: 0;
+		position: relative;
+		right: -50px;
+		top: 75px;
+	}
+	.pagination {
+		font-size: 10px;
+	}
+	.pagination .prev {
+		margin-left: 2px;
+	}
+	.pagination .next {
+		margin-right: 2px;
+	}
+	.pagination_items {
+		margin: 0 6px;
+	}
+	.main_footer .copy {
+		font-size: 11px;
+	}
+	.main_header__buttons button {
+		width: 100%;
+	}
+	.main_header__how .buttons .startup {
+		margin-right: auto;
+		margin-bottom: 30px;
+	}
+	.main_header__how .buttons button {
+		display: block;
+		margin: 0 auto;
+	}
+	.slider_img {
+		height: auto;
+	}
+}
+
+@media only screen and (min-width : 992px) {
+	.dark_header__line .name .name_hover ul li a:hover{
+    background-color: #72B3A6;
+  }
+  .dark_header__line .name span:hover .name_hover {
+    opacity: 1;
+    top: 55px;
+    margin-top: 0;
+  }
+  .mobile_dark {
+		display: none;
+	}
+}
+
+@media only screen and (min-width : 768px) {
+	.profile_text button {
+		margin-top: 15px;
+	}
+}
+
+@media only screen and (min-width : 1200px) {
+	.slider_img::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0,0,0, .5);
+		top: 0;
+		left: 0;
+	}
+	.slider_img h3, .slider_img p {
+    position: relative;
+	}
+}
+
+
+
