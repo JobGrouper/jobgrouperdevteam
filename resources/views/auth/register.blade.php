@@ -45,7 +45,7 @@
             <input type="checkbox" id="terms">
             <label class="terms" for="terms">I’ve read and agree to the <a href="/terms">Terms &amp; Conditions</a></label>
             <div class="btndiv clearfix">
-                <span>Have an account& <a href="/login">Log in</a></span>
+                <span>Have an account? <a href="/login">Log in</a></span>
                 <button>Sign Up</button>
             </div>
         </form>
