@@ -2,28 +2,28 @@ $(document).ready(function() {
 
 	var d = $('.message_chat .all_sms');
 	d.scrollTop(d.prop("scrollHeight"));
-	// $(".dark_header__line .ham").click(function() {
-	// 	$(".dark_header__categories").fadeToggle("fast");
-	// 	$(".main_header__logo a img").toggleClass("mobileshow");
-	// 	$(".main_header__logo a").toggleClass("mobileshow");
-	// 	$(".dark_bg").toggleClass("active");
-	// 	if ($(this).find("img").attr("src") == "http://jobgrouper.com/img/Category/ham.png") {
-	// 		$(this).find("img").attr("src", "http://jobgrouper.com/img/View/cancel.png");
-	// 	}	else {
-	// 		$(this).find("img").attr("src", "http://jobgrouper.com/img/Category/ham.png");
-	// 	}
-	// 	if (window.innerWidth < 768 && window.location.href == "http://jobgrouper.com/") {
-	// 		$(".main_header__logo").toggleClass("hide_logo");
-	// 		$(".main_header .dark_header__categories").toggleClass("active");
-	// 	}
-    //
-	// });
+	$(".dark_header__line .ham").click(function() {
+		$(".dark_header__categories").fadeToggle("fast");
+		$(".main_header__logo a img").toggleClass("mobileshow");
+		$(".main_header__logo a").toggleClass("mobileshow");
+		$(".dark_bg").toggleClass("active");
+		if ($(this).find("img").attr("src") == "http://jobgrouper.com/img/Category/ham.png") {
+			$(this).find("img").attr("src", "http://jobgrouper.com/img/View/cancel.png");
+		}	else {
+			$(this).find("img").attr("src", "http://jobgrouper.com/img/Category/ham.png");
+		}
+		if (window.innerWidth < 768 && window.location.href == "http://jobgrouper.com/") {
+			$(".main_header__logo").toggleClass("hide_logo");
+			$(".main_header .dark_header__categories").toggleClass("active");
+		}
 
-	// $(".job_item h1").click(function() {
-	// 	$(this).parents(".job_item").find(".jobs_acc").slideToggle("fast");
-	// 	$(this).parent().toggleClass("active");
-	// 	$(this).toggleClass("active");
-	// });
+	});
+
+	$(".job_item h1").click(function() {
+		$(this).parents(".job_item").find(".jobs_acc").slideToggle("fast");
+		$(this).parent().toggleClass("active");
+		$(this).toggleClass("active");
+	});
 
 	if (window.innerWidth < 768 && window.location.href == "http://jobgrouper.com/") {
 		$("body").on("click", ".dark_bg.active", function() {
