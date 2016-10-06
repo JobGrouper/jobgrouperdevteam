@@ -1,3 +1,0 @@
-cd /home/jobgrou2/public_html/application/
-php artisan chat_server:serve
-ps axu | grep chat_server
