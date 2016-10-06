@@ -16,18 +16,51 @@
             @if(isset($job->title))
                 <input type="hidden" name="job_id" value="{{$job->id}}">
             @endif
-            <label for="title">Title</label>
 
-            <input type="text" id="title"  name="title" value="{{(isset($job->title) ? $job->title : '')}}"/>
+            <label class="lang_change">Language of job posting</label>
+            <div class="radio_list">
+                <div class="radiodiv">
+                    <input name="lang" class="radio" checked type="radio" id="1">
+                    <label class="buyer buy_radio" for="1">Jobgrouper main(English)</label>
+                </div>
+                <div class="radiodiv">
+                    <input name="lang" class="radio" type="radio" id="2">
+                    <label class="buyer buy_radio" for="2">English and Chinese</label>
+                </div>
+                <div class="radiodiv">
+                    <input name="lang" class="radio" type="radio" id="3">
+                    <label class="buyer buy_radio" for="3">Chinese only</label>
+                </div>
+            </div>
+            <div class="english_card">
+                <label for="title">Title (English)</label>
 
+                <input type="text" id="title"  name="title" value="{{(isset($job->title) ? $job->title : '')}}"/>
+
+            </div>
+
+            <div class="china_card">
+                 <label for="title">Title (Chinese)</label>
+
+                <input type="text" id="title"  name="title" value="{{(isset($job->title) ? $job->title : '')}}"/>
+            </div>
             <input type="checkbox" id="hot" name="hot" value="1" {{((isset($job->hot) && $job->hot) ? 'checked' : '')}}/>
 
             <label class="hot_label" for="hot">Hot</label>
 
-            <label for="descr">Description</label>
+            <div class="english_card">
+                <label for="descr">Description (English)</label>
 
-            <textarea id="descr" name="description">{{(isset($job->title) ? $job->description : '')}}</textarea>
+                <textarea id="descr" name="description">{{(isset($job->title) ? $job->description : '')}}</textarea>
 
+            </div>
+
+
+            <div class="china_card">
+                <label for="descr">Description (Chinese)</label>
+
+                <textarea id="descr" name="description">{{(isset($job->title) ? $job->description : '')}}</textarea>
+            </div>
             <div class="double">
 
                 <div class="max">

@@ -1049,3 +1049,47 @@ body {
   -o-transform-origin: left top;
   transform-origin: left top;
 }
+
+.addcard_wrapper .content_form .add_form .radio_list {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.addcard_wrapper .content_form .add_form .radio_list .radiodiv {
+  display: inline-block;
+  position: relative;
+  margin-right: 80px;
+}
+
+.addcard_wrapper .content_form .add_form .radio_list .radiodiv:last-child {
+  margin-right: 0;
+}
+
+.addcard_wrapper .content_form .add_form .radio_list label {
+  display: block;
+  padding-left: 20px; }
+.addcard_wrapper .content_form .add_form .radio_list .radio {
+  display: none; }
+.addcard_wrapper .content_form .add_form .radio_list .radio + label::before {
+  content: '';
+  background-image: url(../../img/passive.png);
+  background-repeat: no-repeat;
+  display: inline-block;
+  vertical-align: middle;
+  position: absolute;
+  top: 0px;
+  left: -15px;
+  margin-left: -12px;
+  width: 24px;
+  height: 24px; }
+.addcard_wrapper .content_form .add_form .radio_list .radio:checked + label::before {
+  background-image: url(../../img/active.png);
+  background-repeat: no-repeat; }
+
+.addcard_wrapper .content_form .add_form .lang_change {
+  margin-bottom: 30px;
+}
+
+.addcard_wrapper .content_form .add_form .china_card {
+  display: none;
+}
