@@ -665,8 +665,21 @@ if (window.innerWidth > 768) {
     });
   });
 }
+/////JOB GROUPER PHASE 2
 
+    $(".addcard_wrapper .content_form .add_form .radio_list .radio[id='1']").on("change", function() {
+        $(".china_card").fadeOut("fast");
+        $(".english_card").fadeIn("fast");
+    });
 
+    $(".addcard_wrapper .content_form .add_form .radio_list .radio[id='2']").on("change", function() {
+        $(".china_card").fadeIn("fast");
+        $(".english_card").fadeIn("fast");
+    });
 
-        // 
+    $(".addcard_wrapper .content_form .add_form .radio_list .radio[id='3']").on("change", function() {
+        $(".china_card").fadeIn("fast");
+        $(".english_card").fadeOut("fast");
+    });
+
 });
