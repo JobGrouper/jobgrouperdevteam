@@ -42,7 +42,7 @@
             <div class="china_card">
                  <label for="title">Title (Chinese)</label>
 
-                <input type="text" id="title"  name="title_ch" value="{{(isset($job->title) ? $job->title : '')}}"/>
+                <input type="text" id="title"  name="title_ch" value="{{(isset($job->title_ch) ? $job->title : '')}}"/>
             </div>
             <input type="checkbox" id="hot" name="hot" value="1" {{((isset($job->hot) && $job->hot) ? 'checked' : '')}}/>
 
@@ -59,7 +59,7 @@
             <div class="china_card">
                 <label for="descr">Description (Chinese)</label>
 
-                <textarea id="descr" name="description_ch">{{(isset($job->title) ? $job->description : '')}}</textarea>
+                <textarea id="descr" name="description_ch">{{(isset($job->title) ? $job->description_ch : '')}}</textarea>
             </div>
             <div class="double">
 

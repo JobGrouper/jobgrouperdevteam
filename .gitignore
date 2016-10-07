@@ -6,3 +6,5 @@ Homestead.json
 .env
 *~
 *.un*
+git-help.txt
+/public

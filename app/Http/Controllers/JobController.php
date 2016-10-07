@@ -13,7 +13,7 @@ use Carbon\Carbon;
 class JobController extends Controller
 {
     /**
-     * Creating ne job-card
+     * Creating new job-card
      *
      * @param  Request  $request
      * @return Response
@@ -97,7 +97,7 @@ class JobController extends Controller
         return view('pages.admin.card', ['job' => $job, 'categories' => $categories]);
     }
     /**
-     * Create new job
+     * Create new job card
      *
      * @param  Request  $request
      * @return Response
@@ -105,16 +105,20 @@ class JobController extends Controller
     public function store(Request $request)
     {
 
+        $job = new Job();
+        $job->fill($request->all());
+        $job->save();
 
-         $job = Job::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'salary' => $request->salary,
-            'max_clients_count' => $request->max_clients_count,
-            'category_id' => $request->category_id,
-        ]);
+//         $job = Job::create([
+//            'title' => $request->title,
+//            'description' => $request->description,
+//            'salary' => $request->salary,
+//            'max_clients_count' => $request->max_clients_count,
+//            'category_id' => $request->category_id,
+//        ]);
 
 
+        //Save image for job-card
         if($request->image_hash){
             $imageHash = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image_hash));
             $imageName = 'jobs/j_'.$job->id.'.png';
@@ -122,9 +126,8 @@ class JobController extends Controller
 
         }
 
-
         if(!$job->id){
-            die('error');
+            die('Error during creating job-card');
         }
 
         return redirect('/admin/cards');

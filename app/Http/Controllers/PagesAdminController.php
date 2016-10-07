@@ -20,9 +20,6 @@ class PagesAdminController extends Controller
 
     public function cards(){
         $allCards = Job::all();
-        /*$cards = $cards->sortByDesc(function($cards){
-            return $cards->employee_requests_count;
-        });*/
         $cardsWithRequests = $allCards->filter(function ($card) {
             return $card->employee_requests_count > 0;
         });
