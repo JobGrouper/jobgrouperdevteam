@@ -763,8 +763,7 @@ body {
 .admintext_wrapper__item {
   padding: 30px 0;
   border-bottom: 2px solid #E0E0E0;
-  position: relative;
-  margin-left: 40px;}
+  position: relative; }
 .admintext_wrapper__item:last-child {
   border-bottom: none; }
 .admintext_wrapper__item p {
@@ -1093,12 +1092,4 @@ body {
 
 .addcard_wrapper .content_form .add_form .china_card {
   display: none;
-}
-
-.admintext_wrapper__item .lang {
-  position: absolute;
-  top: 50%;
-  left: -90px;
-  font-size: 20px;
-  margin-top: -14px;
 }

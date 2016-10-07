@@ -16,8 +16,6 @@
 
             <div class="admintext_wrapper__item clearfix" data-id="{{$text->id}}">
 
-                <div class="lang">{{$text->id}} EN</div>
-
                 <p>{{$text->value}}</p>
 
                 <input type="text" name="edit">
