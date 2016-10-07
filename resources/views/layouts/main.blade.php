@@ -14,6 +14,10 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <script type="text/javascript">
+        var jg_domain = "{{ Request::root() }}";
+    </script>
+
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800italic,800,700italic,700,600italic,400italic,600,300,300italic' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="{{ asset('libs/bootstrap/bootstrap.min.css') }}">

@@ -81,7 +81,7 @@ $(document).ready(function() {
         var currentId = $(this).parent().attr("data-id");
         $.ajax({
              type: "PUT",
-             url: "http://jobgrouper.com/api/texts/" + currentId,
+             url: jg_domain + "/api/texts/" + currentId,
              data: obj,
              datatype: "json",
              success: function(response) {
