@@ -26,7 +26,7 @@
     <script>
         $('.deactivateUserButton').click(function () {
             var user_id = $(this).attr('data-user_id');
-            $.post({{ Request::root() }} + '/api/deactivateUser/' + user_id, {}, function (data) {
+            $.post('{{ Request::root() }}/api/deactivateUser/' + user_id, {}, function (data) {
                 switch(data){
                     case 'activated':
                             $('#button_' + user_id).html('<img  src="{{asset('img/Admin/Lockgray.png')}}" alt="alt">');

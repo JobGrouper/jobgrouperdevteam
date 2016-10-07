@@ -46,7 +46,7 @@
         $('.deleteCardButton').click(function () {
             if(confirm("Are you sure? All data related with this card will be deleted! (Orders, Requests e.t.c...)")){
                 var card_id = $(this).attr('data-card_id');
-                $.post({{ Request::root() }} + '/api/deleteJob/' + card_id, {}, function (data) {
+                $.post('{{ Request::root() }}/api/deleteJob/' + card_id, {}, function (data) {
                     switch(data){
                         case 'success':
                             $('#item_' + card_id).remove();

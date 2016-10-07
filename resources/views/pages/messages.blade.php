@@ -329,7 +329,7 @@
 
         function setChatHistory(recipientID) {
 
-            $.get({{ Request::root() }} + '/api/messages_history/' + recipientID, {}, function (data) {
+            $.get('{{ Request::root() }}/api/messages_history/' + recipientID, {}, function (data) {
 
                 console.log(data);
 
@@ -375,7 +375,7 @@
         }
 
         function markMessageasAsRead(){
-            $.post({{ Request::root() }} + '/api/markMessageasAsRead/' + currentRecipientID, {}, function (data) {
+            $.post('{{ Request::root() }}/api/markMessageasAsRead/' + currentRecipientID, {}, function (data) {
                 $('.unread').removeClass('unread');
                 if(data == 0){
                     data = '';
