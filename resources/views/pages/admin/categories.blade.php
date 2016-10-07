@@ -98,7 +98,7 @@
         $("#small-dialog3 .buttons .buttons_ok").on("click", function() {
                 
                 $.ajax({
-                    url: 'http://jobgrouper.com/api/category/'+ category_id + '/' + newCat,
+		    url: {{ Request::root() }} + '/api/category/'+ category_id + '/' + newCat,
                     type: 'DELETE',
                     success: function (data) {
                         switch(data){
@@ -122,7 +122,7 @@
                 var category_id = $(this).attr('data-category_id');
                 var title  = $('#category_'+category_id+'_title').val();
                 $.ajax({
-                    url: 'http://jobgrouper.com/api/category/'+ category_id,
+                    url: {{ Request::root() }} + '/api/category/'+ category_id,
                     type: 'PUT',
                     data: { title:title} ,
                     success: function (data) { }
