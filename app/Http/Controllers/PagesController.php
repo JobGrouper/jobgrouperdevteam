@@ -33,7 +33,7 @@ class PagesController extends Controller
         $notHotJobs = Job::where('hot', false)->get()->sortByDesc('id');
         $jobs = $jobs->merge($notHotJobs);
         $chunks = $jobs->chunk(9);
-        return view('pages.main', ['categories' => $categories, 'jobs' => $chunks[0]/*, 'hotJobs' => $hotJobs*/]);
+        return view('pages.main', ['categories' => $categories, 'jobs' => $chunks->first()/*, 'hotJobs' => $hotJobs*/]);
     }
 
 
