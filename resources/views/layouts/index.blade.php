@@ -8,6 +8,10 @@
 
     <title>@yield('title')</title>
 
+    <script type="text/javascript">
+        var jg_domain = "{{ Request::root() }}";
+    </script>
+
     <link rel="icon" type="image/ico" href="{{ asset('img/jb_16.ico') }}" sizes="16x16">
     <link rel="icon" type="image/ico" href="{{ asset('img/jb_32.ico') }}" sizes="32x32">
     <link rel="icon" type="image/ico" href="{{ asset('img/jb_64.ico') }}" sizes="64x64">

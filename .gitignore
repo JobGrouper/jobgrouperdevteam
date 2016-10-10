@@ -1,6 +1,8 @@
 /vendor
 /node_modules
 /public/storage
+/public/images/jobs/*.png
+/public/images/users/*.png
 Homestead.yaml
 Homestead.json
 error_log
@@ -8,3 +10,4 @@ error_log
 .env
 *~
 *.un*
+*.swp

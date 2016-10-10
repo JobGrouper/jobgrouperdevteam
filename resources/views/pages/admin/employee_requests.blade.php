@@ -78,7 +78,7 @@
 
             {{--var user_id = $(this).attr('data-user_id');--}}
 
-            {{--$.post('http://jobgrouper.com/api/deactivateUser/' + user_id, {}, function (data) {--}}
+            {{--$.post('{{ Request::root() }}/api/deactivateUser/' + user_id, {}, function (data) {--}}
 
                 {{--switch(data){--}}
 
