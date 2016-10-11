@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use App\User; //модель пользоватля
+use App\User;
 use App\UserSocialAccount;
-use App\ConfirmUsers; //модель пользоватля
-use Mail; // фасад для отправки почты
+use App\ConfirmUsers;
+use Mail;
 use Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -19,7 +19,6 @@ class RegistrateController extends Controller
 
     public function checkEmailFree(Request $request){
         $response = array();
-        $input = $request->only(['email']);
         $user = User::where('email', '=', $request->input('email'))->first();
         if ($user === null) {
             $response['status'] = 0;
@@ -31,20 +30,17 @@ class RegistrateController extends Controller
         }
 
         return response($response, 200);
-
     }
+
 
     public function register(Request $request)
     {
-        //Getting user data
-        $input = $request->only(['first_name', 'last_name', 'user_type', 'email', 'password', 'social_account_id']);
-
-        //Insert user
         $user = User::where('email', '=', $request->input('email'))->first();
         if ($user !== null) {
             die('User with this email already exist');
         }
 
+        //Creating new user
         $user = User::create([
             'first_name' => $request->input('first_name'),
             'last_name' => $request->input('last_name'),
@@ -53,20 +49,24 @@ class RegistrateController extends Controller
             'password' => bcrypt($request->input('password')),
         ]);
 
-        if(!empty($user->id))
+        if(isset($user->id))
         {
+            //Creating record for user email confirmation
             $email = $user->email;
-            $token = str_random(32);    //token for email cerify
-            $model = new ConfirmUsers;  //создаем экземпляр нашей модели
-            $model->email = $email;     //вставляем в таблицу email
-            $model->token = $token;     //вставляем в таблицу токен
-            $model->save();         // сохраняем все данные в таблицу
+            $token = str_random(32);            //token for email confirmation
+            $confirmUser = new ConfirmUsers;
+            $confirmUser->email = $email;
+            $confirmUser->token = $token;
+            $confirmUser->save();
 
 
+            //Check if registration began from creating the social account (fb / tw)
             if($request->input('social_account_id')){
                 $socialAccount = UserSocialAccount::whereId($request->input('social_account_id'))
                     ->whereUserId(null)
                     ->first();
+
+                //Associating user account with user social account
                 $socialAccount->user()->associate($user);
                 $socialAccount->save();
             }
@@ -78,20 +78,12 @@ class RegistrateController extends Controller
                 $u->to($user->email);
                 $u->subject('Confirm registration');
             });
-
-            $responseCode = 200;
-            $responseData['error'] = false;
-            $responseData['status'] = 0;
-            $responseData['info'] = 'User successfully registered';
         }
         else {
             die('Something went wrong. Please try again later.');
         }
 
-        $emailArr = explode('@', $user->email);
-        $emailUrl = 'http://'.$emailArr[1];
-
-        return view('pages.success', ['emailUrl' => $emailUrl]);
+        return view('pages.success');
     }
 
     public function confirm($token)
@@ -101,10 +93,10 @@ class RegistrateController extends Controller
             die('Token not found!');
         }
         else{
-            $user = User::where('email','=',$model->email)->first(); //выбираем пользователя почта которого соответствует переданному токену
-            $user->email_confirmed = 1; // меняем статус на 1
-            $user->save();  // сохраняем изменения
-            $model->delete(); //Удаляем запись из confirm_users
+            $user = User::where('email','=',$model->email)->first();
+            $user->email_confirmed = 1;
+            $user->save();
+            $model->delete();
 
             Auth::login($user);
             

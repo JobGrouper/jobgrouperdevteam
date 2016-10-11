@@ -8,5 +8,5 @@ done
 #if chat socket procces was not founded - run socket server
 if [[ "$procesCount" -ne 2 ]]
 then
-    php  /home/jobgrou2/public_html/application/artisan chat_server:serve
+    php  artisan chat_server:serve
 fi

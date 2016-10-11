@@ -49,13 +49,18 @@ class Kernel extends ConsoleKernel
             User::where('updated_at','<',date('Y-m-d H:i:s', strtotime('-1 hours')))->where('email_confirmed','=',0)->delete();
         })->everyMinute();
 
+        /*
+         * Task to run chat socket server and check it`s status
+         */
         $schedule->call(function () {
             //This script will check if socket server is running and run it if no
-            shell_exec('/home/jobgrou2/public_html/application/storage/shell/run_socket_server.sh');
+            shell_exec('storage/shell/run_socket_server.sh');
         })->everyMinute();
 
 
-        //Delete orders without payments
+        /*
+         * Task to delete orders without payments
+         */
         $schedule->call(function () {
             $sales = Sale::where('status', 'in_progress')->get();
             foreach ($sales as $sale){
