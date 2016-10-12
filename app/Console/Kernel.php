@@ -119,6 +119,8 @@ class Kernel extends ConsoleKernel
             )
         );
 
+	$apiContext->setConfig(array('mode' => env('PAYPAL_API_MODE')));
+
         $jobs = Job::where('status', '=', 'working')->where('next_payment_date','<=',date('Y-m-d H:i:s'))->get();
         if($jobs->count() == 0){
             return false;

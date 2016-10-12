@@ -155,6 +155,8 @@ Route::group(['prefix' => 'test'], function(){
             )
         );
 
+	$apiContext->setConfig(array('mode' => env('PAYPAL_API_MODE')));
+
         $payouts = new \PayPal\Api\Payout();
         $senderBatchHeader = new \PayPal\Api\PayoutSenderBatchHeader();
         $senderBatchHeader->setSenderBatchId(uniqid())
