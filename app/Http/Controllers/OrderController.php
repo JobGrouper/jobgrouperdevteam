@@ -181,6 +181,8 @@ class OrderController extends Controller
             )
         );
 
+	$apiContext->setConfig(array('mode' => env('PAYPAL_API_MODE')));
+
         $creditCardToken = new CreditCardToken();
         $creditCardToken->setCreditCardId($creditCard->card_id);
 
