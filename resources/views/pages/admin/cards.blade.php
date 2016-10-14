@@ -7,6 +7,10 @@
         <div class="list_wrapper">
             @foreach($cards as $card)
             <div class="list_wrapper__item" id="item_{{$card->id}}">
+                <div class="apr_rej">
+                    <button type="submit" class="approve">Approve</button>
+                    <button type="submit" class="reject">Reject</button>
+                </div>
                 <h2>{{$card->title}}</h2>
                 <p>{{$card->description}}</p>
                 <div class="item_info">
