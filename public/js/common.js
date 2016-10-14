@@ -19,6 +19,55 @@ $(document).ready(function() {
 		
 	});
 
+	$(".add_form .radio_list .radio[id='1']").on("change", function() {
+		$(".china_card").fadeOut("fast");
+		$(".english_card").fadeIn("fast");
+	});
+
+	$(".add_form .radio_list .radio[id='2']").on("change", function() {
+		$(".china_card").fadeIn("fast");
+		$(".english_card").fadeIn("fast");
+	});
+
+	$(".add_form .radio_list .radio[id='3']").on("change", function() {
+		$(".china_card").fadeIn("fast");
+		$(".english_card").fadeOut("fast");
+	});
+
+	jQuery.fn.ForceNumericOnly =
+		function()
+		{
+			return this.each(function()
+			{
+				$(this).keydown(function(e)
+				{
+					var key = e.charCode || e.keyCode || 0;
+					// allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
+					// home, end, period, and numpad decimal
+					return (
+					key == 8 ||
+					key == 9 ||
+					key == 13 ||
+					key == 46 ||
+					key == 110 ||
+					key == 190 ||
+					(key >= 35 && key <= 40) ||
+					(key >= 48 && key <= 57) ||
+					(key >= 96 && key <= 105));
+				});
+			});
+		};
+
+	$(".add_form .double .max #max").ForceNumericOnly();
+	$(".add_form .double .perclient #per").ForceNumericOnly();
+	setInterval(function(e) {
+		if ($(".add_form .double .max #max").val().trim().length != 0 && $(".add_form .double .perclient #per").val().trim().length != 0) {
+			$(".add_form .double .salary #salary").val(($(".add_form .double .perclient #per").val() * +$(".add_form .double .max #max").val()));
+		} else {
+			$(".add_form .double .salary #salary").val("");
+		}
+	}, 100);
+
 	// $(".job_item h1").click(function() {
 	// 	$(this).parents(".job_item").find(".jobs_acc").slideToggle("fast");
 	// 	$(this).parent().toggleClass("active");

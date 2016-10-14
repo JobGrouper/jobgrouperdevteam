@@ -2507,3 +2507,183 @@ img {
 .job_item h1 .job_item__title .potent_span {
   font-style: italic;
 }
+
+.add_form {
+  background-color: #fff;
+  -webkit-box-shadow: 0 0 10px #ccc;
+  box-shadow: 0 0 10px #ccc;
+  padding: 70px 75px 75px 75px;}
+.add_form label {
+  font-weight: 600;
+  display: block;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  text-align: left; }
+.add_form input {
+  width: 100%;
+  border: 1px solid #C2C2C2;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  height: 54px;
+  padding-left: 15px;
+  margin-bottom: 20px; }
+.add_form #hot {
+  display: none; }
+
+.add_form #hot + label::before {
+  content: '';
+  background-color: #fff;
+  border: 1px solid #D4D9E3;
+  width: 20px;
+  height: 20px;
+  position: relative;
+  top: -2px;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: 700;
+  margin-right: 10px;
+  font-size: 14px;
+  color: #000; }
+
+.add_form .hot_label {
+  margin-bottom: 30px;
+}
+
+.add_form #hot:checked + label::before {
+  content: '\2713'; }
+.add_form textarea {
+  width: 100%;
+  border: 1px solid #C2C2C2;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  height: 160px;
+  padding-top: 15px;
+  padding-left: 15px;
+  margin-bottom: 20px;
+  resize: none; }
+.add_form .double {
+  position: relative;
+  text-align: center;
+}
+.add_form .double .max {
+  float: left;
+  width: 30%; }
+.add_form .double .perclient {
+  display: inline-block; }
+.add_form .double .salary {
+  float: right;
+  width: 30%; }
+.add_form select {
+  width: 100%;
+  border: none;
+  background-color: #3350B9;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  height: 54px;
+  padding-left: 15px;
+  margin-bottom: 20px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  color: #fff;
+  background-image: url(../img/Admin/selectarrow.png);
+  background-repeat: no-repeat;
+  background-position: 95% 50%; }
+.add_form select::-ms-expand {
+  display: none;
+}
+.add_form .upload input {
+  width: 70%; }
+.add_form .upload #changeavatar {
+  display: none;
+}
+.add_form .upload .img_wrapper {
+  width: 250px;
+  height: 100px;
+  float: left;
+}
+.add_form .upload .img_wrapper img {
+  width: 100%;
+  height: 100%;
+}
+.add_form .upload label {
+  float: right;
+  height: 54px;
+  width: 25%;
+  border: none;
+  text-align: center;
+  line-height: 54px;
+  color: #fff;
+  cursor: pointer;
+  text-transform: uppercase;
+  background-color: #FF480B;
+  -webkit-transition: background-color .3s ease;
+  transition: background-color .3s ease; }
+.add_form .upload button:hover {
+  background-color: #72B3A6; }
+.add_form .create_buttons {
+  text-align: center;
+}
+.add_form .create_buttons .cancel {
+  margin-left: 30px;
+}
+.add_form .create {
+  height: 54px;
+  border: none;
+  color: #fff;
+  text-transform: uppercase;
+  background-color: #3350B9;
+  width: 210px;
+  margin: 0 auto;
+  margin-top: 75px;
+  -webkit-transition: background-color .3s ease;
+  transition: background-color .3s ease; }
+.add_form .create:hover {
+  background-color: #72B3A6; }
+
+.add_form .radio_list {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.add_form .radio_list .radiodiv {
+  display: inline-block;
+  position: relative;
+  margin-right: 80px;
+}
+
+.add_form .radio_list .radiodiv:last-child {
+  margin-right: 0;
+}
+
+.add_form .radio_list label {
+  display: block;
+  padding-left: 20px; }
+.add_form .radio_list .radio {
+  display: none; }
+.add_form .radio_list .radio + label::before {
+  content: '';
+  background-image: url(../img/passive.png);
+  background-repeat: no-repeat;
+  display: inline-block;
+  vertical-align: middle;
+  position: absolute;
+  top: 0px;
+  left: -15px;
+  margin-left: -12px;
+  width: 24px;
+  height: 24px; }
+.add_form .radio_list .radio:checked + label::before {
+  background-image: url(../img/active.png);
+  background-repeat: no-repeat; }
+
+.add_form .lang_change {
+  margin-bottom: 30px;
+}
+
+.add_form .china_card {
+  display: none;
+}
+
+
