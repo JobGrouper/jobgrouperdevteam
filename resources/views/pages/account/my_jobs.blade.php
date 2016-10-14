@@ -17,6 +17,7 @@
             @if($jobs->count())
                 @foreach($jobs as $job)
                 <div class="job_item">
+                    <div class="edit_job" title="Edit job"><img src="{{ asset('img/Profile/edit_pencil.png') }}" alt="alt"></div>
                     <h1 class="active">
                         <span class="job_item__title">{{$job->title}}{!!  ($job->status == 'working' ? '<span class="green">Active</span>' : '<span class="red">Waiting for buyers</span>')  !!}</span>
                          <p class="myjobs_text">{{$job->description}}</p>
@@ -102,6 +103,8 @@
                 <p class="potent">Potential jobs</p>
                 @foreach($potentialJobs as $job)
                     <div class="job_item">
+                        <div class="edit_job" title="Edit job"><img src="{{ asset('img/Profile/edit_pencil.png') }}" alt="alt"></div>
+
                         <h1 class="active">
                             <span class="job_item__title">{{$job->title}} <span class="potent_span">Potential job</span></span>
                             <p class="myjobs_text">{{$job->description}}</p>
@@ -182,6 +185,8 @@
             @if($employeeRequests->count())
                 @foreach($employeeRequests as $employeeRequest)
                     <div class="job_item">
+                         <div class="edit_job" title="Edit job"><img src="{{ asset('img/Profile/edit_pencil.png') }}" alt="alt"></div>
+
                         <h1 class="active">
                             <span class="job_item__title">{{$employeeRequest->job()->first()->title}}</span>
                             <p class="myjobs_text">{{$employeeRequest->job()->first()->description}}</p>

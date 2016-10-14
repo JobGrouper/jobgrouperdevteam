@@ -2427,7 +2427,14 @@ img {
   color: #61BD4F !important;
 }
 .job_item {
+  position: relative;
   margin-bottom: 40px;
+}
+.job_item .edit_job {
+  position: absolute;
+  right: 20px;
+  cursor: pointer;
+  z-index: 1;
 }
 .job_item .job_item__title {
   display: block;
