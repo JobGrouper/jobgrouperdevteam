@@ -62,8 +62,10 @@ class JobController extends Controller
         }
 
         $user = Auth::user();
+		$user_order_info = null;
         $jobOrdered = false;
         $jobPaid = false;
+
         if($user){
             if($user->user_type == 'employee'){
                 if($user->employee_requests()->where('job_id', '=', $job->id)->count()){
