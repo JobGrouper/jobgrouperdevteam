@@ -130,7 +130,7 @@
                                 @if($jobPaid)
                                     <span class="approved">YOU HAVE ORDERED THIS JOB</span>
                                 @elseif($jobOrdered)
-                                    <span class="approved">PLEASE COMPLETE PAYMENT</span>
+                                    <a href="{{ Request::root() }}/purchase/{{ $user_order_info->id }}"><span class="approved">PLEASE COMPLETE PAYMENT</span></a>
                                 @else
                                     {{--Это было для сохранения карт и авто-оплат--}}
                                     {{--<a href="/purchase/{{$job->id}}"><button>Buy</button></a>--}}
