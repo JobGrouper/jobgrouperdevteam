@@ -87,7 +87,7 @@
                                 <a href="/purchase/{{$order->id}}"><button class="purchasebtn">Purchase</button></a>
                             @endif
 
-                            <form role="form" method="POST" action="{{ url('/order/close') }}">
+                            <form role="form" method="POST" action="{{ url('/order/close/' . $order->id ) }}">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="order_id" value="{{$order->id}}">
                                 <a class="popup-with-move-anim" href="#small-dialog4"><button type="submit" class="cancelbtn" data-order_id="{{$order->id}}">Close order</button><button class="Request2">Order closed</button></a>
