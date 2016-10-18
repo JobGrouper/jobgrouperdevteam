@@ -18,13 +18,12 @@
                                 <option value="{{$creditCard->id}}">{{$creditCard->number}}</option>
                             @endforeach
                         @else
-                            <option disabled value="">You have not credit cards</option>
+                            <option disabled value="">You have no credit cards</option>
                         @endif
                     </select>
                     <input type="hidden" name="order_id" value="{{$order->id}}">
                     <div class="invalid_login"></div>
-                    {!! ($changeCard ? false : ' <p>The first month will be paid.</p>') !!}
-                    <p>Payments for next months of work will be done automatically using this card.</p>
+                    <p>Payments for all subsequent months of work will be done automatically using this card.</p>
                     <a href="{{url('card/create')}}">Add payment card</a>
                     <button>{{ ($changeCard ? 'Change credit card' : 'Purchase') }}</button>
                 </form>
