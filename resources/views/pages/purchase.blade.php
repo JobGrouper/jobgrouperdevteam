@@ -23,8 +23,7 @@
                     </select>
                     <input type="hidden" name="order_id" value="{{$order->id}}">
                     <div class="invalid_login"></div>
-                    {!! ($changeCard ? false : ' <p>The first month will be paid.</p>') !!}
-                    <p>Payments for next months of work will be done automatically using this card.</p>
+                    <p>Payments for all subsequent months of work will be done automatically using this card.</p>
                     <a href="http://jobgrouper.com/card/create">Add payment card</a>
                     <button>{{ ($changeCard ? 'Change credit card' : 'Purchase') }}</button>
                 </form>
