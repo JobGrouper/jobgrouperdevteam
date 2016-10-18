@@ -8,7 +8,7 @@
         <div class="alert_window">
             <div class="alert_window__block">
                 <p>{!! $pageTexts[13] !!}</p>
-                <h2>{{$job->yearly_salary}} USD</h2>
+                <h2>{{$job->monthly_salary}} USD</h2>
                 <div class="cancel"></div>
             </div>
         </div>
@@ -70,7 +70,7 @@
 
                                 <div class="block bordered">
 
-                                    <span class="amount">${{$job->monthly_salary}}/mo</span>
+                                    <span class="amount">${{($employee ? $job->monthly_salary : $job->monthly_price)}}/mo</span>
 
                                 </div>
 

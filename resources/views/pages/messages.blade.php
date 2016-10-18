@@ -119,7 +119,7 @@
         var socket = new WebSocket('{{$_ENV['APP_CHAT_WS_URI']}}');
 
         socket.onopen = function () {
-            //alert("Connection established.");
+            console.log("Connection with WS established.");
         };
 
         socket.onclose = function (event) {
@@ -128,9 +128,9 @@
                 //alert('Connection closed clearly');
             } else {
                 setChatUnavailableWindow();
-                alert('Connection failed!!');
+                console.log('Connection failed!!');
+                console.log('Code: ' + event.code + ' cause: ' + event.reason);
             }
-            //alert('Code: ' + event.code + ' cause: ' + event.reason);
             //setChatUnavailableWindow();
         };
 
@@ -219,15 +219,6 @@
             }
         }
 
-
-        function sendTyping() {
-            var message = new Object();
-            message.type = 'typing';
-            message.recipientID = currentRecipientID;
-            socket.send(JSON.stringify(message));
-        }
-
-
         function setChatWindow(recipient_id, recipientImgUrl, recipientName) {
             $('#choose').remove();
             window.history.pushState("object or string", "Title", "/messages/" + currentRecipientID);
@@ -308,11 +299,9 @@
         }
 
         $('body').delegate('#message', 'keypress', function (e) {
-            sendTyping();
             if ((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey) {
                 this.value = this.value.substring(0, this.selectionStart) + "\n";
             }
-
             if (e.which == 13) {
                 event.preventDefault();
                 sendMessage();
