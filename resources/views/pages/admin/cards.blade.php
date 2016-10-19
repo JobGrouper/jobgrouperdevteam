@@ -19,7 +19,7 @@
                             @if($card->sales_count > 0)
                                 <a href="/admin/orders/{{$card->id}}">
                             @endif
-                                Max clients: {{$card->max_clients_count}}/{{$card->sales_count}}
+                                Max clients: {{$card->sales_count}}/{{$card->max_clients_count}}
                             @if($card->sales_count > 0)
                                 </a>
                             @endif

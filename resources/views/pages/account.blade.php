@@ -206,10 +206,12 @@
                                 </div>
                                 <div class="work_edit" data-id="{{$experience->id}}">
                                     <input type="text" class="longinput jobtitle" placeholder="Job title">
-                                    <div class="date"><input type="text" class="from" maxlength="10" readonly placeholder="From">
+                                    <div class="date login"><input type="text" class="from" maxlength="10" readonly placeholder="From">
                                         <input type="text" class="to" readonly maxlength="10" placeholder="To">
+                                        <input type="checkbox" id="present"/>
+                                        <label for="present" class="present">present</label>
                                     </div>
-                                    <input type="text" class="longinput addinfo" placeholder="Additional information">
+                                    <textarea class="longinput addinfo" placeholder="Additional information"></textarea>
                                     <div class="work_edit__btn">
                                         <button class="workchange">Save</button>
                                         <button class="delete">Delete job</button>
@@ -249,10 +251,12 @@
                             </div>
                             <div class="work_edit" data-id="{{$education->id}}">
                                 <input type="text" class="longinput jobtitle" placeholder="Education title">
-                                <div class="date"><input type="text" class="from" readonly maxlength="10" placeholder="From">
+                                <div class="date login"><input type="text" class="from" readonly maxlength="10" placeholder="From">
                                     <input type="text" class="to" readonly maxlength="10" placeholder="To">
+                                    <input type="checkbox" id="present"/>
+                                    <label for="present" class="present">present</label>
                                 </div>
-                                <input type="text" class="longinput addinfo" placeholder="Additional information">
+                                <textarea class="longinput addinfo" placeholder="Additional information"></textarea>
                                 <div class="work_edit__btn">
                                     <button class="workchange">Save</button>
                                     <button class="delete">Delete education</button>
