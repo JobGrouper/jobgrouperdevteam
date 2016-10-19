@@ -1,8 +1,13 @@
 /vendor
 /node_modules
-/public/storage
+/public/images
+/public/storage/app
+/public/storage/framework
+/public/storage/logs
 Homestead.yaml
 Homestead.json
 .env
 *~
 *.un*
+git-help.txt
+Vagrantfile
