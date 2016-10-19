@@ -5,9 +5,11 @@
 @section('content')
 
     <div class="view">
+        @if(!Auth::guest() && Auth::user()->user_type != 'employee')
         <div class="alert_window month">
             <div class="alert_window__block">
                 <p>{!! $pageTexts[13] !!}</p>
+<<<<<<< HEAD
 <<<<<<< HEAD
                 <h2>{{$job->monthly_salary}} USD</h2>
 =======
@@ -15,9 +17,15 @@
                 <p>Monthly price of the purchase: 100 USD</p>
                 <p>Markup: 100*0,15 = 15 USD</p>
                 <p>Total: 115 USD</p>
+=======
+                <p>Monthly price of the purchase: {{$job->salary}} USD</p>
+                <p>Markup: {{$job->salary}} * 15% fee = {{$job->salary*0.15}} USD</p>
+                <p>Total: {{$job->salary + ($job->salary*0.15)}} USD</p>
+>>>>>>> 7afcd64... Inform Buyers of Markup Before Purchase
                 <div class="cancel"></div>
             </div>
         </div>
+        @endif
 
         <div class="alert_window year">
             <div class="alert_window__block">
@@ -85,7 +93,15 @@
 
                                 <div class="block bordered">
 
-                                    <span class="amount">${{($employee ? $job->monthly_salary : $job->monthly_price)}}/mo</span>
+                                    <span class="amount">
+                                        @if(Auth::guest())
+                                            ${{$job->salary}}/mo
+                                        @elseif(!Auth::guest() && Auth::user()->user_type != 'employee')
+                                            ${{$job->monthly_price}}/mo
+                                        @else
+                                            ${{$job->monthly_salary}}/mo
+                                        @endif
+                                    </span>
 
                                 </div>
 
@@ -158,8 +174,9 @@
 
                         </div>
 
-                        <p class="window"><span>Salary <img src="{{asset('img/View/circle.png')}}" alt="alt"></span></p>
-
+                        @if(!Auth::guest() && Auth::user()->user_type == 'employee')
+                            <p class="window"><span>Salary <img src="{{asset('img/View/circle.png')}}" alt="alt"></span></p>
+                        @endif
                         <div class="recent">
 
                             @if(count($orders) > 0)
