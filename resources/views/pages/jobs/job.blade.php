@@ -5,10 +5,21 @@
 @section('content')
 
     <div class="view">
-        <div class="alert_window">
+        <div class="alert_window month">
             <div class="alert_window__block">
                 <p>{!! $pageTexts[13] !!}</p>
-                <h2>{{$job->yearly_salary}} USD</h2>
+                <h2>Salary: ${{$job->monthly_salary}} USD/month</h2>
+                <p>Monthly price of the purchase: 100 USD</p>
+                <p>Markup: 100*0,15 = 15 USD</p>
+                <p>Total: 115 USD</p>
+                <div class="cancel"></div>
+            </div>
+        </div>
+
+        <div class="alert_window year">
+            <div class="alert_window__block">
+                <p>{!! $pageTexts[13] !!}</p>
+                <h2>Salary: ${{$job->yearly_salary}} USD</h2>
                 <div class="cancel"></div>
             </div>
         </div>
@@ -130,7 +141,7 @@
                                 @if($jobPaid)
                                     <span class="approved">YOU HAVE ORDERED THIS JOB</span>
                                 @elseif($jobOrdered)
-                                    <span class="approved">PLEASE COMPLETE PAYMENT</span>
+                                    <a href="/purchase" class="approved">PLEASE COMPLETE PAYMENT</a>
                                 @else
                                     {{--Это было для сохранения карт и авто-оплат--}}
                                     {{--<a href="/purchase/{{$job->id}}"><button>Buy</button></a>--}}

@@ -258,8 +258,12 @@ $(document).ready(function() {
 		$(this).parent().find(".text_block").slideToggle();
 	});
 
-	$(".view_sidebar .window span, .view_sidebar .salary_info .purchase .block .amount").click(function() {
-		$(".alert_window").fadeIn("fast");
+	$(".view_sidebar .salary_info .purchase .block .amount").click(function() {
+		$(".alert_window.month").fadeIn("fast");
+	});
+
+	$(".view_sidebar .window span").click(function() {
+		$(".alert_window.year").fadeIn("fast");
 	});
 
 	$(".alert_window__block .cancel").click(function() {
