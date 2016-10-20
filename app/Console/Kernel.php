@@ -104,11 +104,11 @@ class Kernel extends ConsoleKernel
         })->everyMinute();
 
 
-        //Это  для сохранения карт и авто-оплат
+        //Getting payments from customers and sending money to sellers
         $schedule->call(function () {
             $this->getPaymentsForOrders();
-        //})->everyMinute(); //минута час день_месяца месяц день_недели*/
-        })->cron('0 0 * * *'); //минута час день_месяца месяц день_недели*/
+        //})->everyMinute();
+        })->cron('0 0 * * *');
 
 
     }
