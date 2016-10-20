@@ -68,7 +68,7 @@ class Kernel extends ConsoleKernel
                 if(!$payments->count() && $sale->updated_at < date('Y-m-d H:i:s', strtotime('-5 minutes'))){
                     $job = $sale->job()->first();
                     $sale->delete();
-                    if($job->sales_count == 0){
+                    if($job->sales_count == 0 && $job->status = 'working'){
                         $job->work_stop();
                     }
                 }
