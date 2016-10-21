@@ -129,7 +129,7 @@
                                 @if($jobPaid)
                                     <span class="approved">YOU HAVE ORDERED THIS JOB</span>
                                 @elseif($jobOrdered)
-                                    <span class="approved">PLEASE COMPLETE PAYMENT</span>
+                                    <span class="approved need" purchase={{$job->sales()->first()->id}}>PLEASE COMPLETE PAYMENT</span>
                                 @else
                                     {{--Это было для сохранения карт и авто-оплат--}}
                                     {{--<a href="/purchase/{{$job->id}}"><button>Buy</button></a>--}}

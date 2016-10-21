@@ -1781,6 +1781,9 @@ img {
       margin: 0 auto;
       margin-bottom: 20px;
     }
+    .view_sidebar .buttons .need {
+      cursor: pointer;
+        }
     .view_sidebar .buttons .rejected {
       display: block;
       text-align: center;
