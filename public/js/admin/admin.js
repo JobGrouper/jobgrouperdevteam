@@ -81,7 +81,7 @@ $(document).ready(function() {
         var currentId = $(this).parent().attr("data-id");
         $.ajax({
              type: "PUT",
-             url: "http://jobgrouper.com/api/texts/" + currentId,
+             url: "/api/texts/" + currentId,
              data: obj,
              datatype: "json",
              success: function(response) {
@@ -201,7 +201,7 @@ function()
 	 //    console.log(obj);
 	 //    $.ajax({
 		// 		type: "PUT",
-		// 		url: "http://jobgrouper.com//api/user/update",
+		// 		url: "//api/user/update",
 		// 		data: obj,
 		// 		datatype: "json",
 		// 		success: function(response) {
@@ -428,7 +428,7 @@ if (window.innerWidth > 768) {
                                           //   console.log(obj);
                                           //   $.ajax({
                                                 //  type: "PUT",
-                                                //  url: "http://jobgrouper.com//api/user/update",
+                                                //  url: "//api/user/update",
                                                 //  data: obj,
                                                 //  datatype: "json",
                                                 //  success: function(response) {
