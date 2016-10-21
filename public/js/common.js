@@ -393,7 +393,7 @@ $(document).ready(function() {
     if($(".profile_info .social .edittitle .edit_name").val().length > 0 || $(".profile_info .social .edittitle .edit_surname").val().length > 0) {
     	 $.ajax({
 				type: "PUT",
-				url: "http://jobgrouper.com//api/user/update",
+				url: "/api/user/update",
 				data: obj,
 				datatype: "json",
 				success: function(response) {
@@ -448,7 +448,7 @@ $(document).ready(function() {
 			}
 			$.ajax({
 				type: "PUT",
-				url: "http://jobgrouper.com//api/user/update",
+				url: "/api/user/update",
 				data: obj,
 				datatype: "json",
 				success: function(response) {
@@ -479,7 +479,7 @@ $(document).ready(function() {
 		}
 		$.ajax({
 			type: "PUT",
-			url: "http://jobgrouper.com//api/user/update",
+			url: "/api/user/update",
 			data: obj,
 			datatype: "json",
 			success: function(response) {
