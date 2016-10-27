@@ -1228,7 +1228,7 @@ $(".forgot_only button").on("click", function(event) {
 
 
 $(".myjobs .workers_item .cancelbtn").on("click", function() {
-	var order_id = $(this).parent().attr("data-id");
+	var order_id = $(this).attr("data-order_id");
 	var self = $(this);
 	$.ajax({
 		type: "POST",
