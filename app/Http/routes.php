@@ -159,4 +159,45 @@ Route::group(['prefix' => 'api'], function () {
 //Sandbox, for testing some features
 Route::get('sandbox', 'TestController@test');
 
+Route::group(['prefix' => 'test'], function(){
+    Route::get('paypal', function () {
+        $apiContext = new \PayPal\Rest\ApiContext(
+            new \PayPal\Auth\OAuthTokenCredential(
+                env('PAYPAL_CLIENT_ID'),     // ClientID
+                env('PAYPAL_CLIENT_SECRET')      // ClientSecret
+            )
+        );
+
+	$apiContext->setConfig(array('mode' => env('PAYPAL_API_MODE')));
+
+        $payouts = new \PayPal\Api\Payout();
+        $senderBatchHeader = new \PayPal\Api\PayoutSenderBatchHeader();
+        $senderBatchHeader->setSenderBatchId(uniqid())
+            ->setEmailSubject("You have a Payout!");
+
+        $senderItem = new \PayPal\Api\PayoutItem();
+        $senderItem->setRecipientType('Email')
+            ->setNote('Salary for work on job.')
+            ->setReceiver('ken-buyer-1@jobgrouper.com')
+            ->setSenderItemId("2014031400023")
+            ->setAmount(new \PayPal\Api\Currency('{
+                        "value":"10",
+                        "currency":"USD"
+                    }'));
+
+        $payouts->setSenderBatchHeader($senderBatchHeader)
+            ->addItem($senderItem);
+
+        $request = clone $payouts;
+
+        try {
+            $output = $payouts->createSynchronous($apiContext);
+        } catch (\Exception $ex) {
+            dd($ex);
+        }
+
+        dd('success');
+
+    });
+});
 

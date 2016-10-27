@@ -37,6 +37,8 @@ class CreditCardController extends Controller
             )
         );
 
+	$apiContext->setConfig(array('mode' => env('PAYPAL_API_MODE')));
+
         $card = new CreditCard();
         $card ->setType($this->cardType($input['card_number']))
             ->setNumber($input['card_number'])
