@@ -1,6 +1,11 @@
+.idea/
 /vendor
 /node_modules
+/public/images
 /public/storage
+/public/storage/app
+/public/storage/framework
+/public/storage/logs
 /public/images/jobs/*.png
 /public/images/users/*.png
 Homestead.yaml
@@ -8,6 +13,8 @@ Homestead.json
 error_log
 .htaccess
 .env
+*.swp
 *~
 *.un*
-*.swp
+git-help.txt
+Vagrantfile

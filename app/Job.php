@@ -40,6 +40,14 @@ class Job extends Model
     }
 
     /**
+     * Accessor to get percent of busy places
+     */
+    public function getSalesPercentAttribute()
+    {
+        return $this->sales_count * 100 / $this->max_clients_count;
+    }
+
+    /**
      * Accessor to get employees count for the job
      */
     public function getEmployeesCountAttribute()

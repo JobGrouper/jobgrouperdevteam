@@ -13,6 +13,7 @@ if(Request::input('fromJob')){
             <form role="form" method="POST" action="{{ url('/auth/login') }}">
                 {{ csrf_field() }}
                 <h2>Log In</h2>
+                <a href="/register" style="display: block; text-align: center; margin-bottom: 20px;">or register</a>
                 <div class="login_social">
                     <a href="/social_login/facebook">
                         <span class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i>Facebook</span>

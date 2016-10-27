@@ -70,7 +70,7 @@
             // if(confirm("Are you sure? All data related with this category will be deleted! (Cards, Orders, Requests e.t.c...)")){
             //     var category_id = $(this).attr('data-category_id');
             //     $.ajax({
-            //         url: 'http://jobgrouper.com/api/category/'+ category_id,
+            //         url: '/api/category/'+ category_id,
             //         type: 'DELETE',
             //         success: function (data) {
             //             switch(data){
@@ -98,7 +98,7 @@
         $("#small-dialog3 .buttons .buttons_ok").on("click", function() {
                 
                 $.ajax({
-		    url: '{{ Request::root() }}/api/category/'+ category_id + '/' + newCat,
+                    url: '/api/category/'+ category_id + '/' + newCat,
                     type: 'DELETE',
                     success: function (data) {
                         switch(data){
@@ -122,7 +122,7 @@
                 var category_id = $(this).attr('data-category_id');
                 var title  = $('#category_'+category_id+'_title').val();
                 $.ajax({
-                    url: '{{ Request::root() }}/api/category/'+ category_id,
+                    url: '/api/category/'+ category_id,
                     type: 'PUT',
                     data: { title:title} ,
                     success: function (data) { }

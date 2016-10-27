@@ -16,9 +16,7 @@
 
                 @if(count($orders) > 0)
                     @foreach($orders as $order)
-
                         <?php
-
                             $job = $order->job()->first();
                             $employee = $job->employee()->first();
                             $closeRequest = $order->close_order_requests()->where('originator_id', '=', $buyer->id)->first();

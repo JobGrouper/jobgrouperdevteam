@@ -19,6 +19,10 @@ $(document).ready(function() {
 		
 	});
 
+	$(".view_sidebar .buttons .need").click(function() {
+		window.location.href = '/purchase/' + $(this).attr("purchase");
+	});
+
 	// $(".job_item h1").click(function() {
 	// 	$(this).parents(".job_item").find(".jobs_acc").slideToggle("fast");
 	// 	$(this).parent().toggleClass("active");
@@ -47,7 +51,7 @@ $(document).ready(function() {
 		var self = $(this);
 		$.ajax({
 			type: "POST",
-			url: jg_domain + "/api/employeeExitRequest/" + job_id,
+			url: "/api/employeeExitRequest/" + job_id,
 			datatype: "json",
 			success: function(response) {
 				console.log(response);
@@ -66,7 +70,7 @@ $(document).ready(function() {
 		var self = $(this);
 		$.ajax({
 			type: "DELETE",
-			url: jg_domain + "/api/employeeRequest/" + job_id,
+			url: "/api/employeeRequest/" + job_id,
 			datatype: "json",
 			success: function(response) {
 				console.log(response);
@@ -110,7 +114,7 @@ $(document).ready(function() {
 				console.log(obj);
 				$.ajax({
 					type: "POST",
-					url: jg_domain + "/api/closeOrderRequest/" + ratePersonId,
+					url: "/api/closeOrderRequest/" + ratePersonId,
 					datatype: "json",
 					success: function(response) {
 						console.log(response);
@@ -119,7 +123,7 @@ $(document).ready(function() {
 							selfId.parent().parent().submit();
 							// $.ajax({
 							// 	type: "POST",
-							// 	url: "http://jobgrouper.com/api/closeOrderRequest/" + orderCloseId,
+							// 	url: "/api/closeOrderRequest/" + orderCloseId,
 							// 	dataType: "json",
 							// 	success: function(response) {
 							// 		console.log(response);
@@ -149,7 +153,7 @@ $(document).ready(function() {
 		console.log(obj);
 		$.ajax({
 			type: "POST",
-			url: jg_domain + "/api/rate/" + ratePersonId,
+			url: "/api/rate/" + ratePersonId,
 			data: obj,
 			datatype: "json",
 			success: function(response) {
@@ -159,7 +163,7 @@ $(document).ready(function() {
 					selfId.parent().parent().submit();
 					// $.ajax({
 					// 	type: "POST",
-					// 	url: "http://jobgrouper.com/api/closeOrderRequest/" + orderCloseId,
+					// 	url: "/api/closeOrderRequest/" + orderCloseId,
 					// 	dataType: "json",
 					// 	success: function(response) {
 					// 		console.log(response);
@@ -270,7 +274,7 @@ $(document).ready(function() {
 		}
 		$.ajax({
 			type: "POST",
-			url: jg_domain + "/api/checkEmailFree",
+			url: "/api/checkEmailFree",
 			data: obj,
 			datatype: "json",
 			success: function(response) {
@@ -290,7 +294,7 @@ $(document).ready(function() {
 			}
 		$.ajax({
 				type: "POST",
-				url: jg_domain + "/api/checkEmailFree",
+				url: "/api/checkEmailFree",
 				data: obj,
 				datatype: "json",
 				success: function(response) {
@@ -393,7 +397,7 @@ $(document).ready(function() {
     if($(".profile_info .social .edittitle .edit_name").val().length > 0 || $(".profile_info .social .edittitle .edit_surname").val().length > 0) {
     	 $.ajax({
 				type: "PUT",
-				url: jg_domain + "/api/user/update",
+				url: "/api/user/update",
 				data: obj,
 				datatype: "json",
 				success: function(response) {
@@ -448,7 +452,7 @@ $(document).ready(function() {
 			}
 			$.ajax({
 				type: "PUT",
-				url: jg_domain + "/api/user/update",
+				url: "/api/user/update",
 				data: obj,
 				datatype: "json",
 				success: function(response) {
@@ -479,7 +483,7 @@ $(document).ready(function() {
 		}
 		$.ajax({
 			type: "PUT",
-			url: jg_domain + "/api/user/update",
+			url: "/api/user/update",
 			data: obj,
 			datatype: "json",
 			success: function(response) {
@@ -565,7 +569,7 @@ $(document).ready(function() {
 	  		if($(this).attr("data-proid") == 1) {
 	  			$.ajax({
 						type: "POST",
-						url: jg_domain + "/api/experience",
+						url: "/api/experience",
 						data: obj,
 						datatype: "json",
 						success: function(response) {
@@ -597,7 +601,7 @@ $(".work_block__wrapper").on("click", ".delete", function() {
 		$(this).parents(".work_block").remove();
 		$.ajax({
 			type: "DELETE",
-			url: jg_domain + "/api/experience/" + +$(this).parents(".work_edit").attr("data-id"),
+			url: "/api/experience/" + +$(this).parents(".work_edit").attr("data-id"),
 				datatype: "json",
 				success: function(response) {
 					console.log(response);
@@ -662,7 +666,7 @@ $(".work_block__wrapper").on("click", ".edit_profile", function() {
   		console.log(obj);
   		$.ajax({
 				type: "PUT",
-				url: jg_domain + "/api/experience/" + +$(this).parents(".work_edit").attr("data-id"),
+				url: "/api/experience/" + +$(this).parents(".work_edit").attr("data-id"),
 				data: obj,
 				datatype: "json",
 				success: function(response) {
@@ -750,7 +754,7 @@ $(".one_more2 button").click(function() {
 	  		if($(this).attr("data-proid") == 1) {
 	  			$.ajax({
 						type: "POST",
-						url: jg_domain + "/api/education",
+						url: "/api/education",
 						data: obj,
 						datatype: "json",
 						success: function(response) {
@@ -782,7 +786,7 @@ $(".education_block__wrapper").on("click", ".delete", function() {
 		$(this).parents(".education_block").remove();
 		$.ajax({
 			type: "DELETE",
-			url: jg_domain + "/api/education/" + +$(this).parents(".work_edit").attr("data-id"),
+			url: "/api/education/" + +$(this).parents(".work_edit").attr("data-id"),
 				datatype: "json",
 				success: function(response) {
 					console.log(response);
@@ -847,7 +851,7 @@ $(".education_block__wrapper").on("click", ".edit_profile", function() {
   		console.log(obj);
   		$.ajax({
 				type: "PUT",
-				url: jg_domain + "/api/education/" + +$(this).parents(".work_edit").attr("data-id"),
+				url: "/api/education/" + +$(this).parents(".work_edit").attr("data-id"),
 				data: obj,
 				datatype: "json",
 				success: function(response) {
@@ -902,7 +906,7 @@ $(".education_block__wrapper").on("click", ".edit_profile", function() {
 	  		if($(this).attr("data-proid") == 1) {
 	  			$.ajax({
 						type: "POST",
-						url: jg_domain + "/api/skill",
+						url: "/api/skill",
 						data: obj,
 						datatype: "json",
 						success: function(response) {
@@ -933,7 +937,7 @@ $(".skill").on("click", ".mixed .close", function() {
 		var deleteElement = $(this).prev();
 		$.ajax({
 			type: "DELETE",
-			url: jg_domain + "/api/skill/" + +$(this).prev().attr("data-id"),
+			url: "/api/skill/" + +$(this).prev().attr("data-id"),
 			datatype: "json",
 			success: function(response) {
 				console.log(response);
@@ -1048,7 +1052,7 @@ $(".one_more4 button").click(function() {
 	  		if($(this).attr("data-proid") == 1) {
 	  			$.ajax({
 						type: "POST",
-						url: jg_domain + "/api/addition",
+						url: "/api/addition",
 						data: obj,
 						datatype: "json",
 						success: function(response) {
@@ -1080,7 +1084,7 @@ $(".additional_block__wrapper").on("click", ".delete", function() {
 		$(this).parents(".additional_block").remove();
 		$.ajax({
 			type: "DELETE",
-			url: jg_domain + "/api/addition/" + +$(this).parents(".work_edit").attr("data-id"),
+			url: "/api/addition/" + +$(this).parents(".work_edit").attr("data-id"),
 				datatype: "json",
 				success: function(response) {
 					console.log(response);
@@ -1122,7 +1126,7 @@ $(".additional_block__wrapper").on("click", ".edit_profile", function() {
   		console.log(obj);
   		$.ajax({
 				type: "PUT",
-				url: jg_domain + "/api/addition/" + +$(this).parents(".work_edit").attr("data-id"),
+				url: "/api/addition/" + +$(this).parents(".work_edit").attr("data-id"),
 				data: obj,
 				datatype: "json",
 				success: function(response) {
@@ -1155,7 +1159,7 @@ $(".view_sidebar .buttons .apply").on("click", function() {
 	if (confirm("Is your profile filled out completely? Your profile is the sole basis for which you are selected for jobs at JobGrouper.")) {
 		$.ajax({
 			type: "POST",
-			url:  jg_domain + "/api/employeeRequest/" + job_id,
+			url:  "/api/employeeRequest/" + job_id,
 			dataType: "json",
 			success: function(response) {
 				console.log(response);
@@ -1177,7 +1181,7 @@ $(".forgot_only #email").focusout(function() {
 		}
 		$.ajax({
 			type: "POST",
-			url: jg_domain + "/api/checkEmailFree",
+			url: "/api/checkEmailFree",
 			data: obj,
 			datatype: "json",
 			success: function(response) {
@@ -1200,7 +1204,7 @@ $(".forgot_only button").on("click", function(event) {
 		event.preventDefault();
 		$.ajax({
 			type: "POST",
-			url: jg_domain + "/api/checkEmailFree",
+			url: "/api/checkEmailFree",
 			data: obj,
 			datatype: "json",
 			success: function(response) {
@@ -1224,11 +1228,11 @@ $(".forgot_only button").on("click", function(event) {
 
 
 $(".myjobs .workers_item .cancelbtn").on("click", function() {
-	var order_id = $(this).parent().attr("data-id");
+	var order_id = $(this).attr("data-order_id");
 	var self = $(this);
 	$.ajax({
 		type: "POST",
-		url: jg_domain + "/api/order/close/" + order_id,
+		url: "/api/order/close/" + order_id,
 		dataType: "json",
 		success: function(response) {
 			console.log(response);
@@ -1294,7 +1298,7 @@ $(".creditcard_info__form button").on("click", function(event) {
 		// console.log(obj);
 		// $.ajax({
 		// 	type: "POST",
-		// 	url: "http://jobgrouper.com/api/order/purchase_via_stripe",
+		// 	url: "/api/order/purchase_via_stripe",
 		// 	data: obj,
 		// 	datatype: "json",
 		// 	success: function(response) {
@@ -1555,7 +1559,7 @@ if (window.innerWidth > 768) {
 										    console.log(obj);
 										    $.ajax({
 													type: "PUT",
-													url: jg_domain + "/api/user/update",
+													url: "//api/user/update",
 													data: obj,
 													datatype: "json",
 													success: function(response) {
@@ -1785,7 +1789,7 @@ if (window.innerWidth > 768) {
 	    console.log(obj);
 	    $.ajax({
 				type: "PUT",
-				url: jg_domain + "/api/user/update",
+				url: "/api/user/update",
 				data: obj,
 				datatype: "json",
 				success: function(response) {

@@ -41,7 +41,7 @@ class ChatServer extends Command
      */
     public function handle()
     {
-        $this->info("Start server");
+        $this->info("Starting server on port " . env('APP_CHAT_WS_PORT', null));
 
         $server = IoServer::factory(
             new HttpServer(
@@ -49,7 +49,7 @@ class ChatServer extends Command
                     new ChatSocket()
                 )
             ),
-            8888
+            env('APP_CHAT_WS_PORT', null)
         );
 
         $server->run();
