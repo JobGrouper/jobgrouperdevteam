@@ -17,10 +17,12 @@ use PayPal\Api\ItemList;
 use PayPal\Api\Payer;
 use PayPal\Api\Payment;
 use PayPal\Api\Transaction;
+use URL;
 
 class CreditCardController extends Controller
 {
     public function create(){
+        Session::flash('continuePurchaseUrl', URL::previous()); //To redirect user to purchase page after card creation
         return view('pages.account.card');
     }
     
@@ -68,40 +70,14 @@ class CreditCardController extends Controller
             'last_name' => $card->last_name
         ]);
 
-
-        /*$card = $user->credit_cards()->create([
-            'first_name' => $input['first_name'],
-            'last_name' => $input['last_name'],
-            'last_four' => substr($input['card_number'], 12),
-            'costumer_id' => $customer->id,
-        ]);*/
-
-
-        /*$stripe = array(
-            "secret_key"      => "sk_test_vvAgM8jjPgxXCqBVuugYzIhg",
-            "publishable_key" => "pk_test_uDNGMqLc83xUIkEttmN7yFpx"
-        );
-
-        \Stripe\Stripe::setApiKey($stripe['secret_key']);
-
-        $res = \Stripe\Token::create(
-            array(
-                "card" => array(
-                    "number" => $input['card_number'],
-                    "exp_month" => $input['end_month'],
-                    "exp_year" => $input['end_year'],
-                    "cvc" => $input['cvv']
-                )
-            )
-        );
-
-        $customer = \Stripe\Customer::create(array(
-            "card" => $res->id
-        ));*/
-
         if(isset($card->id)){
-            Session::flash('message_success', 'Card has been successfully added to your account!');
-            return redirect('/card/create');
+            if(Session::get('continuePurchaseUrl')){
+                return redirect(Session::get('continuePurchaseUrl'));
+            }
+            else{
+                Session::flash('message_success', 'Card has been successfully added to your account!');
+                return redirect('/card/create');
+            }
         }
     }
 

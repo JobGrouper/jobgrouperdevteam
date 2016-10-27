@@ -8,7 +8,7 @@
         <div class="alert_window">
             <div class="alert_window__block">
                 <p>{!! $pageTexts[13] !!}</p>
-                <h2>{{$job->yearly_salary}} USD</h2>
+                <h2>{{$job->monthly_salary}} USD</h2>
                 <div class="cancel"></div>
             </div>
         </div>
@@ -70,7 +70,7 @@
 
                                 <div class="block bordered">
 
-                                    <span class="amount">${{$job->monthly_salary}}/mo</span>
+                                    <span class="amount">${{($employee ? $job->monthly_salary : $job->monthly_price)}}/mo</span>
 
                                 </div>
 
@@ -104,12 +104,11 @@
                         <div class="buttons">
 
                             @if (Auth::guest())
-
                                 <a href="/login?fromJob={{$job->id}}"><button>Buy</button></a>
-
-                                <a href="/login"><button>Apply for this Job</button></a>
-
-
+                                @if(!$employee || $employeeStatus['status'] == 'leave')
+                                    {{--If job has no employee or employee will leave this job--}}
+                                    <button class="apply">Apply for this Job</button>
+                                @endif
                             @elseif(Auth::user()->user_type == 'employee')
                                 @if($employeeRequest)
                                     @if($employeeRequest->status == 'pending')
@@ -130,7 +129,7 @@
                                 @if($jobPaid)
                                     <span class="approved">YOU HAVE ORDERED THIS JOB</span>
                                 @elseif($jobOrdered)
-                                    <a href="{{ Request::root() }}/purchase/{{ $user_order_info->id }}"><span class="approved">PLEASE COMPLETE PAYMENT</span></a>
+                                    <a href="/purchase/{{ $user_order_info->id }}"><span class="approved need">PLEASE COMPLETE PAYMENT</span></a>
                                 @else
                                     {{--Это было для сохранения карт и авто-оплат--}}
                                     {{--<a href="/purchase/{{$job->id}}"><button>Buy</button></a>--}}

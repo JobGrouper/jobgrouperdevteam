@@ -3,11 +3,7 @@
 @section('title', 'Dialogs')
 
 @section('content')
-
-
-
-
-    <div class="message">
+        <div class="message">
 
         <div class="container">
 
@@ -89,81 +85,53 @@
 
 
         //Setting sound for input messages
-
         var audio = {};
-
         audio["message"] = new Audio();
-
-        audio["message"].src = "http://jobgrouper.com/audio/message.mp3";
+        audio["message"].src = "/audio/message.mp3";
 
 
         var currentRecipientID = <?=$recipientID?>;         //Current recipient id
-
         var userPhotoUrl = '<?=$userData['imageUrl']?>';    //Photo of current user
-
         var recipientPhotoUrl = '';                         //Here will be photo of selected recipient
 
 
         //If it is recipient id in url, open dialog with he
-
         if (currentRecipientID > 0) {
-
             setChatHistory(currentRecipientID);
-
         }
 
-
         //Selecting dialog
-
         $('.dialog').click(function () {
 
             //Add "active" class to selected dialog
-
             $('.dialog').removeClass('active');
-
             $(this).addClass('active');
 
-
             //Get selected recipient ID
-
             currentRecipientID = $(this).attr("data-recipientID");
 
 
             //Load chat history
-
             setChatHistory(currentRecipientID);
-
         });
 
 
-        var socket = new WebSocket("ws://jobgrouper.com:8888");
-
+        var socket = new WebSocket('{{$_ENV['APP_CHAT_WS_URI']}}');
 
         socket.onopen = function () {
-
-            //alert("Соединение установлено.");
-
-
+            console.log("Connection with WS established.");
         };
-
 
         socket.onclose = function (event) {
 
             if (event.wasClean) {
-
-                //alert('Соединение закрыто чисто');
-
+                //alert('Connection closed clearly');
             } else {
                 setChatUnavailableWindow();
-
-                //alert('Обрыв соединения'); // например, "убит" процесс сервера
-
+                console.log('Connection failed!!');
+                console.log('Code: ' + event.code + ' cause: ' + event.reason);
             }
-
-            // alert('Код: ' + event.code + ' причина: ' + event.reason);
-
             //setChatUnavailableWindow();
-
         };
 
 
@@ -173,9 +141,7 @@
             switch (message.type) {
 
                 case 'message':
-
                     var messageUserPhotoUrl = '';               //Recipient photo url will be here
-
                     if (currentRecipientID == message.senderID) {
                         audio["message"].play();
                         messageUserPhotoUrl = recipientPhotoUrl;
@@ -183,9 +149,7 @@
                     else {
                         messageUserPhotoUrl = userPhotoUrl;
                     }
-
                     if (currentRecipientID == message.senderID || message.senderID == <?=$userData['id']?>) {
-
                         var string = '<div class="sms">\
                             <div class="head">\
                                 <div class="img_wrapper">\
@@ -199,7 +163,7 @@
                         $('.all_sms').append(string);
                     }
 
-                    //Добавление текста сообщения в окно диалога слева
+                    //Add new message text to dialogs list (left side)
                     $('#last_message_' + message.senderID).html(message.text);
 
 
@@ -208,7 +172,7 @@
                     d.scrollTop(d.prop("scrollHeight"));
 
 
-                    //Если пришло сообщение, и textarea focused отмечаем его сразу как прочитаное
+                    //If textarea was focudes when new message was getting - mark new messagee as readed
                     if($("#message").is(":focus")){
                         markMessageasAsRead();
                     }
@@ -220,36 +184,18 @@
                         $('#newMessagesCount').html(message.countNewMessages);
                     }
                     break;
-
-                case 'typing':
-
-                    /*$('#typing').html('typing...');
-
-                     window.setTimeout(function () {
-
-                     $('#typing').html('');
-
-                     }, 2000);*/
-
-                    break;
-
             }
         };
 
 
         socket.onerror = function (error) {
-
-            //alert("Ошибка " + error.message);
-
+            //alert("Error " + error.message);
         };
 
 
         function sendMessage() {
-
             var message = new Object();
-
             message.type = 'message';
-
             message.recipientID = currentRecipientID;
 
             message.text = $('#message').val();
@@ -259,41 +205,19 @@
             @endif
 
             if (message.text != '') {
-
                 socket.send(JSON.stringify(message));
-
                 $('#message').val('');
-
                 if (message.text.length > 25) {
-
                     message.text = message.text.slice(0, 25);
-
                     message.text = message.text + '...';
-
                 }
 
                 $('#last_message_' + currentRecipientID).html('<b>You: </b> ' + message.text);
                 //--
                 var d = $('.message_chat .all_sms');
                 d.scrollTop(d.prop("scrollHeight"));
-
             }
-
         }
-
-
-        function sendTyping() {
-
-            var message = new Object();
-
-            message.type = 'typing';
-
-            message.recipientID = currentRecipientID;
-
-            socket.send(JSON.stringify(message));
-
-        }
-
 
         function setChatWindow(recipient_id, recipientImgUrl, recipientName) {
             $('#choose').remove();
@@ -328,29 +252,18 @@
 
 
         function setChatHistory(recipientID) {
-
-            $.get('{{ Request::root() }}/api/messages_history/' + recipientID, {}, function (data) {
-
-                console.log(data);
-
+            $.get('/api/messages_history/' + recipientID, {}, function (data) {
+                //console.log(data);
                 recipientPhotoUrl = data.image_url;
-
                 setChatWindow(recipientID, data.image_url, data.recipientName);
-
                 for (var i = 0; i < data.messages.length; i++) {
-
                     var messageUserPhotoUrl = '';                           //Recipient photo url will be here
 
                     if (currentRecipientID == data.messages[i].sender_id) {
-
                         messageUserPhotoUrl = recipientPhotoUrl;
-
                     }
-
                     else {
-
                         messageUserPhotoUrl = userPhotoUrl;
-
                     }
 
                     var string = '<div class="sms">\
@@ -375,7 +288,7 @@
         }
 
         function markMessageasAsRead(){
-            $.post('{{ Request::root() }}/api/markMessageasAsRead/' + currentRecipientID, {}, function (data) {
+            $.post('/api/markMessageasAsRead/' + currentRecipientID, {}, function (data) {
                 $('.unread').removeClass('unread');
                 if(data == 0){
                     data = '';
@@ -386,11 +299,9 @@
         }
 
         $('body').delegate('#message', 'keypress', function (e) {
-            sendTyping();
             if ((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey) {
                 this.value = this.value.substring(0, this.selectionStart) + "\n";
             }
-
             if (e.which == 13) {
                 event.preventDefault();
                 sendMessage();

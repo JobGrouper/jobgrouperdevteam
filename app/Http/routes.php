@@ -25,8 +25,9 @@ use Carbon\Carbon;
 */
 Route::get('/', 'PagesController@home');
 
-
-//Route::get('register', 'RegistrateController@showRegisterPage');
+/*
+ * Registration, Auth and Password Recovery
+ */
 Route::post('custom_register', 'RegistrateController@register');
 Route::post('auth/login', 'Auth\MyAuth@auth');
 Route::get('register/confirm/{token}', 'RegistrateController@confirm');
@@ -34,7 +35,14 @@ Route::get('password/email', 'Auth\PasswordController@getEmail');
 Route::post('password/email', 'Auth\PasswordController@postEmail');
 Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
+Route::get('social_login/{provider}', 'SocialAuthController@login');
+Route::get('social_login/callback/{provider}', 'SocialAuthController@callback');
+Route::auth();
 
+
+/*
+ * Job Cards
+ */
 Route::get('job/{id}','JobController@show');
 Route::get('jobs','JobController@all');
 Route::get('jobs/category/{id?}','JobController@all');
@@ -42,32 +50,32 @@ Route::post('job/store','JobController@store');
 Route::post('job/update','JobController@update');
 
 
+/*
+ * Users profile
+ */
 Route::get('account', ['middleware' => 'auth', 'uses' => 'UserController@myAccount']);
 Route::get('account/{userID}','UserController@showAccount');
-
 Route::get('my_jobs', ['middleware' => 'auth', 'uses' => 'UserController@showJobs']);
 Route::get('my_orders', ['middleware' => 'auth', 'uses' => 'UserController@showOrders']);
 Route::get('my_transactions', ['middleware' => 'auth', 'uses' => 'UserController@showPayments']);
+Route::get('card/create', ['middleware' => 'auth', 'uses' => 'CreditCardController@create']);   //User`s credit card
+Route::post('card/store', 'CreditCardController@store');
 
 
+/*
+ * Static pages
+ */
 Route::get('help','PagesController@help');
 Route::get('terms','PagesController@terms');
 
+
+/*
+ * Message system
+ */
 Route::get('messages/{recipientID?}', ['as' => 'messages', 'middleware' => 'auth', 'uses' => 'MessageController@index']);
 
-Route::get('social_login/{provider}', 'SocialAuthController@login');
-Route::get('social_login/callback/{provider}', 'SocialAuthController@callback');
 
-
-
-Route::get('card/create', ['middleware' => 'auth', 'uses' => 'CreditCardController@create']);
-Route::post('card/store', 'CreditCardController@store');
-
-Route::post('category/store', 'CategoryController@store');
-
-//Route::get('purchase/{jobID}', ['middleware' => 'auth', 'uses' => 'OrderController@create']);
-
-/**
+/*
  * Operations with Orders (Sales)
  */
 Route::get('purchase/{order_id}', ['middleware' => 'auth', 'uses' => 'OrderController@purchase']);
@@ -79,13 +87,9 @@ Route::post('order/purchase_via_stripe', 'OrderController@purchaseViaStripe');
 Route::post('order/close/{order_id}', 'OrderController@close');
 
 
-
-
-Route::post('/employee_request/approve', ['middleware' => 'check_role', 'uses' => 'EmployeeRequestController@approve']);
-Route::post('/employee_request/reject', ['middleware' => 'check_role', 'uses' => 'EmployeeRequestController@reject']);
-
-
-
+/*
+ * Admin`s side routes
+ */
 Route::group(['prefix' => 'admin', 'middleware' => 'check_role'], function () {
     Route::get('/cards', ['as' => 'cards', 'uses' => 'PagesAdminController@cards']);
     Route::get('/', ['as' => 'users', 'uses' => 'PagesAdminController@users']);
@@ -98,8 +102,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check_role'], function () {
     Route::get('/texts', ['as' => 'texts', 'uses' => 'PagesAdminController@texts']);
 });
 
+Route::post('category/store', 'CategoryController@store');
+Route::post('/employee_request/approve', ['middleware' => 'check_role', 'uses' => 'EmployeeRequestController@approve']);
+Route::post('/employee_request/reject', ['middleware' => 'check_role', 'uses' => 'EmployeeRequestController@reject']);
 
 
+/*
+ * API routes
+ */
 Route::group(['prefix' => 'api'], function () {
     Route::post('order/close/{order_id}', 'OrderController@close');
 
@@ -147,6 +157,9 @@ Route::group(['prefix' => 'api'], function () {
 
 });
 
+//Sandbox, for testing some features
+Route::get('sandbox', 'TestController@test');
+
 Route::group(['prefix' => 'test'], function(){
     Route::get('paypal', function () {
         $apiContext = new \PayPal\Rest\ApiContext(
@@ -189,5 +202,3 @@ Route::group(['prefix' => 'test'], function(){
     });
 });
 
-
-Route::auth();

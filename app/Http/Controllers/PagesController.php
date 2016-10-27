@@ -9,31 +9,25 @@ use App\Http\Requests;
 class PagesController extends Controller
 {
     public function home(){
-        //$jobs = Job::where('employees_count', '=', 0)->orderBy('id', 'desc')->paginate(8);
-        //$jobs = Job::all();
-        $categories = Category::all();
-        $categories->prepend(new Category(['title' => 'All Categories']));
-
-       /*$jobs = $jobs->filter(function($job)
-        {
-            return !($job->sales_count == $job->max_clients_count && $job->employees_count > 0);
-        });
-
-        $jobs = $jobs->sortByDesc('become_hot');
-
-        $chunks = $jobs->chunk(8);
-
-
-
-        $hotJobs = Job::hot()->get();*/
-
-        //Первыми на главной странице идут хоты (первый из них в слайдере)
-        //Затем идут просто карточки по новизне.
+        //In the top of list are the hot cards (first of them in is in slider)
         $jobs = Job::hot()->get();
-        $notHotJobs = Job::where('hot', false)->get()->sortByDesc('id');
-        $jobs = $jobs->merge($notHotJobs);
-        $chunks = $jobs->chunk(9);
-        return view('pages.main', ['categories' => $categories, 'jobs' => $chunks->first()/*, 'hotJobs' => $hotJobs*/]);
+
+        //Next will take place the not hot cards with buyers above 25%.
+        $notHotJobs = Job::where('hot', false)->get();
+        $notHotJobsAbove25 =  $notHotJobs->filter(function ($job) {
+            return $job->sales_percent >= 25;
+        })->sortByDesc('sales_percent');
+
+        //Next will be other cards sorted by date of creation
+        $notHotJobsOther =  $notHotJobs->filter(function ($job) {
+            return $job->sales_percent < 25;
+        })->sortByDesc('created_at');
+
+        $jobs = $jobs->merge($notHotJobsAbove25);
+        $jobs = $jobs->merge($notHotJobsOther);
+        $chunks = $jobs->chunk(9); //9 = 1 in slider + 8 in rows
+
+        return view('pages.main', ['jobs' => $chunks->first()]);
     }
 
 

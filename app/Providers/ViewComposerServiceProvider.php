@@ -16,7 +16,8 @@ class ViewComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         //С помощью View Composer мы передаем переменную в хежер
-        $this->composeHeader();
+        $this->composeSmallHeader();
+        $this->composeBigHeader();
         $this->composeAdminHeader();
         $this->composeMyOrders();
         $this->composeMyJobs();
@@ -36,11 +37,22 @@ class ViewComposerServiceProvider extends ServiceProvider
 
 
     /**
-     * Compose the header
+     * Compose the small header
      */
-    public function composeHeader()
+    public function composeSmallHeader()
     {
         view()->composer('partials.small-header', function ($view) {
+            $view->with('userData', \Auth::user());
+            $view->with('categories', Category::all()->prepend(new Category(['title' => 'All Categories'])));
+        });
+    }
+
+    /**
+     * Compose the big header
+     */
+    public function composeBigHeader()
+    {
+        view()->composer('partials.big-header', function ($view) {
             $view->with('userData', \Auth::user());
             $view->with('categories', Category::all()->prepend(new Category(['title' => 'All Categories'])));
         });
