@@ -19,10 +19,6 @@ $(document).ready(function() {
 		
 	});
 
-	$(".view_sidebar .buttons .need").click(function() {
-		window.location.href = '/purchase/' + $(this).attr("purchase");
-	});
-
 	// $(".job_item h1").click(function() {
 	// 	$(this).parents(".job_item").find(".jobs_acc").slideToggle("fast");
 	// 	$(this).parent().toggleClass("active");
