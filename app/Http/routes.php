@@ -84,7 +84,6 @@ Route::put('change_credit_card', ['middleware' => 'auth', 'uses' => 'OrderContro
 Route::post('order/store', 'OrderController@store');
 Route::put('order', 'OrderController@update');
 Route::post('order/purchase_via_stripe', 'OrderController@purchaseViaStripe');
-Route::post('order/close/{order_id}', 'OrderController@close');
 
 
 /*
