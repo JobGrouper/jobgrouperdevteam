@@ -8,6 +8,7 @@
 Homestead.yaml
 Homestead.json
 .env
+*.swp
 *~
 *.un*
 git-help.txt
