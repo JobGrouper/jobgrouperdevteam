@@ -62,8 +62,10 @@ class JobController extends Controller
         }
 
         $user = Auth::user();
+		$user_order_info = null;
         $jobOrdered = false;
         $jobPaid = false;
+
         if($user){
             if($user->user_type == 'employee'){
                 if($user->employee_requests()->where('job_id', '=', $job->id)->count()){
@@ -71,12 +73,19 @@ class JobController extends Controller
                 }
             }
             else{
-                if($user->orders()->where('job_id', '=', $job->id)->where('status', '=', 'in_progress')->count()){
-                    $jobOrdered = true;
-                }
 
-                if($user->orders()->where('job_id', '=', $job->id)->where('status', '=', 'in_progress')->where('credit_card_id', '!=', 'null')->count()){
-                    $jobPaid = true;
+				// Retrieving user info
+				$user_order_info = $user->orders()->where('job_id', '=', $job->id)->where('status', '=', 'in_progress')->first();
+
+                if($user_order_info){
+
+                    $jobOrdered = true;
+
+					// If credit card id is present, job has been paid for
+					//
+					if ($user_order_info->credit_card_id != null) {
+						$jobPaid = true;
+					}
                 }
             }
         }
@@ -86,7 +95,11 @@ class JobController extends Controller
         //$sales = $job->buyers()->get();
         $orders = $job->sales()->where('status', '=', 'in_progress')->get();
 
-        return view('pages.jobs.job', ['job' => $job, 'category' => $category, 'employee' => $employee, 'employeeStatus' => $emploeeStatus, 'orders' => $orders, 'employeeRequest' => $employeeRequest, 'jobOrdered' => $jobOrdered, 'jobPaid' => $jobPaid]);
+		if ($jobOrdered && !$jobPaid) {
+
+		}
+
+        return view('pages.jobs.job', ['job' => $job, 'category' => $category, 'employee' => $employee, 'employeeStatus' => $emploeeStatus, 'orders' => $orders, 'employeeRequest' => $employeeRequest, 'jobOrdered' => $jobOrdered, 'jobPaid' => $jobPaid, 'user_order_info' => $user_order_info]);
     }
 
 

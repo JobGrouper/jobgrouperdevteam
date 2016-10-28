@@ -9,19 +9,9 @@
         <div class="alert_window month">
             <div class="alert_window__block">
                 <p>{!! $pageTexts[13] !!}</p>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                <h2>{{$job->monthly_salary}} USD</h2>
-=======
-                <h2>Salary: ${{$job->monthly_salary}} USD/month</h2>
-                <p>Monthly price of the purchase: 100 USD</p>
-                <p>Markup: 100*0,15 = 15 USD</p>
-                <p>Total: 115 USD</p>
-=======
                 <p>Monthly price of the purchase: {{$job->salary}} USD</p>
                 <p>Markup: {{$job->salary}} * 15% fee = {{$job->salary*0.15}} USD</p>
                 <p>Total: {{$job->salary + ($job->salary*0.15)}} USD</p>
->>>>>>> 7afcd64... Inform Buyers of Markup Before Purchase
                 <div class="cancel"></div>
             </div>
         </div>
@@ -31,7 +21,6 @@
             <div class="alert_window__block">
                 <p>{!! $pageTexts[13] !!}</p>
                 <h2>Salary: ${{$job->yearly_salary}} USD</h2>
->>>>>>> fc96e4e... Markup info
                 <div class="cancel"></div>
             </div>
         </div>
@@ -160,7 +149,7 @@
                                 @if($jobPaid)
                                     <span class="approved">YOU HAVE ORDERED THIS JOB</span>
                                 @elseif($jobOrdered)
-				    <a href="/purchase/{{ $user_order_info->id }}"><span class="approved need">PLEASE COMPLETE PAYMENT</span></a>
+                                    <a href="/purchase/{{ $user_order_info->id }}"><span class="approved need">PLEASE COMPLETE PAYMENT</span></a>
                                 @else
                                     {{--Это было для сохранения карт и авто-оплат--}}
                                     {{--<a href="/purchase/{{$job->id}}"><button>Buy</button></a>--}}
