@@ -2,6 +2,7 @@
 use Illuminate\Contracts\Bus\Dispatcher;
 use App\Console\Commands\ChatServer;
 use App\Job;
+use App\Interfaces\PaymentServiceInterface;
 
 
 use PayPal\Api\Amount;
@@ -160,7 +161,8 @@ Route::group(['prefix' => 'api'], function () {
 Route::get('sandbox', 'TestController@test');
 
 Route::group(['prefix' => 'test'], function(){
-    Route::get('paypal', function () {
+    Route::get('paypal', function (PaymentServiceInterface $psi) {
+
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
                 env('PAYPAL_CLIENT_ID'),     // ClientID
