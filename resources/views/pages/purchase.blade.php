@@ -10,6 +10,10 @@
             @else
                 <form role="form" method="POST" action="{{ ($changeCard ? url('/change_credit_card') : url('/order')) }}">
                     {{ csrf_field() }}
+                    <label>Summary</label>
+                    <p>Monthly price of the purchase: <span>{{$job->salary}} USD</span></p>
+                    <p>Markup: <img src="{{asset('img/View/circle.png')}}" alt="alt"><span>{{$job->salary*0.15}} USD</span></p>
+                    <p>Total: <span>{{$job->salary + ($job->salary*0.15)}} USD</span></p>
                     <input name="_method" type="hidden" value="PUT">
                     <label for="purchase">Select payment card</label>
                     <select id="purchase" name="credit_card_id">

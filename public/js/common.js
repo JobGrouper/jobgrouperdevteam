@@ -213,7 +213,7 @@ $(document).ready(function() {
 		$(".alert_window.month").fadeIn("fast");
 	});
 
-	$(".view_sidebar .window span").click(function() {
+	$(".view_sidebar .window span, .forgotpass_form p img").click(function() {
 		$(".alert_window.year").fadeIn("fast");
 	});
 

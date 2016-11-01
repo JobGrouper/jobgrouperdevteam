@@ -743,6 +743,12 @@ img {
       font-weight: 700;
       padding-bottom: 0;
       padding-top: 0; }
+    .forgotpass_form p span {
+      float: right;
+    }
+    .forgotpass_form p img {
+      cursor: pointer;
+    }
     .forgotpass_form button {
       text-align: center;
       margin-top: 20px;
