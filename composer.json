@@ -11,7 +11,8 @@
         "cboden/ratchet": "0.3.5",
         "laravel/socialite": "~2.0",
         "stripe/stripe-php": "^3.17",
-        "paypal/rest-api-sdk-php": "^1.7"
+        "paypal/rest-api-sdk-php": "^1.7",
+        "torann/geoip": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

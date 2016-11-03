@@ -68,8 +68,6 @@
             <div class="col-md-10 col-sm-12 col-xs-12">
 
                 <div class="main_header__btn">
-
-
                     @if (Auth::guest())
                         <a href="register"><button>Sign Up</button></a>
                         <a href="/login"><button>Log In</button></a>
@@ -82,7 +80,8 @@
                         <a href="/logout"><button>Log Out</button></a>
 
                     @endif
-
+                        <a @if(App::getLocale() == 'en') style="font-weight: bold;" @endif href="{{url('/translate/en')}}">English</a>
+                        <a @if(App::getLocale() == 'cn') style="font-weight: bold;" @endif href="{{url('/translate/cn')}}">Chinese</a>
                 </div>
 
             </div>

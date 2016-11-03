@@ -8,3 +8,4 @@ Homestead.json
 *.un*
 git-help.txt
 /public
+Vagrantfile
