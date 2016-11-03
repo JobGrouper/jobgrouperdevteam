@@ -3,6 +3,15 @@
 @section('title', 'Payment page')
 
 @section('content')
+    <div class="alert_window month">
+        <div class="alert_window__block">
+            <p></p>
+            <p>Monthly price of the purchase:  USD</p>
+            <p>Markup:  USD</p>
+            <p>Total:  USD</p>
+            <div class="cancel"></div>
+        </div>
+    </div>
     <div class="forgotpass">
         <div class="forgotpass_form forgot_only">
             @if (session('message'))

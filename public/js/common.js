@@ -19,6 +19,7 @@ $(document).ready(function() {
 		
 	});
 
+
 	// $(".job_item h1").click(function() {
 	// 	$(this).parents(".job_item").find(".jobs_acc").slideToggle("fast");
 	// 	$(this).parent().toggleClass("active");
@@ -209,7 +210,7 @@ $(document).ready(function() {
 		$(this).parent().find(".text_block").slideToggle();
 	});
 
-	$(".view_sidebar .salary_info .purchase .block .amount").click(function() {
+	$(".view_sidebar .salary_info .purchase .block .amount, .forgotpass_form p img").click(function() {
 		$(".alert_window.month").fadeIn("fast");
 	});
 
