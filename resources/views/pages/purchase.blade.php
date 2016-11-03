@@ -6,9 +6,9 @@
     <div class="alert_window month">
         <div class="alert_window__block">
             <p></p>
-            <p>Monthly price of the purchase:  USD</p>
-            <p>Markup:  USD</p>
-            <p>Total:  USD</p>
+            <p>Monthly price of the purchase:  {{$job->salary}} USD</p>
+            <p>Markup:  {{$job->salary}} * 15% fee = {{$job->salary*0.15}} USD</p>
+            <p>Total:  {{$job->salary + ($job->salary*0.15)}} USD</p>
             <div class="cancel"></div>
         </div>
     </div>
