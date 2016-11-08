@@ -18,3 +18,4 @@ error_log
 *.un*
 git-help.txt
 Vagrantfile
+app/Http/Controllers/TestController.php

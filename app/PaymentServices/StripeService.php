@@ -18,12 +18,26 @@ class StripeService implements PaymentServiceInterface {
 	}
 
 	public function initialize() {
-
 		Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 	}
 
-	public function createCreditCardToken() {
+	public  function createCreditCardToken(array $creditCardData) {
+		try {
+			$creditCardToken = Token::create(
+				array(
+					"card" => array(
+						"number" => $creditCardData['number'],
+						"exp_month" => $creditCardData['exp_month'],
+						"exp_year" => $creditCardData['exp_year'],
+						"cvc" => $creditCardData['cvc']
+					)
+				)
+			);
+		} catch (Exception $e) {
+			dd($e->getMessage());
+		}
 
+		return $creditCardToken;
 	}
 
 	public function createPayment() {
