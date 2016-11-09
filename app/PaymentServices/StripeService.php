@@ -4,6 +4,7 @@ namespace App\PaymentServices;
 
 use App\Interfaces\PaymentServiceInterface;
 
+use Stripe\Account;
 use \Stripe\Stripe;
 use \Stripe\Charge;
 use \Stripe\Token;
@@ -21,7 +22,7 @@ class StripeService implements PaymentServiceInterface {
 		Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 	}
 
-	public  function createCreditCardToken(array $creditCardData) {
+	public function createCreditCardToken(array $creditCardData) {
 		try {
 			$creditCardToken = Token::create(
 				array(
@@ -40,6 +41,38 @@ class StripeService implements PaymentServiceInterface {
 		return $creditCardToken;
 	}
 
+	public function createAccount(array $stripeAccountData) {
+		try {
+			$stripeAccount = Account::create(array(
+				"managed" => true,
+				"country" => "US",
+				"email" => $stripeAccountData['email']
+			));
+		} catch (Exception $e) {
+			dd($e->getMessage());
+		}
+
+		return $stripeAccount;
+	}
+
+	public function updateAccount($stripeAccountID, array $stripeAccountData) {
+		try {
+			$account = Account::retrieve($stripeAccountID);
+			foreach ($stripeAccountData as $field => $value){
+				$account->$field = $value;
+			}
+			$account->save();
+		} catch (Exception $e) {
+			dd($e->getMessage());
+		}
+
+		return true;
+	}
+
+	public function createExternalAccount(){
+
+	}
+	
 	public function createPayment() {
 
 	}
