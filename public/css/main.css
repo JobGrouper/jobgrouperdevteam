@@ -690,6 +690,9 @@ img {
 .forgotpass {
   height: 960px;
   padding-top: 210px; }
+  .forgotpass.signup {
+    height: auto;
+  }
   .forgotpass_form {
   	position: relative;
     width: 430px;

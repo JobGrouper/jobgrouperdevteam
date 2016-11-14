@@ -17,6 +17,24 @@
                 </a>
                 
             </div>
+            <label for="city">City</label>
+            <input type="text" id="city" name="city">
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address">
+            <label for="postal">Postal code</label>
+            <input type="text" id="postal" name="postal">
+            <label for="state">State</label>
+            <input type="text" id="state" name="state">
+            <label for="day">Birth day</label>
+            <input type="text" id="dat" name="day">
+            <label for="month">Birth month</label>
+            <input type="text" id="month" name="month">
+            <label for="year">Birth year</label>
+            <input type="text" id="year" name="year">
+            <label for="card">Debit Card information</label>
+            <input type="text" id="card" name="card">
+            <label for="ssn">SSN</label>
+            <input type="password" id="ssn" name="ssn">
             <div class="signup_firstlast">
                 <div class="signup_firstlast__first">
                     <label for="first">First Name</label>
