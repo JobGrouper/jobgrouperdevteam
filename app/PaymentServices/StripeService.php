@@ -42,31 +42,49 @@ class StripeService implements PaymentServiceInterface {
 	}
 
 	public function createAccount(array $stripeAccountData) {
-		try {
-			$stripeAccount = Account::create(array(
-				"managed" => true,
-				"country" => "US",
-				"email" => $stripeAccountData['email']
-			));
-		} catch (Exception $e) {
-			dd($e->getMessage());
-		}
+		$response = Account::create(array(
+			"managed" => true,
+			"country" => $stripeAccountData['country'],
+			"email" => $stripeAccountData['email'],
+		));
 
-		return $stripeAccount;
+		return $response;
 	}
 
 	public function updateAccount($stripeAccountID, array $stripeAccountData) {
-		try {
-			$account = Account::retrieve($stripeAccountID);
-			foreach ($stripeAccountData as $field => $value){
-				$account->$field = $value;
-			}
-			$account->save();
-		} catch (Exception $e) {
-			dd($e->getMessage());
+		$account = Account::retrieve($stripeAccountID);
+
+		if($stripeAccountData['legal_entity']['address']){
+			$account->legal_entity->address->city = $stripeAccountData['legal_entity']['address']['city'];
+			$account->legal_entity->address->line1 = $stripeAccountData['legal_entity']['address']['line1'];
+			$account->legal_entity->address->postal_code = $stripeAccountData['legal_entity']['address']['postal_code'];
+			$account->legal_entity->address->state = $stripeAccountData['legal_entity']['address']['state'];
 		}
 
-		return true;
+		if($stripeAccountData['legal_entity']['dob']){
+			$account->legal_entity->dob->day = $stripeAccountData['legal_entity']['dob']['day'];
+			$account->legal_entity->dob->month = $stripeAccountData['legal_entity']['dob']['month'];
+			$account->legal_entity->dob->year = $stripeAccountData['legal_entity']['dob']['year'];
+		}
+
+		if($stripeAccountData['legal_entity']['ssn_last_4']) {
+			$account->legal_entity->ssn_last_4 = $stripeAccountData['legal_entity']['ssn_last_4'];
+		}
+
+		if($stripeAccountData['legal_entity']['type']) {
+			$account->legal_entity->type = $stripeAccountData['legal_entity']['type'];
+		}
+
+		if($stripeAccountData['legal_entity']['date']) {
+			$account->legal_entity->date = $stripeAccountData['legal_entity']['date'];
+		}
+
+		if($stripeAccountData['legal_entity']['ip']) {
+			$account->legal_entity->ip = $stripeAccountData['legal_entity']['ip'];
+		}
+
+		$response = $account->save();
+		return $response;
 	}
 
 	public function createExternalAccount(){

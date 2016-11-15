@@ -15,16 +15,24 @@ use \Stripe\Customer;
 class TestController extends Controller
 {
     public function test(){
-        $creditCardData = [
-        'number' => '4111111111111111',
-        'exp_month' => 12,
-        'exp_year' => 20,
-        'cvc' => 123,
-
-        ];
         $stripeService = new StripeService();
-        $creditCardToken = $stripeService->createCreditCardToken($creditCardData);
+        /*$res = $stripeService->createAccount([
+            'email' => 'testmail1@test.mail',
+            'country' => 'us',
+        ]);
 
-        dd($creditCardToken);
+        dd($res);*/
+
+        $res = $stripeService->updateAccount('acct_19EfY8EyRcaduvX2', [
+            'legal_entity' => [
+                'dob' => [
+                    'day' => 5,
+                    'month' => 5,
+                    'year' => 1995,
+                ]
+            ]
+        ]);
+
+        dd($res);
     }
 }
