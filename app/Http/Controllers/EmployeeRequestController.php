@@ -65,6 +65,7 @@ class EmployeeRequestController extends Controller
         }
 
 
+        $responseData['request_id'] = $EmployeeRequest->id;
         $responseData['error'] = false;
         $responseData['status'] = 0;
         $responseData['info'] = 'Request successfully created';
