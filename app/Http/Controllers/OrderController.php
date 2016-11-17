@@ -121,7 +121,7 @@ class OrderController extends Controller
 
 
 
-    public function store(Request $request){
+    public function store(Request $request, PaymentServiceInterface $psi){
         $user = Auth::user();
         //Это было для сохранения карт и авто-оплат
         //$input = $request->only(['credit_card_id', 'job_id']);
