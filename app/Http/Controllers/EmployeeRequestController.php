@@ -175,4 +175,15 @@ class EmployeeRequestController extends Controller
 
     }
 
+    public function getStatus($id){
+        $responseData = array();
+
+        $employeeRequest = EmployeeRequest::findOrFail($id);
+
+        $responseData['error'] = false;
+        $responseData['status'] = $employeeRequest->status;
+
+        return response($responseData, 200);
+    }
+
 }
