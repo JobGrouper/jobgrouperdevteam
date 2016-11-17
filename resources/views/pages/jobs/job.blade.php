@@ -61,8 +61,9 @@
 
                                 <div class="fb"><img src="{{asset('img/Profile/fb.png')}}" alt="alt">facebook.com/{{$employee->first_name.$employee->last_name}}</div>
 
-                                <div class="twitter"><img src="{{asset('img/View/twitter.png')}}" alt="alt">twitter.com/{{$employee->first_name.$employee->last_name}}</div>
+                                <div class="twitter"><img src="{{ asset('img/Profile/link.png') }}" alt="alt">linkedin.com/{{$employee->first_name.$employee->last_name}}</div>
 
+                                <div class="twitter"><img src="{{ asset('img/Profile/github.png')}}" alt="alt">github.com/{{$employee->first_name.$employee->last_name}}</div>
                                 <a href="/account/{{$employee->id}}">More details</a>
                                 @if($employeeStatus['status'] == 'leave')
                                     <span>Employee will leave this job at {{$employeeStatus['leave_date']}}</span>
