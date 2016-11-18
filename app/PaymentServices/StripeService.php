@@ -160,6 +160,18 @@ class StripeService implements PaymentServiceInterface {
 		return 1;
 	}
 
+	/*
+	 * Creates a Subscription associated with a Plan; 
+	 *   should only be called inside createPlan function
+	 *
+	 * @params
+	 * 	plan
+	 * 	customer
+	 * 	seller_account
+	 * @throws
+	 * @returns
+	 *
+	 */
 	public function createSubscription($plan, $customer, $seller_account) {
 
 		$plan_id = NULL;
@@ -191,6 +203,54 @@ class StripeService implements PaymentServiceInterface {
 		if (isset($response['error'])) {
 
 		}
+
+		return 1;
+	}
+
+	/*
+	 * Adds a source (credit/debit card) to an existing Customer object
+	 * If an original id is included, add source to original Customer object
+	 *
+	 * @params
+	 * 	source - token provided by Stripe.JS
+	 * 	customer_id - id of Stripe Customer
+	 * 		+ may refer to root customer or connected customer depending on
+	 * 		+ presence of original id
+	 * 	original_id - id of original Stripe Customer (nullable)
+	 * @throws
+	 * @returns
+	 */
+	public function updateCustomerSource($source, $customer_id, $original_id=NULL) {
+
+		$customer_data = array(
+			'token' => $source,
+			'root_customer_id' => NULL,
+			'connected_customer_id' => NULL
+		);
+
+		if (isset($original_id)) {
+			$customer_data['root_customer_id'] = $original_id;
+			$customer_data['connected_customer_id'] = $customer_id;
+		}
+		else {
+			$customer_data['root_customer_id'] = $customer_id;
+		}
+
+		// retrieve customer
+		// 	- get id
+		// 	- get object
+		//
+		$customer = Customer::retrieve($customer_id);
+
+		$response = $customer->sources->create(array("source" => $source));
+
+		if ($original != NULL) {
+			$root_customer = Customer::retrieve($original);
+			$response = $customer->sources->create(array("source" => $source));
+		}
+
+		// insert into db
+		DB::table('stripe_customer_sources')->insert( $customer_data );
 
 		return 1;
 	}
