@@ -20,6 +20,10 @@ $(document).ready(function() {
 	});
 
 
+
+
+
+
 	// $(".job_item h1").click(function() {
 	// 	$(this).parents(".job_item").find(".jobs_acc").slideToggle("fast");
 	// 	$(this).parent().toggleClass("active");
@@ -1166,6 +1170,21 @@ $(".view_sidebar .buttons .apply").on("click", function() {
 				if (response.status == 0) {
 					$(".view_sidebar .buttons").hide();
 					$(".view_sidebar .statebuttons .pending").show();
+					var jobIdInterval = response.request_id;
+					console.log(jobIdInterval);
+					setInterval(function() {
+						$.get('/api/employeeRequestStatus/' + jobIdInterval, function(res) {
+							console.log(res);
+							if (res.status == "approved") {
+								$(".view_sidebar .statebuttons .pending").hide();
+								$(".view_sidebar .statebuttons .approved").show();
+							}
+							if (res.status == "rejected") {
+								$(".view_sidebar .statebuttons .pending").hide();
+								$(".view_sidebar .statebuttons .rejected").show();
+							}
+						})
+					},1000)
 				}
 			}
 		});
