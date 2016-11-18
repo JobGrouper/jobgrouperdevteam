@@ -13,6 +13,7 @@ use \Stripe\Token;
 use \Stripe\Customer;
 use \Stripe\Plan;
 use \Stripe\Subscription;
+use \Stripe\Invoice;
 
 class StripeService implements PaymentServiceInterface {
 
@@ -170,6 +171,7 @@ class StripeService implements PaymentServiceInterface {
 	 * 	seller_account
 	 * @throws
 	 * @returns
+	 * 	...
 	 *
 	 */
 	public function createSubscription($plan, $customer, $seller_account) {
@@ -219,6 +221,7 @@ class StripeService implements PaymentServiceInterface {
 	 * 	original_id - id of original Stripe Customer (nullable)
 	 * @throws
 	 * @returns
+	 * 	...
 	 */
 	public function updateCustomerSource($source, $customer_id, $original_id=NULL) {
 
@@ -251,6 +254,51 @@ class StripeService implements PaymentServiceInterface {
 
 		// insert into db
 		DB::table('stripe_customer_sources')->insert( $customer_data );
+
+		return 1;
+	}
+
+	/*
+	 * Modifies a customer's upcoming invoice:
+	 * 	- to include our application fee
+	 * 	- to prorate the amount due
+	 *
+	 * 	Can happen at subscription creation or during webhook event (on invoice created)
+	 *
+	 * 	If customer_id is set, it means this is happening during subscription creation, 
+	 * 	and the upcoming invoice must be retrieved first
+	 *
+	 * @params
+	 * 	params
+	 * 	customer_id
+	 * @throws
+	 * @returns
+	 * 	...
+	 *
+	 */
+	public function modifyInvoice($params, $input_object) {
+
+		// Get upcoming invoice
+
+		$invoice = NULL;
+
+		// If it's a string, assume its a customer id
+		if (is_string($input_object)) {
+		  $invoice = Invoice::upcoming(array("customer" => $customer_id));
+		}
+
+		// If it's an array, assume it's an invoice object
+		if (is_array($input_object)) {
+			$invoice = $input_object;
+		}
+
+		// Set values for invoice
+		foreach(array_keys($params) as $key) {
+			$invoice->$key = $params[$key];
+		}
+
+		// Save invoice
+		$invoice->save();
 
 		return 1;
 	}
