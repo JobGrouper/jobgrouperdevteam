@@ -87,7 +87,7 @@ class EmployeeRequestController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
 
-    public function approve(Request $request){
+    public function approve(Request $request, PaymentServiceInterface $psi){
         $employeeRequest = EmployeeRequest::where('id', '=', $request->employee_request_id)->first();
         if($employeeRequest->status != 'approved'){
             $employeeRequest->status = 'approved';

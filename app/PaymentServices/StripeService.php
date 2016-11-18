@@ -4,12 +4,15 @@ namespace App\PaymentServices;
 
 use App\Interfaces\PaymentServiceInterface;
 
-use Stripe\Account;
+use \Carbon\Carbon;
+
+use \Stripe\Account;
 use \Stripe\Stripe;
 use \Stripe\Charge;
 use \Stripe\Token;
 use \Stripe\Customer;
 use \Stripe\Plan;
+use \Stripe\Subscription;
 
 class StripeService implements PaymentServiceInterface {
 
@@ -141,7 +144,7 @@ class StripeService implements PaymentServiceInterface {
 		);
 
 		// Queue up subscription job
-		$this->dispatch(new StripePlanActivation($this));
+		$this->dispatch(new StripePlanActivation($this, $job, $plan, $managed_account));
 
 		// Email admin that plan is being created
 		//
@@ -157,8 +160,39 @@ class StripeService implements PaymentServiceInterface {
 		return 1;
 	}
 
-	public function createSubscription() {
+	public function createSubscription($plan, $customer, $seller_account) {
 
+		$plan_id = NULL;
+		$customer_id = NULL;
+		$account_id = NULL;
+		
+		if (is_array($plan)) {
+		  $plan_id = $plan['id'];
+		}
+
+		if (is_array($customer)) {
+		  $customer_id = $customer['id'];
+		}
+
+		if (is_array($seller_account)) {
+		  $account_id = $seller_account['id'];
+		}
+
+		$response = Subscription::create(
+			array('customer' => $customer_id,
+			'plan' => $plan_id,
+			'application_fee_percent' => 15,
+			'trial_end' => Carbon::tomorrow() // starting a day after so we can modify invoice
+		),
+			array('stripe_account' => $account_id)
+		);
+
+		// some kind of error mechanism in case this fails
+		if (isset($response['error'])) {
+
+		}
+
+		return 1;
 	}
 }
 
