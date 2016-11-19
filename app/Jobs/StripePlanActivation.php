@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use Mail;
+
 use App\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;

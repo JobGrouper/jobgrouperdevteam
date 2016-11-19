@@ -155,6 +155,10 @@ Route::group(['prefix' => 'api'], function () {
     //Route::post('purchase/paypal/feedback', ['uses' => 'PayPalController@processPayment']);
     Route::post('purchase/paypal/feedback', ['uses' => 'OrderController@purchasePayPalFeedback']);
 
+    Route::post('stripe/invoice/payment', 'StripeWebhookController@createTransfer');
+    Route::post('stripe/invoice/created', 'StripeWebhookController@updateFee');
+    Route::post('stripe/account/updated', 'StripeWebhookController@confirmManagedAccount');
+
 });
 
 //Sandbox, for testing some features

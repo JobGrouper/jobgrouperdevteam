@@ -5,6 +5,7 @@ namespace App\PaymentServices;
 use App\Interfaces\PaymentServiceInterface;
 
 use \Carbon\Carbon;
+use Mail;
 
 use \Stripe\Account;
 use \Stripe\Stripe;

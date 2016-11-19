@@ -6,6 +6,7 @@ use App\CreditCard;
 use App\Job;
 use App\Sale;
 use Illuminate\Http\Request;
+use App\Interfaces\PaymentServiceInterface;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
