@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Interfaces\PaymentServiceInterface;
 
 use App\User;
 use App\UserSocialAccount;
@@ -33,7 +34,7 @@ class RegistrateController extends Controller
     }
 
 
-    public function register(Request $request)
+    public function register(Request $request, PaymentServiceInterface $psi)
     {
         $user = User::where('email', '=', $request->input('email'))->first();
         if ($user !== null) {

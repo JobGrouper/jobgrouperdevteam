@@ -15,6 +15,7 @@ use \Stripe\Customer;
 use \Stripe\Plan;
 use \Stripe\Subscription;
 use \Stripe\Invoice;
+use \Stripe\Transfer;
 
 class StripeService implements PaymentServiceInterface {
 
@@ -47,12 +48,41 @@ class StripeService implements PaymentServiceInterface {
 		return $creditCardToken;
 	}
 
-	public function createAccount(array $stripeAccountData) {
+	public function createAccount(array $stripeAccountData, $user) {
+
 		$response = Account::create(array(
 			"managed" => true,
 			"country" => $stripeAccountData['country'],
 			"email" => $stripeAccountData['email'],
-		));
+			"legal_entity" => array(
+				"address" => array(
+					"city" => $stripeAccountData['legal_entity']['address']['city'],
+					"line1" => $stripeAccountData['legal_entity']['address']['line1'],
+					"postal_code" => $stripeAccountData['legal_entity']['address']['postal_code'],
+					"state" => $stripeAccountData['legal_entity']['address']['state']
+				),
+				"dob" => array(
+					"day" => $stripeAccountData['legal_entity']['dob']['day'],
+					"month" => $stripeAccountData['legal_entity']['dob']['month'],
+					"year" => $stripeAccountData['legal_entity']['dob']['year']
+				),
+				"first_name" => $stripeAccountData['legal_entity']['first_name'],
+				"last_name" => $stripeAccountData['legal_entity']['last_name'],
+				"ssn_last_4" => $stripeAccountData['legal_entity']['ssn_last_4'],
+				"type" => $stripeAccountData['legal_entity']['type']),
+			"tos" => array(
+				"date" => $stripeAccountData['tos']['date'],
+				"ip" => $stripeAccountData['tos']['ip'])
+			);
+
+		if (isset($response['id'])) {
+
+			// store account in database
+			DB::table('stripe_managed_accounts')->insert(array(
+				'id' => $response['id']
+				'user_id' => $user->id
+			));
+		}
 
 		return $response;
 	}
@@ -300,6 +330,28 @@ class StripeService implements PaymentServiceInterface {
 
 		// Save invoice
 		$invoice->save();
+
+		return 1;
+	}
+
+	/*
+	 * Creates a transfer between a buyer's managed account 
+	 *   and it's external account(bank account/debit card).
+	 */
+	public function createTransfer($account_id) {
+
+		// get the plan
+
+		// api call
+		$response = Transfer::create(array(
+		  "amount" => ,
+		  "currency" => "usd",
+		  "destination" => "default_for_currency",
+		  ),
+  		array('stripe_account' => $account_id)
+		);
+
+		// store in database
 
 		return 1;
 	}
