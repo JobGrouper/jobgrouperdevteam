@@ -77,20 +77,22 @@ class StripeService implements PaymentServiceInterface {
 			)
 		);
 
-		if (isset($response['id'])) {
-
-			// store account in database
-			DB::table('stripe_managed_accounts')->insert(array(
-				'id' => $response['id'],
-				'user_id' => $user_id)
-			);
-		}
+		$this->insertAccountIntoDB($response['id'], $user_id);
 
 		if ($returning) {
 		  return $response;
 		}
 		else
 		  return 1;
+	}
+
+	public function insertAccountIntoDB($account_id, $user_id) {
+
+		// store account in database
+		DB::table('stripe_managed_accounts')->insert(array(
+			'id' => $account_id,
+			'user_id' => $user_id)
+		);
 	}
 
 	public function updateAccount($stripeAccountID, array $stripeAccountData) {
@@ -188,10 +190,16 @@ class StripeService implements PaymentServiceInterface {
 		$account = Account::retrieve($account_id);
 		$response = $account->delete();
 
+		return $response['deleted'];
+	}
+
+	/*
+	 * A function deleting the account from the database (for testability)
+	 */
+	public function deleteAccountFromDB($account_id) {
+
 		// delete account in database
 		DB::table('stripe_managed_accounts')->where('id', '=', $account_id)->delete();
-
-		return $response['deleted'];
 	}
 
 	public function createExternalAccount(){

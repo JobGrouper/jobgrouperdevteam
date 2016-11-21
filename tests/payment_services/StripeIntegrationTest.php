@@ -58,35 +58,16 @@ class StripeIntegrationTest extends TestCase
 
 	public function testCreateAccountInDB() {
 
-		$account = $this->psi->createAccount(array(
-			"country" => "US",
-			"email" => "testemail@test.com",
-			"legal_entity" => array(
-				"address" => array(
-					"city" => "Malibu",
-					"line1" => "line",
-					"postal_code" => "90210",
-					"state" => "CA"),
-				"dob" => array(
-					"day" => "1",
-					"month" => "2",
-					"year" => "1986"
-				),
-				"first_name" => "Test",
-				"last_name" => "User",
-				"ssn_last_4" => "9999",
-				"type" => "individual"
-			),
-			"tos_acceptance" => array(
-				"date" => Carbon::now()->timestamp,
-				"ip" => "8.8.8.8"
-			)
-		), 1, True);
+		$account = array(
+			'id' => 1
+		);
+
+		$this->psi->insertAccountIntoDB($account['id'], 1);
 
 		$this->seeInDatabase('stripe_managed_accounts', [
 			'id' => $account['id']
 		]);
 
-		$this->psi->deleteAccount($account['id']); 
+		$this->psi->deleteAccountFromDB($account['id']); 
 	}
 }
