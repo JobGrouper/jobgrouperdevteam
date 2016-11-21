@@ -6,7 +6,7 @@ interface PaymentServiceInterface {
 
 	public function initialize();
 	public function createCreditCardToken(array $creditCardData);
-	public function createSubscription();
+	//public function createSubscription();
 	public function createPayment();
 }
 

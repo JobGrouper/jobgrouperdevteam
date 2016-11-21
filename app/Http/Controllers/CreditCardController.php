@@ -28,7 +28,7 @@ class CreditCardController extends Controller
         return view('pages.account.card');
     }
     
-    public function store(Request $request){
+    public function store(Request $request, PaymentServiceInterface $psi){
         $user = Auth::user();
         $input = $request->only(['first_name', 'last_name', 'card_number', 'end_month', 'end_year', 'cvv']);
 

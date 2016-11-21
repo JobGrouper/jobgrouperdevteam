@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\EmployeeExitRequest;
 use App\EmployeeRequest;
+use App\Interfaces\PaymentServiceInterface;
 use App\Job;
 use App\User;
 use Auth;

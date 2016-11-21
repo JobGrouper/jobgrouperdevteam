@@ -154,7 +154,7 @@ class OrderController extends Controller
     }
 
 
-    public function update(Request $request){
+    public function update(Request $request, PaymentServiceInterface $psi){
         $user = Auth::user();
         $creditCard = CreditCard::find($request->credit_card_id);
         $order = Sale::find($request->order_id);

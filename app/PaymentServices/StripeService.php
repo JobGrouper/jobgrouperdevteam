@@ -6,6 +6,7 @@ use App\Interfaces\PaymentServiceInterface;
 
 use \Carbon\Carbon;
 use Mail;
+use DB;
 
 use \Stripe\Account;
 use \Stripe\Stripe;
@@ -48,7 +49,7 @@ class StripeService implements PaymentServiceInterface {
 		return $creditCardToken;
 	}
 
-	public function createAccount(array $stripeAccountData, $user) {
+	public function createAccount(array $stripeAccountData, $user_id, $returning=False) {
 
 		$response = Account::create(array(
 			"managed" => true,
@@ -70,26 +71,80 @@ class StripeService implements PaymentServiceInterface {
 				"last_name" => $stripeAccountData['legal_entity']['last_name'],
 				"ssn_last_4" => $stripeAccountData['legal_entity']['ssn_last_4'],
 				"type" => $stripeAccountData['legal_entity']['type']),
-			"tos" => array(
-				"date" => $stripeAccountData['tos']['date'],
-				"ip" => $stripeAccountData['tos']['ip'])
-			);
+			"tos_acceptance" => array(
+				"date" => Carbon::now()->timestamp,
+				"ip" => $stripeAccountData['tos_acceptance']['ip'])
+			)
+		);
 
 		if (isset($response['id'])) {
 
 			// store account in database
 			DB::table('stripe_managed_accounts')->insert(array(
-				'id' => $response['id']
-				'user_id' => $user->id
-			));
+				'id' => $response['id'],
+				'user_id' => $user_id)
+			);
 		}
 
-		return $response;
+		if ($returning) {
+		  return $response;
+		}
+		else
+		  return 1;
 	}
 
 	public function updateAccount($stripeAccountID, array $stripeAccountData) {
 		$account = Account::retrieve($stripeAccountID);
 
+		$keys = array_keys($stripeAccountData);
+
+		foreach($keys as $key) {
+
+			// LEGAL ENTITY
+			if ($key == 'legal_entity') {
+
+				$legal_entity_keys = array_keys($stripeAccountData[$key]);
+
+				foreach ($legal_entity_keys as $le_key) {
+
+					// DATE OF BIRTH
+					if ($le_key == 'dob') {
+						
+						$dob_keys = array_keys($stripeAccountData[$key][$le_key]);
+
+						foreach ($dob_keys as $dob_key) {
+							$account->$key->$le_key->$dob_key = $stripeAccountData[$key][$le_key][$dob_key];
+						}
+					}
+					// ADDRESS
+					else if ($le_key == 'address') {
+
+						$address_keys = array_keys($stripeAccountData[$key][$le_key]);
+
+						foreach ($address_keys as $address_key) {
+							$account->$key->$le_key->$address_key = $stripeAccountData[$key][$le_key][$address_key];
+						}
+					}
+					else {
+						// otherwise
+						$account->$key->$le_key = $stripeAccountData[$key][$le_key];
+					}
+				}
+			}
+			// TERMS OF ACCEPTANCE
+			else if ($key == 'tos_acceptance') {
+				$tos_keys = array_keys($stripeAccountData[$key]);
+
+				foreach ($tos_keys as $tos_key) {
+					$account->$key->$tos_key = $stripeAccountData[$key][$tos_key];
+				}
+			}
+			else {
+				$account->$key = $stripeAccountData[$key];
+			}
+		}
+
+		/*
 		if($stripeAccountData['legal_entity']['address']){
 			$account->legal_entity->address->city = $stripeAccountData['legal_entity']['address']['city'];
 			$account->legal_entity->address->line1 = $stripeAccountData['legal_entity']['address']['line1'];
@@ -111,16 +166,32 @@ class StripeService implements PaymentServiceInterface {
 			$account->legal_entity->type = $stripeAccountData['legal_entity']['type'];
 		}
 
-		if($stripeAccountData['legal_entity']['date']) {
-			$account->legal_entity->date = $stripeAccountData['legal_entity']['date'];
+		if($stripeAccountData['tos_acceptance']['date']) {
+			$account->tos_acceptance->date = $stripeAccountData['tos_acceptance']['date'];
 		}
 
-		if($stripeAccountData['legal_entity']['ip']) {
-			$account->legal_entity->ip = $stripeAccountData['legal_entity']['ip'];
+		if($stripeAccountData['tos_acceptance']['ip']) {
+			$account->tos_acceptance->ip = $stripeAccountData['tos_acceptance']['ip'];
 		}
+		 */ 
 
 		$response = $account->save();
 		return $response;
+	}
+
+	/*
+	 * A delete managed account function (for testing purposes, mainly)
+	 *
+	 */
+	public function deleteAccount($account_id) {
+
+		$account = Account::retrieve($account_id);
+		$response = $account->delete();
+
+		// delete account in database
+		DB::table('stripe_managed_accounts')->where('id', '=', $account_id)->delete();
+
+		return $response['deleted'];
 	}
 
 	public function createExternalAccount(){
@@ -344,7 +415,7 @@ class StripeService implements PaymentServiceInterface {
 
 		// api call
 		$response = Transfer::create(array(
-		  "amount" => ,
+		  "amount" => 'amount',
 		  "currency" => "usd",
 		  "destination" => "default_for_currency",
 		  ),
