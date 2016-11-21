@@ -72,7 +72,7 @@ class StripeService implements PaymentServiceInterface {
 				"ssn_last_4" => $stripeAccountData['legal_entity']['ssn_last_4'],
 				"type" => $stripeAccountData['legal_entity']['type']),
 			"tos_acceptance" => array(
-				"date" => Carbon::now()->timestamp,
+				"date" => $stripeAccountData['tos_acceptance']['date'],
 				"ip" => $stripeAccountData['tos_acceptance']['ip'])
 			)
 		);

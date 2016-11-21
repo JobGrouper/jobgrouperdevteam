@@ -4,6 +4,8 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+use \Carbon\Carbon;
+
 use \App\PaymentServices\StripeService;
 
 class StripeIntegrationTest extends TestCase
@@ -44,7 +46,7 @@ class StripeIntegrationTest extends TestCase
 				"type" => "individual"
 			),
 			"tos_acceptance" => array(
-				"date" => 1234,
+				"date" => Carbon::now()->timestamp,
 				"ip" => "8.8.8.8"
 			)
 		), 1, True);
@@ -76,7 +78,7 @@ class StripeIntegrationTest extends TestCase
 				"type" => "individual"
 			),
 			"tos_acceptance" => array(
-				"date" => 1234,
+				"date" => Carbon::now()->timestamp,
 				"ip" => "8.8.8.8"
 			)
 		), 1, True);
