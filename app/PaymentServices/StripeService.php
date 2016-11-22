@@ -202,6 +202,104 @@ class StripeService implements PaymentServiceInterface {
 		DB::table('stripe_managed_accounts')->where('id', '=', $account_id)->delete();
 	}
 
+	/*
+	 * Creates a Customer object; used on registration and on new subscriptions
+	 * We'll know if it's being used for subscriptions if account id is passed along with it
+	 *
+	 */
+	public function createCustomer($user, array $customerData, $account_id=NULL) {
+
+		$customer_data = array();
+		$data_keys = array_keys($customerData);
+
+		foreach($data_keys as $key) {
+			$customer_data[$key] = $customerData[$key];
+		}
+
+		// Make api call
+		$response = NULL;
+
+		if (!$account_id) {
+			$response = Customer::create($customer_data);
+		}
+		else {
+			$response = Customer::create($customer_data, array('stripe_account' => $account_id));
+		}
+
+		$this->createCustomerInDB($user, $response, $account_id);
+
+		return $response;
+
+	}
+
+	public function createCustomerInDB($user, $customer, $account_id=NULL) {
+
+		if ($account_id) {
+
+			$root = DB::table('stripe_root_customers')->where('user_id', '=', $user->id)->first();
+
+			DB::table('stripe_connected_customers')->insert([
+				'id' => $customer['id'],
+				'user_id' => $user->id,
+				'root_customer_id' => $root->id,
+				'managed_account_id' => $account_id
+				]);
+		}
+		else {
+
+			DB::table('stripe_root_customers')->insert([
+				'id' => $customer['id'],
+				'user_id' => $user->id,
+				]);
+		}
+	}
+
+	/*
+	 * Deletes created customer
+	 */
+	public function deleteCustomer($user, $account_id=NULL) {
+
+		// 1) Retrieve from db
+		// 2) Retrieve from stripe
+		// 3) Delete
+		//
+
+		if ($account_id) {
+
+			$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $user->id)->
+				where('managed_account_id', '=', $account_id)->first();
+
+			$customer = Customer::retrieve(array('id' => $customer_record->id),
+				array('stripe_account' => $account_id));
+			$response = $customer->delete();
+
+			$this->deleteCustomerFromDB($user);
+		}
+		else {
+			$customer_record = DB::table('stripe_root_customers')->where('user_id', '=', $user->id)->first();
+			$customer = Customer::retrieve($customer_record->id);
+			$response = $customer->delete();
+
+			$this->deleteCustomerFromDB($user, $account_id);
+		}
+
+		return $response;
+	}
+
+	/*
+	 * Deletes created customer from database
+	 */
+	public function deleteCustomerFromDB($user, $account_id=NULL) {
+
+		if ($account_id) {
+			DB::table('stripe_connected_customers')->where('user_id', '=', $user->id)->
+				where('managed_account_id', '=', $account_id)->delete();
+		}
+		else {
+			DB::table('stripe_connected_customers')->where('user_id', '=', $user->id)->delete();
+		}
+	}
+
 	public function createExternalAccount(){
 
 	}
@@ -227,8 +325,9 @@ class StripeService implements PaymentServiceInterface {
 	 * @throws
 	 * 	Exceptions for missing parameters
 	 */
-	public function createPlan($user, $job, $plan_params) {
+	public function createPlan($user, $job, $testing=False) {
 
+		/*
 		if (!is_string($account_id)) {
 			throw new \Exception('StripeService::createPlan - Account Id must be a string');
 		}
@@ -236,39 +335,71 @@ class StripeService implements PaymentServiceInterface {
 		if (!is_array($plan_params)) {
 			throw new \Exception('StripeService::createPlan - Plan parameters must be an array');
 		}
+		 */
 
-		$managed_account = DB::table('stripe_managed_accounts')->where('user_id', $user->id);
+		// Retrieve account
+		$managed_account = DB::table('stripe_managed_accounts')->where('user_id', '=', $user->id)->first();
+
+		$plan_id = $this->generatePlanId($job->title);
 
 		// Create plan
 		$plan = Plan::create(array(
-		  "amount" => $job->salary,
+		  "amount" => $job->salary * 100, // value must be in cents for Stripe
 		  "interval" => "month",
-		  "name" => $plan_params["name"],
-		  "currency" => $plan_params["currency"],
-		  "id" => $plan_params["id"]),
+		  "name" => $job->title,
+		  "currency" => 'USD',
+		  "id" => $plan_id),
 		  array("stripe_account" => $managed_account->id)
 		);
 
 		// Add plan to database
 		DB::table('stripe_plans')->insert(
-			['id' => $plan->id , 'activated' => 1]
+			['id' => $plan->id , 'managed_account_id' => $managed_account->id,
+			'job_id' => $job->id, 'activated' => 1]
 		);
 
-		// Queue up subscription job
-		$this->dispatch(new StripePlanActivation($this, $job, $plan, $managed_account));
+		if (!$testing) {
 
-		// Email admin that plan is being created
-		//
-		/*
-		Mail::send('emails.plan_activating',['token'=>'asdasdasdasd'],function($u)
-		{
-		    $u->from('admin@jobgrouper.com');
-		    $u->to('admin@jobgrouper.com');
-		    $u->subject('Job creation started');
-		});
-		 */
+			// Queue up subscription job
+			$this->dispatch(new StripePlanActivation($this, $job, $plan, $managed_account));
 
-		return 1;
+			// Email admin that plan is being created
+			//
+			Mail::send('emails.plan_activating',['token'=>'asdasdasdasd'],function($u)
+			{
+			    $u->from('admin@jobgrouper.com');
+			    $u->to('admin@jobgrouper.com');
+			    $u->subject('Job creation started');
+			});
+		}
+
+		return $plan;
+	}
+
+	/*
+	 * Generates a unique id for a plan
+	 */
+	public function generatePlanId($plan_name) {
+
+		return  'plan_' . random_int(10000000, 99999999) . substr( hash('md5', $plan_name), 20);
+	}
+
+	public function deletePlan($user, $job, $account_id) {
+
+		$plan_record = DB::table('stripe_plans')->where('job_id', '=', $job->id)->first();
+
+		$plan = Plan::retrieve(array('id' => $plan_record->id),
+			array('stripe_account' => $account_id));
+
+		$response = $plan->delete();
+
+		$this->deletePlanFromDB($plan_record);
+
+		return $response;
+	}
+
+	public function deletePlanFromDB($plan) {
+		DB::table('stripe_plans')->where('id', '=', $plan->id)->delete();
 	}
 
 	/*
@@ -294,19 +425,31 @@ class StripeService implements PaymentServiceInterface {
 		  $plan_id = $plan['id'];
 		}
 
+		if (is_object($plan)) {
+		  $plan_id = $plan->id;
+		}
+
 		if (is_array($customer)) {
 		  $customer_id = $customer['id'];
+		}
+
+		if (is_object($customer)) {
+		  $customer_id = $customer->id;
 		}
 
 		if (is_array($seller_account)) {
 		  $account_id = $seller_account['id'];
 		}
 
+		if (is_object($seller_account)) {
+		  $account_id = $seller_account->id;
+		}
+
 		$response = Subscription::create(
 			array('customer' => $customer_id,
 			'plan' => $plan_id,
 			'application_fee_percent' => 15,
-			'trial_end' => Carbon::tomorrow() // starting a day after so we can modify invoice
+			'trial_end' => Carbon::tomorrow()->timestamp // starting a day after so we can modify invoice
 		),
 			array('stripe_account' => $account_id)
 		);
@@ -316,7 +459,37 @@ class StripeService implements PaymentServiceInterface {
 
 		}
 
-		return 1;
+		$this->createSubscriptionInDB($response['id'], $plan_id, $customer_id);
+
+		return $response;
+	}
+
+	public function createSubscriptionInDB($id, $plan_id, $customer_id) {
+
+		// Add subscription to database
+		DB::table('stripe_subscriptions')->insert(
+			['id' => $id , 'plan_id' => $plan_id,
+			'connected_customer_id' => $customer_id, 'activated' => 1]
+		);
+	}
+
+	public function cancelSubscription($plan, $customer, $account_id) {
+
+		$subscription_record = DB::table('stripe_subscriptions')->where('plan_id', '=', $plan['id'])->
+			where('connected_customer_id', '=', $customer['id'])->first();
+
+		$subscription = Subscription::retrieve(array('id' => $subscription_record->id),
+			array('stripe_account' => $account_id));
+
+		$response = $subscription->cancel();
+
+		$this->deleteSubscriptionInDB($subscription_record);
+
+		return $response;
+	}
+
+	public function deleteSubscriptionInDB($subscription) {
+		DB::table('stripe_subscriptions')->where('id', '=', $subscription->id)->delete();
 	}
 
 	/*
