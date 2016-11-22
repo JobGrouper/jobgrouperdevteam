@@ -70,4 +70,72 @@ class StripeIntegrationTest extends TestCase
 
 		$this->psi->deleteAccountFromDB($account['id']); 
 	}
+
+	public function testCreateCreditCardToken() {
+
+		$token = $this->psi->createCreditCardToken(array(
+			'number' => "4242424242424242",
+			'exp_month' => 11,
+			'exp_year' => 2017,
+			'cvc' => "314"
+		));
+
+		$this->assertArrayHasKey('id', $token);
+	}
+
+	public function testCreateCustomerForRegistration() {
+
+		$user = new StdClass();
+		$user->id = 1;
+		$user->email = 'testmail@test.com';
+
+		$token = $this->psi->createCreditCardToken(array(
+			'number' => "4242424242424242",
+			'exp_month' => 11,
+			'exp_year' => 2017,
+			'cvc' => "314"
+		));
+
+		$this->psi->createCustomer($user, array(
+			'email' => $user->email,
+			'source' => $token['id'])
+		);
+
+		$this->seeInDatabase('stripe_root_customers',
+			['user_id' => $user->id]
+		);	
+
+		$this->psi->deleteCustomer($user);
+	}
+
+	public function testCreateCustomerForSubscription() {
+
+		$user = new StdClass();
+		$user->id = 1;
+		$user->email = 'testmail@test.com';
+
+		$account_id = 'acct_198BveHmuu0N2CC4';
+
+		// insert account into db
+		$this->psi->insertAccountIntoDB($account_id, 1);
+
+		$this->psi->createCustomer($user, array(
+			'email' => $user->email)
+		);
+
+		$this->psi->createCustomer($user, array(
+			'email' => $user->email),
+			$account_id
+		);
+
+		$this->seeInDatabase('stripe_connected_customers',
+			['user_id' => $user->id,
+			'managed_account_id' => $account_id]
+		);	
+
+		$this->psi->deleteCustomer($user, $account_id);
+		$this->psi->deleteCustomer($user);
+
+		$this->psi->deleteAccountFromDB($account_id); 
+	}
 }

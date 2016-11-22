@@ -202,6 +202,103 @@ class StripeService implements PaymentServiceInterface {
 		DB::table('stripe_managed_accounts')->where('id', '=', $account_id)->delete();
 	}
 
+	/*
+	 * Creates a Customer object; used on registration and on new subscriptions
+	 * We'll know if it's being used for subscriptions if account id is passed along with it
+	 *
+	 */
+	public function createCustomer($user, array $customerData, $account_id=NULL) {
+
+		$customer_data = array();
+		$data_keys = array_keys($customerData);
+
+		foreach($data_keys as $key) {
+			$customer_data[$key] = $customerData[$key];
+		}
+
+		// Make api call
+		$response = NULL;
+
+		if (!$account_id) {
+			$response = Customer::create($customer_data);
+		}
+		else {
+			$response = Customer::create($customer_data, array('stripe_account' => $account_id));
+		}
+
+		$this->createCustomerInDB($user, $response, $account_id);
+
+		return $response;
+
+	}
+
+	public function createCustomerInDB($user, $customer, $account_id=NULL) {
+
+		if ($account_id) {
+
+			$root = DB::table('stripe_root_customers')->where('user_id', '=', $user->id)->first();
+
+			DB::table('stripe_connected_customers')->insert([
+				'id' => $customer['id'],
+				'user_id' => $user->id,
+				'root_customer_id' => $root->id,
+				'managed_account_id' => $account_id
+				]);
+		}
+		else {
+
+			DB::table('stripe_root_customers')->insert([
+				'id' => $customer['id'],
+				'user_id' => $user->id,
+				]);
+		}
+	}
+
+	/*
+	 * Deletes created customer
+	 */
+	public function deleteCustomer($user, $account_id=NULL) {
+
+		// 1) Retrieve from db
+		// 2) Retrieve from stripe
+		// 3) Delete
+		//
+
+		if ($account_id) {
+
+			$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $user->id)->
+				where('managed_account_id', '=', $account_id)->first();
+
+			$customer = Customer::retrieve($customer_record->id);
+			$response = $customer->delete();
+
+			$this->deleteCustomerFromDB($user);
+		}
+		else {
+			$customer_record = DB::table('stripe_root_customers')->where('user_id', '=', $user->id)->first();
+			$customer = Customer::retrieve($customer_record->id);
+			$response = $customer->delete();
+
+			$this->deleteCustomerFromDB($user, $account_id);
+		}
+
+		return $response;
+	}
+
+	/*
+	 * Deletes created customer from database
+	 */
+	public function deleteCustomerFromDB($user, $account_id=NULL) {
+
+		if ($account_id) {
+			DB::table('stripe_connected_customers')->where('user_id', '=', $user->id)->
+				where('managed_account_id', '=', $account_id)->delete();
+		}
+		else {
+			DB::table('stripe_connected_customers')->where('user_id', '=', $user->id)->delete();
+		}
+	}
+
 	public function createExternalAccount(){
 
 	}
