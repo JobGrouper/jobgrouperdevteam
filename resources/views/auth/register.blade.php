@@ -15,6 +15,7 @@
                 <a href="#">
                     <span class="twitter"><i class="fa fa-twitter"></i>Twitter</span>
                 </a>
+
             </div>
             <label for="city">City</label>
             <input type="text" id="city" name="city">

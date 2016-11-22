@@ -104,7 +104,7 @@ class RegistrateController extends Controller
                 $ss->createAccount($stripeAccountData, $user->id);
             }
             else{
-                //Creating Stripe Costumer  Account
+                //Creating Stripe Costumer Account
             }
 
 
