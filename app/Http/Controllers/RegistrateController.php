@@ -75,7 +75,7 @@ class RegistrateController extends Controller
                 $socialAccount->save();
             }
 
-            if($user->type == 'employee'){
+            if($user->user_type == 'employee'){
                 //Creating Stripe Managed Account
                 $stripeAccountData = [
                     "country" => $request->country,
