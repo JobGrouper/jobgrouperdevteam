@@ -36,8 +36,9 @@ class RegistrateController extends Controller
     }
 
 
-    public function register(Request $request, StripeService $ss)
+    public function register(Request $request, PaymentServiceInterface $psi)
     {
+
         $user = User::where('email', '=', $request->input('email'))->first();
         if ($user !== null) {
             die('User with this email already exist');
@@ -101,10 +102,14 @@ class RegistrateController extends Controller
                         "ip" => $request->ip()
                     ]
                 ];
-                $ss->createAccount($stripeAccountData, $user->id);
+                $psi->createAccount($stripeAccountData, $user->id);
             }
             else{
                 //Creating Stripe Costumer  Account
+                $costumerData = [
+                    'email' => $user->email
+                ];
+                $psi->createCustomer($user, $costumerData);
             }
 
 
