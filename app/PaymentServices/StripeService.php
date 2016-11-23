@@ -30,7 +30,13 @@ class StripeService implements PaymentServiceInterface {
 		Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 	}
 
-	public function createCreditCardToken(array $creditCardData) {
+	public function createCreditCardToken(array $creditCardData, $is_managed=False) {
+
+		$currency = NULL;
+
+		if ($is_managed)
+		  $currency = "usd";
+
 		try {
 			$creditCardToken = Token::create(
 				array(
@@ -38,7 +44,8 @@ class StripeService implements PaymentServiceInterface {
 						"number" => $creditCardData['number'],
 						"exp_month" => $creditCardData['exp_month'],
 						"exp_year" => $creditCardData['exp_year'],
-						"cvc" => $creditCardData['cvc']
+						"cvc" => $creditCardData['cvc'],
+						"currency" => $currency
 					)
 				)
 			);
@@ -300,8 +307,54 @@ class StripeService implements PaymentServiceInterface {
 		}
 	}
 
-	public function createExternalAccount(){
+	/*
+	 * Creates external account associated with a managed account
 
+	 * @params
+	 * 	account_id, string account_token
+	 * @returns
+	 * 	response
+	 * @throws
+	 * 	...
+	 *
+	 */
+	public function createExternalAccount($user, $token){
+
+		$account_record = DB::table('stripe_managed_accounts')->where('user_id', '=', $user->id)->first();
+		$account = Account::retrieve($account_record->id);
+
+		$response = $account->external_accounts->create(array("external_account" => $token));
+
+		$this->createExternalAccountInDB($account['id'], $response['id'], $response['last4']);
+
+		return $response;
+	}
+
+	public function createExternalAccountInDB($account_id, $card_id, $card_last4) {
+
+		DB::table('stripe_external_accounts')->insert([
+			'id' => $card_id,
+			'managed_account_id' => $account_id,
+			'last_four' => $card_last4
+			]);
+	}
+
+	public function deleteExternalAccount($user_id, $card_id) {
+
+		$account_record = DB::table('stripe_managed_accounts')->where('user_id', '=', $user_id)->first();
+		$account = Account::retrieve($account_record->id);
+
+		// delete account
+		$response = $account->external_accounts->retrieve($card_id)->delete();
+		
+		$this->psi->deleteExternalAccountInDB($card_id);
+
+		return $response;
+	}
+
+	public function deleteExternalAccountInDB($card_id) {
+		DB::table('stripe_external_accounts')->where(
+			'id', '=', $card_id)->delete();
 	}
 	
 	public function createPayment() {

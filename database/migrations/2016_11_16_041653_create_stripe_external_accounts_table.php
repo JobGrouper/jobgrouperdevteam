@@ -13,7 +13,7 @@ class CreateStripeExternalAccountsTable extends Migration
     public function up()
     {
         Schema::create('stripe_external_accounts', function (Blueprint $table) {
-	    $table->char('id', 27)->primary();
+	    $table->char('id', 29)->primary();
 	    $table->char('managed_account_id', 21);
 	    $table->foreign('managed_account_id')->references('id')->on('stripe_managed_accounts')->onDelete('cascade');
             $table->timestamps();

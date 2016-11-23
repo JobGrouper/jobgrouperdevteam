@@ -16,7 +16,7 @@ class CreateStripeTransfersTable extends Migration
 	    $table->char('id', 27)->primary();
 	    $table->char('managed_account_id', 21);
 	    $table->foreign('managed_account_id')->references('id')->on('stripe_managed_accounts')->onDelete('cascade');
-	    $table->char('external_account_id', 27);
+	    $table->char('external_account_id', 29);
 	    $table->foreign('external_account_id')->references('id')->on('stripe_external_accounts')->onDelete('cascade');
             $table->timestamps();
         });
