@@ -42,24 +42,23 @@ class AddColumnsToStripeSchema extends Migration
     public function down()
     {
         //
-	Schema::table('stripe_connected_customers', function ($table) {
-    		$table->dropColumn('managed_account_id');
-	});
+        Schema::table('stripe_connected_customers', function ($table) {
+                $table->dropColumn('managed_account_id');
+        });
 
-        //
-	Schema::table('stripe_plans', function ($table) {
-    		$table->dropColumn('activated');
-	});
-	
-        //
-	Schema::table('stripe_subscriptions', function ($table) {
-    		$table->dropColumn('activated');
-	});
-	
-        //
-	Schema::table('stripe_customer_sources', function ($table) {
-    		$table->dropColumn('last_four');
-	});
-});
+            //
+        Schema::table('stripe_plans', function ($table) {
+                $table->dropColumn('activated');
+        });
+
+            //
+        Schema::table('stripe_subscriptions', function ($table) {
+                $table->dropColumn('activated');
+        });
+
+            //
+        Schema::table('stripe_customer_sources', function ($table) {
+                $table->dropColumn('last_four');
+        });
     }
 }
