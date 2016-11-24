@@ -559,39 +559,79 @@ class StripeService implements PaymentServiceInterface {
 	 * @returns
 	 * 	...
 	 */
-	public function updateCustomerSource($source, $customer_id, $original_id=NULL) {
+	public function updateCustomerSource($user, $token, $account_id=NULL) {
+		
+		if ($account_id) {
 
-		$customer_data = array(
-			'token' => $source,
-			'root_customer_id' => NULL,
-			'connected_customer_id' => NULL
-		);
-
-		if (isset($original_id)) {
-			$customer_data['root_customer_id'] = $original_id;
-			$customer_data['connected_customer_id'] = $customer_id;
+			$customer_record = DB::table('stripe_connected_customers')->
+						where('user_id', '=', $user->id)->
+						where('managed_account_id', '=', $account_id)->first();
+			
+			$root_record = DB::table('stripe_root_customers')->
+						where('user_id', '=', $user->id)->first();
 		}
 		else {
-			$customer_data['root_customer_id'] = $customer_id;
+			$customer_record = DB::table('stripe_root_customers')->
+						where('user_id', '=', $user->id)->first();
 		}
 
-		// retrieve customer
-		// 	- get id
-		// 	- get object
-		//
-		$customer = Customer::retrieve($customer_id);
+		if ($account_id) {
 
-		$response = $customer->sources->create(array("source" => $source));
+			// retrieve customer
+			// 	- get id
+			// 	- get object
+			//
+			$customer = Customer::retrieve(array('id' => $customer_record->id), 
+						array('stripe_account' => $account_id));
 
-		if ($original != NULL) {
-			$root_customer = Customer::retrieve($original);
-			$response = $customer->sources->create(array("source" => $source));
+			$root = Customer::retrieve($root_record->id);
+
+			$customer->source = $token;
+			$response = $customer->save();
+
+			// Generate a new token (because we can't reuse them)
+			$root_response = $root->sources->create(array('source' => $response['sources']['data'][0]['id']));
+			//$root_response = $root->save();
+
+			$this->updateCustomerSourceInDB($response['sources']['data'][0]['id'], $customer_record->id, 
+				$response['sources']['data'][0]['last4'], $root_record->id );
+		}
+		else {
+			$customer = Customer::retrieve($customer_record->id);
+			$customer->source = $token;
+			$response = $customer->save();
+
+			$this->updateCustomerSourceInDB($response['sources']['data'][0]['id'], $customer_record->id, 
+				$response['sources']['data'][0]['last4'] );
 		}
 
-		// insert into db
-		DB::table('stripe_customer_sources')->insert( $customer_data );
+		return $response;
+	}
 
-		return 1;
+	public function updateCustomerSourceInDB($source_id, $customer_id, $last_four, $root_id=NULL) {
+
+		if ($root_id) {
+			// insert into db
+			DB::table('stripe_customer_sources')->insert( 
+				['id' => $source_id, 'root_customer_id' => $root_id,
+				'connected_customer_id' => $customer_id,
+				'last_four' => $last_four] );
+		}
+		else {
+			// insert into db
+			DB::table('stripe_customer_sources')->insert( 
+				['id' => $source_id, 'root_customer_id' => $customer_id,
+				'last_four' => $last_four] );
+		}
+	}
+
+	public function deleteCustomerSource() {
+
+		
+	}
+
+	public function deleteCustomerSourceInDB() {
+
 	}
 
 	/*
@@ -643,22 +683,34 @@ class StripeService implements PaymentServiceInterface {
 	 * Creates a transfer between a buyer's managed account 
 	 *   and it's external account(bank account/debit card).
 	 */
-	public function createTransfer($account_id) {
+	public function createTransfer($user, $job) {
 
 		// get the plan
+		$account_record = DB::table('stripe_managed_accounts')->
+			where('user_id', '=', $user->id)->first();
+
+		$account = Account::retrieve($account_record->id);
 
 		// api call
 		$response = Transfer::create(array(
-		  "amount" => 'amount',
+		  "amount" => $job->salary * 100,
 		  "currency" => "usd",
 		  "destination" => "default_for_currency",
 		  ),
-  		array('stripe_account' => $account_id)
+  		array('stripe_account' => $account['id'])
 		);
 
 		// store in database
+		$this->createTransferInDB($response['id'], $account['id']);
 
-		return 1;
+		return $response;
+	}
+
+	public function createTransferInDB($transfer_id, $account_id) {
+
+		DB::table('stripe_transfers')->insert(
+			['id' => $transfer_id, 'managed_account_id' => $account_id]
+		);
 	}
 }
 

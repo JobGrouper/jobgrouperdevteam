@@ -13,10 +13,10 @@ class CreateStripeCustomerSources extends Migration
     public function up()
     {
         Schema::create('stripe_customer_sources', function (Blueprint $table) {
-	    $table->char('token', 28)->primary();
+	    $table->char('id', 29)->primary();
 	    $table->char('root_customer_id', 18);
 	    $table->foreign('root_customer_id')->references('id')->on('stripe_root_customers')->onDelete('cascade');
-	    $table->char('connected_customer_id', 18);
+	    $table->char('connected_customer_id', 18)->nullable();
 	    $table->foreign('connected_customer_id')->references('id')->on('stripe_connected_customers')->onDelete('cascade');
             $table->timestamps();
         });

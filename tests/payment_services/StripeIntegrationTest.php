@@ -301,6 +301,8 @@ class StripeIntegrationTest extends TestCase
 	 */
 	public function testCreateExternalAccount() {
 
+		$this->markTestSkipped();
+
 		//Create fake user
 		$user = User::create([
 		    'first_name' => 'Teddy',
@@ -367,10 +369,143 @@ class StripeIntegrationTest extends TestCase
 	}
 
 	public function testUpdateCustomerSource() {
+
 		$this->markTestSkipped();
+
+		//Create fake user
+		$user = User::create([
+		    'first_name' => 'Teddy',
+		    'last_name' => 'Thanopoklos',
+		    'user_type' => 'buyer',
+		    'email' => 'teddy1@bearmail.com',
+		    'password' => bcrypt('password'),
+		]);
+
+		$customer = $this->psi->createCustomer($user, array(
+			'email' => $user->email
+			)
+		);
+
+		$token = $this->psi->createCreditCardToken(array(
+			'number' => "4242424242424242",
+			'exp_month' => 11,
+			'exp_year' => 2017,
+			'cvc' => "314"
+		));
+
+		$this->psi->updateCustomerSource($user, $token);
+	}
+
+	public function testUpdateConnectedCustomerSource() {
+
+		$this->markTestSkipped();
+		//Create fake user
+		$user = User::create([
+		    'first_name' => 'Teddy',
+		    'last_name' => 'Thanopoklos',
+		    'user_type' => 'buyer',
+		    'email' => 'teddy1@bearmail.com',
+		    'password' => bcrypt('password'),
+		]);
+
+		$customer = $this->psi->createCustomer($user, array(
+			'email' => $user->email
+			)
+		);
+
+		$account = $this->psi->createAccount(array(
+			"country" => "US",
+			"email" => "testemail@test.com",
+			"legal_entity" => array(
+				"address" => array(
+					"city" => "Malibu",
+					"line1" => "line",
+					"postal_code" => "90210",
+					"state" => "CA"),
+				"dob" => array(
+					"day" => "1",
+					"month" => "2",
+					"year" => "1986"
+				),
+				"first_name" => "Test",
+				"last_name" => "User",
+				"ssn_last_4" => "9999",
+				"type" => "individual"
+			),
+			"tos_acceptance" => array(
+				"date" => Carbon::now()->timestamp,
+				"ip" => "8.8.8.8"
+			)
+		), $user->id, True);
+
+		$this->psi->createCustomer($user, array(
+			'email' => $user->email),
+			$account['id']
+		);
+
+		$token = $this->psi->createCreditCardToken(array(
+			'number' => "4242424242424242",
+			'exp_month' => 11,
+			'exp_year' => 2017,
+			'cvc' => "314"
+		));
+
+		$this->psi->updateCustomerSource($user, $token, $account['id']);
 	}
 
 	public function testCreateTransfer() {
-		$this->markTestSkipped();
+
+		//Create fake user
+		$user = User::create([
+		    'first_name' => 'Teddy',
+		    'last_name' => 'Thanopoklos',
+		    'user_type' => 'buyer',
+		    'email' => 'teddy1@bearmail.com',
+		    'password' => bcrypt('password'),
+		]);
+
+		 $job = Job::create([
+		    'title' => 'Test Job',
+		    'description' => "A job for testing",
+		    'salary' => 50.00,
+		    'max_clients_count' => 5,
+		    'category_id' => 1,
+		]);
+
+		$account = $this->psi->createAccount(array(
+			"country" => "US",
+			"email" => "testemail@test.com",
+			"legal_entity" => array(
+				"address" => array(
+					"city" => "Malibu",
+					"line1" => "line",
+					"postal_code" => "90210",
+					"state" => "CA"),
+				"dob" => array(
+					"day" => "1",
+					"month" => "2",
+					"year" => "1986"
+				),
+				"first_name" => "Test",
+				"last_name" => "User",
+				"ssn_last_4" => "9999",
+				"type" => "individual"
+			),
+			"tos_acceptance" => array(
+				"date" => Carbon::now()->timestamp,
+				"ip" => "8.8.8.8"
+			)
+		), $user->id, True);
+
+		$token = $this->psi->createCreditCardToken(array(
+			'number' => "4000056655665556",
+			'exp_month' => 11,
+			'exp_year' => 2017,
+			'cvc' => "314"
+		), True);
+
+		$card = $this->psi->createExternalAccount($user, $token);
+		
+		$transfer = $this->psi->createTransfer($user, $job);
 	}
 }
