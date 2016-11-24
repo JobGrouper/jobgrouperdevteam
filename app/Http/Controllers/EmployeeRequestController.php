@@ -92,20 +92,20 @@ class EmployeeRequestController extends Controller
         $employeeRequest = EmployeeRequest::where('id', '=', $request->employee_request_id)->first();
         if($employeeRequest->status != 'approved'){
             $employeeRequest->status = 'approved';
-            $employeeRequest->save();
+
             $job = $employeeRequest->job()->first();
-
-
-            //Есди в работе есть работник, который покидает работу, делаем нового заявщика потенциальным
+            $employee  = $employeeRequest->employee()->first();
+            //If job already has a seller (employee) but he had make request to leave this job, make new seller as potential
             if($job->employee_status['status'] == 'leave'){
                 $job->potential_employee_id = $employeeRequest->employee_id;
             }
             else{
                 $job->employee_id = $employeeRequest->employee_id;
+                $psi->createPlan($employee, $job, true);
             }
 
-
-            //if card has enough count of buyers and sellers the work begins
+            $employeeRequest->save();
+            //if job has enough count of buyers and sellers the work begins
             if($job->sales_count == $job->max_clients_count){
                 $job->work_start();
             }
