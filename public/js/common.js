@@ -240,6 +240,7 @@ $(document).ready(function() {
 		if ($("#employee").attr("checked", false)) {
 			$("#buyer").attr("checked", true);
 			userChoose = "buyer";
+			$(".sellers_only").hide()
 			console.log(userChoose);
 		} else {
 			$("#buyer").attr("checked", false);
@@ -255,6 +256,7 @@ $(document).ready(function() {
 	$(".employee_radio").click(function() {
 		if ($("#buyer").attr("checked", false)) {
 			$("#employee").attr("checked", true);
+			$(".sellers_only").show()
 			userChoose = "employee";
 			console.log(userChoose);
 		} else {

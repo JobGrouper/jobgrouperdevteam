@@ -688,7 +688,7 @@ img {
       border: none; }
 
 .forgotpass {
-  height: 960px;
+  height: 100%;
   padding-top: 210px; }
   .forgotpass.signup {
     height: auto;
@@ -850,6 +850,9 @@ img {
  	top: -10px;
  }
 
+ .sellers_only {
+   display: none;
+ }
 .login_social {
   margin-bottom: 15px; }
   .login_social a {
