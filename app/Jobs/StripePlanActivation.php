@@ -13,8 +13,10 @@ class StripePlanActivation extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
-    private $psi;
-    private $seller_account;
+    protected $psi;
+    protected $seller_account;
+    protected $plan;
+    protected $stripe_job;
 
     /**
      * Create a new job instance.
@@ -26,7 +28,7 @@ class StripePlanActivation extends Job implements ShouldQueue
     {
         //
 	$this->psi = $psi;
-	$this->job = $job;
+	$this->stripe_job = $job;
 	$this->plan = $plan;
 	$this->seller_account = $seller_account;
     }
@@ -38,8 +40,9 @@ class StripePlanActivation extends Job implements ShouldQueue
      */
     public function handle()
     {
+
 	// Gather everyone
-	$buyers = $this->job->buyers();
+	$buyers = $this->stripe_job->buyers();
 
         //
 	foreach ($buyers as $buyer) {

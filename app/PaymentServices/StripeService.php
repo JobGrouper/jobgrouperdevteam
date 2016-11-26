@@ -4,6 +4,8 @@ namespace App\PaymentServices;
 
 use App\Interfaces\PaymentServiceInterface;
 
+use App\Jobs\StripePlanActivation;
+
 use \Carbon\Carbon;
 use Mail;
 use DB;
@@ -411,10 +413,13 @@ class StripeService implements PaymentServiceInterface {
 			'job_id' => $job->id, 'activated' => 1]
 		);
 
+		// Queue up subscription job
+		dispatch(new StripePlanActivation($this, $job, $plan, $managed_account));
+
 		if (!$testing) {
 
 			// Queue up subscription job
-			$this->dispatch(new StripePlanActivation($this, $job, $plan, $managed_account));
+			dispatch(new StripePlanActivation($this, $job, $plan, $managed_account));
 
 			// Email admin that plan is being created
 			//

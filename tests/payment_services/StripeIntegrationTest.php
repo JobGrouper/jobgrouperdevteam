@@ -9,6 +9,7 @@ use \Carbon\Carbon;
 use \App\PaymentServices\StripeService;
 use App\Job;
 use App\User;
+use App\Jobs\StripePlanActivation;
 
 class StripeIntegrationTest extends TestCase
 {
@@ -156,7 +157,6 @@ class StripeIntegrationTest extends TestCase
 
 	public function testCreatePlan() {
 
-		$this->markTestSkipped();
 		// Create a fake-oh job
 		 $job = Job::create([
 		    'title' => 'Test Job',
@@ -198,6 +198,8 @@ class StripeIntegrationTest extends TestCase
 				"ip" => "8.8.8.8"
 			)
 		), $user->id, True);
+
+		$this->expectsJobs(StripePlanActivation::class);
 
 		$plan = $this->psi->createPlan($user, $job, True);
 
@@ -454,6 +456,8 @@ class StripeIntegrationTest extends TestCase
 	}
 
 	public function testCreateTransfer() {
+
+		$this->markTestSkipped();
 
 		//Create fake user
 		$user = User::create([
