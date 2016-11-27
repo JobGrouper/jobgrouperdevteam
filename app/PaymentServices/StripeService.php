@@ -24,6 +24,8 @@ class StripeService implements PaymentServiceInterface {
 
 	private $stripe_object;
 
+	private $response;
+
 	/*
 
 	STRIPE TRY CATCH TEMPLATE
@@ -76,10 +78,35 @@ class StripeService implements PaymentServiceInterface {
 
 	public function __construct() {
 		$this->initialize();
+
+		$this->response = array(
+			'status' => NULL,
+			'response_object' => NULL,
+			'reject_message' => NULL,
+			'reject_message_user' => NULL
+		);
 	}
 
 	public function initialize() {
 		Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+	}
+
+	private function constructErrorResponse($response) {
+
+		// Since it's a decline, \Stripe\Error\Card will be caught
+		$body = $response->getJsonBody();
+		$error  = $body['error'];
+
+		$formatted_response = array(
+			'http' => $response->getHttpStatus(),
+			'type' => $error['type'],
+			'code' => $error['code'],
+			'param' => $error['param'],
+			'message' => $error['message'],
+			'user' => NULL
+		);
+
+		return $formatted_response;
 	}
 
 	public function retrieveAccount($account_id) {
@@ -88,29 +115,29 @@ class StripeService implements PaymentServiceInterface {
 			$response = Account::retrieve($account_id);
 
 		} catch (\Stripe\Error\RateLimit $e) {
-
 		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\InvalidRequest $e) {
-
 		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Authentication $e) {
-
 		  // Authentication with Stripe's API failed
-		  // (maybe you changed API keys recently)
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\ApiConnection $e) {
-
 		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Base $e) {
-
-		  // Display a very generic error to the user, and maybe send
-		  // yourself an email
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (Exception $e) {
 		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
+
 		}
 
 		return $response;
@@ -127,30 +154,39 @@ class StripeService implements PaymentServiceInterface {
 			  $response = Customer::retrieve($customer_id);
 			}
 
-		} catch (\Stripe\Error\RateLimit $e) {
+		} catch(\Stripe\Error\Card $e) {
+			$error_response = $this->constructErrorResponse($e);
+			
+			// user error
+			$error_response['user'] = true;
 
+		} catch (\Stripe\Error\RateLimit $e) {
 		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\InvalidRequest $e) {
-
 		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+			// user error (possibly)
+			$error_response['user'] = true;
 
 		} catch (\Stripe\Error\Authentication $e) {
-
 		  // Authentication with Stripe's API failed
-		  // (maybe you changed API keys recently)
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\ApiConnection $e) {
-
 		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Base $e) {
-
-		  // Display a very generic error to the user, and maybe send
-		  // yourself an email
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (Exception $e) {
 		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
+
 		}
 
 		return $response;
@@ -177,43 +213,37 @@ class StripeService implements PaymentServiceInterface {
 			);
 
 		} catch(\Stripe\Error\Card $e) {
-
-		  // Since it's a decline, \Stripe\Error\Card will be caught
-		  $body = $e->getJsonBody();
-		  $err  = $body['error'];
-
-		  print('Status is:' . $e->getHttpStatus() . "\n");
-		  print('Type is:' . $err['type'] . "\n");
-		  print('Code is:' . $err['code'] . "\n");
-		  // param is '' in this case
-		  print('Param is:' . $err['param'] . "\n");
-		  print('Message is:' . $err['message'] . "\n");
+			$error_response = $this->constructErrorResponse($e);
+			
+			// user error
+			$error_response['user'] = true;
 
 		} catch (\Stripe\Error\RateLimit $e) {
-
 		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\InvalidRequest $e) {
-
 		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+			// user error (possibly)
+			$error_response['user'] = true;
 
 		} catch (\Stripe\Error\Authentication $e) {
-
 		  // Authentication with Stripe's API failed
-		  // (maybe you changed API keys recently)
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\ApiConnection $e) {
-
 		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Base $e) {
-
-		  // Display a very generic error to the user, and maybe send
-		  // yourself an email
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (Exception $e) {
-
 		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
 
 		}
 
@@ -248,20 +278,34 @@ class StripeService implements PaymentServiceInterface {
 					"ip" => $stripeAccountData['tos_acceptance']['ip'])
 				)
 			);
+
 		} catch (\Stripe\Error\RateLimit $e) {
 		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
+
 		} catch (\Stripe\Error\InvalidRequest $e) {
 		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+			// user error (possibly)
+			$error_response['user'] = true;
+
 		} catch (\Stripe\Error\Authentication $e) {
 		  // Authentication with Stripe's API failed
-		  // (maybe you changed API keys recently)
+			$error_response = $this->constructErrorResponse($e);
+
 		} catch (\Stripe\Error\ApiConnection $e) {
 		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
+
 		} catch (\Stripe\Error\Base $e) {
-		  // Display a very generic error to the user, and maybe send
-		  // yourself an email
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
+
 		} catch (Exception $e) {
 		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
+
 		}
 
 
@@ -368,31 +412,38 @@ class StripeService implements PaymentServiceInterface {
 		try {
 			$response = $account->save();
 
-		} catch (\Stripe\Error\RateLimit $e) {
+		} catch(\Stripe\Error\Card $e) {
+			$error_response = $this->constructErrorResponse($e);
+			
+			// user error
+			$error_response['user'] = true;
 
+		} catch (\Stripe\Error\RateLimit $e) {
 		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\InvalidRequest $e) {
-
 		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+			// user error (possibly)
+			$error_response['user'] = true;
 
 		} catch (\Stripe\Error\Authentication $e) {
-
 		  // Authentication with Stripe's API failed
-		  // (maybe you changed API keys recently)
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\ApiConnection $e) {
-
 		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Base $e) {
-
-		  // Display a very generic error to the user, and maybe send
-		  // yourself an email
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (Exception $e) {
-
 		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
 
 		}
 			
@@ -408,31 +459,38 @@ class StripeService implements PaymentServiceInterface {
 		$account = Account::retrieve($account_id);
 		try {
 			$response = $account->delete();
-		} catch (\Stripe\Error\RateLimit $e) {
+		} catch(\Stripe\Error\Card $e) {
+			$error_response = $this->constructErrorResponse($e);
+			
+			// user error
+			$error_response['user'] = true;
 
+		} catch (\Stripe\Error\RateLimit $e) {
 		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\InvalidRequest $e) {
-
 		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+			// user error (possibly)
+			$error_response['user'] = true;
 
 		} catch (\Stripe\Error\Authentication $e) {
-
 		  // Authentication with Stripe's API failed
-		  // (maybe you changed API keys recently)
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\ApiConnection $e) {
-
 		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Base $e) {
-
-		  // Display a very generic error to the user, and maybe send
-		  // yourself an email
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (Exception $e) {
-
 		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
 
 		}
 
@@ -449,9 +507,7 @@ class StripeService implements PaymentServiceInterface {
 	}
 
 	/*
-	 * Creates a Customer object; used on registration and on new subscriptions
-	 * We'll know if it's being used for subscriptions if account id is passed along with it
-	 *
+	 * Creates a Customer object; used on job subscription / new subscriptions
 	 */
 	public function createCustomer($user, array $customerData, $account_id=NULL) {
 
@@ -464,6 +520,7 @@ class StripeService implements PaymentServiceInterface {
 
 		// Make api call
 		$response = NULL;
+		$error_response = NULL;
 
 		try {
 			if (!$account_id) {
@@ -472,31 +529,38 @@ class StripeService implements PaymentServiceInterface {
 			else {
 				$response = Customer::create($customer_data, array('stripe_account' => $account_id));
 			}
-		} catch (\Stripe\Error\RateLimit $e) {
+		} catch(\Stripe\Error\Card $e) {
+			$error_response = $this->constructErrorResponse($e);
+			
+			// user error
+			$error_response['user'] = true;
 
+		} catch (\Stripe\Error\RateLimit $e) {
 		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\InvalidRequest $e) {
-
 		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+			// user error (possibly)
+			$error_response['user'] = true;
 
 		} catch (\Stripe\Error\Authentication $e) {
-
 		  // Authentication with Stripe's API failed
-		  // (maybe you changed API keys recently)
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\ApiConnection $e) {
-
 		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Base $e) {
-
-		  // Display a very generic error to the user, and maybe send
-		  // yourself an email
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (Exception $e) {
-
 		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
 
 		}
 
@@ -510,12 +574,12 @@ class StripeService implements PaymentServiceInterface {
 
 		if ($account_id) {
 
-			$root = DB::table('stripe_root_customers')->where('user_id', '=', $user->id)->first();
+			// $root = DB::table('stripe_root_customers')->where('user_id', '=', $user->id)->first();
 
 			DB::table('stripe_connected_customers')->insert([
 				'id' => $customer['id'],
 				'user_id' => $user->id,
-				'root_customer_id' => $root->id,
+				//'root_customer_id' => $root->id,
 				'managed_account_id' => $account_id
 				]);
 		}
@@ -575,6 +639,156 @@ class StripeService implements PaymentServiceInterface {
 	}
 
 	/*
+	 * Adds a source (credit/debit card) to an existing Customer object
+	 * If an original id is included, add source to original Customer object
+	 *
+	 * @params
+	 * 	source - token provided by Stripe.JS
+	 * 	customer_id - id of Stripe Customer
+	 * 		+ may refer to root customer or connected customer depending on
+	 * 		+ presence of original id
+	 * 	original_id - id of original Stripe Customer (nullable)
+	 * @throws
+	 * @returns
+	 * 	...
+	 */
+	public function updateCustomerSource($user, $token, $account_id=NULL) {
+		
+		$response = NULL;
+		$error_response = NULL;
+
+		if ($account_id) {
+
+			$customer_record = DB::table('stripe_connected_customers')->
+						where('user_id', '=', $user->id)->
+						where('managed_account_id', '=', $account_id)->first();
+
+		}
+		else {
+			$customer_record = DB::table('stripe_root_customers')->
+						where('user_id', '=', $user->id)->first();
+		}
+
+		if ($account_id) {
+
+			// retrieve customer
+			// 	- get id
+			// 	- get object
+			//
+			$customer = Customer::retrieve(array('id' => $customer_record->id), 
+						array('stripe_account' => $account_id));
+
+			$customer->source = $token;
+
+			try {
+				$response = $customer->save();
+
+			} catch(\Stripe\Error\Card $e) {
+				$error_response = $this->constructErrorResponse($e);
+				
+				// user error
+				$error_response['user'] = true;
+
+			} catch (\Stripe\Error\RateLimit $e) {
+			  // Too many requests made to the API too quickly
+				$error_response = $this->constructErrorResponse($e);
+
+			} catch (\Stripe\Error\InvalidRequest $e) {
+			  // Invalid parameters were supplied to Stripe's API
+				$error_response = $this->constructErrorResponse($e);
+
+				// user error (possibly)
+				$error_response['user'] = true;
+
+			} catch (\Stripe\Error\Authentication $e) {
+			  // Authentication with Stripe's API failed
+				$error_response = $this->constructErrorResponse($e);
+
+			} catch (\Stripe\Error\ApiConnection $e) {
+			  // Network communication with Stripe failed
+				$error_response = $this->constructErrorResponse($e);
+
+			} catch (\Stripe\Error\Base $e) {
+			   // Generic Stripe error
+				$error_response = $this->constructErrorResponse($e);
+
+			} catch (Exception $e) {
+			  // Something else happened, completely unrelated to Stripe
+				$error_response = $this->constructErrorResponse($e);
+
+			}
+
+			$this->updateCustomerSourceInDB($response['sources']['data'][0]['id'], $customer_record->id, 
+				$response['sources']['data'][0]['last4']);
+		}
+		else {
+			$customer = Customer::retrieve($customer_record->id);
+			$customer->source = $token;
+
+			try {
+				$response = $customer->save();
+
+			} catch(\Stripe\Error\Card $e) {
+				$error_response = $this->constructErrorResponse($e);
+				
+				// user error
+				$error_response['user'] = true;
+
+			} catch (\Stripe\Error\RateLimit $e) {
+			  // Too many requests made to the API too quickly
+				$error_response = $this->constructErrorResponse($e);
+
+			} catch (\Stripe\Error\InvalidRequest $e) {
+			  // Invalid parameters were supplied to Stripe's API
+				$error_response = $this->constructErrorResponse($e);
+
+				// user error (possibly)
+				$error_response['user'] = true;
+
+			} catch (\Stripe\Error\Authentication $e) {
+			  // Authentication with Stripe's API failed
+				$error_response = $this->constructErrorResponse($e);
+
+			} catch (\Stripe\Error\ApiConnection $e) {
+			  // Network communication with Stripe failed
+				$error_response = $this->constructErrorResponse($e);
+
+			} catch (\Stripe\Error\Base $e) {
+			   // Generic Stripe error
+				$error_response = $this->constructErrorResponse($e);
+
+			} catch (Exception $e) {
+			  // Something else happened, completely unrelated to Stripe
+				$error_response = $this->constructErrorResponse($e);
+
+			}
+
+			$this->updateCustomerSourceInDB($response['sources']['data'][0]['id'], $customer_record->id, 
+				$response['sources']['data'][0]['last4'] );
+		}
+
+		return $response;
+	}
+
+	public function updateCustomerSourceInDB($source_id, $customer_id, $last_four) {
+
+		// insert into db
+		DB::table('stripe_customer_sources')->insert( 
+			['id' => $source_id, 
+			'connected_customer_id' => $customer_id,
+			'last_four' => $last_four] );
+	}
+
+	public function deleteCustomerSource() {
+
+		
+	}
+
+	public function deleteCustomerSourceInDB() {
+
+	}
+
+	/*
 	 * Creates external account associated with a managed account
 
 	 * @params
@@ -592,45 +806,39 @@ class StripeService implements PaymentServiceInterface {
 
 		try {
 			$response = $account->external_accounts->create(array("external_account" => $token));
+
 		} catch(\Stripe\Error\Card $e) {
+			$error_response = $this->constructErrorResponse($e);
+			
+			// user error
+			$error_response['user'] = true;
 
-		  // Since it's a decline, \Stripe\Error\Card will be caught
-		  $body = $e->getJsonBody();
-		  $err  = $body['error'];
-
-		  print('Status is:' . $e->getHttpStatus() . "\n");
-		  print('Type is:' . $err['type'] . "\n");
-		  print('Code is:' . $err['code'] . "\n");
-		  // param is '' in this case
-		  print('Param is:' . $err['param'] . "\n");
-		  print('Message is:' . $err['message'] . "\n");
-
-		
 		} catch (\Stripe\Error\RateLimit $e) {
-
 		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\InvalidRequest $e) {
-
 		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+			// user error (possibly)
+			$error_response['user'] = true;
 
 		} catch (\Stripe\Error\Authentication $e) {
-
 		  // Authentication with Stripe's API failed
-		  // (maybe you changed API keys recently)
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\ApiConnection $e) {
-
 		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Base $e) {
-
-		  // Display a very generic error to the user, and maybe send
-		  // yourself an email
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (Exception $e) {
-
 		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
 
 		}
 
@@ -717,44 +925,37 @@ class StripeService implements PaymentServiceInterface {
 			);
 
 		} catch(\Stripe\Error\Card $e) {
+			$error_response = $this->constructErrorResponse($e);
+			
+			// user error
+			$error_response['user'] = true;
 
-		  // Since it's a decline, \Stripe\Error\Card will be caught
-		  $body = $e->getJsonBody();
-		  $err  = $body['error'];
-
-		  print('Status is:' . $e->getHttpStatus() . "\n");
-		  print('Type is:' . $err['type'] . "\n");
-		  print('Code is:' . $err['code'] . "\n");
-		  // param is '' in this case
-		  print('Param is:' . $err['param'] . "\n");
-		  print('Message is:' . $err['message'] . "\n");
-
-		
 		} catch (\Stripe\Error\RateLimit $e) {
-
 		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\InvalidRequest $e) {
-
 		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+			// user error (possibly)
+			$error_response['user'] = true;
 
 		} catch (\Stripe\Error\Authentication $e) {
-
 		  // Authentication with Stripe's API failed
-		  // (maybe you changed API keys recently)
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\ApiConnection $e) {
-
 		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Base $e) {
-
-		  // Display a very generic error to the user, and maybe send
-		  // yourself an email
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (Exception $e) {
-
 		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
 
 		}
 
@@ -866,44 +1067,37 @@ class StripeService implements PaymentServiceInterface {
 			);
 
 		} catch(\Stripe\Error\Card $e) {
+			$error_response = $this->constructErrorResponse($e);
+			
+			// user error
+			$error_response['user'] = true;
 
-		  // Since it's a decline, \Stripe\Error\Card will be caught
-		  $body = $e->getJsonBody();
-		  $err  = $body['error'];
-
-		  print('Status is:' . $e->getHttpStatus() . "\n");
-		  print('Type is:' . $err['type'] . "\n");
-		  print('Code is:' . $err['code'] . "\n");
-		  // param is '' in this case
-		  print('Param is:' . $err['param'] . "\n");
-		  print('Message is:' . $err['message'] . "\n");
-
-		
 		} catch (\Stripe\Error\RateLimit $e) {
-
 		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\InvalidRequest $e) {
-
 		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+			// user error (possibly)
+			$error_response['user'] = true;
 
 		} catch (\Stripe\Error\Authentication $e) {
-
 		  // Authentication with Stripe's API failed
-		  // (maybe you changed API keys recently)
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\ApiConnection $e) {
-
 		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Base $e) {
-
-		  // Display a very generic error to the user, and maybe send
-		  // yourself an email
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (Exception $e) {
-
 		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
 
 		}
 
@@ -936,45 +1130,30 @@ class StripeService implements PaymentServiceInterface {
 
 		try {
 			$response = $subscription->cancel();
-		} catch(\Stripe\Error\Card $e) {
 
-		  // Since it's a decline, \Stripe\Error\Card will be caught
-		  $body = $e->getJsonBody();
-		  $err  = $body['error'];
-
-		  print('Status is:' . $e->getHttpStatus() . "\n");
-		  print('Type is:' . $err['type'] . "\n");
-		  print('Code is:' . $err['code'] . "\n");
-		  // param is '' in this case
-		  print('Param is:' . $err['param'] . "\n");
-		  print('Message is:' . $err['message'] . "\n");
-
-		
 		} catch (\Stripe\Error\RateLimit $e) {
-
 		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\InvalidRequest $e) {
-
 		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Authentication $e) {
-
 		  // Authentication with Stripe's API failed
-		  // (maybe you changed API keys recently)
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\ApiConnection $e) {
-
 		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Base $e) {
-
-		  // Display a very generic error to the user, and maybe send
-		  // yourself an email
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (Exception $e) {
-
 		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
 
 		}
 
@@ -985,138 +1164,6 @@ class StripeService implements PaymentServiceInterface {
 
 	public function deleteSubscriptionInDB($subscription) {
 		DB::table('stripe_subscriptions')->where('id', '=', $subscription->id)->delete();
-	}
-
-	/*
-	 * Adds a source (credit/debit card) to an existing Customer object
-	 * If an original id is included, add source to original Customer object
-	 *
-	 * @params
-	 * 	source - token provided by Stripe.JS
-	 * 	customer_id - id of Stripe Customer
-	 * 		+ may refer to root customer or connected customer depending on
-	 * 		+ presence of original id
-	 * 	original_id - id of original Stripe Customer (nullable)
-	 * @throws
-	 * @returns
-	 * 	...
-	 */
-	public function updateCustomerSource($user, $token, $account_id=NULL) {
-		
-		if ($account_id) {
-
-			$customer_record = DB::table('stripe_connected_customers')->
-						where('user_id', '=', $user->id)->
-						where('managed_account_id', '=', $account_id)->first();
-			
-			$root_record = DB::table('stripe_root_customers')->
-						where('user_id', '=', $user->id)->first();
-		}
-		else {
-			$customer_record = DB::table('stripe_root_customers')->
-						where('user_id', '=', $user->id)->first();
-		}
-
-		if ($account_id) {
-
-			// retrieve customer
-			// 	- get id
-			// 	- get object
-			//
-			$customer = Customer::retrieve(array('id' => $customer_record->id), 
-						array('stripe_account' => $account_id));
-
-			$root = Customer::retrieve($root_record->id);
-
-			$customer->source = $token;
-			$response = $customer->save();
-
-			// Generate a new token (because we can't reuse them)
-			$root_response = $root->sources->create(array('source' => $response['sources']['data'][0]['id']));
-			//$root_response = $root->save();
-
-			$this->updateCustomerSourceInDB($response['sources']['data'][0]['id'], $customer_record->id, 
-				$response['sources']['data'][0]['last4'], $root_record->id );
-		}
-		else {
-			$customer = Customer::retrieve($customer_record->id);
-			$customer->source = $token;
-
-			try {
-				$response = $customer->save();
-			} catch(\Stripe\Error\Card $e) {
-
-			  // Since it's a decline, \Stripe\Error\Card will be caught
-			  $body = $e->getJsonBody();
-			  $err  = $body['error'];
-
-			  print('Status is:' . $e->getHttpStatus() . "\n");
-			  print('Type is:' . $err['type'] . "\n");
-			  print('Code is:' . $err['code'] . "\n");
-			  // param is '' in this case
-			  print('Param is:' . $err['param'] . "\n");
-			  print('Message is:' . $err['message'] . "\n");
-
-			
-			} catch (\Stripe\Error\RateLimit $e) {
-
-			  // Too many requests made to the API too quickly
-
-			} catch (\Stripe\Error\InvalidRequest $e) {
-
-			  // Invalid parameters were supplied to Stripe's API
-
-			} catch (\Stripe\Error\Authentication $e) {
-
-			  // Authentication with Stripe's API failed
-			  // (maybe you changed API keys recently)
-
-			} catch (\Stripe\Error\ApiConnection $e) {
-
-			  // Network communication with Stripe failed
-
-			} catch (\Stripe\Error\Base $e) {
-
-			  // Display a very generic error to the user, and maybe send
-			  // yourself an email
-
-			} catch (Exception $e) {
-
-			  // Something else happened, completely unrelated to Stripe
-
-			}
-
-			$this->updateCustomerSourceInDB($response['sources']['data'][0]['id'], $customer_record->id, 
-				$response['sources']['data'][0]['last4'] );
-		}
-
-		return $response;
-	}
-
-	public function updateCustomerSourceInDB($source_id, $customer_id, $last_four, $root_id=NULL) {
-
-		if ($root_id) {
-			// insert into db
-			DB::table('stripe_customer_sources')->insert( 
-				['id' => $source_id, 'root_customer_id' => $root_id,
-				'connected_customer_id' => $customer_id,
-				'last_four' => $last_four] );
-		}
-		else {
-			// insert into db
-			DB::table('stripe_customer_sources')->insert( 
-				['id' => $source_id, 'root_customer_id' => $customer_id,
-				'last_four' => $last_four] );
-		}
-	}
-
-	public function deleteCustomerSource() {
-
-		
-	}
-
-	public function deleteCustomerSourceInDB() {
-
 	}
 
 	/*
@@ -1161,45 +1208,33 @@ class StripeService implements PaymentServiceInterface {
 		try {
 			// Save invoice
 			$invoice->save();
+
 		} catch(\Stripe\Error\Card $e) {
-
-		  // Since it's a decline, \Stripe\Error\Card will be caught
-		  $body = $e->getJsonBody();
-		  $err  = $body['error'];
-
-		  print('Status is:' . $e->getHttpStatus() . "\n");
-		  print('Type is:' . $err['type'] . "\n");
-		  print('Code is:' . $err['code'] . "\n");
-		  // param is '' in this case
-		  print('Param is:' . $err['param'] . "\n");
-		  print('Message is:' . $err['message'] . "\n");
-
-		
+			$error_response = $this->constructErrorResponse($e);
+			
 		} catch (\Stripe\Error\RateLimit $e) {
-
 		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\InvalidRequest $e) {
-
 		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Authentication $e) {
-
 		  // Authentication with Stripe's API failed
-		  // (maybe you changed API keys recently)
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\ApiConnection $e) {
-
 		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Base $e) {
-
-		  // Display a very generic error to the user, and maybe send
-		  // yourself an email
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (Exception $e) {
-
 		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
 
 		}
 
@@ -1218,45 +1253,33 @@ class StripeService implements PaymentServiceInterface {
 
 		try {
 			$account = Account::retrieve($account_record->id);
+
 		} catch(\Stripe\Error\Card $e) {
-
-		  // Since it's a decline, \Stripe\Error\Card will be caught
-		  $body = $e->getJsonBody();
-		  $err  = $body['error'];
-
-		  print('Status is:' . $e->getHttpStatus() . "\n");
-		  print('Type is:' . $err['type'] . "\n");
-		  print('Code is:' . $err['code'] . "\n");
-		  // param is '' in this case
-		  print('Param is:' . $err['param'] . "\n");
-		  print('Message is:' . $err['message'] . "\n");
-
-		
+			$error_response = $this->constructErrorResponse($e);
+			
 		} catch (\Stripe\Error\RateLimit $e) {
-
 		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\InvalidRequest $e) {
-
 		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Authentication $e) {
-
 		  // Authentication with Stripe's API failed
-		  // (maybe you changed API keys recently)
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\ApiConnection $e) {
-
 		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (\Stripe\Error\Base $e) {
-
-		  // Display a very generic error to the user, and maybe send
-		  // yourself an email
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
 
 		} catch (Exception $e) {
-
 		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
 
 		}
 

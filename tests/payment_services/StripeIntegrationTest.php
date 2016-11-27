@@ -78,6 +78,7 @@ class StripeIntegrationTest extends TestCase
 
 	public function testCreateCreditCardToken() {
 
+
 		$this->markTestSkipped();
 		$token = $this->psi->createCreditCardToken(array(
 			'number' => "4242424242424242",
@@ -157,6 +158,7 @@ class StripeIntegrationTest extends TestCase
 
 	public function testCreatePlan() {
 
+		$this->markTestSkipped();
 		// Create a fake-oh job
 		 $job = Job::create([
 		    'title' => 'Test Job',
@@ -303,8 +305,8 @@ class StripeIntegrationTest extends TestCase
 	 */
 	public function testCreateExternalAccount() {
 
-		$this->markTestSkipped();
 
+		$this->markTestSkipped();
 		//Create fake user
 		$user = User::create([
 		    'first_name' => 'Teddy',
@@ -372,10 +374,42 @@ class StripeIntegrationTest extends TestCase
 
 	public function testUpdateCustomerSource() {
 
-		$this->markTestSkipped();
+		//Create fake user
+		$seller = User::create([
+		    'first_name' => 'Art',
+		    'last_name' => 'Parkinson',
+		    'user_type' => 'seller',
+		    'email' => 'arpar@googlemail.com',
+		    'password' => bcrypt('secret'),
+		]);
+
+		$account = $this->psi->createAccount(array(
+			"country" => "US",
+			"email" => "testemail@test.com",
+			"legal_entity" => array(
+				"address" => array(
+					"city" => "Malibu",
+					"line1" => "line",
+					"postal_code" => "90210",
+					"state" => "CA"),
+				"dob" => array(
+					"day" => "1",
+					"month" => "2",
+					"year" => "1986"
+				),
+				"first_name" => "Test",
+				"last_name" => "User",
+				"ssn_last_4" => "9999",
+				"type" => "individual"
+			),
+			"tos_acceptance" => array(
+				"date" => Carbon::now()->timestamp,
+				"ip" => "8.8.8.8"
+			)
+		), $seller->id, True);
 
 		//Create fake user
-		$user = User::create([
+		$buyer = User::create([
 		    'first_name' => 'Teddy',
 		    'last_name' => 'Thanopoklos',
 		    'user_type' => 'buyer',
@@ -383,9 +417,9 @@ class StripeIntegrationTest extends TestCase
 		    'password' => bcrypt('password'),
 		]);
 
-		$customer = $this->psi->createCustomer($user, array(
-			'email' => $user->email
-			)
+		$customer = $this->psi->createCustomer($buyer, array(
+			'email' => $buyer->email
+			), $account['id']
 		);
 
 		$token = $this->psi->createCreditCardToken(array(
@@ -395,12 +429,11 @@ class StripeIntegrationTest extends TestCase
 			'cvc' => "314"
 		));
 
-		$this->psi->updateCustomerSource($user, $token);
+		$this->psi->updateCustomerSource($buyer, $token, $account['id']);
 	}
 
 	public function testUpdateConnectedCustomerSource() {
 
-		$this->markTestSkipped();
 		//Create fake user
 		$user = User::create([
 		    'first_name' => 'Teddy',
@@ -457,8 +490,8 @@ class StripeIntegrationTest extends TestCase
 
 	public function testCreateTransfer() {
 
-		$this->markTestSkipped();
 
+		$this->markTestSkipped();
 		//Create fake user
 		$user = User::create([
 		    'first_name' => 'Teddy',
