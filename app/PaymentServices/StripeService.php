@@ -24,12 +24,136 @@ class StripeService implements PaymentServiceInterface {
 
 	private $stripe_object;
 
+	/*
+
+	STRIPE TRY CATCH TEMPLATE
+
+	try {
+
+	  // Use Stripe's library to make requests...
+
+	} catch(\Stripe\Error\Card $e) {
+
+	  // Since it's a decline, \Stripe\Error\Card will be caught
+	  $body = $e->getJsonBody();
+	  $err  = $body['error'];
+
+	  print('Status is:' . $e->getHttpStatus() . "\n");
+	  print('Type is:' . $err['type'] . "\n");
+	  print('Code is:' . $err['code'] . "\n");
+	  // param is '' in this case
+	  print('Param is:' . $err['param'] . "\n");
+	  print('Message is:' . $err['message'] . "\n");
+
+	} catch (\Stripe\Error\RateLimit $e) {
+
+	  // Too many requests made to the API too quickly
+
+	} catch (\Stripe\Error\InvalidRequest $e) {
+
+	  // Invalid parameters were supplied to Stripe's API
+
+	} catch (\Stripe\Error\Authentication $e) {
+
+	  // Authentication with Stripe's API failed
+	  // (maybe you changed API keys recently)
+
+	} catch (\Stripe\Error\ApiConnection $e) {
+
+	  // Network communication with Stripe failed
+
+	} catch (\Stripe\Error\Base $e) {
+
+	  // Display a very generic error to the user, and maybe send
+	  // yourself an email
+
+	} catch (Exception $e) {
+
+	  // Something else happened, completely unrelated to Stripe
+
+	}
+	*/
+
 	public function __construct() {
 		$this->initialize();
 	}
 
 	public function initialize() {
 		Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+	}
+
+	public function retrieveAccount($account_id) {
+
+		try {
+			$response = Account::retrieve($account_id);
+
+		} catch (\Stripe\Error\RateLimit $e) {
+
+		  // Too many requests made to the API too quickly
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+
+		  // Invalid parameters were supplied to Stripe's API
+
+		} catch (\Stripe\Error\Authentication $e) {
+
+		  // Authentication with Stripe's API failed
+		  // (maybe you changed API keys recently)
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+
+		  // Network communication with Stripe failed
+
+		} catch (\Stripe\Error\Base $e) {
+
+		  // Display a very generic error to the user, and maybe send
+		  // yourself an email
+
+		} catch (Exception $e) {
+		  // Something else happened, completely unrelated to Stripe
+		}
+
+		return $response;
+	}
+
+	public function retrieveCustomer($customer_id, $account_id=NULL) {
+
+		try {
+			if ($account_id) {
+			  $response = Customer::retrieve(array('id' => $customer_id),
+					array('stripe_account' => $account_id));
+			}
+			else {
+			  $response = Customer::retrieve($customer_id);
+			}
+
+		} catch (\Stripe\Error\RateLimit $e) {
+
+		  // Too many requests made to the API too quickly
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+
+		  // Invalid parameters were supplied to Stripe's API
+
+		} catch (\Stripe\Error\Authentication $e) {
+
+		  // Authentication with Stripe's API failed
+		  // (maybe you changed API keys recently)
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+
+		  // Network communication with Stripe failed
+
+		} catch (\Stripe\Error\Base $e) {
+
+		  // Display a very generic error to the user, and maybe send
+		  // yourself an email
+
+		} catch (Exception $e) {
+		  // Something else happened, completely unrelated to Stripe
+		}
+
+		return $response;
 	}
 
 	public function createCreditCardToken(array $creditCardData, $is_managed=False) {
@@ -51,8 +175,46 @@ class StripeService implements PaymentServiceInterface {
 					)
 				)
 			);
+
+		} catch(\Stripe\Error\Card $e) {
+
+		  // Since it's a decline, \Stripe\Error\Card will be caught
+		  $body = $e->getJsonBody();
+		  $err  = $body['error'];
+
+		  print('Status is:' . $e->getHttpStatus() . "\n");
+		  print('Type is:' . $err['type'] . "\n");
+		  print('Code is:' . $err['code'] . "\n");
+		  // param is '' in this case
+		  print('Param is:' . $err['param'] . "\n");
+		  print('Message is:' . $err['message'] . "\n");
+
+		} catch (\Stripe\Error\RateLimit $e) {
+
+		  // Too many requests made to the API too quickly
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+
+		  // Invalid parameters were supplied to Stripe's API
+
+		} catch (\Stripe\Error\Authentication $e) {
+
+		  // Authentication with Stripe's API failed
+		  // (maybe you changed API keys recently)
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+
+		  // Network communication with Stripe failed
+
+		} catch (\Stripe\Error\Base $e) {
+
+		  // Display a very generic error to the user, and maybe send
+		  // yourself an email
+
 		} catch (Exception $e) {
-			dd($e->getMessage());
+
+		  // Something else happened, completely unrelated to Stripe
+
 		}
 
 		return $creditCardToken;
@@ -60,31 +222,48 @@ class StripeService implements PaymentServiceInterface {
 
 	public function createAccount(array $stripeAccountData, $user_id, $returning=False) {
 
-		$response = Account::create(array(
-			"managed" => true,
-			"country" => $stripeAccountData['country'],
-			"email" => $stripeAccountData['email'],
-			"legal_entity" => array(
-				"address" => array(
-					"city" => $stripeAccountData['legal_entity']['address']['city'],
-					"line1" => $stripeAccountData['legal_entity']['address']['line1'],
-					"postal_code" => $stripeAccountData['legal_entity']['address']['postal_code'],
-					"state" => $stripeAccountData['legal_entity']['address']['state']
-				),
-				"dob" => array(
-					"day" => $stripeAccountData['legal_entity']['dob']['day'],
-					"month" => $stripeAccountData['legal_entity']['dob']['month'],
-					"year" => $stripeAccountData['legal_entity']['dob']['year']
-				),
-				"first_name" => $stripeAccountData['legal_entity']['first_name'],
-				"last_name" => $stripeAccountData['legal_entity']['last_name'],
-				"ssn_last_4" => $stripeAccountData['legal_entity']['ssn_last_4'],
-				"type" => $stripeAccountData['legal_entity']['type']),
-			"tos_acceptance" => array(
-				"date" => $stripeAccountData['tos_acceptance']['date'],
-				"ip" => $stripeAccountData['tos_acceptance']['ip'])
-			)
-		);
+		try {
+			$response = Account::create(array(
+				"managed" => true,
+				"country" => $stripeAccountData['country'],
+				"email" => $stripeAccountData['email'],
+				"legal_entity" => array(
+					"address" => array(
+						"city" => $stripeAccountData['legal_entity']['address']['city'],
+						"line1" => $stripeAccountData['legal_entity']['address']['line1'],
+						"postal_code" => $stripeAccountData['legal_entity']['address']['postal_code'],
+						"state" => $stripeAccountData['legal_entity']['address']['state']
+					),
+					"dob" => array(
+						"day" => $stripeAccountData['legal_entity']['dob']['day'],
+						"month" => $stripeAccountData['legal_entity']['dob']['month'],
+						"year" => $stripeAccountData['legal_entity']['dob']['year']
+					),
+					"first_name" => $stripeAccountData['legal_entity']['first_name'],
+					"last_name" => $stripeAccountData['legal_entity']['last_name'],
+					"ssn_last_4" => $stripeAccountData['legal_entity']['ssn_last_4'],
+					"type" => $stripeAccountData['legal_entity']['type']),
+				"tos_acceptance" => array(
+					"date" => $stripeAccountData['tos_acceptance']['date'],
+					"ip" => $stripeAccountData['tos_acceptance']['ip'])
+				)
+			);
+		} catch (\Stripe\Error\RateLimit $e) {
+		  // Too many requests made to the API too quickly
+		} catch (\Stripe\Error\InvalidRequest $e) {
+		  // Invalid parameters were supplied to Stripe's API
+		} catch (\Stripe\Error\Authentication $e) {
+		  // Authentication with Stripe's API failed
+		  // (maybe you changed API keys recently)
+		} catch (\Stripe\Error\ApiConnection $e) {
+		  // Network communication with Stripe failed
+		} catch (\Stripe\Error\Base $e) {
+		  // Display a very generic error to the user, and maybe send
+		  // yourself an email
+		} catch (Exception $e) {
+		  // Something else happened, completely unrelated to Stripe
+		}
+
 
 		$this->insertAccountIntoDB($response['id'], $user_id);
 
@@ -186,7 +365,37 @@ class StripeService implements PaymentServiceInterface {
 		}
 		 */ 
 
-		$response = $account->save();
+		try {
+			$response = $account->save();
+
+		} catch (\Stripe\Error\RateLimit $e) {
+
+		  // Too many requests made to the API too quickly
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+
+		  // Invalid parameters were supplied to Stripe's API
+
+		} catch (\Stripe\Error\Authentication $e) {
+
+		  // Authentication with Stripe's API failed
+		  // (maybe you changed API keys recently)
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+
+		  // Network communication with Stripe failed
+
+		} catch (\Stripe\Error\Base $e) {
+
+		  // Display a very generic error to the user, and maybe send
+		  // yourself an email
+
+		} catch (Exception $e) {
+
+		  // Something else happened, completely unrelated to Stripe
+
+		}
+			
 		return $response;
 	}
 
@@ -197,7 +406,35 @@ class StripeService implements PaymentServiceInterface {
 	public function deleteAccount($account_id) {
 
 		$account = Account::retrieve($account_id);
-		$response = $account->delete();
+		try {
+			$response = $account->delete();
+		} catch (\Stripe\Error\RateLimit $e) {
+
+		  // Too many requests made to the API too quickly
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+
+		  // Invalid parameters were supplied to Stripe's API
+
+		} catch (\Stripe\Error\Authentication $e) {
+
+		  // Authentication with Stripe's API failed
+		  // (maybe you changed API keys recently)
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+
+		  // Network communication with Stripe failed
+
+		} catch (\Stripe\Error\Base $e) {
+
+		  // Display a very generic error to the user, and maybe send
+		  // yourself an email
+
+		} catch (Exception $e) {
+
+		  // Something else happened, completely unrelated to Stripe
+
+		}
 
 		return $response['deleted'];
 	}
@@ -228,11 +465,39 @@ class StripeService implements PaymentServiceInterface {
 		// Make api call
 		$response = NULL;
 
-		if (!$account_id) {
-			$response = Customer::create($customer_data);
-		}
-		else {
-			$response = Customer::create($customer_data, array('stripe_account' => $account_id));
+		try {
+			if (!$account_id) {
+				$response = Customer::create($customer_data);
+			}
+			else {
+				$response = Customer::create($customer_data, array('stripe_account' => $account_id));
+			}
+		} catch (\Stripe\Error\RateLimit $e) {
+
+		  // Too many requests made to the API too quickly
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+
+		  // Invalid parameters were supplied to Stripe's API
+
+		} catch (\Stripe\Error\Authentication $e) {
+
+		  // Authentication with Stripe's API failed
+		  // (maybe you changed API keys recently)
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+
+		  // Network communication with Stripe failed
+
+		} catch (\Stripe\Error\Base $e) {
+
+		  // Display a very generic error to the user, and maybe send
+		  // yourself an email
+
+		} catch (Exception $e) {
+
+		  // Something else happened, completely unrelated to Stripe
+
 		}
 
 		$this->createCustomerInDB($user, $response, $account_id);
@@ -325,7 +590,49 @@ class StripeService implements PaymentServiceInterface {
 		$account_record = DB::table('stripe_managed_accounts')->where('user_id', '=', $user->id)->first();
 		$account = Account::retrieve($account_record->id);
 
-		$response = $account->external_accounts->create(array("external_account" => $token));
+		try {
+			$response = $account->external_accounts->create(array("external_account" => $token));
+		} catch(\Stripe\Error\Card $e) {
+
+		  // Since it's a decline, \Stripe\Error\Card will be caught
+		  $body = $e->getJsonBody();
+		  $err  = $body['error'];
+
+		  print('Status is:' . $e->getHttpStatus() . "\n");
+		  print('Type is:' . $err['type'] . "\n");
+		  print('Code is:' . $err['code'] . "\n");
+		  // param is '' in this case
+		  print('Param is:' . $err['param'] . "\n");
+		  print('Message is:' . $err['message'] . "\n");
+
+		
+		} catch (\Stripe\Error\RateLimit $e) {
+
+		  // Too many requests made to the API too quickly
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+
+		  // Invalid parameters were supplied to Stripe's API
+
+		} catch (\Stripe\Error\Authentication $e) {
+
+		  // Authentication with Stripe's API failed
+		  // (maybe you changed API keys recently)
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+
+		  // Network communication with Stripe failed
+
+		} catch (\Stripe\Error\Base $e) {
+
+		  // Display a very generic error to the user, and maybe send
+		  // yourself an email
+
+		} catch (Exception $e) {
+
+		  // Something else happened, completely unrelated to Stripe
+
+		}
 
 		$this->createExternalAccountInDB($account['id'], $response['id'], $response['last4']);
 
@@ -397,15 +704,59 @@ class StripeService implements PaymentServiceInterface {
 
 		$plan_id = $this->generatePlanId($job->title);
 
-		// Create plan
-		$plan = Plan::create(array(
-		  "amount" => $job->salary * 100, // value must be in cents for Stripe
-		  "interval" => "month",
-		  "name" => $job->title,
-		  "currency" => 'USD',
-		  "id" => $plan_id),
-		  array("stripe_account" => $managed_account->id)
-		);
+		try {
+
+			// Create plan
+			$plan = Plan::create(array(
+			  "amount" => $job->salary * 100, // value must be in cents for Stripe
+			  "interval" => "month",
+			  "name" => $job->title,
+			  "currency" => 'USD',
+			  "id" => $plan_id),
+			  array("stripe_account" => $managed_account->id)
+			);
+
+		} catch(\Stripe\Error\Card $e) {
+
+		  // Since it's a decline, \Stripe\Error\Card will be caught
+		  $body = $e->getJsonBody();
+		  $err  = $body['error'];
+
+		  print('Status is:' . $e->getHttpStatus() . "\n");
+		  print('Type is:' . $err['type'] . "\n");
+		  print('Code is:' . $err['code'] . "\n");
+		  // param is '' in this case
+		  print('Param is:' . $err['param'] . "\n");
+		  print('Message is:' . $err['message'] . "\n");
+
+		
+		} catch (\Stripe\Error\RateLimit $e) {
+
+		  // Too many requests made to the API too quickly
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+
+		  // Invalid parameters were supplied to Stripe's API
+
+		} catch (\Stripe\Error\Authentication $e) {
+
+		  // Authentication with Stripe's API failed
+		  // (maybe you changed API keys recently)
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+
+		  // Network communication with Stripe failed
+
+		} catch (\Stripe\Error\Base $e) {
+
+		  // Display a very generic error to the user, and maybe send
+		  // yourself an email
+
+		} catch (Exception $e) {
+
+		  // Something else happened, completely unrelated to Stripe
+
+		}
 
 		// Add plan to database
 		DB::table('stripe_plans')->insert(
@@ -503,14 +854,58 @@ class StripeService implements PaymentServiceInterface {
 		  $account_id = $seller_account->id;
 		}
 
-		$response = Subscription::create(
-			array('customer' => $customer_id,
-			'plan' => $plan_id,
-			'application_fee_percent' => 15,
-			'trial_end' => Carbon::tomorrow()->timestamp // starting a day after so we can modify invoice
-		),
-			array('stripe_account' => $account_id)
-		);
+		try {
+
+			$response = Subscription::create(
+				array('customer' => $customer_id,
+				'plan' => $plan_id,
+				'application_fee_percent' => 15,
+				'trial_end' => Carbon::tomorrow()->timestamp // starting a day after so we can modify invoice
+			),
+				array('stripe_account' => $account_id)
+			);
+
+		} catch(\Stripe\Error\Card $e) {
+
+		  // Since it's a decline, \Stripe\Error\Card will be caught
+		  $body = $e->getJsonBody();
+		  $err  = $body['error'];
+
+		  print('Status is:' . $e->getHttpStatus() . "\n");
+		  print('Type is:' . $err['type'] . "\n");
+		  print('Code is:' . $err['code'] . "\n");
+		  // param is '' in this case
+		  print('Param is:' . $err['param'] . "\n");
+		  print('Message is:' . $err['message'] . "\n");
+
+		
+		} catch (\Stripe\Error\RateLimit $e) {
+
+		  // Too many requests made to the API too quickly
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+
+		  // Invalid parameters were supplied to Stripe's API
+
+		} catch (\Stripe\Error\Authentication $e) {
+
+		  // Authentication with Stripe's API failed
+		  // (maybe you changed API keys recently)
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+
+		  // Network communication with Stripe failed
+
+		} catch (\Stripe\Error\Base $e) {
+
+		  // Display a very generic error to the user, and maybe send
+		  // yourself an email
+
+		} catch (Exception $e) {
+
+		  // Something else happened, completely unrelated to Stripe
+
+		}
 
 		// some kind of error mechanism in case this fails
 		if (isset($response['error'])) {
@@ -539,7 +934,49 @@ class StripeService implements PaymentServiceInterface {
 		$subscription = Subscription::retrieve(array('id' => $subscription_record->id),
 			array('stripe_account' => $account_id));
 
-		$response = $subscription->cancel();
+		try {
+			$response = $subscription->cancel();
+		} catch(\Stripe\Error\Card $e) {
+
+		  // Since it's a decline, \Stripe\Error\Card will be caught
+		  $body = $e->getJsonBody();
+		  $err  = $body['error'];
+
+		  print('Status is:' . $e->getHttpStatus() . "\n");
+		  print('Type is:' . $err['type'] . "\n");
+		  print('Code is:' . $err['code'] . "\n");
+		  // param is '' in this case
+		  print('Param is:' . $err['param'] . "\n");
+		  print('Message is:' . $err['message'] . "\n");
+
+		
+		} catch (\Stripe\Error\RateLimit $e) {
+
+		  // Too many requests made to the API too quickly
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+
+		  // Invalid parameters were supplied to Stripe's API
+
+		} catch (\Stripe\Error\Authentication $e) {
+
+		  // Authentication with Stripe's API failed
+		  // (maybe you changed API keys recently)
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+
+		  // Network communication with Stripe failed
+
+		} catch (\Stripe\Error\Base $e) {
+
+		  // Display a very generic error to the user, and maybe send
+		  // yourself an email
+
+		} catch (Exception $e) {
+
+		  // Something else happened, completely unrelated to Stripe
+
+		}
 
 		$this->deleteSubscriptionInDB($subscription_record);
 
@@ -604,7 +1041,50 @@ class StripeService implements PaymentServiceInterface {
 		else {
 			$customer = Customer::retrieve($customer_record->id);
 			$customer->source = $token;
-			$response = $customer->save();
+
+			try {
+				$response = $customer->save();
+			} catch(\Stripe\Error\Card $e) {
+
+			  // Since it's a decline, \Stripe\Error\Card will be caught
+			  $body = $e->getJsonBody();
+			  $err  = $body['error'];
+
+			  print('Status is:' . $e->getHttpStatus() . "\n");
+			  print('Type is:' . $err['type'] . "\n");
+			  print('Code is:' . $err['code'] . "\n");
+			  // param is '' in this case
+			  print('Param is:' . $err['param'] . "\n");
+			  print('Message is:' . $err['message'] . "\n");
+
+			
+			} catch (\Stripe\Error\RateLimit $e) {
+
+			  // Too many requests made to the API too quickly
+
+			} catch (\Stripe\Error\InvalidRequest $e) {
+
+			  // Invalid parameters were supplied to Stripe's API
+
+			} catch (\Stripe\Error\Authentication $e) {
+
+			  // Authentication with Stripe's API failed
+			  // (maybe you changed API keys recently)
+
+			} catch (\Stripe\Error\ApiConnection $e) {
+
+			  // Network communication with Stripe failed
+
+			} catch (\Stripe\Error\Base $e) {
+
+			  // Display a very generic error to the user, and maybe send
+			  // yourself an email
+
+			} catch (Exception $e) {
+
+			  // Something else happened, completely unrelated to Stripe
+
+			}
 
 			$this->updateCustomerSourceInDB($response['sources']['data'][0]['id'], $customer_record->id, 
 				$response['sources']['data'][0]['last4'] );
@@ -678,8 +1158,50 @@ class StripeService implements PaymentServiceInterface {
 			$invoice->$key = $params[$key];
 		}
 
-		// Save invoice
-		$invoice->save();
+		try {
+			// Save invoice
+			$invoice->save();
+		} catch(\Stripe\Error\Card $e) {
+
+		  // Since it's a decline, \Stripe\Error\Card will be caught
+		  $body = $e->getJsonBody();
+		  $err  = $body['error'];
+
+		  print('Status is:' . $e->getHttpStatus() . "\n");
+		  print('Type is:' . $err['type'] . "\n");
+		  print('Code is:' . $err['code'] . "\n");
+		  // param is '' in this case
+		  print('Param is:' . $err['param'] . "\n");
+		  print('Message is:' . $err['message'] . "\n");
+
+		
+		} catch (\Stripe\Error\RateLimit $e) {
+
+		  // Too many requests made to the API too quickly
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+
+		  // Invalid parameters were supplied to Stripe's API
+
+		} catch (\Stripe\Error\Authentication $e) {
+
+		  // Authentication with Stripe's API failed
+		  // (maybe you changed API keys recently)
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+
+		  // Network communication with Stripe failed
+
+		} catch (\Stripe\Error\Base $e) {
+
+		  // Display a very generic error to the user, and maybe send
+		  // yourself an email
+
+		} catch (Exception $e) {
+
+		  // Something else happened, completely unrelated to Stripe
+
+		}
 
 		return 1;
 	}
@@ -694,7 +1216,49 @@ class StripeService implements PaymentServiceInterface {
 		$account_record = DB::table('stripe_managed_accounts')->
 			where('user_id', '=', $user->id)->first();
 
-		$account = Account::retrieve($account_record->id);
+		try {
+			$account = Account::retrieve($account_record->id);
+		} catch(\Stripe\Error\Card $e) {
+
+		  // Since it's a decline, \Stripe\Error\Card will be caught
+		  $body = $e->getJsonBody();
+		  $err  = $body['error'];
+
+		  print('Status is:' . $e->getHttpStatus() . "\n");
+		  print('Type is:' . $err['type'] . "\n");
+		  print('Code is:' . $err['code'] . "\n");
+		  // param is '' in this case
+		  print('Param is:' . $err['param'] . "\n");
+		  print('Message is:' . $err['message'] . "\n");
+
+		
+		} catch (\Stripe\Error\RateLimit $e) {
+
+		  // Too many requests made to the API too quickly
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+
+		  // Invalid parameters were supplied to Stripe's API
+
+		} catch (\Stripe\Error\Authentication $e) {
+
+		  // Authentication with Stripe's API failed
+		  // (maybe you changed API keys recently)
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+
+		  // Network communication with Stripe failed
+
+		} catch (\Stripe\Error\Base $e) {
+
+		  // Display a very generic error to the user, and maybe send
+		  // yourself an email
+
+		} catch (Exception $e) {
+
+		  // Something else happened, completely unrelated to Stripe
+
+		}
 
 		// api call
 		$response = Transfer::create(array(
