@@ -157,7 +157,8 @@ Route::group(['prefix' => 'api'], function () {
 
     Route::post('stripe/invoice/payment', 'StripeWebhookController@createTransfer');
     Route::post('stripe/invoice/created', 'StripeWebhookController@updateFee');
-    Route::post('stripe/account/updated', 'StripeWebhookController@confirmManagedAccount');
+    Route::post('stripe/invoice/failed', 'StripeWebhookController@handleInvoiceFailure');
+    Route::post('stripe/account/updated', 'StripeWebhookController@handleAccountUpdate');
 
 });
 

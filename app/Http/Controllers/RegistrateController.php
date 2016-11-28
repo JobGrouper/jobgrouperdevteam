@@ -78,7 +78,7 @@ class RegistrateController extends Controller
             if($user->user_type == 'employee'){
                 //Creating Stripe Managed Account
                 $stripeAccountData = [
-                    "country" => $request->country,
+                    "country" => "US",
                     "email" => $request->email,
                     "legal_entity" => [
                         "address" => [

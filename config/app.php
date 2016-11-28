@@ -160,7 +160,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\ViewComposerServiceProvider::class,
-	App\Providers\PaymentServiceProvider::class
+	App\Providers\PaymentServiceProvider::class,
+
+    	Collective\Html\HtmlServiceProvider::class
 
     ],
 
@@ -211,6 +213,8 @@ return [
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
     ],
 
 ];
