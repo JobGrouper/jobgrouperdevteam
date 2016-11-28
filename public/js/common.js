@@ -241,6 +241,7 @@ $(document).ready(function() {
 			$("#buyer").attr("checked", true);
 			userChoose = "buyer";
 			$(".sellers_only").hide()
+			$(".buyers_only").show()
 			console.log(userChoose);
 		} else {
 			$("#buyer").attr("checked", false);
@@ -257,6 +258,7 @@ $(document).ready(function() {
 		if ($("#buyer").attr("checked", false)) {
 			$("#employee").attr("checked", true);
 			$(".sellers_only").show()
+			$(".buyers_only").hide()
 			userChoose = "employee";
 			console.log(userChoose);
 		} else {
