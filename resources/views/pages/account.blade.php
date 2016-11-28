@@ -154,6 +154,7 @@
                     </div>
                 </div>
 
+		<!--
                 <div class="profile_text">
 
                     <h2>Paypal</h2>
@@ -170,6 +171,7 @@
 
 
                 </div>
+		-->
 
                 <div class="profile_text">
 
