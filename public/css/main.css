@@ -1204,9 +1204,59 @@ img {
       width: 110px;
       height: 40px;
     }
+    .profile_text .seller_cards {
+      width: 220px;
+      display: block;
+    }
     .profile_text h2 {
       font-size: 20px;
       font-weight: 700; }
+
+    .profile_text .bank_form {
+      width: 500px;
+      border: 1px solid #E4E4E4;
+      padding: 15px;
+      display: none;
+      margin-top: 30px;
+    }
+    .profile_text .bank_form h2 img {
+      float: right;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+    .profile_text .bank_form h2 {
+      text-align: center;
+      margin: 0;
+      margin-bottom: 15px;
+    }
+    .profile_text .bank_form .block {
+      margin-bottom: 20px;
+    }
+    .profile_text .bank_form .block label span {
+      display: inline-block;
+      margin-left: 5px;
+      color: #de5145;
+    }
+    .profile_text .bank_form .block input {
+      width: 300px;
+      float: right;
+      border: 1px solid #E4E4E4;
+      padding: 10px;
+    }
+    .profile_text .bank_form .block .data_input {
+      float: none;
+      width: 120px;
+    }
+    .profile_text .bank_form .block .wrap {
+      display: inline-block;
+      width: 300px;
+      float: right;
+    }
+    .profile_text .bank_form button {
+      display: block;
+      margin: auto;
+    }
     .profile_text p {
       line-height: 1.6;
       margin-top: 20px; }

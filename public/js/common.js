@@ -19,6 +19,24 @@ $(document).ready(function() {
 		
 	});
 
+	$(".profile_text #bank_add").click(function() {
+		$(this).hide();
+		$(".profile_text #debit_add").hide();
+		$(".profile_text .bank_form.bank").fadeIn();
+	});
+
+	$(".profile_text .bank_form h2 img").click(function() {
+		$(this).parents('.bank_form').hide();
+		$(".profile_text #bank_add").fadeIn();
+		$(".profile_text #debit_add").fadeIn();
+	});
+
+	$(".profile_text #debit_add").click(function() {
+		$(this).hide();
+		$(".profile_text #bank_add").hide();
+		$(".profile_text .bank_form.debit").fadeIn();
+	});
+
 	// $(".job_item h1").click(function() {
 	// 	$(this).parents(".job_item").find(".jobs_acc").slideToggle("fast");
 	// 	$(this).parent().toggleClass("active");

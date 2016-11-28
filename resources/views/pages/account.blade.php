@@ -190,6 +190,58 @@
 
                 </div>
 
+                <div class="profile_text" style="border-bottom: none;">
+                    <button class="seller_cards" id="bank_add">Add Bank Account</button>
+                    <button class="seller_cards" id="debit_add">Add Debit card</button>
+                    <div class="bank_form bank">
+                        <h2>Bank Account Form<img src="{{asset('img/Profile/cancel.png')}}" alt="alt"></h2>
+                        <form>
+                            <div class="block clearfix">
+                                <label>Account Name<span>*</span></label>
+                                <input type="text" />
+                            </div>
+                            <div class="block clearfix">
+                                <label>Routing Number<span>*</span></label>
+                                <input type="text" />
+                            </div>
+                            <div class="block clearfix">
+                                <label>Account Number<span>*</span></label>
+                                <input type="text" />
+                            </div>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                    <div class="bank_form debit">
+                        <h2>Debit Card Form<img src="{{asset('img/Profile/cancel.png')}}" alt="alt"></h2>
+                        <form>
+                            <div class="block clearfix">
+                                <label>Card Number<span>*</span></label>
+                                <input type="text" />
+                            </div>
+                            <div class="block clearfix">
+                                <label>CVC<span>*</span></label>
+                                <input type="text" />
+                            </div>
+                            <div class="block clearfix">
+                                <label>Exp Month/Year<span>*</span></label>
+                                <div class="wrap">
+                                    <input maxlength="2" class="data_input" type="text" />
+                                    <span>/</span>
+                                    <input maxlength="2" class="data_input" type="text" />
+                                </div>
+                            </div>
+                            <div class="block clearfix">
+                                <label>ZIP Code<span>*</span></label>
+                                <input type="text" />
+                            </div>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+                </div>
+
+
+
                 <div class="profile_portfolio">
 
                     <h2 class="title">Portfolio</h2>
