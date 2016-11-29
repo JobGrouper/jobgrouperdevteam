@@ -128,8 +128,10 @@
                             @else
                                 @if($jobPaid)
                                     <span class="approved">YOU HAVE ORDERED THIS JOB</span>
-                                @elseif($jobOrdered)
+                                @elseif($jobOrdered && $job->employee_id != NULL)
                                     <a href="/purchase/{{ $user_order_info->id }}"><span class="approved need">PLEASE COMPLETE PAYMENT</span></a>
+                                @elseif($jobOrdered && $job->employee_id == NULL)
+                                    <span class="approved need">Waiting For Employee</span>
                                 @else
                                     {{--Это было для сохранения карт и авто-оплат--}}
                                     {{--<a href="/purchase/{{$job->id}}"><button>Buy</button></a>--}}

@@ -35,7 +35,7 @@
 
                         @if(count($job->sales()->get()) > 0)
 
-                            @foreach($job->sales()->where('status', 'in_progress')->get() as $order)
+                            @foreach($job->sales()->where('status', 'in_progress')->orWhere('status', '=', 'pending')->get() as $order)
 
                                 <?php
 
@@ -121,7 +121,7 @@
 
                                 @if(count($job->sales()->get()) > 0)
 
-                                    @foreach($job->sales()->where('status', 'in_progress')->get() as $order)
+                                    @foreach($job->sales()->whereIn('status', ['in_progress', 'pending'])->get() as $order)
 
                                         <?php
 

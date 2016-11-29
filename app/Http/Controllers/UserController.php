@@ -69,7 +69,7 @@ class UserController extends Controller
             return redirect('/');
         }
 
-        $orders = $buyer->orders()->where('status', 'in_progress')->get();
+        $orders = $buyer->orders()->where('status', 'in_progress')->orWhere('status', '=', 'pending')->get();
   
 
         return view('pages.account.my_orders', ['orders' => $orders]);

@@ -965,9 +965,6 @@ class StripeService implements PaymentServiceInterface {
 			'job_id' => $job->id, 'activated' => 1]
 		);
 
-		// Queue up subscription job
-		dispatch(new StripePlanActivation($this, $job, $plan, $managed_account));
-
 		if (!$testing) {
 
 			// Queue up subscription job

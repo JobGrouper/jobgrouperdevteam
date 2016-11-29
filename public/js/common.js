@@ -253,7 +253,7 @@ $(document).ready(function() {
 				}
 				
 			});
-	var userChoose;
+	var userChoose = "buyer";
 	$(".buy_radio").click(function() {
 		if ($("#employee").attr("checked", false)) {
 			$("#buyer").attr("checked", true);

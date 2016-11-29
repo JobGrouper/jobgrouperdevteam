@@ -107,7 +107,8 @@ class EmployeeRequestController extends Controller
             $employeeRequest->save();
             //if job has enough count of buyers and sellers the work begins
             if($job->sales_count == $job->max_clients_count){
-                $job->work_start();
+                //$job->work_start();
+		$psi->createPlan($employee, $job);
             }
             $job->save();
 

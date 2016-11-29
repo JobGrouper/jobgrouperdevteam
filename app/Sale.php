@@ -14,7 +14,7 @@ class Sale extends Model
      * @var array
      */
     protected $fillable = [
-         'job_id', 'buyer_id', 'credit_card_id'
+         'job_id', 'buyer_id', 'credit_card_id', 'card_set'
     ];
 
     /**

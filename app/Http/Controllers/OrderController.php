@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+
 use App\CreditCard;
 use App\Job;
 use App\Sale;
@@ -99,7 +101,7 @@ class OrderController extends Controller
      * Closing the order
      * Originator can be seller ot buyer
      */
-    public function close(Request $request){
+    public function close(Request $request, PaymentServiceInterface $psi){
         $responseData= array();
 
         $order = Sale::find($request->order_id);
@@ -111,6 +113,19 @@ class OrderController extends Controller
         if($job->status == 'working'){
             $job->make_hot();
         }
+
+	if ($job->employee_id) {
+
+		// get user who is closing order
+		//   and managed account
+		$user = DB::table('users')->where('id', $order->buyer_id)->first();
+		$seller_record = DB::table('stripe_managed_accounts')->where('user_id', $job->employee_id)->first();
+
+		// Delete payment service records
+		$response = $psi->deleteCustomer($user, $seller_record['id']);
+
+		// Delete payment service cards
+	}
 
         $responseData['error'] = false;
         $responseData['status'] = 0;
@@ -135,6 +150,8 @@ class OrderController extends Controller
         $input = $request->only(['job_id']);
         $job = Job::find($input['job_id']);
 
+	$input['status'] = 'pending';
+
         $order = $user->orders()->create($input);
 
         //if card has enough count of buyers and sellers the work begins
@@ -155,11 +172,55 @@ class OrderController extends Controller
 
 
     public function update(Request $request, PaymentServiceInterface $psi){
+
         $user = Auth::user();
-        $creditCard = CreditCard::find($request->credit_card_id);
+        //$creditCard = CreditCard::find($request->credit_card_id);
         $order = Sale::find($request->order_id);
         $job = $order->job()->first();
 
+	// Retrieve employee account
+	$employee_record = DB::table('stripe_managed_accounts')->where(
+		'user_id', '=', $job->employee_id)->first();
+
+	$account = $psi->retrieveAccount($employee_record->id);
+
+	// sloppy, but 
+	// doing this for now (fix later)
+	//
+	$seller = new StdClass();
+	$seller->id = $account['id'];
+
+	// Create customer
+	$customer = $psi->createCustomer($user, array(
+		'email' => $user->email), $account['id']);
+
+	// Create credit card token
+	$token = $psi->createCreditCardToken(
+		array(
+			'number' => $request->card_number,
+			'exp_month' => $request->end_month,
+			'exp_year' => $request->end_year,
+			'cvc' => $request->cvc
+		), true);
+
+	$source = $psi->updateCustomerSource($user, $token, $account['id']);
+	
+
+	if (isset($source['id'])) {
+	  $order->status = 'in_progress';
+	  $order->card_set = True;
+          $order->save();
+	}
+	else {
+	  die('Payment saving failed!');
+	}
+
+        //if card has enough count of buyers and sellers the work begins
+        if($job->sales_count == $job->max_clients_count && null != $job->employee_id){
+		$psi->createPlan($seller, $job);
+        }
+
+	/*
         if(!isset($creditCard->id)){
             die('Credit Card not found');
         }
@@ -168,12 +229,14 @@ class OrderController extends Controller
         if($creditCard->owner_id != $user->id){
             die('it is not your card');
         }
+	 */
 
 
 
         //Assign credit card to order
-        $order->credit_card_id = $creditCard->id;
+        //$order->credit_card_id = $creditCard->id;
 
+	/*
         //Get payment for first month
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
@@ -230,7 +293,7 @@ class OrderController extends Controller
             die('Payment saving failed!');
         }
 
-        $order->save();
+	 */
 
         return redirect('/my_orders');
     }
