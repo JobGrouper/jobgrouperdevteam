@@ -155,10 +155,10 @@ Route::group(['prefix' => 'api'], function () {
     //Route::post('purchase/paypal/feedback', ['uses' => 'PayPalController@processPayment']);
     Route::post('purchase/paypal/feedback', ['uses' => 'OrderController@purchasePayPalFeedback']);
 
-    Route::post('stripe/invoice/payment', 'StripeWebhookController@createTransfer');
-    Route::post('stripe/invoice/created', 'StripeWebhookController@updateFee');
-    Route::post('stripe/invoice/failed', 'StripeWebhookController@handleInvoiceFailure');
-    Route::post('stripe/account/updated', 'StripeWebhookController@handleAccountUpdate');
+    Route::post('stripe/invoice/payment', 'StripeWebhookController@onInvoicePaid');
+    Route::post('stripe/invoice/created', 'StripeWebhookController@onInvoiceCreated');
+    Route::post('stripe/invoice/failed', 'StripeWebhookController@onInvoiceFailure');
+    Route::post('stripe/account/updated', 'StripeWebhookController@onAccountUpdated');
 
 });
 

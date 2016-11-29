@@ -11,15 +11,39 @@ class StripeWebhookController extends Controller
 {
     //
 	//
-	public function createTransfer(PaymentServiceInterface $psi) {
+	public function onInvoicePaid(PaymentServiceInterface $psi) {
 
+		// retrieve the request's body and parse it as json
+		$input = @file_get_contents("php://input");
+		$event_json = json_decode($input);
+
+		Log::info('Invoice paid webhook received', ['event' => $event_json]);
 	}
 
-	public function updateFee(PaymentServiceInterface $psi) {
+	public function onInvoiceCreated(PaymentServiceInterface $psi) {
 
+		// retrieve the request's body and parse it as json
+		$input = @file_get_contents("php://input");
+		$event_json = json_decode($input);
+
+		Log::info('Invoice created webhook received', ['event' => $event_json]);
 	}
 
-	public function confirmManagedAccount(PaymentServiceInterface $psi) {
+	public function onInvoiceFailure(PaymentServiceInterface $psi) {
 
+		// Retrieve the request's body and parse it as JSON
+		$input = @file_get_contents("php://input");
+		$event_json = json_decode($input);
+
+		Log::info('Invoice failure webhook received', ['event' => $event_json]);
+	}
+
+	public function onAccountUpdated(PaymentServiceInterface $psi) {
+
+		// Retrieve the request's body and parse it as JSON
+		$input = @file_get_contents("php://input");
+		$event_json = json_decode($input);
+
+		Log::info('Account updated webhook received', ['event' => $event_json]);
 	}
 }
