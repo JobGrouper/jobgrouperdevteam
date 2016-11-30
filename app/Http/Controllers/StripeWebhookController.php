@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Interfaces\PaymentServiceInterface;
 
 use App\Http\Requests;
@@ -18,6 +19,8 @@ class StripeWebhookController extends Controller
 		$event_json = json_decode($input);
 
 		Log::info('Invoice paid webhook received', ['event' => $event_json]);
+
+		return response('Successful', 200);
 	}
 
 	public function onInvoiceCreated(PaymentServiceInterface $psi) {
@@ -27,6 +30,8 @@ class StripeWebhookController extends Controller
 		$event_json = json_decode($input);
 
 		Log::info('Invoice created webhook received', ['event' => $event_json]);
+
+		return response('Successful', 200);
 	}
 
 	public function onInvoiceFailure(PaymentServiceInterface $psi) {
@@ -36,6 +41,8 @@ class StripeWebhookController extends Controller
 		$event_json = json_decode($input);
 
 		Log::info('Invoice failure webhook received', ['event' => $event_json]);
+
+		return response('Successful', 200);
 	}
 
 	public function onAccountUpdated(PaymentServiceInterface $psi) {
@@ -45,5 +52,7 @@ class StripeWebhookController extends Controller
 		$event_json = json_decode($input);
 
 		Log::info('Account updated webhook received', ['event' => $event_json]);
+
+		return response('Successful', 200);
 	}
 }
