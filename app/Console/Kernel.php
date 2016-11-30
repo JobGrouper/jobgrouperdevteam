@@ -3,22 +3,12 @@
 namespace App\Console;
 
 use App\EmployeeExitRequest;
-use App\Sale;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\User;
 use App\ConfirmUsers;
-use App\Job;
-use PayPal\Api\Amount;
-use PayPal\Api\CreditCardToken;
-use PayPal\Api\FundingInstrument;
-use PayPal\Api\Payer;
-use PayPal\Api\Payment;
-use PayPal\Api\Transaction;
 use SebastianBergmann\Environment\Console;
-use DB;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
 
 class Kernel extends ConsoleKernel
 {
