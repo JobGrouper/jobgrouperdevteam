@@ -164,8 +164,6 @@ class StripeIntegrationTest extends TestCase
 
 	public function testCreatePlan() {
 
-		$this->markTestSkipped();
-
 		// Create a fake-oh job
 		 $job = Job::create([
 		    'title' => 'Test Job',
@@ -210,7 +208,7 @@ class StripeIntegrationTest extends TestCase
 
 		$this->expectsJobs(StripePlanActivation::class);
 
-		$plan = $this->psi->createPlan($user, $job, True);
+		$plan = $this->psi->createPlan($user, $job);
 
 		$this->seeInDatabase('stripe_plans',
 			['id' => $plan['id']]
@@ -228,6 +226,7 @@ class StripeIntegrationTest extends TestCase
 	 */
 	public function testCreateSubscription() {
 
+		$this->markTestSkipped();
 		// Create a fake-oh job
 		 $job = Job::create([
 		    'title' => 'Test Job',
@@ -624,5 +623,81 @@ class StripeIntegrationTest extends TestCase
 		$card = $this->psi->createExternalAccount($user, $token);
 		
 		$transfer = $this->psi->createTransfer($user, $job);
+	}
+
+	public function testCreatePlanAlt() {
+
+		// Create a fake-oh job
+		 $job = Job::create([
+		    'title' => 'Test Job',
+		    'description' => "A job for testing",
+		    'salary' => 50.00,
+		    'max_clients_count' => 1,
+		    'category_id' => 1,
+		]);
+
+		// Create a fake user
+		$user = new StdClass();
+		$user->id = 1;
+
+		//Creating new user
+		$sucker = User::create([
+		    'first_name' => 'Hello',
+		    'last_name' => 'There',
+		    'user_type' => 'buyer',
+		    'email' => 'fred@airmail.com',
+		    'password' => bcrypt('password')
+		]);
+
+
+		DB::statement("SET FOREIGN_KEY_CHECKS=0");
+
+		// Create a fake account for the fake user
+		// 	- will not be done in live situation
+		$account = $psi->createAccount(array(
+			"country" => "US",
+			"email" => "testemail@test.com",
+			"legal_entity" => array(
+				"address" => array(
+					"city" => "Malibu",
+					"line1" => "line",
+					"postal_code" => "90210",
+					"state" => "CA"),
+				"dob" => array(
+					"day" => "1",
+					"month" => "2",
+					"year" => "1986"
+				),
+				"first_name" => "Test",
+				"last_name" => "User",
+				"ssn_last_4" => "9999",
+				"type" => "individual"
+			),
+			"tos_acceptance" => array(
+				"date" => Carbon::now()->timestamp,
+				"ip" => "8.8.8.8"
+			)
+		), $user->id, True);
+
+        	$order = $sucker->orders()->create(array('job_id' => $job->id, 'status' => 'in_progress'));
+
+		// and then the real (fake) deal
+		$customer = $psi->createCustomer($sucker, array(
+			'email' => $sucker->email),
+			$account['id']
+		);
+
+		$token = $psi->createCreditCardToken(array(
+			'number' => "4242424242424242",
+			'exp_month' => 11,
+			'exp_year' => 2017,
+			'cvc' => "314"
+		), 'card');
+
+		$psi->updateCustomerSource($sucker, $token, $account['id']);
+
+		$plan = $psi->createPlan($user, $job);
+
+		DB::statement("SET FOREIGN_KEY_CHECKS=1");
 	}
 }

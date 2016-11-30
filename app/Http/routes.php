@@ -167,6 +167,7 @@ Route::group(['prefix' => 'api'], function () {
 Route::get('sandbox', 'TestController@test');
 
 Route::group(['prefix' => 'test'], function(){
+
     Route::get('paypal', function (PaymentServiceInterface $psi) {
 
         $apiContext = new \PayPal\Rest\ApiContext(

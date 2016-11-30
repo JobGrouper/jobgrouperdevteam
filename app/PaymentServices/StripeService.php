@@ -2,6 +2,7 @@
 
 namespace App\PaymentServices;
 
+use Illuminate\Support\Facades\Log;
 use App\Interfaces\PaymentServiceInterface;
 
 use App\Jobs\StripePlanActivation;
@@ -194,7 +195,10 @@ class StripeService implements PaymentServiceInterface {
 
 		}
 
-		return $response;
+		if ($error_response !== NULL)
+			return $error_response;
+		else
+			return $response;
 	}
 
 	public function createCreditCardToken(array $creditCardData, $type, $is_managed=False) {
@@ -1016,16 +1020,18 @@ class StripeService implements PaymentServiceInterface {
 		if (!$testing) {
 
 			// Queue up subscription job
-			dispatch(new StripePlanActivation($this, $job, $plan, $managed_account));
+			dispatch( new StripePlanActivation($this, $job, $plan, $managed_account));
 
 			// Email admin that plan is being created
 			//
+			/*
 			Mail::send('emails.plan_activating',['token'=>'asdasdasdasd'],function($u)
 			{
-			    $u->from('admin@jobgrouper.com');
-			    $u->to('admin@jobgrouper.com');
+			    //$u->from('admin@jobgrouper.com');
+			    //$u->to('admin@jobgrouper.com');
 			    $u->subject('Job creation started');
 			});
+			 */
 		}
 
 		return $plan;
