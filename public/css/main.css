@@ -1212,6 +1212,17 @@ img {
       font-size: 20px;
       font-weight: 700; }
 
+    .profile_text .payment_method {
+      text-transform: uppercase;
+      background-color: #DD4F43;
+      color: #ffffff;
+      width: 220px;
+      height: 40px;
+      text-align: center;
+      line-height: 40px;
+      font-weight: 700;
+      margin-bottom: 80px;
+    }
     .profile_text .bank_form {
       width: 500px;
       border: 1px solid #E4E4E4;

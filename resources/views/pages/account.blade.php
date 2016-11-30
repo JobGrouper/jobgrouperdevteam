@@ -191,6 +191,8 @@
                 </div>
 
                 <div class="profile_text" style="border-bottom: none;">
+                    <h2>Payment options</h2>
+                    <div class="payment_method">Need payment method</div>
                     <button class="seller_cards" id="bank_add">Add Bank Account</button>
                     <button class="seller_cards" id="debit_add">Add Debit card</button>
                     <div class="bank_form bank">
