@@ -30,6 +30,7 @@ class StripeIntegrationTest extends TestCase
 	public function testCreateAccount() {
 
 		$this->markTestSkipped();
+
 		$account = $this->psi->createAccount(array(
 			"country" => "US",
 			"email" => "testemail@test.com",
@@ -63,6 +64,7 @@ class StripeIntegrationTest extends TestCase
 	public function testCreateAccountInDB() {
 
 		$this->markTestSkipped();
+
 		$account = array(
 			'id' => 1
 		);
@@ -80,12 +82,13 @@ class StripeIntegrationTest extends TestCase
 
 
 		$this->markTestSkipped();
+
 		$token = $this->psi->createCreditCardToken(array(
 			'number' => "4242424242424242",
 			'exp_month' => 11,
 			'exp_year' => 2017,
 			'cvc' => "314"
-		));
+		), 'card');
 
 		$this->assertArrayHasKey('id', $token);
 	}
@@ -93,6 +96,7 @@ class StripeIntegrationTest extends TestCase
 	public function testCreateCustomerForRegistration() {
 
 		$this->markTestSkipped();
+
 		$user = new StdClass();
 		$user->id = 1;
 		$user->email = 'testmail@test.com';
@@ -102,7 +106,7 @@ class StripeIntegrationTest extends TestCase
 			'exp_month' => 11,
 			'exp_year' => 2017,
 			'cvc' => "314"
-		));
+		), 'card');
 
 		$this->psi->createCustomer($user, array(
 			'email' => $user->email,
@@ -119,6 +123,7 @@ class StripeIntegrationTest extends TestCase
 	public function testCreateCustomerForSubscription() {
 
 		$this->markTestSkipped();
+
 		$user = new StdClass();
 		$user->id = 1;
 		$user->email = 'testmail@test.com';
@@ -151,6 +156,7 @@ class StripeIntegrationTest extends TestCase
 	public function testGeneratePlanId() {
 
 		$this->markTestSkipped();
+
 		$plan_name = 'Test Plan';
 		$plan_id = $this->psi->generatePlanId($plan_name);
 		$this->assertEquals(25, strlen($plan_id));
@@ -159,6 +165,7 @@ class StripeIntegrationTest extends TestCase
 	public function testCreatePlan() {
 
 		$this->markTestSkipped();
+
 		// Create a fake-oh job
 		 $job = Job::create([
 		    'title' => 'Test Job',
@@ -221,7 +228,6 @@ class StripeIntegrationTest extends TestCase
 	 */
 	public function testCreateSubscription() {
 
-		$this->markTestSkipped();
 		// Create a fake-oh job
 		 $job = Job::create([
 		    'title' => 'Test Job',
@@ -303,8 +309,7 @@ class StripeIntegrationTest extends TestCase
 	/*
 	 * Create external account is likely to receive a token and a user id
 	 */
-	public function testCreateExternalAccount() {
-
+	public function testCreateExternalDebitCard() {
 
 		$this->markTestSkipped();
 		//Create fake user
@@ -346,7 +351,78 @@ class StripeIntegrationTest extends TestCase
 			'exp_month' => 11,
 			'exp_year' => 2017,
 			'cvc' => "314"
-		), True);
+		), 'card', True);
+
+		$card = $this->psi->createExternalAccount($user, $token);
+
+		$this->seeInDatabase('stripe_external_accounts',
+			['id' => $card['id'], 'managed_account_id' => $account['id']]);
+
+		// DELETE ALL
+		try {
+			
+			// This will fail without a replacement card,
+			// 	we need to account for this in our logic .!.!
+			//
+		  	$this->psi->deleteExternalAccount($user->id, $card['id']);
+
+			$this->psi->deleteAccount($account['id']);
+			$user->delete();
+		}
+		catch(Exception $e) {
+
+			$this->psi->deleteExternalAccountInDB($card['id']);
+			$this->psi->deleteAccount($account['id']);
+			$user->delete();
+		}
+	}
+
+	/*
+	 * Create external account is likely to receive a token and a user id
+	 */
+	public function testCreateExternalBankAccount() {
+
+		$this->markTestSkipped();
+
+		//Create fake user
+		$user = User::create([
+		    'first_name' => 'Teddy',
+		    'last_name' => 'Thanopoklos',
+		    'user_type' => 'buyer',
+		    'email' => 'teddy1@bearmail.com',
+		    'password' => bcrypt('password'),
+		]);
+
+		$account = $this->psi->createAccount(array(
+			"country" => "US",
+			"email" => "testemail@test.com",
+			"legal_entity" => array(
+				"address" => array(
+					"city" => "Malibu",
+					"line1" => "line",
+					"postal_code" => "90210",
+					"state" => "CA"),
+				"dob" => array(
+					"day" => "1",
+					"month" => "2",
+					"year" => "1986"
+				),
+				"first_name" => "Test",
+				"last_name" => "User",
+				"ssn_last_4" => "9999",
+				"type" => "individual"
+			),
+			"tos_acceptance" => array(
+				"date" => Carbon::now()->timestamp,
+				"ip" => "8.8.8.8"
+			)
+		), $user->id, True);
+
+		$token = $this->psi->createCreditCardToken(array(
+			'account_holder_name' => 'Test User',
+			'routing_number' => 110000000,
+			'account_number' => 000123456789
+		), 'bank_account', True);
 
 		$card = $this->psi->createExternalAccount($user, $token);
 
@@ -373,6 +449,8 @@ class StripeIntegrationTest extends TestCase
 	}
 
 	public function testUpdateCustomerSource() {
+
+		$this->markTestSkipped();
 
 		//Create fake user
 		$seller = User::create([
@@ -427,12 +505,14 @@ class StripeIntegrationTest extends TestCase
 			'exp_month' => 11,
 			'exp_year' => 2017,
 			'cvc' => "314"
-		));
+		), 'card');
 
 		$this->psi->updateCustomerSource($buyer, $token, $account['id']);
 	}
 
 	public function testUpdateConnectedCustomerSource() {
+
+		$this->markTestSkipped();
 
 		//Create fake user
 		$user = User::create([
@@ -483,15 +563,15 @@ class StripeIntegrationTest extends TestCase
 			'exp_month' => 11,
 			'exp_year' => 2017,
 			'cvc' => "314"
-		));
+		), 'card');
 
 		$this->psi->updateCustomerSource($user, $token, $account['id']);
 	}
 
 	public function testCreateTransfer() {
 
-
 		$this->markTestSkipped();
+
 		//Create fake user
 		$user = User::create([
 		    'first_name' => 'Teddy',
@@ -539,7 +619,7 @@ class StripeIntegrationTest extends TestCase
 			'exp_month' => 11,
 			'exp_year' => 2017,
 			'cvc' => "314"
-		), True);
+		), 'card', True);
 
 		$card = $this->psi->createExternalAccount($user, $token);
 		

@@ -196,6 +196,7 @@
                     <div class="bank_form bank">
                         <h2>Bank Account Form<img src="{{asset('img/Profile/cancel.png')}}" alt="alt"></h2>
                         <form>
+			    <input type="hidden" name="account_type" value="bank_account" />
                             <div class="block clearfix">
                                 <label>Account Name<span>*</span></label>
                                 <input type="text" />
@@ -213,7 +214,8 @@
                     </div>
                     <div class="bank_form debit">
                         <h2>Debit Card Form<img src="{{asset('img/Profile/cancel.png')}}" alt="alt"></h2>
-                        <form>
+                        <form id="seller_debit_card_form" method="POST" action="">
+			    <input type="hidden" name="account_type" value="debit" />
                             <div class="block clearfix">
                                 <label>Card Number<span>*</span></label>
                                 <input type="text" />

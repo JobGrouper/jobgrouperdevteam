@@ -100,7 +100,6 @@ class StripeService implements PaymentServiceInterface {
 		$formatted_response = array(
 			'http' => $response->getHttpStatus(),
 			'type' => $error['type'],
-			'code' => $error['code'],
 			'param' => $error['param'],
 			'message' => $error['message'],
 			'user' => NULL
@@ -110,6 +109,9 @@ class StripeService implements PaymentServiceInterface {
 	}
 
 	public function retrieveAccount($account_id) {
+
+		$response = NULL;
+		$error_response = NULL;
 
 		try {
 			$response = Account::retrieve($account_id);
@@ -144,6 +146,9 @@ class StripeService implements PaymentServiceInterface {
 	}
 
 	public function retrieveCustomer($customer_id, $account_id=NULL) {
+
+		$response = NULL;
+		$error_response = NULL;
 
 		try {
 			if ($account_id) {
@@ -192,7 +197,10 @@ class StripeService implements PaymentServiceInterface {
 		return $response;
 	}
 
-	public function createCreditCardToken(array $creditCardData, $is_managed=False) {
+	public function createCreditCardToken(array $creditCardData, $type, $is_managed=False) {
+
+		$response = NULL;
+		$error_response = NULL;
 
 		$currency = NULL;
 
@@ -200,17 +208,36 @@ class StripeService implements PaymentServiceInterface {
 		  $currency = "usd";
 
 		try {
-			$creditCardToken = Token::create(
-				array(
-					"card" => array(
-						"number" => $creditCardData['number'],
-						"exp_month" => $creditCardData['exp_month'],
-						"exp_year" => $creditCardData['exp_year'],
-						"cvc" => $creditCardData['cvc'],
-						"currency" => $currency
+			$creditCardToken = NULL;
+
+			if ($type == 'card') {
+				$creditCardToken = Token::create(
+					array(
+						"card" => array(
+							"number" => $creditCardData['number'],
+							"exp_month" => $creditCardData['exp_month'],
+							"exp_year" => $creditCardData['exp_year'],
+							"cvc" => $creditCardData['cvc'],
+							"currency" => $currency
+						)
 					)
-				)
-			);
+				);
+			}
+			else if ($type == 'bank_account') {
+				$creditCardToken = Token::create(
+					array(
+						"bank_account" => array(
+							"country" => "US",
+							"currency" => $currency,
+							"account_holder_name" => $creditCardData['account_holder_name'],
+							"account_holder_type" => "individual",
+							"routing_number" => $creditCardData['routing_number'],
+							"account_number" => $creditCardData['account_number']
+						)
+					)
+				);
+
+			}
 
 		} catch(\Stripe\Error\Card $e) {
 			$error_response = $this->constructErrorResponse($e);
@@ -251,6 +278,9 @@ class StripeService implements PaymentServiceInterface {
 	}
 
 	public function createAccount(array $stripeAccountData, $user_id, $returning=False) {
+
+		$response = NULL;
+		$error_response = NULL;
 
 		try {
 			$response = Account::create(array(
@@ -328,6 +358,9 @@ class StripeService implements PaymentServiceInterface {
 	}
 
 	public function updateAccount($stripeAccountID, array $stripeAccountData) {
+		$response = NULL;
+		$error_response = NULL;
+
 		$account = Account::retrieve($stripeAccountID);
 
 		$keys = array_keys($stripeAccountData);
@@ -456,6 +489,9 @@ class StripeService implements PaymentServiceInterface {
 	 */
 	public function deleteAccount($account_id) {
 
+		$response = NULL;
+		$error_response = NULL;
+
 		$account = Account::retrieve($account_id);
 		try {
 			$response = $account->delete();
@@ -510,6 +546,9 @@ class StripeService implements PaymentServiceInterface {
 	 * Creates a Customer object; used on job subscription / new subscriptions
 	 */
 	public function createCustomer($user, array $customerData, $account_id=NULL) {
+
+		$response = NULL;
+		$error_response = NULL;
 
 		$customer_data = array();
 		$data_keys = array_keys($customerData);
@@ -596,6 +635,9 @@ class StripeService implements PaymentServiceInterface {
 	 * Deletes created customer
 	 */
 	public function deleteCustomer($user, $account_id=NULL) {
+
+		$response = NULL;
+		$error_response = NULL;
 
 		// 1) Retrieve from db
 		// 2) Retrieve from stripe
@@ -801,6 +843,9 @@ class StripeService implements PaymentServiceInterface {
 	 */
 	public function createExternalAccount($user, $token){
 
+		$response = NULL;
+		$error_response = NULL;
+
 		$account_record = DB::table('stripe_managed_accounts')->where('user_id', '=', $user->id)->first();
 		$account = Account::retrieve($account_record->id);
 
@@ -896,6 +941,9 @@ class StripeService implements PaymentServiceInterface {
 	 * 	Exceptions for missing parameters
 	 */
 	public function createPlan($user, $job, $testing=False) {
+
+		$response = NULL;
+		$error_response = NULL;
 
 		/*
 		if (!is_string($account_id)) {
@@ -993,6 +1041,9 @@ class StripeService implements PaymentServiceInterface {
 
 	public function deletePlan($user, $job, $account_id) {
 
+		$response = NULL;
+		$error_response = NULL;
+
 		$plan_record = DB::table('stripe_plans')->where('job_id', '=', $job->id)->first();
 
 		$plan = Plan::retrieve(array('id' => $plan_record->id),
@@ -1024,6 +1075,9 @@ class StripeService implements PaymentServiceInterface {
 	 */
 	public function createSubscription($plan, $customer, $seller_account) {
 
+		$response = NULL;
+		$error_response = NULL;
+
 		$plan_id = NULL;
 		$customer_id = NULL;
 		$account_id = NULL;
@@ -1053,12 +1107,11 @@ class StripeService implements PaymentServiceInterface {
 		}
 
 		try {
-
 			$response = Subscription::create(
 				array('customer' => $customer_id,
 				'plan' => $plan_id,
 				'application_fee_percent' => 15,
-				'trial_end' => Carbon::tomorrow()->timestamp // starting a day after so we can modify invoice
+				'trial_end' => strtotime('+1 day')  // starting a day after so we can modify invoice
 			),
 				array('stripe_account' => $account_id)
 			);
@@ -1099,11 +1152,12 @@ class StripeService implements PaymentServiceInterface {
 		}
 
 		// some kind of error mechanism in case this fails
-		if (isset($response['error'])) {
-
+		if ($error_response) {
+			return $error_response;
 		}
-
-		$this->createSubscriptionInDB($response['id'], $plan_id, $customer_id);
+		else {
+			$this->createSubscriptionInDB($response['id'], $plan_id, $customer_id);
+		}
 
 		return $response;
 	}
@@ -1118,6 +1172,9 @@ class StripeService implements PaymentServiceInterface {
 	}
 
 	public function cancelSubscription($plan, $customer, $account_id) {
+
+		$response = NULL;
+		$error_response = NULL;
 
 		$subscription_record = DB::table('stripe_subscriptions')->where('plan_id', '=', $plan['id'])->
 			where('connected_customer_id', '=', $customer['id'])->first();
@@ -1183,6 +1240,9 @@ class StripeService implements PaymentServiceInterface {
 	 */
 	public function modifyInvoice($params, $input_object) {
 
+		$response = NULL;
+		$error_response = NULL;
+
 		// Get upcoming invoice
 
 		$invoice = NULL;
@@ -1243,6 +1303,9 @@ class StripeService implements PaymentServiceInterface {
 	 *   and it's external account(bank account/debit card).
 	 */
 	public function createTransfer($user, $job) {
+
+		$response = NULL;
+		$error_response = NULL;
 
 		// get the plan
 		$account_record = DB::table('stripe_managed_accounts')->
