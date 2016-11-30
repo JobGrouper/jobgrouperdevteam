@@ -70,7 +70,7 @@
 
                                 <div class="block bordered">
 
-                                    <span class="amount">${{($employee ? $job->monthly_salary : $job->monthly_price)}}/mo</span>
+                                    <span class="amount">${{($user->user_type == 'employee' ? number_format($job->monthly_salary, 2) : number_format($job->monthly_price, 2))}}/mo</span>
 
                                 </div>
 

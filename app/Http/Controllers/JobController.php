@@ -99,7 +99,7 @@ class JobController extends Controller
 
 		}
 
-        return view('pages.jobs.job', ['job' => $job, 'category' => $category, 'employee' => $employee, 'employeeStatus' => $emploeeStatus, 'orders' => $orders, 'employeeRequest' => $employeeRequest, 'jobOrdered' => $jobOrdered, 'jobPaid' => $jobPaid, 'user_order_info' => $user_order_info]);
+        return view('pages.jobs.job', ['user' => $user, 'job' => $job, 'category' => $category, 'employee' => $employee, 'employeeStatus' => $emploeeStatus, 'orders' => $orders, 'employeeRequest' => $employeeRequest, 'jobOrdered' => $jobOrdered, 'jobPaid' => $jobPaid, 'user_order_info' => $user_order_info]);
     }
 
 
