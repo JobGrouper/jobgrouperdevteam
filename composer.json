@@ -13,7 +13,8 @@
         "stripe/stripe-php": "^3.17",
         "paypal/rest-api-sdk-php": "^1.7",
 	"doctrine/dbal": "2.5.4",
-	"laravelcollective/html" : "^5.2.0"
+	"laravelcollective/html" : "^5.2.0",
+	"pda/pheanstalk": "~3.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
