@@ -45,11 +45,7 @@ class CreditCardController extends Controller
         }
     }
 
-    public function storeSellerAccount(Request $request, PaymentServiceInterface $psi) {
-
-	$user = Auth::user();
-
-	$accountData = NULL;
+    public function storeEmployeePaymentMethod(Request $request, PaymentServiceInterface $psi) {
 
 	if (!isset($request->account_type)) {
 		die('No account type set');
@@ -57,25 +53,46 @@ class CreditCardController extends Controller
 
 	if ($request->account_type == 'bank_account') {
 
+	    $this->validate($request, [
+		    'account_holder_name' => 'required',
+		    'routing_number' => 'required',
+		    'account_number' => 'required'
+		    ]);
+	}
+	else if ($request->account_type == 'debit') {
+
+	    $this->validate($request, [
+		    'number' => 'required',
+		    'cvc' => 'required',
+		    'exp_month' => 'required|size:2',
+		    'exp_year' => 'required|size:4'
+		    ]);
+	}
+
+	$user = Auth::user();
+
+	$accountData = NULL;
+
+	if ($request->account_type == 'bank_account') {
+
 		$accountData = array(
-			"account_holder_name" => $request->account_name,
+			"account_holder_name" => $request->account_holder_name,
 			"account_holder_type" => "individual",
 			"routing_number" => $request->routing_number,
 			"account_number" => $request->account_number
 		);
 	}
-	else if ($request->account_type == 'debit') {
+	else if ($request->account_type == 'card') {
 
 		$accountData = array(
-			"number" => $request->card_number,
-			"exp_month" => $request->end_month,
-			"exp_year" => $request->end_year,
-			"cvc" => $request->cvv,
+			"number" => $request->number,
+			"exp_month" => $request->exp_month,
+			"exp_year" => $request->exp_year,
+			"cvc" => $request->cvc,
 		);
 	}
 
-
-        $token = $psi->createCreditCardToken($accountData, 'card', true);
+        $token = $psi->createCreditCardToken($accountData, $request->account_type, true);
 
 	$response = $psi->createExternalAccount($user, $token);
 

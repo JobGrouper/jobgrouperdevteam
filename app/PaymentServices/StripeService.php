@@ -212,10 +212,9 @@ class StripeService implements PaymentServiceInterface {
 		  $currency = "usd";
 
 		try {
-			$creditCardToken = NULL;
 
 			if ($type == 'card') {
-				$creditCardToken = Token::create(
+				$response = Token::create(
 					array(
 						"card" => array(
 							"number" => $creditCardData['number'],
@@ -228,7 +227,7 @@ class StripeService implements PaymentServiceInterface {
 				);
 			}
 			else if ($type == 'bank_account') {
-				$creditCardToken = Token::create(
+				$response = Token::create(
 					array(
 						"bank_account" => array(
 							"country" => "US",
@@ -278,7 +277,10 @@ class StripeService implements PaymentServiceInterface {
 
 		}
 
-		return $creditCardToken;
+		if ($error_response) 
+			return $error_response;
+		else
+			return $response;
 	}
 
 	public function createAccount(array $stripeAccountData, $user_id, $returning=False) {

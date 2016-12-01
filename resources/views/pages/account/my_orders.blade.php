@@ -79,11 +79,11 @@
                         @else
                             {{--<a href="/purchase/{{$order->id}}"><button class="purchasebtn">Purchase for {{ date('M', mktime(0, 0, 0, $order->month_to_pay, 1, 2000))}}</button></a>--}}
 
-                            @if($order->credit_card_set)
-                                <p class="credit_card"><span class="wrap"><span style="font-weight: 700">Credit Card:</span> <span class="number">{{$order->credit_card()->first()->number}}</span></span><a href="/change_credit_card/{{$order->id}}">Change card</a></p>
-                            @elseif(!$order->credit_card_set && $job->employee_id == NULL)
-                                <!--<button class="purchasebtn">Waiting on Employee</button>-->
-			    @elseif(!$order->credit_card_set && $job->employee_id != NULL)
+                            @if($order->card_set)
+                                <!--<p class="credit_card"><span class="wrap"><span style="font-weight: 700">Credit Card:</span> <span class="number"></span></span><a href="/change_credit_card/{{$order->id}}">Change card</a></p>-->
+                            @elseif(!$order->card_set && $job->employee_id == NULL)
+                                <button class="purchasebtn">Waiting on Employee</button>
+			    @elseif(!$order->card_set && $job->employee_id != NULL)
                                 <a href="/purchase/{{$order->id}}"><button class="purchasebtn">Purchase</button></a>
                             @endif
 

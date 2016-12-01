@@ -19,12 +19,12 @@
                         <div class="firstlast">
                             <div class="cardnumber">
                                 <label for="cardnumber">Card Number</label>
-                                <input type="text" id="cardnumber" maxlength="16" name="card_number">
+                                <input type="text" id="cardnumber" maxlength="16" name="card_number" autocomplete="off">
                             </div>
                             <div class="datecvv">
                                 <div class="item">
                                     <label>End Date</label>
-                                    <select name="end_month" id="endmonth">
+                                    <select name="exp_month" id="expmonth" autocomplete="off">
                                         <option value="0">mm</option>
                                         @for($i = 1; $i <= 12; ++$i)
                                             <option value="{{$i}}">{{$i}}</option>
@@ -32,16 +32,16 @@
                                     </select>
                                 </div>
                                 <div class="item">
-                                    <select name="end_year" id="endyear">
+                                    <select name="exp_year" id="expyear" autocomplete="off">
                                         <option value="0">yyyy</option>
                                         @for($i = 2016; $i <= 2020; ++$i)
                                             <option value="{{$i}}">{{$i}}</option>
                                         @endfor
                                     </select>
                                 </div>
-                                <div class="cvv">
-                                    <label for="cvv">CVV</label>
-                                    <input type="password" maxlength="3" id="cvv" name="cvv">
+                                <div class="cvc">
+                                    <label for="cvc">CVC</label>
+                                    <input type="password" maxlength="3" id="cvc" name="cvc" autocomplete="off">
                                 </div>
                             </div>
                             @if (session('message_success'))
@@ -50,6 +50,10 @@
                             @if (session('message_error'))
                                 <span class="invalid">{{ session('message_error') }}</span>
                             @endif
+
+			    @foreach ($errors->all() as $error)
+				<p>** {{ $error }} **</p>
+			    @endforeach
                         </div>
 			<!-- SET CARD END -->
                     <input name="_method" type="hidden" value="PUT">

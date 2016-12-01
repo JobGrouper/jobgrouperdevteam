@@ -190,58 +190,74 @@
 
                 </div>
 
+		@if ($user->user_type == 'employee')
                 <div class="profile_text" style="border-bottom: none;">
                     <h2>Payment options</h2>
-                    <div class="payment_method">Need payment method</div>
+		    @if ($card == NULL)
+                      <div class="payment_method">Need payment method</div>
+		    @else
+                      <div class="payment_method">Payment method set</div>
+		    @endif
                     <button class="seller_cards" id="bank_add">Add Bank Account</button>
                     <button class="seller_cards" id="debit_add">Add Debit card</button>
                     <div class="bank_form bank">
                         <h2>Bank Account Form<img src="{{asset('img/Profile/cancel.png')}}" alt="alt"></h2>
-                        <form>
+                        <form id="seller_bank_account_form" method="POST" action="{{ url('/card/employee/create') }}">
+			    {{ csrf_field() }}
 			    <input type="hidden" name="account_type" value="bank_account" />
                             <div class="block clearfix">
                                 <label>Account Name<span>*</span></label>
-                                <input type="text" />
+                                <input type="text" name="account_holder_name" autocomplete="off"/>
                             </div>
                             <div class="block clearfix">
                                 <label>Routing Number<span>*</span></label>
-                                <input type="text" />
+                                <input type="text" name="routing_number" autocomplete="off"/>
                             </div>
                             <div class="block clearfix">
                                 <label>Account Number<span>*</span></label>
-                                <input type="text" />
+                                <input type="text" name="account_number" autocomplete="off"/>
                             </div>
                             <button type="submit">Submit</button>
+			    @foreach ($errors->all() as $error)
+				<p>{{ $error }}</p>
+			    @endforeach
                         </form>
                     </div>
                     <div class="bank_form debit">
                         <h2>Debit Card Form<img src="{{asset('img/Profile/cancel.png')}}" alt="alt"></h2>
-                        <form id="seller_debit_card_form" method="POST" action="">
-			    <input type="hidden" name="account_type" value="debit" />
+                        <form id="seller_debit_card_form" method="POST" action="{{ url('/card/employee/create') }}">
+			    {{ csrf_field() }}
+			    <input type="hidden" name="account_type" value="card" />
                             <div class="block clearfix">
                                 <label>Card Number<span>*</span></label>
-                                <input type="text" />
+                                <input type="text" name="number" autocomplete="off"/>
                             </div>
                             <div class="block clearfix">
                                 <label>CVC<span>*</span></label>
-                                <input type="text" />
+                                <input type="text" name="cvc" autocomplete="off"/>
                             </div>
                             <div class="block clearfix">
                                 <label>Exp Month/Year<span>*</span></label>
                                 <div class="wrap">
-                                    <input maxlength="2" class="data_input" type="text" />
+                                    <input maxlength="2" class="data_input" type="text" name="exp_month" autocomplete="off"/>
                                     <span>/</span>
-                                    <input maxlength="2" class="data_input" type="text" />
+                                    <input maxlength="4" class="data_input" type="text" name="exp_year" autocomplete="off"/>
                                 </div>
                             </div>
+				<!--
                             <div class="block clearfix">
                                 <label>ZIP Code<span>*</span></label>
                                 <input type="text" />
                             </div>
+				-->
                             <button type="submit">Submit</button>
+			    @foreach ($errors->all() as $error)
+				<p>{{ $error }}</p>
+			    @endforeach
                         </form>
                     </div>
                 </div>
+		@endif
                 </div>
 
 

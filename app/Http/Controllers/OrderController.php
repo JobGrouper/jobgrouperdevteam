@@ -114,6 +114,12 @@ class OrderController extends Controller
             $job->make_hot();
         }
 
+	// Delete Stripe Customer if user signed on
+	// while an employee was active
+	//
+	// (Not completely correct)
+	// 	- what about cases where employee leaves?
+	//
 	if ($job->employee_id) {
 
 		// get user who is closing order
@@ -122,9 +128,7 @@ class OrderController extends Controller
 		$seller_record = DB::table('stripe_managed_accounts')->where('user_id', $job->employee_id)->first();
 
 		// Delete payment service records
-		$response = $psi->deleteCustomer($user, $seller_record['id']);
-
-		// Delete payment service cards
+		$response = $psi->deleteCustomer($user, $seller_record->id);
 	}
 
         $responseData['error'] = false;
@@ -173,6 +177,13 @@ class OrderController extends Controller
 
     public function update(Request $request, PaymentServiceInterface $psi){
 
+	$this->validate($request, [
+		    'card_number' => 'required',
+		    'cvc' => 'required',
+		    'exp_month' => 'required|integer',
+		    'exp_year' => 'required|size:4'
+		    ]);
+
         $user = Auth::user();
         //$creditCard = CreditCard::find($request->credit_card_id);
         $order = Sale::find($request->order_id);
@@ -184,28 +195,35 @@ class OrderController extends Controller
 
 	$account = $psi->retrieveAccount($employee_record->id);
 
-	// sloppy, but 
-	// doing this for now (fix later)
-	//
-	$seller = new StdClass();
-	$seller->id = $account['id'];
+	// Create credit card token
+	$token = $psi->createCreditCardToken(
+		array(
+			'number' => $request->card_number,
+			'exp_month' => $request->exp_month,
+			'exp_year' => $request->exp_year,
+			'cvc' => $request->cvc
+		), 'card', true);
+
+	if (!isset($token['id'])) {
+
+		// redirect
+		return redirect('purchase/' . $order->id)->
+			withErrors([$token['message'] ]);
+	}
 
 	// Create customer
 	$customer = $psi->createCustomer($user, array(
 		'email' => $user->email), $account['id']);
 
-	// Create credit card token
-	$token = $psi->createCreditCardToken(
-		array(
-			'number' => $request->card_number,
-			'exp_month' => $request->end_month,
-			'exp_year' => $request->end_year,
-			'cvc' => $request->cvc
-		), true);
+	if (!isset($customer['id'])) {
+
+		// redirect
+		return redirect('purchase/' . $order->id)->
+			withErrors(['Server error. Try again later.']);
+	}
 
 	$source = $psi->updateCustomerSource($user, $token, $account['id']);
 	
-
 	if (isset($source['id'])) {
 	  $order->status = 'in_progress';
 	  $order->card_set = True;
@@ -217,7 +235,9 @@ class OrderController extends Controller
 
         //if card has enough count of buyers and sellers the work begins
         if($job->sales_count == $job->max_clients_count && null != $job->employee_id){
-		$psi->createPlan($seller, $job);
+
+        	$employee = $job->employee()->first();
+		$psi->createPlan($employee, $job);
         }
 
 	/*

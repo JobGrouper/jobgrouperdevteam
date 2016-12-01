@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 
 use App\Http\Requests;
 use Auth;
@@ -11,7 +12,16 @@ class UserController extends Controller
 {
     public function myAccount(){
         $user = Auth::user();
-        return view('pages.account', ['user' => $user]);
+
+	$card = NULL;
+
+	if ($user->user_type == 'employee') {
+		$card = DB::table('stripe_managed_accounts')->
+			join('stripe_external_accounts', 'stripe_managed_accounts.id', '=', 'stripe_external_accounts.managed_account_id')->
+			where('stripe_managed_accounts.user_id', $user->id);
+	}
+
+        return view('pages.account', ['user' => $user, 'card' => $card]);
     }
 
     public function showAccount($userID){

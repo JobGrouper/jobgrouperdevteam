@@ -61,7 +61,7 @@ Route::get('my_orders', ['middleware' => 'auth', 'uses' => 'UserController@showO
 Route::get('my_transactions', ['middleware' => 'auth', 'uses' => 'UserController@showPayments']);
 Route::get('card/create', ['middleware' => 'auth', 'uses' => 'CreditCardController@create']);   //User`s credit card
 Route::post('card/store', 'CreditCardController@store');
-Route::post('card/seller/create', 'CreditCardController@storeSellerAccount');
+Route::post('card/employee/create', ['middleware' => 'auth', 'uses' => 'CreditCardController@storeEmployeePaymentMethod']);
 
 
 /*
