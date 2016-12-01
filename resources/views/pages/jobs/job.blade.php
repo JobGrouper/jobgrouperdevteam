@@ -8,7 +8,7 @@
         <div class="alert_window">
             <div class="alert_window__block">
                 <p>{!! $pageTexts[13] !!}</p>
-                <h2>{{$job->monthly_salary}} USD</h2>
+                <h2>${{ number_format($job->monthly_salary * 12, 2)}}</h2>
                 <div class="cancel"></div>
             </div>
         </div>

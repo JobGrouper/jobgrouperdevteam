@@ -108,7 +108,11 @@ $(document).ready(function() {
 	var ratePersonId;
 	var orderCloseId;
 	var selfId;
-	$(".cancelbtn").click(function() {
+	$(".cancelbtn").click(function(e) {
+
+		// Stop form submission
+		e.preventDefault();
+
 		$("#small-dialog4 .stars .yellow").width(0);
 		var order_id = $(this).attr('data-order_id');
 		orderCloseId = $(this).parents(".workers_item").attr("data-id");
@@ -155,7 +159,6 @@ $(document).ready(function() {
 						}
 					}
 				});
-			};
 		}
 	});
 
@@ -1245,24 +1248,29 @@ $(".forgot_only button").on("click", function(event) {
 ///////// MY JOBS
 
 
-$(".myjobs .workers_item .cancelbtn").on("click", function() {
+$(".myjobs .workers_item .cancelbtn").on("click", function(e) {
+
+	// Prevent form submission
+	e.preventDefault();
+
 	var order_id = $(this).attr("data-order_id");
 	var self = $(this);
-	$.ajax({
-		type: "POST",
-		url: "/api/order/close/" + order_id,
-		dataType: "json",
-		success: function(response) {
-			console.log(response);
-			if (response.error == false) {
-				console.log(123);
-				self.parent().hide();
-				alert("You have declined your participation in this project. Your request has been sent successfully to the administrator!");
-			} else {
-				alert(response.info);
+	if (confirm("Are you sure you want to close this order?")){
+
+		$.ajax({
+			type: "POST",
+			url: "/api/order/close/" + order_id,
+			dataType: "json",
+			success: function(response) {
+				console.log(response);
+				if (response.error == false) {
+					self.parent().hide();
+				} else {
+					alert(response.info);
+				}
 			}
-		}
-	});
+		});
+	}
 });
 
 ////// CARD INFO

@@ -62,6 +62,7 @@
                             <p>${{$job->salary}}/month</p>
 
                             {{--<p class="month">work {{$order->created_at->diffInMonths() + 1}} month{{(($order->created_at->diffInMonths() + 1) > 1 ? 's' : '') }}</p>--}}
+				<!--
                             <p class="month">
                                 @if($order->paid_to)
                                     Paid to {{$order->paid_to}}
@@ -70,6 +71,7 @@
                                     This job will time out in {{Carbon\Carbon::now()->diffInMinutes(Carbon\Carbon::parse($order->updated_at)->addMinutes(5)) }} minutes
                                 @endif
                             </p>
+				-->
                         </div>
 
                         {{--@if($closeRequest)--}}
