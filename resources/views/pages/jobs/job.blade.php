@@ -70,7 +70,7 @@
 
                                 <div class="block bordered">
 
-                                    <span class="amount">${{($user->user_type == 'employee' ? number_format($job->monthly_salary, 2) : number_format($job->monthly_price, 2))}}/mo</span>
+                                    <span class="amount">${{(isset($user) && $user->user_type == 'employee' ? number_format($job->monthly_salary, 2) : number_format($job->monthly_price, 2))}}/mo</span>
 
                                 </div>
 
