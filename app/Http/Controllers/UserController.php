@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\PaymentServiceInterface;
 use Illuminate\Http\Request;
 use DB;
 
@@ -109,5 +110,26 @@ class UserController extends Controller
                 die('activated');
             }
         }
+    }
+
+    public function createStripeCustomerSource(Request $request, PaymentServiceInterface $psi){
+        $response = array();
+
+        $user = Auth::user();
+        $user = User::where('id', 47)->first();
+        $cardToken = $psi->createCreditCardToken([
+            "number" => $request->number,
+            "exp_month" => $request->exp_month,
+            "exp_year" => $request->exp_year,
+            "cvc" => $request->cvc,
+            "currency" => $request->currency
+        ], true);
+
+        $psi->updateCustomerSource($user, $cardToken);
+
+        $response['errors'] = false;
+        $response['status'] = 0;
+        $response['info'] = 'Stripe customer source created successfully!';
+        return response($response, 200);
     }
 }

@@ -20,3 +20,4 @@ error_log
 git-help.txt
 Vagrantfile
 app/Http/Controllers/TestController.php
+composer.lock

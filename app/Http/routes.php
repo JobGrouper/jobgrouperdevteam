@@ -153,8 +153,7 @@ Route::group(['prefix' => 'api'], function () {
 
     Route::post('rate/{rated_id}', 'RateController@store');
 
-    //Route::post('purchase/paypal/feedback', ['uses' => 'PayPalController@processPayment']);
-    Route::post('purchase/paypal/feedback', ['uses' => 'OrderController@purchasePayPalFeedback']);
+    Route::post('stripe_customer_sources', 'UserController@createStripeCustomerSource');
 
     Route::post('stripe/invoice/payment', 'StripeWebhookController@onInvoicePaid');
     Route::post('stripe/invoice/created', 'StripeWebhookController@onInvoiceCreated');
