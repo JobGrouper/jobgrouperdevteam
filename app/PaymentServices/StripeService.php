@@ -822,7 +822,7 @@ class StripeService implements PaymentServiceInterface {
 
 		// insert into db
 		DB::table('stripe_customer_sources')->insert( 
-			['id' => $source_id, 
+			['id' => $source_id,
 			'connected_customer_id' => $customer_id,
 			'last_four' => $last_four] );
 	}
