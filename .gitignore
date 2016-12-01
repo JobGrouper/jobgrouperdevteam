@@ -15,6 +15,7 @@ error_log
 .htaccess
 .env
 *.swp
+*.swo
 *~
 *.un*
 git-help.txt

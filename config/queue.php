@@ -44,6 +44,7 @@ return [
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => '127.0.0.1',
+	    'port' => env('BEANSTALKD_PORT'),
             'queue' => 'default',
             'ttr' => 60,
         ],
