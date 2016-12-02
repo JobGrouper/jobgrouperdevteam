@@ -181,4 +181,9 @@ class RegistrateController extends Controller
             }
         }
     }
+
+    public function getMoreVerification($id) {
+
+	    return view('pages.additional_verification');
+    }
 }

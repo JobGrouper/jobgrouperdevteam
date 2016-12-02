@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Interfaces\PaymentServiceInterface;
 
+use DB;
+use Mail;
+
 use App\Http\Requests;
 
 class StripeWebhookController extends Controller
@@ -22,10 +25,46 @@ class StripeWebhookController extends Controller
 
 		$account_id = $event_json['user_id'];
 		$customer_id = $event_json['data']['object']['customer'];
+		$plan_id = $event_json['data']['object']['lines']['data'][0]['plan']['id'];
 
-		echo $account_id;
-		echo '<br>';
-		echo $customer_id;
+		// GET BUYER AND SELLER
+		//
+		// -- make this into a join later
+		//
+		$buyer_record = DB::table('stripe_connected_customers')->
+			where('id', $customer_id)->
+			where('managed_account_id', $account_id)->first();
+
+		$buyer = DB::table('users')->
+			where('id', $buyer_record->user_id)->first();
+
+		// Get employee
+		$employee_record = DB::table('stripe_managed_accounts')->
+			where('id', $account_id)->first();
+
+		$employee = DB::table('users')->
+			where('id', $employee_record->user_id)->first();
+
+		// Get plan
+		$plan_record = DB::table('stripe_plans')->
+			where('id', $plan_id)->first();
+
+        	$job = Job::find($plan_record->job_id);
+
+
+		Mail::send('emails.buyer_payment_successful', ['employee' => $employee->full_name(), 'job_name' => $job->title], function($u)
+		{
+		    $u->from('no-reply@jobgrouper.com');
+		    $u->to($buyer->email);
+		    $u->subject('Your payment for '. $job->title . ' has gone through!');
+		});
+		
+		Mail::send('emails.seller_payment_successful', [], function($u)
+		{
+		    $u->from('no-reply@jobgrouper.com');
+		    $u->to($employee->email);
+		    $u->subject('A payment for '. $job->title . ' has gone through!');
+		});
 
 		return response('Successful', 200);
 	}
@@ -36,7 +75,7 @@ class StripeWebhookController extends Controller
 		$input = @file_get_contents("php://input");
 		$event_json = json_decode($input, true);
 
-		Log::info('Invoice created webhook received', ['event' => $event_json]);
+		//Log::info('Invoice created webhook received', ['event' => $event_json]);
 
 		return response('Successful', 200);
 	}
@@ -51,12 +90,47 @@ class StripeWebhookController extends Controller
 
 		$account_id = $event_json['user_id'];
 		$customer_id = $event_json['data']['object']['customer'];
+		$plan_id = $event_json['data']['object']['lines']['data'][0]['plan']['id'];
 		$description = $event_json['data']['object']['description'];
 
-		echo $account_id;
-		echo '<br>';
-		echo $customer_id;
-		echo 'Description: ' . $description;
+		// GET BUYER AND SELLER
+		//
+		// -- make this into a join later
+		//
+		$buyer_record = DB::table('stripe_connected_customers')->
+			where('id', $customer_id)->
+			where('managed_account_id', $account_id)->first();
+
+		$buyer = DB::table('users')->
+			where('id', $buyer_record->user_id)->first();
+
+		// Get employee
+		$employee_record = DB::table('stripe_managed_accounts')->
+			where('id', $account_id)->first();
+
+		$employee = DB::table('users')->
+			where('id', $employee_record->user_id)->first();
+
+		// Get plan
+		$plan_record = DB::table('stripe_plans')->
+			where('id', $plan_id)->first();
+
+        	$job = Job::find($plan_record->job_id);
+
+
+		Mail::send('emails.buyer_payment_failed', ['job_name' => $job->title], function($u)
+		{
+		    $u->from('no-reply@jobgrouper.com');
+		    $u->to($buyer->email);
+		    $u->subject('Your payment for '. $job->title . ' was not accepted.');
+		});
+		
+		Mail::send('emails.seller_payment_failed', [], function($u)
+		{
+		    $u->from('no-reply@jobgrouper.com');
+		    $u->to($employee->email);
+		    $u->subject('One of your payments for '. $job->title . ' failed.');
+		});
 
 		return response('Successful', 200);
 	}
@@ -70,17 +144,35 @@ class StripeWebhookController extends Controller
 		//Log::info('Account updated webhook received', ['event' => $event_json]);
 
 		$account_id = $event_json['data']['object']['id'];
-		$verified = $event_json['data']['object']['legal_entity']['verification']['status'];
+		$verification_status = $event_json['data']['object']['legal_entity']['verification']['status'];
 		$verification = $event_json['data']['object']['verification']['disabled_reason'];
 		$fields_needed = $event_json['data']['object']['verification']['fields_needed'];
 
-		echo $account_id;
-		echo "||";
-		echo $verified;
-		echo "||";
-		echo $verification;
-		echo "||";
-		var_dump($fields_needed);
+		// Get employee
+		$employee_record = DB::table('stripe_managed_accounts')->
+			where('id', $account_id)->first();
+
+		$employee = DB::table('users')->
+			where('id', $employee_record->user_id)->first();
+
+		if ($verification_status == 'verified') {
+
+			Mail::send('emails.seller_fully_verified', [], function($u)
+			{
+			    $u->from('no-reply@jobgrouper.com');
+			    $u->to($employee->email);
+			    $u->subject('You\'re fully verified on JobGrouper!');
+			});
+		}
+		else {
+
+			Mail::send('emails.seller_need_additional_verification', ['id' => $employee->id], function($u)
+			{
+			    $u->from('no-reply@jobgrouper.com');
+			    $u->to($employee->email);
+			    $u->subject('You\'re fully verified on JobGrouper!');
+			});
+		}
 
 		return response('Successful', 200);
 	}

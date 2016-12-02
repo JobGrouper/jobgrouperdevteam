@@ -38,6 +38,7 @@ Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
 Route::get('social_login/{provider}', 'SocialAuthController@login');
 Route::get('social_login/callback/{provider}', 'SocialAuthController@callback');
+Route::get('account/additional_info/{id}', 'RegistrateController@getMoreVerification');
 Route::auth();
 
 
