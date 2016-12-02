@@ -5,6 +5,8 @@ namespace App\Jobs;
 use Mail;
 use DB;
 
+use App\User;
+
 use App\Jobs\Job;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
@@ -60,24 +62,30 @@ class StripePlanActivation extends Job implements ShouldQueue
 		// Send email to user, saying that 
 		// the job has begun and their first payment 
 		// will be made automatically a day from now
-		/*
-		Mail::send('emails.plan_activated',['token'=>'asdasdasdasd'],function($u)
+		Mail::send('emails.buyer_job_begun',['job_name'=> $this->stripe_job->title ], function($u)
 		{
-		    $u->from('admin@jobgrouper.com');
-		    $u->to('admin@jobgrouper.com');
-		    $u->subject('Job has begun');
+		    $u->from('no-reply@jobgrouper.com');
+		    $u->to($buyer->email);
+		    $u->subject('Job: ' . $this->stripe_job->title . ' has begun');
 		});
-		 */
 	}
 
-	// send email to admin, saying that plan has been completed
-	/*
-	Mail::send('emails.plan_activated',['token'=>'asdasdasdasd'],function($u)
+	$seller = DB::table('users')->where('id', $this->seller_account->user_id)->first();
+
+	// send email to seller, saying that plan has been completed
+	Mail::send('emails.seller_job_begun', ['job_name' => $this->stripe_job->title ], function($u)
 	{
-	    $u->from('admin@jobgrouper.com');
-	    $u->to('admin@jobgrouper.com');
-	    $u->subject('Job has begun');
+	    $u->from('no-reply@jobgrouper.com');
+	    $u->to( $seller->email );
+ 	    $u->subject('Job: ' . $this->stripe_job->title . ' has begun');
 	});
-	 */
+
+	// send email to admin, saying that plan has been completed
+	Mail::send('emails.admin_job_begun', ['job_name' => $this->stripe_job->title ], function($u)
+	{
+	    $u->from('no-reply@jobgrouper.com');
+	    $u->to('admin@jobgrouper.com');
+ 	    $u->subject('Job: ' . $this->stripe_job->title . ' has begun');
+	});
     }
 }

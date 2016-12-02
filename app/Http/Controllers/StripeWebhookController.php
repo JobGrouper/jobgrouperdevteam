@@ -18,9 +18,7 @@ class StripeWebhookController extends Controller
 		$input = @file_get_contents("php://input");
 		$event_json = json_decode($input);
 
-		Log::info('Invoice paid webhook received', ['event' => $event_json]);
-
-		return response('Successful', 200);
+		return response($account_id, 200);
 	}
 
 	public function onInvoiceCreated(PaymentServiceInterface $psi) {

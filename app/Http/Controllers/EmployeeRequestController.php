@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\EmailBuyers;
+
 use App\EmployeeExitRequest;
 use App\EmployeeRequest;
 use App\Interfaces\PaymentServiceInterface;
@@ -70,11 +72,12 @@ class EmployeeRequestController extends Controller
         $responseData['status'] = 0;
         $responseData['info'] = 'Request successfully created';
 
-        Mail::send('emails.new_employee_request',['job_name'=>$job->title, 'employee_name'=>$employee->full_name],function($u) use ($employee)
+	Mail::send('emails.admin_new_job_application',['job_name'=>$job->title, 
+		'employee_name'=>$employee->full_name, 'id' => $employee->id ], function($u) use ($employee)
         {
             $u->from('admin@jobgrouper.com');
             $u->to($employee->email);
-            $u->subject('New Employee request!');
+            $u->subject('Someone has applied for ' . $job->title);
         });
 
         return response($responseData, 200);
@@ -119,6 +122,9 @@ class EmployeeRequestController extends Controller
                 $u->to($employee->email);
                 $u->subject('Request approved!');
             });
+
+	    // Email buyers
+	    dispatch( new EmailBuyers($employee, $job, 'employee_approved') ); 
         }
         return redirect('/admin/employee_requests/'.$job->id);
     }

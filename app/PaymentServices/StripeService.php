@@ -968,9 +968,13 @@ class StripeService implements PaymentServiceInterface {
 
 		try {
 
+			// Add application fee to plan
+			$surcharge = $job->salary * .15;
+			$amount = ($job->salary + $surcharge) * 100; // value must be in cents for Stripe
+
 			// Create plan
 			$plan = Plan::create(array(
-			  "amount" => $job->salary * 100, // value must be in cents for Stripe
+			  "amount" => $amount, 
 			  "interval" => "month",
 			  "name" => $job->title,
 			  "currency" => 'USD',
@@ -1026,14 +1030,12 @@ class StripeService implements PaymentServiceInterface {
 
 			// Email admin that plan is being created
 			//
-			/*
-			Mail::send('emails.plan_activating',['token'=>'asdasdasdasd'],function($u)
+			Mail::send('emails.admin_job_activating',['job_name'=> $job->title],function($u)
 			{
-			    //$u->from('admin@jobgrouper.com');
-			    //$u->to('admin@jobgrouper.com');
-			    $u->subject('Job creation started');
+			    $u->from('no-reply@jobgrouper.com');
+			    $u->to('admin@jobgrouper.com');
+			    $u->subject('Job: ' . $job->title .' Is Being Created');
 			});
-			 */
 		}
 
 		return $plan;
