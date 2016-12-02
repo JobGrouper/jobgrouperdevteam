@@ -16,9 +16,16 @@ class StripeWebhookController extends Controller
 
 		// retrieve the request's body and parse it as json
 		$input = @file_get_contents("php://input");
-		$event_json = json_decode($input);
+		$event_json = json_decode($input, true);
 
-		Log::info('Invoice paid webhook received', ['event' => $event_json]);
+		//Log::info('Invoice paid webhook received', ['event' => $event_json]);
+
+		$account_id = $event_json['user_id'];
+		$customer_id = $event_json['data']['object']['customer'];
+
+		echo $account_id;
+		echo '<br>';
+		echo $customer_id;
 
 		return response('Successful', 200);
 	}
@@ -27,7 +34,7 @@ class StripeWebhookController extends Controller
 
 		// retrieve the request's body and parse it as json
 		$input = @file_get_contents("php://input");
-		$event_json = json_decode($input);
+		$event_json = json_decode($input, true);
 
 		Log::info('Invoice created webhook received', ['event' => $event_json]);
 
@@ -38,9 +45,18 @@ class StripeWebhookController extends Controller
 
 		// Retrieve the request's body and parse it as JSON
 		$input = @file_get_contents("php://input");
-		$event_json = json_decode($input);
+		$event_json = json_decode($input, true);
 
-		Log::info('Invoice failure webhook received', ['event' => $event_json]);
+		//Log::info('Invoice failure webhook received', ['event' => $event_json]);
+
+		$account_id = $event_json['user_id'];
+		$customer_id = $event_json['data']['object']['customer'];
+		$description = $event_json['data']['object']['description'];
+
+		echo $account_id;
+		echo '<br>';
+		echo $customer_id;
+		echo 'Description: ' . $description;
 
 		return response('Successful', 200);
 	}
@@ -49,9 +65,22 @@ class StripeWebhookController extends Controller
 
 		// Retrieve the request's body and parse it as JSON
 		$input = @file_get_contents("php://input");
-		$event_json = json_decode($input);
+		$event_json = json_decode($input, true);
 
-		Log::info('Account updated webhook received', ['event' => $event_json]);
+		//Log::info('Account updated webhook received', ['event' => $event_json]);
+
+		$account_id = $event_json['data']['object']['id'];
+		$verified = $event_json['data']['object']['legal_entity']['verification']['status'];
+		$verification = $event_json['data']['object']['verification']['disabled_reason'];
+		$fields_needed = $event_json['data']['object']['verification']['fields_needed'];
+
+		echo $account_id;
+		echo "||";
+		echo $verified;
+		echo "||";
+		echo $verification;
+		echo "||";
+		var_dump($fields_needed);
 
 		return response('Successful', 200);
 	}
