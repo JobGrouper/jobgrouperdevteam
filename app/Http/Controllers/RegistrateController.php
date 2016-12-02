@@ -90,15 +90,15 @@ class RegistrateController extends Controller
             $confirmUser->save();
 
             //Sending confirmation mail to user
-            /*Mail::send('emails.confirm',['token'=>$token],function($u) use ($user)
+            Mail::send('emails.confirm',['token'=>$token],function($u) use ($user)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($user->email);
-                $u->subject('Confirm registration');
-            });*/
+                $u->subject('Confirm Registration');
+            });
 
             //Check if registration began from creating the social account (fb / tw)
-            /*if($request->input('social_account_id')){
+            if($request->input('social_account_id')){
                 $socialAccount = UserSocialAccount::whereId($request->input('social_account_id'))
                     ->whereUserId(null)
                     ->first();
@@ -106,7 +106,7 @@ class RegistrateController extends Controller
                 //Associating user account with user social account
                 $socialAccount->user()->associate($user);
                 $socialAccount->save();
-            }*/
+            }
 
             if($user->user_type == 'employee'){
                 //Creating Stripe Managed Account
@@ -136,13 +136,6 @@ class RegistrateController extends Controller
                     ]
                 ];
                 $psi->createAccount($stripeAccountData, $user->id);
-            }
-            else{
-                //Creating Stripe Costumer  Account
-                $costumerData = [
-                    'email' => $user->email
-                ];
-                $psi->createCustomer($user, $costumerData);
             }
         }
         else {
