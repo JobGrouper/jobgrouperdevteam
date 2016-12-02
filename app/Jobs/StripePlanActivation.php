@@ -64,7 +64,7 @@ class StripePlanActivation extends Job implements ShouldQueue
 		// will be made automatically a day from now
 		Mail::send('emails.buyer_job_begun',['job_name'=> $this->stripe_job->title ], function($u) use ($buyer, $job)
 		{
-		    $u->from('no-reply@jobgrouper.com');
+		    $u->from('admin@jobgrouper.com');
 		    $u->to($buyer->email);
 		    $u->subject('Job: ' . $job->title . ' has begun');
 		});
@@ -75,7 +75,7 @@ class StripePlanActivation extends Job implements ShouldQueue
 	// send email to seller, saying that plan has been completed
 	Mail::send('emails.seller_job_begun', ['job_name' => $this->stripe_job->title ], function($u) use ($seller, $job)
 	{
-	    $u->from('no-reply@jobgrouper.com');
+	    $u->from('admin@jobgrouper.com');
 	    $u->to( $seller->email );
  	    $u->subject('Job: ' . $job->title . ' has begun');
 	});
@@ -83,7 +83,7 @@ class StripePlanActivation extends Job implements ShouldQueue
 	// send email to admin, saying that plan has been completed
 	Mail::send('emails.admin_job_begun', ['job_name' => $this->stripe_job->title ], function($u) use ($job)
 	{
-	    $u->from('no-reply@jobgrouper.com');
+	    $u->from('admin@jobgrouper.com');
 	    $u->to('admin@jobgrouper.com');
  	    $u->subject('Job: ' . $job->title . ' has begun');
 	});

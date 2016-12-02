@@ -58,7 +58,7 @@ class EmailBuyers extends Job implements ShouldQueue
 		// Send email to user 
 		Mail::send('emails.' . $email_file, $parameters, function($u) use ($buyer, $subject)
 		{
-		    $u->from('no-reply@jobgrouper.com');
+		    $u->from('admin@jobgrouper.com');
 		    $u->to($buyer->email);
 		    $u->subject($subject);
 		});

@@ -54,14 +54,14 @@ class StripeWebhookController extends Controller
 
 		Mail::send('emails.buyer_payment_successful', ['employee' => $employee->full_name(), 'job_name' => $job->title], function($u) use ($buyer, $job)
 		{
-		    $u->from('no-reply@jobgrouper.com');
+		    $u->from('admin@jobgrouper.com');
 		    $u->to($buyer->email);
 		    $u->subject('Your payment for '. $job->title . ' has gone through!');
 		});
 		
 		Mail::send('emails.seller_payment_successful', [], function($u) use ($employee, $job)
 		{
-		    $u->from('no-reply@jobgrouper.com');
+		    $u->from('admin@jobgrouper.com');
 		    $u->to($employee->email);
 		    $u->subject('A payment for '. $job->title . ' has gone through!');
 		});
@@ -120,14 +120,14 @@ class StripeWebhookController extends Controller
 
 		Mail::send('emails.buyer_payment_failed', ['job_name' => $job->title], function($u) use ($buyer, $job)
 		{
-		    $u->from('no-reply@jobgrouper.com');
+		    $u->from('admin@jobgrouper.com');
 		    $u->to($buyer->email);
 		    $u->subject('Your payment for '. $job->title . ' was not accepted.');
 		});
 		
 		Mail::send('emails.seller_payment_failed', [], function($u) use ($employee, $job)
 		{
-		    $u->from('no-reply@jobgrouper.com');
+		    $u->from('admin@jobgrouper.com');
 		    $u->to($employee->email);
 		    $u->subject('One of your payments for '. $job->title . ' failed.');
 		});
@@ -159,7 +159,7 @@ class StripeWebhookController extends Controller
 
 			Mail::send('emails.seller_fully_verified', [], function($u) use ($employee)
 			{
-			    $u->from('no-reply@jobgrouper.com');
+			    $u->from('admin@jobgrouper.com');
 			    $u->to($employee->email);
 			    $u->subject('You\'re fully verified on JobGrouper!');
 			});
@@ -168,7 +168,7 @@ class StripeWebhookController extends Controller
 
 			Mail::send('emails.seller_need_additional_verification', ['id' => $employee->id], function($u) use ($employee)
 			{
-			    $u->from('no-reply@jobgrouper.com');
+			    $u->from('admin@jobgrouper.com');
 			    $u->to($employee->email);
 			    $u->subject('You\'re fully verified on JobGrouper!');
 			});
