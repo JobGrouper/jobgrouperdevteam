@@ -160,7 +160,7 @@ class OrderController extends Controller
 
 
 	// Send email to user 
-	Mail::send('emails.buyer_job_ordered', ['job_name' => $job->title], function($u)
+	Mail::send('emails.buyer_job_ordered', ['job_name' => $job->title], function($u) use ($user, $job)
 	{
 	    $u->from('no-reply@jobgrouper.com');
 	    $u->to($user->email);

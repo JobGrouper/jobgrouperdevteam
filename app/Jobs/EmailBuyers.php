@@ -39,7 +39,6 @@ class EmailBuyers extends Job implements ShouldQueue
 	$email_file = NULL;
 	$parameters = NULL;
 
-
 	// Gather everyone
 	$buyers = $this->stripe_job->buyers()->get();
 	
@@ -57,7 +56,7 @@ class EmailBuyers extends Job implements ShouldQueue
 		}
 
 		// Send email to user 
-		Mail::send('emails.' . $email_file, $parameters, function($u)
+		Mail::send('emails.' . $email_file, $parameters, function($u) use ($buyer, $subject)
 		{
 		    $u->from('no-reply@jobgrouper.com');
 		    $u->to($buyer->email);

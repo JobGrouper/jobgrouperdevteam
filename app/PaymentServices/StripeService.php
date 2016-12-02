@@ -1030,7 +1030,7 @@ class StripeService implements PaymentServiceInterface {
 
 			// Email admin that plan is being created
 			//
-			Mail::send('emails.admin_job_activating',['job_name'=> $job->title],function($u)
+			Mail::send('emails.admin_job_activating',['job_name'=> $job->title],function($u) use ($job)
 			{
 			    $u->from('no-reply@jobgrouper.com');
 			    $u->to('admin@jobgrouper.com');
