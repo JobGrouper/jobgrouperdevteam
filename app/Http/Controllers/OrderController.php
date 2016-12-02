@@ -215,7 +215,7 @@ class OrderController extends Controller
 
 		// redirect
 		return redirect('purchase/' . $order->id)->
-			withErrors([$token['message'] ]);
+			withErrors([ $token['message'] ]);
 	}
 
 	// Create customer

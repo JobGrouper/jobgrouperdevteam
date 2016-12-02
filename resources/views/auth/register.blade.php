@@ -8,6 +8,10 @@
         <form role="form" method="POST" action="{{ url('/custom_register') }}">
             {{ csrf_field() }}
             <h2>Sign Up</h2>
+		<p>ERROR</p>
+	    @foreach ($errors->all() as $error)
+		<p>** {{ $error }} **</p>
+	    @endforeach
             <div class="radiodiv">
                 <input class="radio" type="radio" id="buyer" name="user_type" value="buyer" checked="checked" autocomplete="off">
                 <label class="buyer buy_radio" for="buyer">Buyer</label>

@@ -76,9 +76,19 @@ class EmployeeRequestController extends Controller
 		'employee_name'=>$employee->full_name, 'id' => $employee->id ], function($u) use ($employee, $job)
         {
             $u->from('admin@jobgrouper.com');
-            $u->to($employee->email);
+            $u->to('admin@jobgrouper.com');
             $u->subject('Someone has applied for ' . $job->title);
         });
+
+	/*
+	Mail::send('emails.admin_new_job_application',['job_name'=>$job->title, 
+		'employee_name'=>$employee->full_name, 'id' => $employee->id ], function($u) use ($employee, $job)
+        {
+            $u->from('admin@jobgrouper.com');
+            $u->to('admin@jobgrouper.com');
+            $u->subject('Someone has applied for ' . $job->title);
+        });
+	 */
 
         return response($responseData, 200);
 

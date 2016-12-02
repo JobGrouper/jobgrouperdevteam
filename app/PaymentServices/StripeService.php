@@ -77,6 +77,19 @@ class StripeService implements PaymentServiceInterface {
 	}
 	*/
 
+	/* 
+	 * ERROR 
+	 *
+	 * [ 
+	 *   'error' => boolean
+	 *   'http' => 
+	 *   'type' => 
+	 *   'param' => 
+	 *   'message' => 
+	 *   'user' => boolean
+	 *   ]
+	 */
+
 	public function __construct() {
 		$this->initialize();
 
@@ -99,6 +112,7 @@ class StripeService implements PaymentServiceInterface {
 		$error  = $body['error'];
 
 		$formatted_response = array(
+			'error' => True,
 			'http' => $response->getHttpStatus(),
 			'type' => $error['type'],
 			'param' => $error['param'],
@@ -341,17 +355,16 @@ class StripeService implements PaymentServiceInterface {
 		} catch (Exception $e) {
 		  // Something else happened, completely unrelated to Stripe
 			$error_response = $this->constructErrorResponse($e);
-
 		}
 
 
-		$this->insertAccountIntoDB($response['id'], $user_id);
-
-		if ($returning) {
-		  return $response;
+		if ($response == NULL) {
+			return $error_response;
 		}
-		else
-		  return 1;
+		else {
+			$this->insertAccountIntoDB($response['id'], $user_id);
+			return $response;
+		}
 	}
 
 	public function insertAccountIntoDB($account_id, $user_id) {

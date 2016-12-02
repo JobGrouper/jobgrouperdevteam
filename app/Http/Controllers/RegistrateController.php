@@ -89,13 +89,6 @@ class RegistrateController extends Controller
             $confirmUser->token = $token;
             $confirmUser->save();
 
-            //Sending confirmation mail to user
-            Mail::send('emails.confirm',['token'=>$token],function($u) use ($user)
-            {
-                $u->from('admin@jobgrouper.com');
-                $u->to($user->email);
-                $u->subject('Confirm Registration');
-            });
 
             //Check if registration began from creating the social account (fb / tw)
             if($request->input('social_account_id')){
@@ -135,7 +128,34 @@ class RegistrateController extends Controller
                         "ip" => $request->ip()
                     ]
                 ];
-                $psi->createAccount($stripeAccountData, $user->id);
+
+               $response = $psi->createAccount($stripeAccountData, $user->id);
+
+		if (isset($response['error'])) {
+
+			// delete everything
+			$user->delete();
+			$confirmUser->delete();
+
+			$error = 'Sorry, there was an error on our end. Try back later.';
+
+			if ($response['user'] == True) {
+				$error = $response['message'];
+			}
+
+			return redirect('/register')->
+				withErrors([ $error ]);
+		}
+		else {
+
+		    //Sending confirmation mail to user
+		    Mail::send('emails.confirm',['token'=>$token],function($u) use ($user)
+		    {
+			$u->from('admin@jobgrouper.com');
+			$u->to($user->email);
+			$u->subject('Confirm Registration');
+		    });
+		}
             }
         }
         else {
