@@ -158,12 +158,19 @@ class OrderController extends Controller
 
         $order = $user->orders()->create($input);
 
+
+	// Send email to user 
+	Mail::send('emails.buyer_job_ordered', ['job_name' => $job->title], function($u)
+	{
+	    $u->from('no-reply@jobgrouper.com');
+	    $u->to($user->email);
+	    $u->subject('Your order for '. $job->title . ' has gone through!');
+	});
+
         //if card has enough count of buyers and sellers the work begins
         if($job->sales_count == $job->max_clients_count && null != $job->employee_id){
-            $job->work_start();
+            //$job->work_start();
         }
-
-
 
         if(isset($order->id)){
             return redirect('/my_orders');
