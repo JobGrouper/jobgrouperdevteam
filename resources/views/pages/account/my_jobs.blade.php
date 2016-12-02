@@ -74,7 +74,7 @@
                                     @if($order->status == 'closed')
                                         <button class="Request">Order closed</button>
                                     @else
-                                        <button class="cancelbtn">Close job</button>
+                                        <button class="request_buyer_removal cancelbtn" data-order_id="{{$order->id}}">Report Buyer</button>
                                     @endif
                                 </div>
 
@@ -160,7 +160,7 @@
                                             @if($order->status == 'closed')
                                                 <button class="Request">Order closed</button>
                                             @else
-                                                <button class="cancelbtn">Close job</button>
+                                                <button class="request_buyer_removal cancelbtn" data-order_id="{{$order->id}}">Report Buyer</button>
                                             @endif
                                         </div>
 

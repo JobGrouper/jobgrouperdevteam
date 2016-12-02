@@ -668,11 +668,20 @@ class StripeService implements PaymentServiceInterface {
 			$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $user->id)->
 				where('managed_account_id', '=', $account_id)->first();
 
-			$customer = Customer::retrieve(array('id' => $customer_record->id),
-				array('stripe_account' => $account_id));
-			$response = $customer->delete();
+			if ($customer_record) {
 
-			$this->deleteCustomerFromDB($user);
+				$customer = Customer::retrieve(array('id' => $customer_record->id),
+					array('stripe_account' => $account_id));
+
+				$response = $customer->delete();
+
+				$this->deleteCustomerFromDB($user);
+			}
+			else {
+
+				$error_response['error'] = True;
+				$error_response['message'] = 'No customer found';
+			}
 		}
 		else {
 			$customer_record = DB::table('stripe_root_customers')->where('user_id', '=', $user->id)->first();
@@ -682,7 +691,10 @@ class StripeService implements PaymentServiceInterface {
 			$this->deleteCustomerFromDB($user, $account_id);
 		}
 
-		return $response;
+		if ($response == NULL)
+		   return $error_response;
+		else
+		   return $response;
 	}
 
 	/*

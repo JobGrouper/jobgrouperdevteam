@@ -119,6 +119,7 @@ class OrderController extends Controller
 	//
 	// (Not completely correct)
 	// 	- what about cases where employee leaves?
+	// 	- or when there was no employee
 	//
 	if ($job->employee_id) {
 

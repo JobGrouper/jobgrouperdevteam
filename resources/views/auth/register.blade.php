@@ -8,7 +8,6 @@
         <form role="form" method="POST" action="{{ url('/custom_register') }}">
             {{ csrf_field() }}
             <h2>Sign Up</h2>
-		<p>ERROR</p>
 	    @foreach ($errors->all() as $error)
 		<p>** {{ $error }} **</p>
 	    @endforeach
