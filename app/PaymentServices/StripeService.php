@@ -1041,6 +1041,15 @@ class StripeService implements PaymentServiceInterface {
 		return $plan;
 	}
 
+	public function createPlanInDB($plan_id, $managed_account_id, $job_id) {
+
+		// Add plan to database
+		DB::table('stripe_plans')->insert(
+			['id' => $plan_id , 'managed_account_id' => $managed_account_id,
+			'job_id' => $job_id, 'activated' => 1]
+		);
+	}
+
 	/*
 	 * Generates a unique id for a plan
 	 */

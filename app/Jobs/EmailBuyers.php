@@ -12,7 +12,7 @@ class EmailBuyers extends Job implements ShouldQueue
     use InteractsWithQueue, SerializesModels;
 
     private $employee;
-    private $job;
+    private $jg_job;
     private $concern;
 
     /**
@@ -20,11 +20,11 @@ class EmailBuyers extends Job implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($employee, $job, $concern)
+    public function __construct($employee, $jg_job, $concern)
     {
 	//
 	$this->employee = $employee;
-	$this->job = $job;
+	$this->jg_job = $jg_job;
 	$this->concern = $concern;
     }
 
@@ -40,19 +40,19 @@ class EmailBuyers extends Job implements ShouldQueue
 	$parameters = NULL;
 
 	// Gather everyone
-	$buyers = $this->stripe_job->buyers()->get();
+	$buyers = $this->jg_job->buyers()->get();
 	
 	foreach($buyers as $buyer) {
 
 		if ($this->concern == 'employee_approved') {
 
-		    $order = $buyer->orders->where('job_id', $this->job->id)->
+		    $order = $buyer->orders->where('job_id', $this->jg_job->id)->
 				where('status', 'pending')->first();
 
-		    $subject = 'The Job: ' . $this->job->title . " Is Ready for Purchase";
+		    $subject = 'The Job: ' . $this->jg_job->title . " Is Ready for Purchase";
 		    $email_file = 'buyer_employee_approved';
 		    $parameters = ['employee_name' => $this->employee->full_name,
-				'job_name' => $this->job->title, 'order_id' => $order];
+				'job_name' => $this->jg_job->title, 'order_id' => $order];
 		}
 
 		// Send email to user 

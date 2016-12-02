@@ -9,7 +9,11 @@ use \Carbon\Carbon;
 use \App\PaymentServices\StripeService;
 use App\Job;
 use App\User;
+
 use App\Jobs\StripePlanActivation;
+use App\Jobs\StripeAccountUpdated;
+use App\Jobs\StripeInvoiceFailed;
+use App\Jobs\StripeInvoicePaid;
 
 class StripeIntegrationTest extends TestCase
 {
@@ -28,8 +32,6 @@ class StripeIntegrationTest extends TestCase
 	}
 
 	public function testCreateAccount() {
-
-		$this->markTestSkipped();
 
 		$account = $this->psi->createAccount(array(
 			"country" => "US",
@@ -63,8 +65,6 @@ class StripeIntegrationTest extends TestCase
 
 	public function testCreateAccountInDB() {
 
-		$this->markTestSkipped();
-
 		$account = array(
 			'id' => 1
 		);
@@ -80,9 +80,6 @@ class StripeIntegrationTest extends TestCase
 
 	public function testCreateCreditCardToken() {
 
-
-		$this->markTestSkipped();
-
 		$token = $this->psi->createCreditCardToken(array(
 			'number' => "4242424242424242",
 			'exp_month' => 11,
@@ -94,8 +91,6 @@ class StripeIntegrationTest extends TestCase
 	}
 
 	public function testCreateCustomerForRegistration() {
-
-		$this->markTestSkipped();
 
 		$user = new StdClass();
 		$user->id = 1;
@@ -121,8 +116,6 @@ class StripeIntegrationTest extends TestCase
 	}
 
 	public function testCreateCustomerForSubscription() {
-
-		$this->markTestSkipped();
 
 		$user = new StdClass();
 		$user->id = 1;
@@ -154,8 +147,6 @@ class StripeIntegrationTest extends TestCase
 	}
 
 	public function testGeneratePlanId() {
-
-		$this->markTestSkipped();
 
 		$plan_name = 'Test Plan';
 		$plan_id = $this->psi->generatePlanId($plan_name);
@@ -206,7 +197,7 @@ class StripeIntegrationTest extends TestCase
 			)
 		), $user->id, True);
 
-		$this->expectsJobs(StripePlanActivation::class);
+		//$this->expectsJobs(StripePlanActivation::class);
 
 		$plan = $this->psi->createPlan($user, $job);
 
@@ -226,7 +217,6 @@ class StripeIntegrationTest extends TestCase
 	 */
 	public function testCreateSubscription() {
 
-		$this->markTestSkipped();
 		// Create a fake-oh job
 		 $job = Job::create([
 		    'title' => 'Test Job',
@@ -310,7 +300,6 @@ class StripeIntegrationTest extends TestCase
 	 */
 	public function testCreateExternalDebitCard() {
 
-		$this->markTestSkipped();
 		//Create fake user
 		$user = User::create([
 		    'first_name' => 'Teddy',
@@ -381,8 +370,6 @@ class StripeIntegrationTest extends TestCase
 	 */
 	public function testCreateExternalBankAccount() {
 
-		$this->markTestSkipped();
-
 		//Create fake user
 		$user = User::create([
 		    'first_name' => 'Teddy',
@@ -449,8 +436,6 @@ class StripeIntegrationTest extends TestCase
 
 	public function testUpdateCustomerSource() {
 
-		$this->markTestSkipped();
-
 		//Create fake user
 		$seller = User::create([
 		    'first_name' => 'Art',
@@ -511,8 +496,6 @@ class StripeIntegrationTest extends TestCase
 
 	public function testUpdateConnectedCustomerSource() {
 
-		$this->markTestSkipped();
-
 		//Create fake user
 		$user = User::create([
 		    'first_name' => 'Teddy',
@@ -568,8 +551,6 @@ class StripeIntegrationTest extends TestCase
 	}
 
 	public function testCreateTransfer() {
-
-		$this->markTestSkipped();
 
 		//Create fake user
 		$user = User::create([
@@ -654,7 +635,7 @@ class StripeIntegrationTest extends TestCase
 
 		// Create a fake account for the fake user
 		// 	- will not be done in live situation
-		$account = $psi->createAccount(array(
+		$account = $this->psi->createAccount(array(
 			"country" => "US",
 			"email" => "testemail@test.com",
 			"legal_entity" => array(
@@ -682,22 +663,229 @@ class StripeIntegrationTest extends TestCase
         	$order = $sucker->orders()->create(array('job_id' => $job->id, 'status' => 'in_progress'));
 
 		// and then the real (fake) deal
-		$customer = $psi->createCustomer($sucker, array(
+		$customer = $this->psi->createCustomer($sucker, array(
 			'email' => $sucker->email),
 			$account['id']
 		);
 
-		$token = $psi->createCreditCardToken(array(
+		$token = $this->psi->createCreditCardToken(array(
 			'number' => "4242424242424242",
 			'exp_month' => 11,
 			'exp_year' => 2017,
 			'cvc' => "314"
 		), 'card');
 
-		$psi->updateCustomerSource($sucker, $token, $account['id']);
+		$this->psi->updateCustomerSource($sucker, $token, $account['id']);
 
-		$plan = $psi->createPlan($user, $job);
+		$plan = $this->psi->createPlan($user, $job);
 
 		DB::statement("SET FOREIGN_KEY_CHECKS=1");
+	}
+
+	public function testInvoicePaidWebhook() {
+
+		// create buyer
+		//
+		$buyer = User::create([
+		    'first_name' => 'Teddy',
+		    'last_name' => 'Thanopoklos',
+		    'user_type' => 'buyer',
+		    'email' => 'teddy1@bearmail.com',
+		    'password' => bcrypt('password'),
+		]);
+
+		// create employee
+		//
+		//Creating new user
+		$seller = User::create([
+		    'first_name' => 'Hello',
+		    'last_name' => 'There',
+		    'user_type' => 'buyer',
+		    'email' => 'fred@airmail.com',
+		    'password' => bcrypt('password')
+		]);
+
+		$account_id = 'acct_id';
+		$customer_id = 'cust_id';
+
+		// create managed account
+		$this->psi->insertAccountIntoDB($account_id, $seller->id);
+
+		// create customer
+		$this->psi->createCustomerInDB($buyer, 
+			array('id' => $customer_id),
+			$account_id
+		);
+
+		// Create a fake-oh job
+		 $job = Job::create([
+		    'title' => 'Test Job',
+		    'description' => "A job for testing",
+		    'salary' => 50.00,
+		    'max_clients_count' => 5,
+		    'category_id' => 1,
+		]);
+
+		// Create plan in id
+		$plan_id = 'this_the_plan';
+		$this->psi->createPlanInDB($plan_id, $account_id, $job->id);
+
+		// create event
+		$event = ['user_id' => $account_id,
+			'data' => ['object' => [
+				'customer' => $customer_id,
+				'lines' => [
+					'data' => [ 
+						0 => [ 
+							'plan' => [
+								'id' => $plan_id ]
+							]
+						]
+					]
+				]
+			]];
+
+		dispatch( new StripeInvoicePaid($event) );
+	}
+
+	public function testInvoiceFailedWebhook() {
+
+		// create buyer
+		//
+		$buyer = User::create([
+		    'first_name' => 'Teddy',
+		    'last_name' => 'Thanopoklos',
+		    'user_type' => 'buyer',
+		    'email' => 'teddy1@bearmail.com',
+		    'password' => bcrypt('password'),
+		]);
+
+		// create employee
+		//
+		//Creating new user
+		$seller = User::create([
+		    'first_name' => 'Hello',
+		    'last_name' => 'There',
+		    'user_type' => 'buyer',
+		    'email' => 'fred@airmail.com',
+		    'password' => bcrypt('password')
+		]);
+
+		$account_id = 'acct_id';
+		$customer_id = 'cust_id';
+
+		// create managed account
+		$this->psi->insertAccountIntoDB($account_id, $seller->id);
+
+		// create customer
+		$this->psi->createCustomerInDB($buyer, 
+			array('id' => $customer_id),
+			$account_id
+		);
+
+		// Create a fake-oh job
+		 $job = Job::create([
+		    'title' => 'Test Job',
+		    'description' => "A job for testing",
+		    'salary' => 50.00,
+		    'max_clients_count' => 5,
+		    'category_id' => 1,
+		]);
+
+		// Create plan in id
+		$plan_id = 'this_the_plan';
+		$this->psi->createPlanInDB($plan_id, $account_id, $job->id);
+
+		// create event
+		$event = ['user_id' => $account_id,
+			'data' => ['object' => [
+				'customer' => $customer_id,
+				'lines' => [
+					'data' => [ 
+						0 => [ 
+							'plan' => [
+								'id' => $plan_id ]
+							]
+						]
+					],
+
+				'description' => NULL
+				]
+			]];
+
+		dispatch( new StripeInvoiceFailed($event) );
+	}
+
+	public function testAccountUpdatedWebhook() {
+
+		// create buyer
+		//
+		$user = User::create([
+		    'first_name' => 'Teddy',
+		    'last_name' => 'Thanopoklos',
+		    'user_type' => 'buyer',
+		    'email' => 'teddy1@bearmail.com',
+		    'password' => bcrypt('password'),
+		]);
+
+
+		// create managed account
+		$account_id = 'acct_id';
+		$this->psi->insertAccountIntoDB($account_id, $user->id);
+
+
+		$event = ['data' => [
+				'object' => [
+					'id' => $account_id,
+					'legal_entity' => [
+						'verification' => [
+							'status' => 'verified'
+							]
+						],
+					'verification' => [
+						'disabled_reason' => NULL,
+						'fields_needed' => []
+						]
+					]
+				]
+			];
+
+		dispatch( new StripeAccountUpdated($event) );
+	}
+
+	public function testAccountUpdatedFailWebhook() {
+
+		// create buyer
+		//
+		$user = User::create([
+		    'first_name' => 'Teddy',
+		    'last_name' => 'Thanopoklos',
+		    'user_type' => 'buyer',
+		    'email' => 'teddy1@bearmail.com',
+		    'password' => bcrypt('password'),
+		]);
+
+
+		// create managed account
+		$account_id = 'acct_id';
+		$this->psi->insertAccountIntoDB($account_id, $user->id);
+
+		$event = ['data' => [
+				'object' => [
+					'id' => $account_id,
+					'legal_entity' => [
+						'verification' => [
+							'status' => 'not_verified'
+							]
+						],
+					'verification' => [
+						'disabled_reason' => NULL,
+						'fields_needed' => []
+						]
+					]
+				]
+			];
+
+		dispatch( new StripeAccountUpdated($event) );
 	}
 }

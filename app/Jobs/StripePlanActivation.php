@@ -44,6 +44,9 @@ class StripePlanActivation extends Job implements ShouldQueue
      */
     public function handle()
     {
+
+	// Making a copy
+	$job = $this->stripe_job;
 	
 	// Gather everyone
 	$buyers = $this->stripe_job->buyers()->get();
