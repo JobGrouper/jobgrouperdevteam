@@ -9,6 +9,7 @@ use \Carbon\Carbon;
 use \App\PaymentServices\StripeService;
 use App\Job;
 use App\User;
+use App\Sale;
 
 use App\Jobs\StripePlanActivation;
 use App\Jobs\StripeAccountUpdated;
@@ -887,5 +888,43 @@ class StripeIntegrationTest extends TestCase
 			];
 
 		dispatch( new StripeAccountUpdated($event) );
+	}
+
+	public function testEmailBuyers() {
+
+		$seller = User::create([
+		    'first_name' => 'Hello',
+		    'last_name' => 'There',
+		    'user_type' => 'buyer',
+		    'email' => 'fred@airmail.com',
+		    'password' => bcrypt('password')
+		]);
+
+		// Create a fake-oh job
+		 $job = Job::create([
+		    'title' => 'Test Job',
+		    'description' => "A job for testing",
+		    'salary' => 50.00,
+		    'max_clients_count' => 5,
+		    'category_id' => 1,
+		]);
+
+		// create buyer
+		//
+		$buyer = User::create([
+		    'first_name' => 'Teddy',
+		    'last_name' => 'Thanopoklos',
+		    'user_type' => 'buyer',
+		    'email' => 'teddy1@bearmail.com',
+		    'password' => bcrypt('password'),
+		]);
+
+		// Create a fake-oh job
+		 $order = Sale::create([
+		    'job_id' => $job->id,
+		    'status' => 'in_progress'
+		]);
+
+		dispatch( new EmailBuyers($seller, $job, 'employee_approved') );
 	}
 }
