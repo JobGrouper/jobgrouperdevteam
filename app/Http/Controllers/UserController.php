@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\PaymentServiceInterface;
 use Illuminate\Http\Request;
+use DB;
 
 use App\Http\Requests;
 use Auth;
@@ -11,7 +13,19 @@ class UserController extends Controller
 {
     public function myAccount(){
         $user = Auth::user();
-        return view('pages.account', ['user' => $user]);
+
+	$card = NULL;
+
+	if ($user->user_type == 'employee') {
+
+		// This query is probably wrong
+		// 	needs to be sorted by date
+		$card = DB::table('stripe_managed_accounts')->
+			join('stripe_external_accounts', 'stripe_managed_accounts.id', '=', 'stripe_external_accounts.managed_account_id')->
+			where('stripe_managed_accounts.user_id', $user->id)->latest('stripe_external_accounts.created_at')->first();
+	}
+
+        return view('pages.account', ['user' => $user, 'card' => $card]);
     }
 
     public function showAccount($userID){
@@ -69,7 +83,7 @@ class UserController extends Controller
             return redirect('/');
         }
 
-        $orders = $buyer->orders()->where('status', 'in_progress')->get();
+        $orders = $buyer->orders()->where('status', 'in_progress')->orWhere('status', '=', 'pending')->get();
   
 
         return view('pages.account.my_orders', ['orders' => $orders]);
@@ -99,5 +113,26 @@ class UserController extends Controller
                 die('activated');
             }
         }
+    }
+
+    public function createStripeCustomerSource(Request $request, PaymentServiceInterface $psi){
+        $response = array();
+
+        $user = Auth::user();
+        $user = User::where('id', 47)->first();
+        $cardToken = $psi->createCreditCardToken([
+            "number" => $request->number,
+            "exp_month" => $request->exp_month,
+            "exp_year" => $request->exp_year,
+            "cvc" => $request->cvc,
+            "currency" => $request->currency
+        ], true);
+
+        $psi->updateCustomerSource($user, $cardToken);
+
+        $response['errors'] = false;
+        $response['status'] = 0;
+        $response['info'] = 'Stripe customer source created successfully!';
+        return response($response, 200);
     }
 }

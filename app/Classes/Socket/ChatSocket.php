@@ -90,7 +90,7 @@ class ChatSocket extends BaseSocket
 
                 if($input['sendToAllBuyers']){
                     $job = $user->jobs()->first();
-                    $sales = $job->sales()->where('status', '=', 'in_progress')->get();
+                    $sales = $job->sales()->whereIn('status', ['in_progress', 'pending'])->get();
                     foreach ($sales as $sale){
 
                         $recipient = User::findOrFail($sale->buyer_id);

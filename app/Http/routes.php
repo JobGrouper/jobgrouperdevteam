@@ -2,6 +2,7 @@
 use Illuminate\Contracts\Bus\Dispatcher;
 use App\Console\Commands\ChatServer;
 use App\Job;
+use App\Interfaces\PaymentServiceInterface;
 
 
 use PayPal\Api\Amount;
@@ -37,6 +38,7 @@ Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
 Route::get('social_login/{provider}', 'SocialAuthController@login');
 Route::get('social_login/callback/{provider}', 'SocialAuthController@callback');
+Route::get('account/additional_info/{id}', 'RegistrateController@getMoreVerification');
 Route::auth();
 
 
@@ -60,6 +62,7 @@ Route::get('my_orders', ['middleware' => 'auth', 'uses' => 'UserController@showO
 Route::get('my_transactions', ['middleware' => 'auth', 'uses' => 'UserController@showPayments']);
 Route::get('card/create', ['middleware' => 'auth', 'uses' => 'CreditCardController@create']);   //User`s credit card
 Route::post('card/store', 'CreditCardController@store');
+Route::post('card/employee/create', ['middleware' => 'auth', 'uses' => 'CreditCardController@storeEmployeePaymentMethod']);
 
 
 /*
@@ -151,8 +154,12 @@ Route::group(['prefix' => 'api'], function () {
 
     Route::post('rate/{rated_id}', 'RateController@store');
 
-    //Route::post('purchase/paypal/feedback', ['uses' => 'PayPalController@processPayment']);
-    Route::post('purchase/paypal/feedback', ['uses' => 'OrderController@purchasePayPalFeedback']);
+    Route::post('stripe_customer_sources', 'UserController@createStripeCustomerSource');
+
+    Route::post('stripe/invoice/payment', 'StripeWebhookController@onInvoicePaid');
+    Route::post('stripe/invoice/created', 'StripeWebhookController@onInvoiceCreated');
+    Route::post('stripe/invoice/failed', 'StripeWebhookController@onInvoiceFailure');
+    Route::post('stripe/account/updated', 'StripeWebhookController@onAccountUpdated');
 
 });
 
@@ -160,7 +167,9 @@ Route::group(['prefix' => 'api'], function () {
 Route::get('sandbox', 'TestController@test');
 
 Route::group(['prefix' => 'test'], function(){
-    Route::get('paypal', function () {
+
+    Route::get('paypal', function (PaymentServiceInterface $psi) {
+
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
                 env('PAYPAL_CLIENT_ID'),     // ClientID

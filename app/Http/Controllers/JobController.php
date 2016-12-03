@@ -62,7 +62,7 @@ class JobController extends Controller
         }
 
         $user = Auth::user();
-		$user_order_info = null;
+	$user_order_info = null;
         $jobOrdered = false;
         $jobPaid = false;
 
@@ -74,8 +74,8 @@ class JobController extends Controller
             }
             else{
 
-				// Retrieving user info
-				$user_order_info = $user->orders()->where('job_id', '=', $job->id)->where('status', '=', 'in_progress')->first();
+		// Retrieving user info
+		$user_order_info = $user->orders()->where('job_id', '=', $job->id)->whereIn('status', ['in_progress', 'pending'])->first();
 
                 if($user_order_info){
 
@@ -83,7 +83,7 @@ class JobController extends Controller
 
 					// If credit card id is present, job has been paid for
 					//
-					if ($user_order_info->credit_card_id != null) {
+					if ($user_order_info->credit_card_set) {
 						$jobPaid = true;
 					}
                 }
@@ -93,13 +93,13 @@ class JobController extends Controller
 
 
         //$sales = $job->buyers()->get();
-        $orders = $job->sales()->where('status', '=', 'in_progress')->get();
+        $orders = $job->sales()->whereIn('status', ['in_progress', 'pending'])->get();
 
 		if ($jobOrdered && !$jobPaid) {
 
 		}
 
-        return view('pages.jobs.job', ['job' => $job, 'category' => $category, 'employee' => $employee, 'employeeStatus' => $emploeeStatus, 'orders' => $orders, 'employeeRequest' => $employeeRequest, 'jobOrdered' => $jobOrdered, 'jobPaid' => $jobPaid, 'user_order_info' => $user_order_info]);
+        return view('pages.jobs.job', ['user' => $user, 'job' => $job, 'category' => $category, 'employee' => $employee, 'employeeStatus' => $emploeeStatus, 'orders' => $orders, 'employeeRequest' => $employeeRequest, 'jobOrdered' => $jobOrdered, 'jobPaid' => $jobPaid, 'user_order_info' => $user_order_info]);
     }
 
 

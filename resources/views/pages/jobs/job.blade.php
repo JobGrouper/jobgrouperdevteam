@@ -8,7 +8,7 @@
         <div class="alert_window">
             <div class="alert_window__block">
                 <p>{!! $pageTexts[13] !!}</p>
-                <h2>{{$job->monthly_salary}} USD</h2>
+                <h2>${{ number_format($job->monthly_salary * 12, 2)}}</h2>
                 <div class="cancel"></div>
             </div>
         </div>
@@ -70,7 +70,7 @@
 
                                 <div class="block bordered">
 
-                                    <span class="amount">${{($employee ? $job->monthly_salary : $job->monthly_price)}}/mo</span>
+                                    <span class="amount">${{(isset($user) && $user->user_type == 'employee' ? number_format($job->monthly_salary, 2) : number_format($job->monthly_price, 2))}}/mo</span>
 
                                 </div>
 
@@ -128,8 +128,10 @@
                             @else
                                 @if($jobPaid)
                                     <span class="approved">YOU HAVE ORDERED THIS JOB</span>
-                                @elseif($jobOrdered)
+                                @elseif($jobOrdered && $job->employee_id != NULL)
                                     <a href="/purchase/{{ $user_order_info->id }}"><span class="approved need">PLEASE COMPLETE PAYMENT</span></a>
+                                @elseif($jobOrdered && $job->employee_id == NULL)
+                                    <span class="approved need">Waiting For Employee</span>
                                 @else
                                     {{--Это было для сохранения карт и авто-оплат--}}
                                     {{--<a href="/purchase/{{$job->id}}"><button>Buy</button></a>--}}

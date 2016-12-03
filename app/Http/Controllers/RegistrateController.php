@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
-
+use App\Interfaces\PaymentServiceInterface;
 use App\User;
 use App\UserSocialAccount;
 use App\ConfirmUsers;
@@ -33,11 +32,41 @@ class RegistrateController extends Controller
     }
 
 
-    public function register(Request $request)
+    public function register(Request $request, PaymentServiceInterface $psi)
     {
-        $user = User::where('email', '=', $request->input('email'))->first();
+
+        /*$user = User::where('email', '=', $request->input('email'))->first();
         if ($user !== null) {
             die('User with this email already exist');
+        }*/
+
+        switch($request->user_type){
+            case 'buyer':
+                $this->validate($request, [
+                    'first_name' => 'required|min:2|max:255',
+                    'last_name' => 'required|min:2|max:255',
+                    'email' => 'required|unique:users|max:255',
+                    'password' => 'required|min:6|max:255',
+                ]);
+                break;
+            case 'employee':
+                $this->validate($request, [
+                    'first_name' => 'required|min:2|max:255',
+                    'last_name' => 'required|min:2|max:255',
+                    'email' => 'required|unique:users|max:255',
+                    'password' => 'required|min:6|max:255',
+                    'city' => 'required',
+                    'address' => 'required',
+                    'postal_code' => 'required',
+                    'state' => 'required',
+                    'dob_day' => 'required',
+                    'dob_month' => 'required',
+                    'dob_year' => 'required',
+                    'ssn_last_4' => 'required',
+                ]);
+                break;
+            default:
+                die('User type error');
         }
 
         //Creating new user
@@ -49,11 +78,12 @@ class RegistrateController extends Controller
             'password' => bcrypt($request->input('password')),
         ]);
 
+
         if(isset($user->id))
         {
             //Creating record for user email confirmation
             $email = $user->email;
-            $token = str_random(32);            //token for email confirmation
+            $token = str_random(32);
             $confirmUser = new ConfirmUsers;
             $confirmUser->email = $email;
             $confirmUser->token = $token;
@@ -71,13 +101,62 @@ class RegistrateController extends Controller
                 $socialAccount->save();
             }
 
-            //отправляем ссылку с токеном пользователю
-            Mail::send('emails.confirm',['token'=>$token],function($u) use ($user)
-            {
-                $u->from('admin@jobgrouper.com');
-                $u->to($user->email);
-                $u->subject('Confirm registration');
-            });
+            if($user->user_type == 'employee'){
+                //Creating Stripe Managed Account
+                $stripeAccountData = [
+                    "country" => "US",
+                    "email" => $request->email,
+                    "legal_entity" => [
+                        "address" => [
+                            "city" => $request->city,
+                            "line1" => $request->address,
+                            "postal_code" => $request->postal_code,
+                            "state" => $request->state
+                        ],
+                        "dob" => [
+                            "day" => $request->dob_day,
+                            "month" => $request->dob_month,
+                            "year" => $request->dob_year
+                        ],
+                        "first_name" => $request->first_name,
+                        "last_name" => $request->last_name,
+                        "ssn_last_4" => $request->ssn_last_4,
+                        "type" => 'individual',
+                    ],
+                    "tos_acceptance" => [
+                        "date" => time(),
+                        "ip" => $request->ip()
+                    ]
+                ];
+
+               $response = $psi->createAccount($stripeAccountData, $user->id);
+
+		if (isset($response['error'])) {
+
+			// delete everything
+			$user->delete();
+			$confirmUser->delete();
+
+			$error = 'Sorry, there was an error on our end. Try back later.';
+
+			if ($response['user'] == True) {
+				$error = $response['message'];
+			}
+
+			return redirect('/register')->
+				withErrors([ $error ]);
+		}
+		else {
+
+		    //Sending confirmation mail to user
+		    Mail::send('emails.confirm',['token'=>$token],function($u) use ($user)
+		    {
+			$u->from('admin@jobgrouper.com');
+			$u->to($user->email);
+			$u->subject('Confirm Registration');
+		    });
+		}
+            }
         }
         else {
             die('Something went wrong. Please try again later.');
@@ -114,5 +193,10 @@ class RegistrateController extends Controller
                 return redirect('/');
             }
         }
+    }
+
+    public function getMoreVerification($id) {
+
+	    return view('pages.additional_verification');
     }
 }
