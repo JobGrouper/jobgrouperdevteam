@@ -849,7 +849,8 @@ class StripeService implements PaymentServiceInterface {
 		DB::table('stripe_customer_sources')->insert( 
 			['id' => $source_id,
 			'connected_customer_id' => $customer_id,
-			'last_four' => $last_four] );
+			'last_four' => $last_four,
+			'created_at' => time()] );
 	}
 
 	public function deleteCustomerSource() {
@@ -928,7 +929,8 @@ class StripeService implements PaymentServiceInterface {
 		DB::table('stripe_external_accounts')->insert([
 			'id' => $card_id,
 			'managed_account_id' => $account_id,
-			'last_four' => $card_last4
+			'last_four' => $card_last4,
+			'created_at' => time()
 			]);
 	}
 

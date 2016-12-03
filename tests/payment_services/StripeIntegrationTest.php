@@ -15,6 +15,7 @@ use App\Jobs\StripePlanActivation;
 use App\Jobs\StripeAccountUpdated;
 use App\Jobs\StripeInvoiceFailed;
 use App\Jobs\StripeInvoicePaid;
+use App\Jobs\EmailBuyers;
 
 class StripeIntegrationTest extends TestCase
 {

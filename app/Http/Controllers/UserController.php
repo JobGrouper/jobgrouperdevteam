@@ -17,9 +17,12 @@ class UserController extends Controller
 	$card = NULL;
 
 	if ($user->user_type == 'employee') {
+
+		// This query is probably wrong
+		// 	needs to be sorted by date
 		$card = DB::table('stripe_managed_accounts')->
 			join('stripe_external_accounts', 'stripe_managed_accounts.id', '=', 'stripe_external_accounts.managed_account_id')->
-			where('stripe_managed_accounts.user_id', $user->id);
+			where('stripe_managed_accounts.user_id', $user->id)->latest('stripe_external_accounts.created_at')->first();
 	}
 
         return view('pages.account', ['user' => $user, 'card' => $card]);
