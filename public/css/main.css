@@ -178,7 +178,8 @@ img {
     position: absolute;
     right: 40px;
     top: 30px;
-    float: right; }
+    float: right;
+      z-index: 1;}
     .slider_img .socials ul {
       list-style-type: none;
       display: inline-block; }
@@ -745,6 +746,12 @@ img {
       font-weight: 700;
       padding-bottom: 0;
       padding-top: 0; }
+    .forgotpass_form p span {
+      float: right;
+    }
+    .forgotpass_form p img {
+      cursor: pointer;
+    }
     .forgotpass_form button {
       text-align: center;
       margin-top: 20px;
@@ -1293,7 +1300,7 @@ img {
       border: none;
       background-color: #eee;
       padding: 10px;
-      width: 200px;
+      width: 135px;
       max-width: 500px;
       height: 40px;
       max-height: 120px;
@@ -1370,6 +1377,16 @@ img {
     .profile_portfolio .block .work_edit .longinput,
     .profile_portfolio .block .skill_edit .longinput {
       width: 415px;
+    }
+    .profile_portfolio .block .work_edit textarea {
+      resize: none;
+      border: none;
+      background-color: #eee;
+      padding: 10px;
+      height: 200px;
+      border-radius: 24px;
+      margin-right: 10px;
+      margin-bottom: 10px;
     }
     .profile_portfolio .block .edit_profile {
       position: absolute;

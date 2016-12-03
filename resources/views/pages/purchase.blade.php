@@ -3,6 +3,15 @@
 @section('title', 'Payment page')
 
 @section('content')
+    <div class="alert_window month">
+        <div class="alert_window__block">
+            <p></p>
+            <p>Monthly price of the purchase:  {{$job->salary}} USD</p>
+            <p>Markup:  {{$job->salary}} * 15% fee = {{$job->salary*0.15}} USD</p>
+            <p>Total:  {{$job->salary + ($job->salary*0.15)}} USD</p>
+            <div class="cancel"></div>
+        </div>
+    </div>
     <div class="forgotpass">
         <div class="forgotpass_form forgot_only">
             @if (session('message'))
@@ -13,6 +22,12 @@
                             {{ csrf_field() }}
                     </form>
 			-->
+                    <label>Summary</label>
+                    <p>Monthly price of the purchase: <span>${{number_format($job->salary, 2)}}</span></p>
+                    <p>Markup: <img src="{{asset('img/View/circle.png')}}" alt="alt"><span>${{number_format( $job->salary*0.15, 2)}}</span></p>
+                    <p>Total: <span>${{number_format( $job->salary + ($job->salary*0.15), 2)}}</span></p>
+		    <hr>
+
                 <form role="form" method="POST" action="{{ ($changeCard ? url('/change_credit_card') : url('/order')) }}">
                     {{ csrf_field() }}
 			<!--- SET CARD START -->
@@ -72,7 +87,7 @@
                     <input type="hidden" name="order_id" value="{{$order->id}}">
                     <div class="invalid_login"></div>
                     {!! ($changeCard ? false : ' <p>The first month will be paid.</p>') !!}
-                    <p>Payments for next months of work will be done automatically using this card.</p>
+                    <p>Payments for all subsequent months of work will be done automatically using this card.</p>
                     <!--<a href="{{url('card/create')}}">Add payment card</a>-->
                     <button>{{ ($changeCard ? 'Change credit card' : 'Purchase') }}</button>
                 </form>

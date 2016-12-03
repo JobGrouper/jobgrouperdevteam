@@ -142,6 +142,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::delete('/employeeRequest/{employee_request_id}', ['uses' => 'EmployeeRequestController@destroy']);
     Route::post('employeeExitRequest/{job_id}', 'EmployeeExitRequestController@store');
     Route::post('closeOrderRequest/{order_id}', 'CloseOrderRequestController@store');
+    Route::get('employeeRequestStatus/{id}', 'EmployeeRequestController@getStatus');
 
     Route::post('deactivateUser/{user_id}', ['middleware' => 'check_role', 'uses' => 'UserController@deactivate']);
     Route::post('deleteJob/{job_id}', ['middleware' => 'check_role', 'uses' => 'JobController@destroy']);
@@ -162,6 +163,9 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('stripe/account/updated', 'StripeWebhookController@onAccountUpdated');
 
 });
+
+
+Route::get('translate/{lang}', 'LocalizationController@SetLocalization');
 
 //Sandbox, for testing some features
 Route::get('sandbox', 'TestController@test');

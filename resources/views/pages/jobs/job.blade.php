@@ -5,13 +5,25 @@
 @section('content')
 
     <div class="view">
-        <div class="alert_window">
+        @if(!Auth::guest() && Auth::user()->user_type != 'employee')
+        <div class="alert_window month">
+            <div class="alert_window__block">
+                <p>{!! $pageTexts[13] !!}</p>
+                <p>Monthly price of the purchase: ${{number_format($job->salary, 2)}}</p>
+                <p>Markup: ${{number_format($job->salary, 2)}} * 15% fee = ${{number_format( $job->salary*0.15, 2)}}</p>
+                <p>Total: ${{number_format( $job->salary + ($job->salary*0.15), 2)}}</p>
+                <div class="cancel"></div>
+            </div>
+        </div>
+	@else
+        <div class="alert_window month">
             <div class="alert_window__block">
                 <p>{!! $pageTexts[13] !!}</p>
                 <h2>${{ number_format($job->monthly_salary * 12, 2)}}</h2>
                 <div class="cancel"></div>
             </div>
         </div>
+        @endif
 
         <div class="container">
             <div class="row">
@@ -49,8 +61,9 @@
 
                                 <div class="fb"><img src="{{asset('img/Profile/fb.png')}}" alt="alt">facebook.com/{{$employee->first_name.$employee->last_name}}</div>
 
-                                <div class="twitter"><img src="{{asset('img/View/twitter.png')}}" alt="alt">twitter.com/{{$employee->first_name.$employee->last_name}}</div>
+                                <div class="twitter"><img src="{{ asset('img/Profile/link.png') }}" alt="alt">linkedin.com/{{$employee->first_name.$employee->last_name}}</div>
 
+                                <div class="twitter"><img src="{{ asset('img/Profile/github.png')}}" alt="alt">github.com/{{$employee->first_name.$employee->last_name}}</div>
                                 <a href="/account/{{$employee->id}}">More details</a>
                                 @if($employeeStatus['status'] == 'leave')
                                     <span>Employee will leave this job at {{$employeeStatus['leave_date']}}</span>
@@ -144,8 +157,6 @@
                             @endif
 
                         </div>
-
-                        <p class="window"><span>Salary <img src="{{asset('img/View/circle.png')}}" alt="alt"></span></p>
 
                         <div class="recent">
 

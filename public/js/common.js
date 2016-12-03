@@ -246,8 +246,12 @@ $(document).ready(function() {
 		$(this).parent().find(".text_block").slideToggle();
 	});
 
-	$(".view_sidebar .window span, .view_sidebar .salary_info .purchase .block .amount").click(function() {
-		$(".alert_window").fadeIn("fast");
+	$(".view_sidebar .salary_info .purchase .block .amount, .forgotpass_form p img").click(function() {
+		$(".alert_window.month").fadeIn("fast");
+	});
+
+	$(".view_sidebar .window span, .forgotpass_form p img").click(function() {
+		$(".alert_window.year").fadeIn("fast");
 	});
 
 	$(".alert_window__block .cancel").click(function() {
@@ -272,7 +276,28 @@ $(document).ready(function() {
 				}
 				
 			});
+	/*
+	$("body").on("click", ".present", function() {
+		$(this).prev().click();
+
+		if($(this).prev().prev().val() !== 'present') {
+			$(this).prev().prev().val('present')
+		} else {
+			$(this).prev().prev().val('')
+		}
+
+		if ($("#present").prop("checked") === false) {
+			$("#present").prop("checked", true);
+		}
+		else if ($("#present").prop("checked") === true) {
+			$("#present").prop("checked", false);
+		}
+
+	});
+	*/
+
 	var userChoose = "buyer";
+
 	$(".buy_radio").click(function() {
 		if ($("#employee").attr("checked", false)) {
 			$("#buyer").attr("checked", true);
@@ -541,6 +566,7 @@ $(document).ready(function() {
   ///JOB
 
   var now = new Date;
+	console.log(now)
   $(".one_more button").click(function() {
   	var obj = "<div class='work_block'>\
                   <h2></h2>\
@@ -549,11 +575,13 @@ $(document).ready(function() {
                   <div class='edit_profile' title='Edit job'><img src='http://jobgrouper.com/img/Profile/edit_pencil.png' alt='alt'></div>\
                   <div class='work_edit'>\
                       <input type='text' class='longinput jobtitle' placeholder='Job title'>\
-                      <div class='date'>\
+                      <div class='date login'>\
                           <input type='text' class='from' maxlength='10' readonly placeholder='From'>\
                           <input type='text' class='to' maxlength='10' readonly placeholder='To'>\
+                          <input type='checkbox' id='present'/>\
+	  						<label for='present' class='present'>present</label>\
                       </div>\
-                      <input type='text' class='longinput addinfo' placeholder='Additional information'>\
+                      <textarea class='longinput addinfo' placeholder='Additional information'></textarea>\
                       <div class='work_edit__btn'>\
                           <button data-proid='1' class='workchange'>Save</button><button class='delete'>Delete job</button><button class='close'><img src='http://jobgrouper.com/img/Profile/cancel.png' alt='alt'></button><button class='close_edit'><img src='http://jobgrouper.com/img/Profile/cancel.png') alt='alt'></button>\
                       </div>\
@@ -564,22 +592,17 @@ $(document).ready(function() {
   	$(".work_block__wrapper .work_block:last-child .edit_profile").hide();
   	$(".work_block__wrapper .work_block:last-child .work_edit").find(".workchange").attr("data-proid", 1);
   	$(this).parent().hide();
+
   	$(".from").pickmeup({
-		  format  : 'Y-m-d',
+		  format  : 'm-d-Y',
 		  hide_on_select: true,
-		  render : function (date) {
-        if (date <= now) {
-            return {disabled : true, class_name : 'date-in-past'};
-        }
-        return {};
-    	} 
 		});
 
 		$(".to").pickmeup({
-		  format  : 'Y-m-d',
+		format  : 'm-d-Y',
 		   hide_on_select: true,
 		   render : function (date) {
-        if (date <= now) {
+        if (date <= new Date($(this).prev().val())) {
             return {disabled : true, class_name : 'date-in-past'};
         }
         return {};
@@ -657,25 +680,19 @@ $(".work_block__wrapper").on("click", ".edit_profile", function() {
 	$(this).parent().find(".delete").show();
 	$(this).parent().find(".workchange").attr("data-proid", 2);
 	$(".from").pickmeup({
-		  format  : 'Y-m-d',
+		format  : 'm-d-Y',
 		   hide_on_select: true,
-		   render : function (date) {
-        if (date <= now) {
-            return {disabled : true, class_name : 'date-in-past'};
-        }
-        return {};
-    	}
 		});
 
 	$(".to").pickmeup({
-	  format  : 'Y-m-d',
-	   hide_on_select: true,
-	   render : function (date) {
-        if (date <= now) {
-            return {disabled : true, class_name : 'date-in-past'};
-        }
-        return {};
-    	}
+		format  : 'm-d-Y',
+		hide_on_select: true,
+		render : function (date) {
+			if (date <= new Date($(this).prev().val())) {
+				return {disabled : true, class_name : 'date-in-past'};
+			}
+			return {};
+		}
 	});
 	$(this).parent().find(".work_edit").find(".jobtitle").val($(this).parent().find("h2").text());
 	$(this).parent().find(".work_edit").find(".from").val($(this).parent().find(".fromspan").text());
@@ -734,11 +751,13 @@ $(".one_more2 button").click(function() {
                   <div class='edit_profile' title='Edit education'><img src='http://jobgrouper.com/img/Profile/edit_pencil.png' alt='alt'></div>\
                   <div class='work_edit'>\
                       <input type='text' class='longinput jobtitle' placeholder='Education title'>\
-                      <div class='date'>\
+                      <div class='date login'>\
                           <input type='text' class='from' maxlength='10' readonly placeholder='From'>\
                           <input type='text' class='to' maxlength='10' readonly placeholder='To'>\
+                          <input type='checkbox' id='present'/>\
+	  					<label for='present' class='present'>present</label>\
                       </div>\
-                      <input type='text' class='longinput addinfo' placeholder='Additional information'>\
+                      <textarea class='longinput addinfo' placeholder='Additional information'></textarea>\
                       <div class='work_edit__btn'>\
                           <button data-proid='1' class='workchange'>Save</button><button class='delete'>Delete job</button><button class='close'><img src='http://jobgrouper.com/img/Profile/cancel.png' alt='alt'></button><button class='close_edit'><img src='http://jobgrouper.com/img/Profile/cancel.png') alt='alt'></button>\
                       </div>\
@@ -750,26 +769,20 @@ $(".one_more2 button").click(function() {
   	$(".education_block__wrapper .education_block:last-child .work_edit").find(".workchange").attr("data-proid", 1);
   	$(this).parent().hide();
   	$(".from").pickmeup({
-		  format  : 'Y-m-d',
+		format  : 'm-d-Y',
 		  hide_on_select: true,
-		  render : function (date) {
-        if (date <= now) {
-            return {disabled : true, class_name : 'date-in-past'};
-        }
-        return {};
-    	}
 		});
 
-		$(".to").pickmeup({
-		  format  : 'Y-m-d',
-		  hide_on_select: true,
-		  render : function (date) {
-        if (date <= now) {
-            return {disabled : true, class_name : 'date-in-past'};
-        }
-        return {};
-    	}
-		});
+	$(".to").pickmeup({
+		format  : 'm-d-Y',
+		hide_on_select: true,
+		render : function (date) {
+			if (date <= new Date($(this).prev().val())) {
+				return {disabled : true, class_name : 'date-in-past'};
+			}
+			return {};
+		}
+	});
   	$(".education_block__wrapper .education_block .workchange").click(function() {
 	  	if ($(this).parents(".work_edit").find(".jobtitle").val().length > 0 && $(this).parents(".work_edit").find(".from").val().length > 0 && $(this).parents(".work_edit").find(".to").val().length > 0) {
 	  		$(this).parents(".education_block").find("h2").text($(this).parents(".work_edit").find(".jobtitle").val());
@@ -842,25 +855,19 @@ $(".education_block__wrapper").on("click", ".edit_profile", function() {
 	$(this).parent().find(".delete").show();
 	$(this).parent().find(".workchange").attr("data-proid", 2);
 	$(".from").pickmeup({
-		  format  : 'Y-m-d',
+		format  : 'm-d-Y',
 		  hide_on_select: true,
-		  render : function (date) {
-        if (date <= now) {
-            return {disabled : true, class_name : 'date-in-past'};
-        }
-        return {};
-    	}
 		});
 
 	$(".to").pickmeup({
-	  format  : 'Y-m-d',
-	  hide_on_select: true,
-	  render : function (date) {
-        if (date <= now) {
-            return {disabled : true, class_name : 'date-in-past'};
-        }
-        return {};
-    	}
+		format  : 'm-d-Y',
+		hide_on_select: true,
+		render : function (date) {
+			if (date <= new Date($(this).prev().val())) {
+				return {disabled : true, class_name : 'date-in-past'};
+			}
+			return {};
+		}
 	});
 	$(this).parent().find(".work_edit").find(".jobtitle").val($(this).parent().find("h2").text());
 	$(this).parent().find(".work_edit").find(".from").val($(this).parent().find(".fromspan").text());
@@ -1203,6 +1210,21 @@ $(".view_sidebar .buttons .apply").on("click", function() {
 				if (response.status == 0) {
 					$(".view_sidebar .buttons").hide();
 					$(".view_sidebar .statebuttons .pending").show();
+					var jobIdInterval = response.request_id;
+					console.log(jobIdInterval);
+					setInterval(function() {
+						$.get('/api/employeeRequestStatus/' + jobIdInterval, function(res) {
+							console.log(res);
+							if (res.status == "approved") {
+								$(".view_sidebar .statebuttons .pending").hide();
+								$(".view_sidebar .statebuttons .approved").show();
+							}
+							if (res.status == "rejected") {
+								$(".view_sidebar .statebuttons .pending").hide();
+								$(".view_sidebar .statebuttons .rejected").show();
+							}
+						})
+					},1000)
 				}
 			}
 		});

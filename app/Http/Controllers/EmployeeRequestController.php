@@ -68,6 +68,7 @@ class EmployeeRequestController extends Controller
         }
 
 
+        $responseData['request_id'] = $EmployeeRequest->id;
         $responseData['error'] = false;
         $responseData['status'] = 0;
         $responseData['info'] = 'Request successfully created';
@@ -191,6 +192,17 @@ class EmployeeRequestController extends Controller
 
         return response($responseData, 200);
 
+    }
+
+    public function getStatus($id){
+        $responseData = array();
+
+        $employeeRequest = EmployeeRequest::findOrFail($id);
+
+        $responseData['error'] = false;
+        $responseData['status'] = $employeeRequest->status;
+
+        return response($responseData, 200);
     }
 
 }

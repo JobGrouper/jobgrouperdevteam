@@ -7,6 +7,10 @@
         <div class="list_wrapper">
             @foreach($cards as $card)
             <div class="list_wrapper__item" id="item_{{$card->id}}">
+                <div class="apr_rej">
+                    <button type="submit" class="approve">Approve</button>
+                    <button type="submit" class="reject">Reject</button>
+                </div>
                 <h2>{{$card->title}}</h2>
                 <p>{{$card->description}}</p>
                 <div class="item_info">
@@ -15,7 +19,7 @@
                             @if($card->sales_count > 0)
                                 <a href="/admin/orders/{{$card->id}}">
                             @endif
-                                Max clients: {{$card->max_clients_count}}/{{$card->sales_count}}
+                                Max clients: {{$card->sales_count}}/{{$card->max_clients_count}}і
                             @if($card->sales_count > 0)
                                 </a>
                             @endif
@@ -46,7 +50,7 @@
         $('.deleteCardButton').click(function () {
             if(confirm("Are you sure? All data related with this card will be deleted! (Orders, Requests e.t.c...)")){
                 var card_id = $(this).attr('data-card_id');
-                $.post('{{ Request::root() }}/api/deleteJob/' + card_id, {}, function (data) {
+                $.post('/api/deleteJob/' + card_id, {}, function (data) {
                     switch(data){
                         case 'success':
                             $('#item_' + card_id).remove();

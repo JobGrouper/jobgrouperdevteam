@@ -121,8 +121,7 @@
 
                                         <div class="block orange">
 
-                                            <span class="dole">{{$job->sales_count}}
-                                                /{{$job->max_clients_count}}</span>
+                                            <span class="dole">{{$job->sales_count}}/{{$job->max_clients_count}}</span>
 
                                             <span class="purchased">Purchased</span>
 
@@ -148,13 +147,13 @@
 
                                         <ul>
 
-                                            <li><a href="https://uk-ua.facebook.com/" target="_blank"><i
+                                            <li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A//jobgrouper.com/job/{{$job->id}}" target="_blank"><i
                                                             class="fa fa-facebook"></i></a></li>
 
-                                            <li><a href="https://twitter.com/" target="_blank"><i
+                                            <li><a href="https://twitter.com/home?status=https%3A//jobgrouper.com/job/{{$job->id}}" target="_blank"><i
                                                             class="fa fa-twitter"></i></a></li>
 
-                                            <li><a href="https://plus.google.com/" target="_blank"><i
+                                            <li><a href="https://plus.google.com/share?url=https%3A//jobgrouper.com/job/{{$job->id}}" target="_blank"><i
                                                             class="fa fa-google-plus"></i></a></li>
 
                                         </ul>
