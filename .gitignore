@@ -8,12 +8,16 @@
 /public/storage/logs
 /public/images/jobs/*.png
 /public/images/users/*.png
+public/error_log
 Homestead.yaml
 Homestead.json
 error_log
 .env
 *.swp
+*.swo
 *~
 *.un*
 git-help.txt
 Vagrantfile
+app/Http/Controllers/TestController.php
+composer.lock

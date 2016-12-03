@@ -35,7 +35,7 @@
 
                         @if(count($job->sales()->get()) > 0)
 
-                            @foreach($job->sales()->where('status', 'in_progress')->get() as $order)
+                            @foreach($job->sales()->where('status', 'in_progress')->orWhere('status', '=', 'pending')->get() as $order)
 
                                 <?php
 
@@ -74,7 +74,7 @@
                                     @if($order->status == 'closed')
                                         <button class="Request">Order closed</button>
                                     @else
-                                        <button class="cancelbtn">Close job</button>
+                                        <button class="request_buyer_removal cancelbtn" data-order_id="{{$order->id}}">Report Buyer</button>
                                     @endif
                                 </div>
 
@@ -121,7 +121,7 @@
 
                                 @if(count($job->sales()->get()) > 0)
 
-                                    @foreach($job->sales()->where('status', 'in_progress')->get() as $order)
+                                    @foreach($job->sales()->whereIn('status', ['in_progress', 'pending'])->get() as $order)
 
                                         <?php
 
@@ -160,7 +160,7 @@
                                             @if($order->status == 'closed')
                                                 <button class="Request">Order closed</button>
                                             @else
-                                                <button class="cancelbtn">Close job</button>
+                                                <button class="request_buyer_removal cancelbtn" data-order_id="{{$order->id}}">Report Buyer</button>
                                             @endif
                                         </div>
 

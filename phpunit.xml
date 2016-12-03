@@ -13,6 +13,11 @@
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
+    <testsuites>
+		<testsuite name="payment_services">
+			<directory suffix="Test.php">./tests/payment_services</directory>
+		</testsuite>
+    </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./app</directory>

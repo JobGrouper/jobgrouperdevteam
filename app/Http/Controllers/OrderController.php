@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+
 use App\CreditCard;
 use App\Job;
 use App\Sale;
 use Illuminate\Http\Request;
+use App\Interfaces\PaymentServiceInterface;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
@@ -98,7 +101,7 @@ class OrderController extends Controller
      * Closing the order
      * Originator can be seller ot buyer
      */
-    public function close(Request $request){
+    public function close(Request $request, PaymentServiceInterface $psi){
         $responseData= array();
 
         $order = Sale::find($request->order_id);
@@ -111,6 +114,24 @@ class OrderController extends Controller
             $job->make_hot();
         }
 
+	// Delete Stripe Customer if user signed on
+	// while an employee was active
+	//
+	// (Not completely correct)
+	// 	- what about cases where employee leaves?
+	// 	- or when there was no employee
+	//
+	if ($job->employee_id) {
+
+		// get user who is closing order
+		//   and managed account
+		$user = DB::table('users')->where('id', $order->buyer_id)->first();
+		$seller_record = DB::table('stripe_managed_accounts')->where('user_id', $job->employee_id)->first();
+
+		// Delete payment service records
+		$response = $psi->deleteCustomer($user, $seller_record->id);
+	}
+
         $responseData['error'] = false;
         $responseData['status'] = 0;
         $responseData['info'] = 'Order successfully closed';
@@ -121,7 +142,7 @@ class OrderController extends Controller
 
 
 
-    public function store(Request $request){
+    public function store(Request $request, PaymentServiceInterface $psi){
         $user = Auth::user();
         //Это было для сохранения карт и авто-оплат
         //$input = $request->only(['credit_card_id', 'job_id']);
@@ -134,14 +155,23 @@ class OrderController extends Controller
         $input = $request->only(['job_id']);
         $job = Job::find($input['job_id']);
 
+	$input['status'] = 'pending';
+
         $order = $user->orders()->create($input);
+
+
+	// Send email to user 
+	Mail::send('emails.buyer_job_ordered', ['job_name' => $job->title], function($u) use ($user, $job)
+	{
+	    $u->from('admin@jobgrouper.com');
+	    $u->to($user->email);
+	    $u->subject('Your order for '. $job->title . ' has gone through!');
+	});
 
         //if card has enough count of buyers and sellers the work begins
         if($job->sales_count == $job->max_clients_count && null != $job->employee_id){
-            $job->work_start();
+            //$job->work_start();
         }
-
-
 
         if(isset($order->id)){
             return redirect('/my_orders');
@@ -153,12 +183,72 @@ class OrderController extends Controller
     }
 
 
-    public function update(Request $request){
+    public function update(Request $request, PaymentServiceInterface $psi){
+
+	$this->validate($request, [
+		    'card_number' => 'required',
+		    'cvc' => 'required',
+		    'exp_month' => 'required|integer',
+		    'exp_year' => 'required|size:4'
+		    ]);
+
         $user = Auth::user();
-        $creditCard = CreditCard::find($request->credit_card_id);
+        //$creditCard = CreditCard::find($request->credit_card_id);
         $order = Sale::find($request->order_id);
         $job = $order->job()->first();
 
+	// Retrieve employee account
+	$employee_record = DB::table('stripe_managed_accounts')->where(
+		'user_id', '=', $job->employee_id)->first();
+
+	$account = $psi->retrieveAccount($employee_record->id);
+
+	// Create credit card token
+	$token = $psi->createCreditCardToken(
+		array(
+			'number' => $request->card_number,
+			'exp_month' => $request->exp_month,
+			'exp_year' => $request->exp_year,
+			'cvc' => $request->cvc
+		), 'card', true);
+
+	if (!isset($token['id'])) {
+
+		// redirect
+		return redirect('purchase/' . $order->id)->
+			withErrors([ $token['message'] ]);
+	}
+
+	// Create customer
+	$customer = $psi->createCustomer($user, array(
+		'email' => $user->email), $account['id']);
+
+	if (!isset($customer['id'])) {
+
+		// redirect
+		return redirect('purchase/' . $order->id)->
+			withErrors(['Server error. Try again later.']);
+	}
+
+	$source = $psi->updateCustomerSource($user, $token, $account['id']);
+	
+	if (isset($source['id'])) {
+	  $order->status = 'in_progress';
+	  $order->card_set = True;
+          $order->save();
+	}
+	else {
+	  die('Payment saving failed!');
+	}
+
+        //if card has enough count of buyers and sellers the work begins
+        if($job->sales_count == $job->max_clients_count && null != $job->employee_id){
+
+        	$employee = $job->employee()->first();
+		$psi->createPlan($employee, $job);
+        }
+
+	/*
         if(!isset($creditCard->id)){
             die('Credit Card not found');
         }
@@ -167,12 +257,14 @@ class OrderController extends Controller
         if($creditCard->owner_id != $user->id){
             die('it is not your card');
         }
+	 */
 
 
 
         //Assign credit card to order
-        $order->credit_card_id = $creditCard->id;
+        //$order->credit_card_id = $creditCard->id;
 
+	/*
         //Get payment for first month
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
@@ -229,7 +321,7 @@ class OrderController extends Controller
             die('Payment saving failed!');
         }
 
-        $order->save();
+	 */
 
         return redirect('/my_orders');
     }

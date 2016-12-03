@@ -62,6 +62,7 @@
                             <p>${{$job->salary}}/month</p>
 
                             {{--<p class="month">work {{$order->created_at->diffInMonths() + 1}} month{{(($order->created_at->diffInMonths() + 1) > 1 ? 's' : '') }}</p>--}}
+				<!--
                             <p class="month">
                                 @if($order->paid_to)
                                     Paid to {{$order->paid_to}}
@@ -70,6 +71,7 @@
                                     This job will time out in {{Carbon\Carbon::now()->diffInMinutes(Carbon\Carbon::parse($order->updated_at)->addMinutes(5)) }} minutes
                                 @endif
                             </p>
+				-->
                         </div>
 
                         {{--@if($closeRequest)--}}
@@ -79,16 +81,19 @@
                         @else
                             {{--<a href="/purchase/{{$order->id}}"><button class="purchasebtn">Purchase for {{ date('M', mktime(0, 0, 0, $order->month_to_pay, 1, 2000))}}</button></a>--}}
 
-                            @if($order->credit_card_id)
-                                <p class="credit_card"><span class="wrap"><span style="font-weight: 700">Credit Card:</span> <span class="number">{{$order->credit_card()->first()->number}}</span></span><a href="/change_credit_card/{{$order->id}}">Change card</a></p>
-                            @else
+                            @if($order->card_set)
+                                <!--<p class="credit_card"><span class="wrap"><span style="font-weight: 700">Credit Card:</span> <span class="number"></span></span><a href="/change_credit_card/{{$order->id}}">Change card</a></p>-->
+                            @elseif(!$order->card_set && $job->employee_id == NULL)
+                                <button class="purchasebtn">Waiting on Employee</button>
+			    @elseif(!$order->card_set && $job->employee_id != NULL)
                                 <a href="/purchase/{{$order->id}}"><button class="purchasebtn">Purchase</button></a>
                             @endif
 
                             <form role="form" method="POST" action="{{ url('/order/close/' . $order->id ) }}">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="order_id" value="{{$order->id}}">
-                                <a class="popup-with-move-anim" href="#small-dialog4"><button type="submit" class="cancelbtn" data-order_id="{{$order->id}}">Close order</button><button class="Request2">Order closed</button></a>
+                               <!-- <a class="popup-with-move-anim" href="#small-dialog4"><button type="submit" class="close_order_btn cancelbtn" data-order_id="{{$order->id}}">Close order</button><button class="Request2">Order closed</button></a> -->
+				<button type="submit" class="close_order_btn cancelbtn" data-order_id="{{$order->id}}">Close order</button><button class="Request2">Order closed</button>
                             </form>
                             {{--<button class="Request">Request Sent</button>--}}
 

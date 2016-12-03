@@ -9,21 +9,21 @@
         <div class="alert_window month">
             <div class="alert_window__block">
                 <p>{!! $pageTexts[13] !!}</p>
-                <p>Monthly price of the purchase: {{$job->salary}} USD</p>
-                <p>Markup: {{$job->salary}} * 15% fee = {{$job->salary*0.15}} USD</p>
-                <p>Total: {{$job->salary + ($job->salary*0.15)}} USD</p>
+                <p>Monthly price of the purchase: ${{number_format($job->salary, 2)}}</p>
+                <p>Markup: ${{number_format($job->salary, 2)}} * 15% fee = ${{number_format( $job->salary*0.15, 2)}}</p>
+                <p>Total: ${{number_format( $job->salary + ($job->salary*0.15), 2)}}</p>
+                <div class="cancel"></div>
+            </div>
+        </div>
+	@else
+        <div class="alert_window month">
+            <div class="alert_window__block">
+                <p>{!! $pageTexts[13] !!}</p>
+                <h2>${{ number_format($job->monthly_salary * 12, 2)}}</h2>
                 <div class="cancel"></div>
             </div>
         </div>
         @endif
-
-        <div class="alert_window year">
-            <div class="alert_window__block">
-                <p>{!! $pageTexts[13] !!}</p>
-                <h2>Salary: ${{$job->yearly_salary}} USD</h2>
-                <div class="cancel"></div>
-            </div>
-        </div>
 
         <div class="container">
             <div class="row">
@@ -83,15 +83,7 @@
 
                                 <div class="block bordered">
 
-                                    <span class="amount">
-                                        @if(Auth::guest())
-                                            ${{$job->salary}}/mo
-                                        @elseif(!Auth::guest() && Auth::user()->user_type != 'employee')
-                                            ${{$job->monthly_price}}/mo
-                                        @else
-                                            ${{$job->monthly_salary}}/mo
-                                        @endif
-                                    </span>
+                                    <span class="amount">${{(isset($user) && $user->user_type == 'employee' ? number_format($job->monthly_salary, 2) : number_format($job->monthly_price, 2))}}/mo</span>
 
                                 </div>
 
@@ -149,8 +141,10 @@
                             @else
                                 @if($jobPaid)
                                     <span class="approved">YOU HAVE ORDERED THIS JOB</span>
-                                @elseif($jobOrdered)
+                                @elseif($jobOrdered && $job->employee_id != NULL)
                                     <a href="/purchase/{{ $user_order_info->id }}"><span class="approved need">PLEASE COMPLETE PAYMENT</span></a>
+                                @elseif($jobOrdered && $job->employee_id == NULL)
+                                    <span class="approved need">Waiting For Employee</span>
                                 @else
                                     {{--Это было для сохранения карт и авто-оплат--}}
                                     {{--<a href="/purchase/{{$job->id}}"><button>Buy</button></a>--}}
@@ -164,9 +158,6 @@
 
                         </div>
 
-                        @if(!Auth::guest() && Auth::user()->user_type == 'employee')
-                            <p class="window"><span>Salary <img src="{{asset('img/View/circle.png')}}" alt="alt"></span></p>
-                        @endif
                         <div class="recent">
 
                             @if(count($orders) > 0)

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\EmailBuyers;
+
 use App\EmployeeExitRequest;
 use App\EmployeeRequest;
+use App\Interfaces\PaymentServiceInterface;
 use App\Job;
 use App\User;
 use Auth;
@@ -70,12 +73,23 @@ class EmployeeRequestController extends Controller
         $responseData['status'] = 0;
         $responseData['info'] = 'Request successfully created';
 
-        Mail::send('emails.new_employee_request',['job_name'=>$job->title, 'employee_name'=>$employee->full_name],function($u) use ($employee)
+	Mail::send('emails.admin_new_job_application',['job_name'=>$job->title, 
+		'employee_name'=>$employee->full_name, 'id' => $employee->id ], function($u) use ($employee, $job)
         {
             $u->from('admin@jobgrouper.com');
-            $u->to($employee->email);
-            $u->subject('New Employee request!');
+            $u->to('admin@jobgrouper.com');
+            $u->subject('Someone has applied for ' . $job->title);
         });
+
+	/*
+	Mail::send('emails.admin_new_job_application',['job_name'=>$job->title, 
+		'employee_name'=>$employee->full_name, 'id' => $employee->id ], function($u) use ($employee, $job)
+        {
+            $u->from('admin@jobgrouper.com');
+            $u->to('admin@jobgrouper.com');
+            $u->subject('Someone has applied for ' . $job->title);
+        });
+	 */
 
         return response($responseData, 200);
 
@@ -88,26 +102,27 @@ class EmployeeRequestController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
 
-    public function approve(Request $request){
+    public function approve(Request $request, PaymentServiceInterface $psi){
         $employeeRequest = EmployeeRequest::where('id', '=', $request->employee_request_id)->first();
         if($employeeRequest->status != 'approved'){
             $employeeRequest->status = 'approved';
-            $employeeRequest->save();
+
             $job = $employeeRequest->job()->first();
-
-
-            //Есди в работе есть работник, который покидает работу, делаем нового заявщика потенциальным
+            $employee  = $employeeRequest->employee()->first();
+            //If job already has a seller (employee) but he had make request to leave this job, make new seller as potential
             if($job->employee_status['status'] == 'leave'){
                 $job->potential_employee_id = $employeeRequest->employee_id;
             }
             else{
                 $job->employee_id = $employeeRequest->employee_id;
+                $psi->createPlan($employee, $job, true);
             }
 
-
-            //if card has enough count of buyers and sellers the work begins
+            $employeeRequest->save();
+            //if job has enough count of buyers and sellers the work begins
             if($job->sales_count == $job->max_clients_count){
-                $job->work_start();
+                //$job->work_start();
+		$psi->createPlan($employee, $job);
             }
             $job->save();
 
@@ -118,6 +133,9 @@ class EmployeeRequestController extends Controller
                 $u->to($employee->email);
                 $u->subject('Request approved!');
             });
+
+	    // Email buyers
+	    dispatch( new EmailBuyers($employee, $job, 'employee_approved') ); 
         }
         return redirect('/admin/employee_requests/'.$job->id);
     }

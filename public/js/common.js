@@ -19,10 +19,23 @@ $(document).ready(function() {
 		
 	});
 
+	$(".profile_text #bank_add").click(function() {
+		$(this).hide();
+		$(".profile_text #debit_add").hide();
+		$(".profile_text .bank_form.bank").fadeIn();
+	});
 
+	$(".profile_text .bank_form h2 img").click(function() {
+		$(this).parents('.bank_form').hide();
+		$(".profile_text #bank_add").fadeIn();
+		$(".profile_text #debit_add").fadeIn();
+	});
 
-
-
+	$(".profile_text #debit_add").click(function() {
+		$(this).hide();
+		$(".profile_text #bank_add").hide();
+		$(".profile_text .bank_form.debit").fadeIn();
+	});
 
 	// $(".job_item h1").click(function() {
 	// 	$(this).parents(".job_item").find(".jobs_acc").slideToggle("fast");
@@ -95,55 +108,71 @@ $(document).ready(function() {
 	var ratePersonId;
 	var orderCloseId;
 	var selfId;
-	$(".cancelbtn").click(function() {
+	$(".request_buyer_removal").click(function(e) {
+
+		// Stop form submission
+		e.preventDefault();
+
 		$("#small-dialog4 .stars .yellow").width(0);
 		var order_id = $(this).attr('data-order_id');
 		orderCloseId = $(this).parents(".workers_item").attr("data-id");
-		selfId = $(this);
+		var selfId = $(this);
+
+		//$(this).parent().removeClass("popup-with-move-anim").attr("href", "");
+		ratePersonId = $(this).parents(".workers_item").attr("data-id");
+		if (confirm("Are you sure you want to report this buyer?")){
+
+			var obj = {
+				score: starLength,
+				comment: $("#small-dialog4 textarea").val()
+			};
+
+			console.log(obj);
+
+			$.ajax({
+				type: "POST",
+				url: "/api/closeOrderRequest/" + ratePersonId,
+				datatype: "json",
+				success: function(response) {
+					//console.log(response);
+					//$.magnificPopup.close();
+
+					$( selfId ).text('Reported');
+
+					if (response.error == false) {
+						selfId.parent().parent().submit();
+						// $.ajax({
+						// 	type: "POST",
+						// 	url: "/api/closeOrderRequest/" + orderCloseId,
+						// 	dataType: "json",
+						// 	success: function(response) {
+						// 		console.log(response);
+						// 		if (response.error == false) {
+						// 			console.log(123);
+						// 			selfId.parents(".workers_item").find(".purchasebtn").hide();
+						// 			selfId.hide();
+						// 			selfId.next().fadeIn("fast");
+						// 			alert("You have declined your participation in this project. Your request has been sent successfully to the administrator!");
+						// 		} else {
+						// 			alert(response.info);
+						// 		}
+						// 	}
+						// });
+					}
+				}
+			});
+		};
+
+		/*
 		if($('#block_' + order_id).attr('data-hasEmployee') != 0){
 			$("#small-dialog4 .header .name").text($(this).parents(".workers_item").find(".rating_name span").text());
 			ratePersonId = $(this).parents(".workers_item").attr("data-hasemployee");
 		}
 		else{
-			$(this).parent().removeClass("popup-with-move-anim").attr("href", "");
-			ratePersonId = $(this).parents(".workers_item").attr("data-id");
-			if (confirm("Are you sure you want to close this order?")){
-				var obj = {
-				score: starLength,
-				comment: $("#small-dialog4 textarea").val()
-				}
-				console.log(obj);
-				$.ajax({
-					type: "POST",
-					url: "/api/closeOrderRequest/" + ratePersonId,
-					datatype: "json",
-					success: function(response) {
-						console.log(response);
-						$.magnificPopup.close();
-						if (response.error == false) {
-							selfId.parent().parent().submit();
-							// $.ajax({
-							// 	type: "POST",
-							// 	url: "/api/closeOrderRequest/" + orderCloseId,
-							// 	dataType: "json",
-							// 	success: function(response) {
-							// 		console.log(response);
-							// 		if (response.error == false) {
-							// 			console.log(123);
-							// 			selfId.parents(".workers_item").find(".purchasebtn").hide();
-							// 			selfId.hide();
-							// 			selfId.next().fadeIn("fast");
-							// 			alert("You have declined your participation in this project. Your request has been sent successfully to the administrator!");
-							// 		} else {
-							// 			alert(response.info);
-							// 		}
-							// 	}
-							// });
-						}
-					}
-				});
-			};
+
+			// AJAX CALL WOULD GO HERE
 		}
+		*/
 	});
 
 	$("#small-dialog4 .send").on("click", function() {
@@ -151,6 +180,9 @@ $(document).ready(function() {
 			score: starLength,
 			comment: $("#small-dialog4 textarea").val()
 		}
+
+		ratePersonId = $(this).parents(".workers_item").attr("data-id");
+
 		console.log(obj);
 		$.ajax({
 			type: "POST",
@@ -244,6 +276,7 @@ $(document).ready(function() {
 				}
 				
 			});
+	/*
 	$("body").on("click", ".present", function() {
 		$(this).prev().click();
 
@@ -261,11 +294,16 @@ $(document).ready(function() {
 		}
 
 	});
-	var userChoose;
+	*/
+
+	var userChoose = "buyer";
+
 	$(".buy_radio").click(function() {
 		if ($("#employee").attr("checked", false)) {
 			$("#buyer").attr("checked", true);
 			userChoose = "buyer";
+			$(".sellers_only").hide()
+			$(".buyers_only").show()
 			console.log(userChoose);
 		} else {
 			$("#buyer").attr("checked", false);
@@ -281,6 +319,8 @@ $(document).ready(function() {
 	$(".employee_radio").click(function() {
 		if ($("#buyer").attr("checked", false)) {
 			$("#employee").attr("checked", true);
+			$(".sellers_only").show()
+			$(".buyers_only").hide()
 			userChoose = "employee";
 			console.log(userChoose);
 		} else {
@@ -1246,24 +1286,29 @@ $(".forgot_only button").on("click", function(event) {
 ///////// MY JOBS
 
 
-$(".myjobs .workers_item .cancelbtn").on("click", function() {
+$(".myjobs .workers_item .close_order_btn").on("click", function(e) {
+
+	// Prevent form submission
+	e.preventDefault();
+
 	var order_id = $(this).attr("data-order_id");
 	var self = $(this);
-	$.ajax({
-		type: "POST",
-		url: "/api/order/close/" + order_id,
-		dataType: "json",
-		success: function(response) {
-			console.log(response);
-			if (response.error == false) {
-				console.log(123);
-				self.parent().hide();
-				alert("You have declined your participation in this project. Your request has been sent successfully to the administrator!");
-			} else {
-				alert(response.info);
+	if (confirm("Are you sure you want to close this order?")){
+
+		$.ajax({
+			type: "POST",
+			url: "/api/order/close/" + order_id,
+			dataType: "json",
+			success: function(response) {
+				console.log(response);
+				if (response.error == false) {
+					self.parent().hide();
+				} else {
+					alert(response.info);
+				}
 			}
-		}
-	});
+		});
+	}
 });
 
 ////// CARD INFO

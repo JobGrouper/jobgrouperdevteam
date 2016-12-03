@@ -2,21 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\PaymentServiceInterface;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-
-use PayPal\Api\Amount;
-use PayPal\Api\CreditCard;
-use PayPal\Api\Details;
-use PayPal\Api\FundingInstrument;
-use PayPal\Api\Item;
-use PayPal\Api\ItemList;
-use PayPal\Api\Payer;
-use PayPal\Api\Payment;
-use PayPal\Api\Transaction;
 use URL;
 
 class CreditCardController extends Controller
@@ -26,97 +17,86 @@ class CreditCardController extends Controller
         return view('pages.account.card');
     }
     
-    public function store(Request $request){
+    public function store(Request $request, PaymentServiceInterface $psi){
         $user = Auth::user();
-        $input = $request->only(['first_name', 'last_name', 'card_number', 'end_month', 'end_year', 'cvv']);
+        if($user->user_type == 'employee'){
+            $cardData = [
+                "number" => $request->card_number,
+                "exp_month" => $request->end_month,
+                "exp_year" => $request->end_year,
+                "cvc" => $request->cvv,
+            ];
 
-        $apiContext = new \PayPal\Rest\ApiContext(
-            new \PayPal\Auth\OAuthTokenCredential(
-                env('PAYPAL_CLIENT_ID'),     // ClientID
-                env('PAYPAL_CLIENT_SECRET')      // ClientSecret
-            )
-        );
+            $token = $psi->createCreditCardToken($cardData, true);
 
-	$apiContext->setConfig(array('mode' => env('PAYPAL_API_MODE')));
-
-        $card = new CreditCard();
-        $card ->setType($this->cardType($input['card_number']))
-            ->setNumber($input['card_number'])
-            ->setExpireMonth($input['end_month'])
-            ->setExpireYear($input['end_year'])
-            ->setCvv2($input['cvv'])
-            ->setFirstName($input['first_name'])
-            ->setLastName($input['last_name']);
-
-
-        try {
-            $card->create($apiContext);
-        } catch (\Exception $ex) {
-            dd($ex);
-            //dd(json_decode($ex->getData()->me, true));
-            Session::flash('message_error', json_decode($ex->getData())->message);
-            return redirect('/card/create');
+            $psi->createExternalAccount($user, $token);
+        }
+        else{
+            die('Service unavailable for buyers now');
         }
 
 
-        $card = $user->credit_cards()->create([
-            'card_id' => $card->id,
-            'valid_until' => $card->valid_until,
-            'type' => $card->type,
-            'number' => $card->number,
-            'expire_month' => $card->expire_month,
-            'expire_year' => $card->expire_year,
-            'first_name' => $card->first_name,
-            'last_name' => $card->last_name
-        ]);
-
-        if(isset($card->id)){
-            if(Session::get('continuePurchaseUrl')){
-                return redirect(Session::get('continuePurchaseUrl'));
-            }
-            else{
-                Session::flash('message_success', 'Card has been successfully added to your account!');
-                return redirect('/card/create');
-            }
+        if(Session::get('continuePurchaseUrl')){
+            return redirect(Session::get('continuePurchaseUrl'));
+        }
+        else{
+            Session::flash('message_success', 'Card has been successfully added to your account!');
+            return redirect('/card/create');
         }
     }
 
+    public function storeEmployeePaymentMethod(Request $request, PaymentServiceInterface $psi) {
 
-    /**
-     * Return credit card type if number is valid
-     * @return string
-     * @param $number string
-     **/
-    private function cardType($number)
-    {
-        $number=preg_replace('/[^\d]/','',$number);
-        if (preg_match('/^3[47][0-9]{13}$/',$number))
-        {
-            return 'amex';
-        }
-        elseif (preg_match('/^3(?:0[0-5]|[68][0-9])[0-9]{11}$/',$number))
-        {
-            return 'Diners Club';
-        }
-        elseif (preg_match('/^6(?:011|5[0-9][0-9])[0-9]{12}$/',$number))
-        {
-            return 'discover';
-        }
-        elseif (preg_match('/^(?:2131|1800|35\d{3})\d{11}$/',$number))
-        {
-            return 'jcb';
-        }
-        elseif (preg_match('/^5[1-5][0-9]{14}$/',$number))
-        {
-            return 'mastercard';
-        }
-        elseif (preg_match('/^4[0-9]{12}(?:[0-9]{3})?$/',$number))
-        {
-            return 'visa';
-        }
-        else
-        {
-            return 'Unknown';
-        }
+	if (!isset($request->account_type)) {
+		die('No account type set');
+	}
+
+	if ($request->account_type == 'bank_account') {
+
+	    $this->validate($request, [
+		    'account_holder_name' => 'required',
+		    'routing_number' => 'required',
+		    'account_number' => 'required'
+		    ]);
+	}
+	else if ($request->account_type == 'debit') {
+
+	    $this->validate($request, [
+		    'number' => 'required',
+		    'cvc' => 'required',
+		    'exp_month' => 'required|size:2',
+		    'exp_year' => 'required|size:4'
+		    ]);
+	}
+
+	$user = Auth::user();
+
+	$accountData = NULL;
+
+	if ($request->account_type == 'bank_account') {
+
+		$accountData = array(
+			"account_holder_name" => $request->account_holder_name,
+			"account_holder_type" => "individual",
+			"routing_number" => $request->routing_number,
+			"account_number" => $request->account_number
+		);
+	}
+	else if ($request->account_type == 'card') {
+
+		$accountData = array(
+			"number" => $request->number,
+			"exp_month" => $request->exp_month,
+			"exp_year" => $request->exp_year,
+			"cvc" => $request->cvc,
+		);
+	}
+
+        $token = $psi->createCreditCardToken($accountData, $request->account_type, true);
+
+	$response = $psi->createExternalAccount($user, $token);
+
+	// Back to account page
+        return redirect('/account');
     }
 }
