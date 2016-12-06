@@ -39,6 +39,7 @@ Route::post('password/reset', 'Auth\PasswordController@postReset');
 Route::get('social_login/{provider}', 'SocialAuthController@login');
 Route::get('social_login/callback/{provider}', 'SocialAuthController@callback');
 Route::get('account/additional_info/{id}', 'RegistrateController@getMoreVerification');
+Route::put('stripe_verification_request/{id}', 'StripeVerificationRequestsController@update');
 Route::auth();
 
 
@@ -155,14 +156,16 @@ Route::group(['prefix' => 'api'], function () {
 
     Route::post('rate/{rated_id}', 'RateController@store');
 
-    Route::post('stripe_customer_sources', 'UserController@createStripeCustomerSource');
+    //Route::post('stripe_customer_sources', 'UserController@createStripeCustomerSource');
+    Route::post('stripe_external_account', 'UserController@createStripeExternalAccount');
 
     Route::post('stripe/invoice/payment', 'StripeWebhookController@onInvoicePaid');
     Route::post('stripe/invoice/created', 'StripeWebhookController@onInvoiceCreated');
     Route::post('stripe/invoice/failed', 'StripeWebhookController@onInvoiceFailure');
     Route::post('stripe/account/updated', 'StripeWebhookController@onAccountUpdated');
-
 });
+
+
 
 
 Route::get('translate/{lang}', 'LocalizationController@SetLocalization');

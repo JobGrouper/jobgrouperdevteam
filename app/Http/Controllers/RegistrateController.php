@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\StripeVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Interfaces\PaymentServiceInterface;
@@ -10,6 +11,7 @@ use App\UserSocialAccount;
 use App\ConfirmUsers;
 use Mail;
 use Auth;
+use DB;
 use Illuminate\Support\Facades\Session;
 
 
@@ -196,7 +198,13 @@ class RegistrateController extends Controller
     }
 
     public function getMoreVerification($id) {
+        $user = User::where('id', $id)->first();
+        $stripeManagedAccount = DB::table('stripe_managed_accounts')->where('user_id', '=', $user->id)->first();
+        $stripeVerificationRequest = StripeVerificationRequest::where('managed_account_id', $stripeManagedAccount->id)->where('completed', false)->get()->last();
 
-	    return view('pages.additional_verification');
+        return view('pages.additional_verification', [
+            'fields_needed' => json_decode($stripeVerificationRequest->fields_needed, true),
+            'id' => $stripeVerificationRequest->id
+        ]);
     }
 }

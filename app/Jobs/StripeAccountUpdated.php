@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Interfaces\PaymentServiceInterface;
+use App\StripeVerificationRequest;
 use Mail;
 use DB;
 
@@ -34,7 +36,7 @@ class StripeAccountUpdated extends Job implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(PaymentServiceInterface $psi)
     {
         //
 	$account_id = $this->event['data']['object']['id'];
@@ -58,12 +60,18 @@ class StripeAccountUpdated extends Job implements ShouldQueue
 		});
 	}
 	else {
+        if(count($fields_needed) > 0){
+            $stripeVerificationRequest = StripeVerificationRequest::create([
+                'managed_account_id' => $account_id,
+                'fields_needed' => json_encode($fields_needed),
+            ]);
+        }
 
 		Mail::send('emails.seller_need_additional_verification', ['id' => $employee->id], function($u) use ($employee)
 		{
 		    $u->from('admin@jobgrouper.com');
 		    $u->to($employee->email);
-		    $u->subject('You\'re fully verified on JobGrouper!');
+		    $u->subject('You\'re not fully verified on JobGrouper!');
 		});
 	}
 
