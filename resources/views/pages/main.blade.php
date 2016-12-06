@@ -44,7 +44,7 @@
 
                                     {{--<div class="block bordered">--}}
 
-                                        {{--<span class="amount">&dollar;{{$hotJob->salary}}</span>--}}
+                                        {{--<span class="amount">&dollar;{{$hotJob->monthly_price}}</span>--}}
 
                                         {{--<span class="per">per month</span>--}}
 
@@ -113,7 +113,7 @@
 
                                         <div class="block bordered">
 
-                                            <span class="amount">&dollar;{{$job->salary}}</span>
+                                            <span class="amount">&dollar;{{number_format( $job->monthly_price, 2 ) }}</span>
 
                                             <span class="per">per month</span>
 
@@ -177,7 +177,7 @@
 
                                     <p class="text">{{$job->description}}</p>
 
-                                    <p class="count clearfix"><span class="left">${{$job->salary}}/month</span><span class="right">{{$job->sales_count}}/{{$job->max_clients_count}} buyers</span></p>
+                                    <p class="count clearfix"><span class="left">${{number_format( $job->monthly_price, 2 )}}/month</span><span class="right">{{$job->sales_count}}/{{$job->max_clients_count}} buyers</span></p>
 
                                 </div>
 
