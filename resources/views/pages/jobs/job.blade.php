@@ -9,17 +9,18 @@
         <div class="alert_window month">
             <div class="alert_window__block">
                 <p>{!! $pageTexts[13] !!}</p>
-                <p>Monthly price of the purchase: ${{number_format($job->salary, 2)}}</p>
-                <p>Markup: ${{number_format($job->salary, 2)}} * 15% fee = ${{number_format( $job->salary*0.15, 2)}}</p>
-                <p>Total: ${{number_format( $job->salary + ($job->salary*0.15), 2)}}</p>
+                <h2>${{ number_format($job->monthly_salary * 12, 2)}}</h2>
                 <div class="cancel"></div>
             </div>
         </div>
 	@else
         <div class="alert_window month">
             <div class="alert_window__block">
-                <p>{!! $pageTexts[13] !!}</p>
-                <h2>${{ number_format($job->monthly_salary * 12, 2)}}</h2>
+		<p>JobGrouper applies a 15 percent service fee on top of the listed price</p>
+		<hr>
+                <p>Monthly price: ${{number_format($job->salary, 2)}}</p>
+                <p>Markup: ${{number_format($job->salary, 2)}} * 15% fee = ${{number_format( $job->salary*0.15, 2)}}</p>
+                <p>Total: ${{number_format( $job->salary + ($job->salary*0.15), 2)}}</p>
                 <div class="cancel"></div>
             </div>
         </div>
@@ -83,7 +84,11 @@
 
                                 <div class="block bordered">
 
-                                    <span class="amount">${{(isset($user) && $user->user_type == 'employee' ? number_format($job->monthly_salary, 2) : number_format($job->monthly_price, 2))}}/mo</span>
+                                    <span class="amount">${{(isset($user) && $user->user_type == 'employee' ? number_format($job->monthly_salary, 2) : number_format($job->salary, 2))}}/mo</span>
+				    
+				    @if(Auth::guest() || Auth::user()->user_type == 'buyer')
+				    <span class="disclaimer">A service charge will be added on to the purchase price</span>
+				    @endif
 
                                 </div>
 
