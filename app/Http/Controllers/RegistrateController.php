@@ -198,13 +198,21 @@ class RegistrateController extends Controller
     }
 
     public function getMoreVerification($id) {
-        $user = User::where('id', $id)->first();
-        $stripeManagedAccount = DB::table('stripe_managed_accounts')->where('user_id', '=', $user->id)->first();
-        $stripeVerificationRequest = StripeVerificationRequest::where('managed_account_id', $stripeManagedAccount->id)->where('completed', false)->get()->last();
-
-        return view('pages.additional_verification', [
-            'fields_needed' => json_decode($stripeVerificationRequest->fields_needed, true),
-            'id' => $stripeVerificationRequest->id
-        ]);
+        if (Auth::check()) {
+            $user = Auth::user();
+            $stripeVerificationRequest = StripeVerificationRequest::find($id);
+            if($user->can('edit', $stripeVerificationRequest)){
+                return view('pages.additional_verification', [
+                    'fields_needed' => json_decode($stripeVerificationRequest->fields_needed, true),
+                    'id' => $stripeVerificationRequest->id
+                ]);
+            }
+            else{
+                dd('This action is unauthorized.');
+            }
+        }
+        else{
+            return redirect('/login');
+        }
     }
 }

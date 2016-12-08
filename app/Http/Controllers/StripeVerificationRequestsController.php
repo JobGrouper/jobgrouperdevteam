@@ -12,7 +12,10 @@ use App\Http\Requests;
 class StripeVerificationRequestsController extends Controller
 {
     public function update(Request $request, PaymentServiceInterface $psi){
+
         $stripeVerificationRequest = StripeVerificationRequest::findOrFail($request->id);
+
+        $this->authorize('edit', $stripeVerificationRequest);
 
         $stripeAccountData = $request->stripeAccountData;
         $stripeAccountData['tos_acceptance']['date'] = time();
