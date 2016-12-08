@@ -227,5 +227,15 @@ class User extends Authenticatable
         return $this->hasMany('App\Rate', 'rated_id');
     }
 
+    public function stripeManagedAccount()
+    {
+        return $this->hasOne('App\StripeManagedAccount', 'user_id');
+    }
+
+    public function StripeVerificationRequests()
+    {
+        return $this->hasManyThrough('App\StripeVerificationRequest', 'App\StripeManagedAccount','user_id', 'managed_account_id');
+    }
+
 
 }
