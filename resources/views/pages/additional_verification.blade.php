@@ -121,6 +121,15 @@
 								{{$field_name}}
 							@endif
 						@endforeach
+						@if (count($errors) > 0)
+							<div class="alert alert-danger">
+								<ul>
+									@foreach ($errors->all() as $error)
+										<li>{{ $error }}</li>
+									@endforeach
+								</ul>
+							</div>
+						@endif
 
 						@if (session('message_success'))
 							<span class="invalid_green">{{ session('message_success') }}</span>
