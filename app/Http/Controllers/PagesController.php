@@ -32,7 +32,7 @@ class PagesController extends Controller
         $jobs = $jobs->merge($notHotJobsOther);
         $chunks = $jobs->chunk(9); //9 = 1 in slider + 8 in rows
 
-        return view('pages.main', ['user' => $user, 'jobs' => $chunks->first()]);
+        return view('pages.main', ['user' => $user, 'jobs' => $jobs]);
     }
 
 
