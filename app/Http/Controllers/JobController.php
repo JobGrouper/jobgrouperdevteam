@@ -31,6 +31,7 @@ class JobController extends Controller
      * @return Response
      */
     public function all($categoryID = 0){
+	$user = Auth::user();
         $pageUrl = '';
         if($categoryID){
             $category = Category::findOrFail($categoryID);
@@ -44,7 +45,7 @@ class JobController extends Controller
             $pageUrl = '/jobs';
         }
 
-        return view('pages.jobs.jobs', ['pageUrl' => $pageUrl, 'categoryTitle' => $categoryTitle, 'jobs' => $jobs]);
+        return view('pages.jobs.jobs', ['user' => $user, 'pageUrl' => $pageUrl, 'categoryTitle' => $categoryTitle, 'jobs' => $jobs]);
     }
     
 

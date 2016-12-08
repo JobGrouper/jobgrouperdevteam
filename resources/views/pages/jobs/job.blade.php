@@ -5,7 +5,7 @@
 @section('content')
 
     <div class="view">
-        @if(!Auth::guest() && Auth::user()->user_type != 'employee')
+        @if(!Auth::guest() && Auth::user()->user_type == 'employee')
         <div class="alert_window month">
             <div class="alert_window__block">
                 <p>{!! $pageTexts[13] !!}</p>
@@ -27,6 +27,7 @@
         @endif
 
         <div class="container">
+
             <div class="row">
 
                 <div class="col-md-12">
@@ -84,9 +85,9 @@
 
                                 <div class="block bordered">
 
-                                    <span class="amount">${{(isset($user) && $user->user_type == 'employee' ? number_format($job->monthly_salary, 2) : number_format($job->salary, 2))}}/mo</span>
+                                    <span class="amount">${{$job->getConfiguredSale($user)}}/mo</span>
 				    
-				    @if(Auth::guest() || Auth::user()->user_type == 'buyer')
+				    @if(!isset($user) || $user->user_type == 'buyer')
 				    <span class="disclaimer">A service charge will be added on to the purchase price</span>
 				    @endif
 

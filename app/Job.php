@@ -5,6 +5,8 @@ use Mail;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+use Auth;
+
 class Job extends Model
 {
     /**
@@ -131,6 +133,27 @@ class Job extends Model
     }
 
 
+
+    /*
+     * Depending on level of user, returns appropriate "sale" number
+     * Not an accessor
+     * 
+     */
+    public function getConfiguredSale(User $user=NULL) {
+
+	    if (!$user) {
+		return number_format($this->salary, 2);
+	    }
+	    else {
+		if ($user->user_type == 'buyer') {
+			return number_format($this->salary, 2);
+		}
+
+		if ($user->user_type == 'employee') {
+			return number_format($this->monthly_salary, 2);
+		}
+	    }
+    }
 
 
     /**
