@@ -749,6 +749,19 @@ img {
     .forgotpass_form p span {
       float: right;
     }
+    .forgotpass_form p.attached {
+	float:none;
+	font-size: 12px;
+	color: #A0A0A0;
+    }
+    .forgotpass_form p.attached.top {
+	margin-top:-4px;
+	margin-bottom:-2px;
+    }
+    .forgotpass_form p.attached.bottom {
+	margin-top:-17px;
+	margin-bottom:20px;
+    }
     .forgotpass_form p img {
       cursor: pointer;
     }

@@ -39,6 +39,7 @@
             </div>
             <label for="email">Email</label>
             <input type="email" id="email" name="email">
+	    <p class="attached bottom">A bottom example</p>
             <div class="invalid_login"></div>
             <label for="pass">Password</label>
             <input type="password" id="pass" name="password">
@@ -115,6 +116,7 @@
                 <label for="year">Birth year</label>
 		{{ Form::selectRange('dob_year', 1930, 2016, 'Select birth year...', ['placeholder' => 'Select birth year...', 'autocomplete' => 'off']) }}
                 <label for="ssn">Social Security Number (last four digits only)</label>
+		<p class="attached top">A little forward, we know, but we need it to verify your identity</p>
                 <input type="password" id="ssn" name="ssn_last_4" maxlength="4">
             </div>
             <input type="checkbox" id="terms">
