@@ -39,7 +39,6 @@
             </div>
             <label for="email">Email</label>
             <input type="email" id="email" name="email">
-	    <p class="attached bottom">A bottom example</p>
             <div class="invalid_login"></div>
             <label for="pass">Password</label>
             <input type="password" id="pass" name="password">
