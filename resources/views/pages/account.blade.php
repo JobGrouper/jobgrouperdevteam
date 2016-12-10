@@ -199,6 +199,7 @@
                       <div class="payment_method">Payment method set</div>
 		    @endif
                     <button class="seller_cards" id="bank_add">Add Bank Account</button>
+		    <p>...or...</p>
                     <button class="seller_cards" id="debit_add">Add Debit card</button>
                     <div class="bank_form bank">
                         <h2>Bank Account Form<img src="{{asset('img/Profile/cancel.png')}}" alt="alt"></h2>
