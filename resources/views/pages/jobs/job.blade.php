@@ -126,7 +126,7 @@
                                 <a href="/login?fromJob={{$job->id}}"><button>Buy</button></a>
                                 @if(!$employee || $employeeStatus['status'] == 'leave')
                                     {{--If job has no employee or employee will leave this job--}}
-                                    <button class="apply">Apply for this Job</button>
+                                    <a href="/login?fromJob={{$job->id}}"><button class="apply noclick">Apply for this Job</button></a>
                                 @endif
                             @elseif(Auth::user()->user_type == 'employee')
                                 @if($employeeRequest)

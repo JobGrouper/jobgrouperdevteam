@@ -1197,7 +1197,14 @@ $(".additional_block__wrapper").on("click", ".edit_profile", function() {
 
 //////////////////// VIEW PAGE
 
-$(".view_sidebar .buttons .apply").on("click", function() {
+$(".view_sidebar .buttons .apply").on("click", function(e) {
+
+	if ( $( e.target ).hasClass('noclick')) {
+		return -1;
+	}
+
+	e.preventDefault();
+
 	var jobId = window.location.href.split("/");
 	var job_id = jobId[jobId.length - 1];
 	if (confirm("Is your profile filled out completely? Your profile is the sole basis for which you are selected for jobs at JobGrouper.")) {
