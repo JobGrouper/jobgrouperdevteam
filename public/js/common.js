@@ -464,28 +464,34 @@ $(document).ready(function() {
 				datatype: "json",
 				success: function(response) {
 					console.log(response);
+
+					// Unfinished, so leaving comments in
+					//
 					$(".profile_info .savebtn_top").hide();
 					$(".profile_info .social .name").show();
 					$(".profile_info .social .edittitle").hide();
 					$(".profile_info .social .name").text(obj.first_name + " " + obj.last_name);
 					if ($(".editlinkedin input").val() !== "") {
-						$(".linkedin span").html("<a href=" + obj.linkid_url + ">" + obj.linkid_url + "</a>");
-					} else {
 						$(".linkedin span").text(obj.linkid_url);
+					//	$(".linkedin span").html("<a href=" + obj.linkid_url + ">" + obj.linkid_url + "</a>");
+					} else {
+					//	$(".linkedin span").text(obj.linkid_url);
 					}
 					$(".profile_info .linkedin span, .profile_info .linkedin >img").show();
 					$(".profile_info .linkedin .editlinkedin").hide();
 					if ($(".editfacebook input").val() !== "") {
-						$(".facebook span").html("<a href=" + obj.fb_url + ">" + obj.fb_url + "</a>");
-					} else {
 						$(".facebook span").text(obj.fb_url);
+					//	$(".facebook span").html("<a href=" + obj.fb_url + ">" + obj.fb_url + "</a>");
+					} else {
+					//	$(".facebook span").text(obj.fb_url);
 					}
 					$(".profile_info .facebook span, .profile_info .facebook >img").show();
 					$(".profile_info .facebook .editfacebook").hide();
 					if ($(".editgithub input").val() !== "") {
-						$(".github span").html("<a href=" + obj.git_url + ">" + obj.git_url + "</a>");
-					} else {
 						$(".github span").text(obj.git_url);
+					//	$(".github span").html("<a href=" + obj.git_url + ">" + obj.git_url + "</a>");
+					} else {
+					//	$(".github span").text(obj.git_url);
 					}
 					$(".profile_info .github span, .profile_info .github >img").show();
 					$(".profile_info .github .editgithub").hide();
@@ -1197,7 +1203,14 @@ $(".additional_block__wrapper").on("click", ".edit_profile", function() {
 
 //////////////////// VIEW PAGE
 
-$(".view_sidebar .buttons .apply").on("click", function() {
+$(".view_sidebar .buttons .apply").on("click", function(e) {
+
+	if ( $( e.target ).hasClass('noclick')) {
+		return -1;
+	}
+
+	e.preventDefault();
+
 	var jobId = window.location.href.split("/");
 	var job_id = jobId[jobId.length - 1];
 	if (confirm("Is your profile filled out completely? Your profile is the sole basis for which you are selected for jobs at JobGrouper.")) {

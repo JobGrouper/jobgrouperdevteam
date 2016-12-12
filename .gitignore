@@ -12,6 +12,7 @@ public/error_log
 Homestead.yaml
 Homestead.json
 error_log
+.htaccess
 .env
 *.swp
 *.swo

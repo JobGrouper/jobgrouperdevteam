@@ -24,11 +24,13 @@ class EducationController extends Controller
 
         $user = Auth::user();
         //$user = User::find(4);          //todo production
+	$date_from = \DateTime::createFromFormat('m-d-Y', $request->date_from )->format('Y-m-d H:i:s');
+	$date_to = \DateTime::createFromFormat('m-d-Y', $request->date_to )->format('Y-m-d H:i:s');
 
         $education = $user->Education()->create([
             'title' => $request->title,
-            'date_from' => $request->date_from,
-            'date_to' => $request->date_to,
+            'date_from' => $date_from,
+            'date_to' => $date_to,
             'additional_info' => $request->additional_info,
         ]);
 
@@ -59,6 +61,8 @@ class EducationController extends Controller
         //todo check is user owner
 
         $education->fill($request->all());
+	$education->date_from = \DateTime::createFromFormat('m-d-Y', $request->date_from )->format('Y-m-d H:i:s');
+	$education->date_to = \DateTime::createFromFormat('m-d-Y', $request->date_to )->format('Y-m-d H:i:s');
         $education->save();
 
 
