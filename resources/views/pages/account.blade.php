@@ -181,7 +181,9 @@
                     <p class="profile_text__description">{{ $user['description'] }}</p>
                     <button id="descr_add">Add / Edit Description</button>
                     <div class="edit_description">
-                        <textarea placeholder="Your description..."></textarea><br><button id="descrchange">Save</button><button class="close"><img src="{{ asset("img/Profile/cancel.png") }}" alt="alt"></button>
+			<textarea placeholder="Your description..." maxlength=550></textarea><br>
+			<p><i>550 character limit</i></p><br>
+			<button id="descrchange">Save</button><button class="close"><img src="{{ asset("img/Profile/cancel.png") }}" alt="alt"></button>
 
                     </div>
 
