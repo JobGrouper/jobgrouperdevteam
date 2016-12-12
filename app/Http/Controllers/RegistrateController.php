@@ -146,17 +146,15 @@ class RegistrateController extends Controller
 			return redirect('/register')->
 				withErrors([ $error ]);
 		}
-		else {
-
-		    //Sending confirmation mail to user
-		    Mail::send('emails.confirm',['token'=>$token],function($u) use ($user)
-		    {
-			$u->from('admin@jobgrouper.com');
-			$u->to($user->email);
-			$u->subject('Confirm Registration');
-		    });
-		}
             }
+
+	    //Sending confirmation mail to user
+	    Mail::send('emails.confirm',['token'=>$token],function($u) use ($user)
+	    {
+		$u->from('admin@jobgrouper.com');
+		$u->to($user->email);
+		$u->subject('Confirm Registration');
+	    });
         }
         else {
             die('Something went wrong. Please try again later.');
