@@ -176,6 +176,8 @@
                                         <?php
                                             $buyer = $order->buyer()->first();
                                         ?>
+
+					@if($buyer)
                                         <div class="recent_item">
 
                                             <div class="img_wrapper">
@@ -195,6 +197,7 @@
                                             </div>
 
                                         </div>
+					@endif
 
                                 @endforeach
 
