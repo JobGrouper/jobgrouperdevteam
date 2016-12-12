@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration
             $table->string('linkid_url');
             $table->string('fb_url');
             $table->string('git_url');
-            $table->string('description');
+            $table->string('description', 550);
             $table->boolean('active')->default(true);
             $table->rememberToken();
             $table->timestamps();
