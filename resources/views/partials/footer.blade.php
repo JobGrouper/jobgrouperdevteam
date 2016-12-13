@@ -12,7 +12,7 @@
                     <span class="copy">{!! $pageTexts[8] !!} | {!! $pageTexts[9] !!} | {!! $pageTexts[10] !!}</span>
                 </div>
 
-                <span class="links"><a href="/help">Help</a>|<a href="/terms">Terms &amp; Conditions</a></span>
+                <span class="links"><a href="/help">Help</a>|<a href="/terms">Terms &amp; Conditions</a>| Contact us at support@jobgrouper.com</span>
 
 
                 <div class="main_footer__social">

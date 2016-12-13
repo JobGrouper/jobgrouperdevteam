@@ -61,11 +61,36 @@
 
                                 <p class="name"><a href="/account/{{$employee->id}}">{{$employee->full_name}}</a></p>
 
-                                <div class="fb"><img src="{{asset('img/Profile/fb.png')}}" alt="alt">facebook.com/{{$employee->first_name.$employee->last_name}}</div>
+				<div class="fb">
+				<img src="{{asset('img/Profile/fb.png')}}" alt="alt">
+                                    @if($user['fb_url'])
+                                    {{ $user['fb_url'] }}
+                                    @else
+                                    No information yet.
+                                    @endif
+				</img>
+				</div>
 
-                                <div class="twitter"><img src="{{ asset('img/Profile/link.png') }}" alt="alt">linkedin.com/{{$employee->first_name.$employee->last_name}}</div>
+				<div class="twitter">
+				<img src="{{ asset('img/Profile/link.png') }}" alt="alt">
+                                    @if($user['linkid_url'])
+                                    {{ $user['linkid_url'] }}
+                                    @else
+                                    No information yet.
+                                    @endif
+				</img>
+				</div>
 
-                                <div class="twitter"><img src="{{ asset('img/Profile/github.png')}}" alt="alt">github.com/{{$employee->first_name.$employee->last_name}}</div>
+				<div class="twitter">
+				<img src="{{ asset('img/Profile/github.png')}}" alt="alt">
+                                  @if($user['git_url'])
+                                  {{ $user['git_url'] }}
+                                  @else
+                                  No information yet.
+                                  @endif
+				</img>
+				</div>
+
                                 <a href="/account/{{$employee->id}}">More details</a>
                                 @if($employeeStatus['status'] == 'leave')
                                     <span>Employee will leave this job at {{$employeeStatus['leave_date']}}</span>
@@ -176,6 +201,8 @@
                                         <?php
                                             $buyer = $order->buyer()->first();
                                         ?>
+
+					@if($buyer)
                                         <div class="recent_item">
 
                                             <div class="img_wrapper">
@@ -195,6 +222,7 @@
                                             </div>
 
                                         </div>
+					@endif
 
                                 @endforeach
 

@@ -18,17 +18,30 @@ class EducationController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'date_from' => 'required',
-            'date_to' => 'required',
+            'date_to' => 'required_if:date_to_present,false',
+	    'date_to_present' => 'required_without:date_to'
         ]);
 
 
         $user = Auth::user();
         //$user = User::find(4);          //todo production
+	$date_from = \DateTime::createFromFormat('m-d-Y', $request->date_from )->format('Y-m-d H:i:s');
+
+	if ($request->date_to !== '')
+	  $date_to = \DateTime::createFromFormat('m-d-Y', $request->date_to )->format('Y-m-d H:i:s');
+	else
+	  $date_to = $request->date_to;
+
+	if ($request->date_to_present == 'true')
+	  $date_to_present = 1;
+	else
+	  $date_to_present = 0;
 
         $education = $user->Education()->create([
             'title' => $request->title,
-            'date_from' => $request->date_from,
-            'date_to' => $request->date_to,
+            'date_from' => $date_from,
+            'date_to' => $date_to,
+	    'date_to_present' => $date_to_present,
             'additional_info' => $request->additional_info,
         ]);
 
@@ -59,6 +72,18 @@ class EducationController extends Controller
         //todo check is user owner
 
         $education->fill($request->all());
+	$education->date_from = \DateTime::createFromFormat('m-d-Y', $request->date_from )->format('Y-m-d H:i:s');
+
+	if ($request->date_to !== '')
+	  $education->date_to = \DateTime::createFromFormat('m-d-Y', $request->date_to )->format('Y-m-d H:i:s');
+	else
+	  $education->date_to = $request->date_to;
+
+	if ($request->date_to_present == 'true')
+	  $education->date_to_present = 1;
+	else
+	  $education->date_to_present = 0;
+
         $education->save();
 
 
