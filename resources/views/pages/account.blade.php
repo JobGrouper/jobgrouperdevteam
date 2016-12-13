@@ -276,7 +276,14 @@
                             @if(count($user->experience()->get()) > 0)
                             @foreach($user->experience()->get() as $experience)
                             <div class="work_block"><h2>{{$experience->title}}</h2>
-                                <p><span class="fromspan">{{$experience->date_from}}</span> - <span class="tospan">{{$experience->date_to}}</span></p>
+				<p><span class="fromspan">{{$experience->date_from}}</span> - 
+				@if($experience->date_to_present == 1)
+				  <span class="tospan">present</span>
+				@else
+				  <span class="tospan">{{$experience->date_to}}</span>
+				@endif
+				</p>
+
                                 <p class="mixed">{{$experience->additional_info}}</p>
                                 <div class="edit_profile" title="Edit job">
                                     <img src="{{asset('img/Profile/edit_pencil.png')}}" alt="alt">
@@ -285,8 +292,10 @@
                                     <input type="text" class="longinput jobtitle" placeholder="Job title">
                                     <div class="date login"><input type="text" class="from" maxlength="10" readonly placeholder="From">
                                         <input type="text" class="to" readonly maxlength="10" placeholder="To">
-                                        <input type="checkbox" id="present"/>
-                                        <label for="present" class="present">present</label>
+
+                                        <input type="checkbox" id="present-exp-{{ $experience->id }}"/>
+                                        <label for="present-exp-{{ $experience->id }}" class="present">present</label>
+
                                     </div>
                                     <textarea class="longinput addinfo" placeholder="Additional information"></textarea>
                                     <div class="work_edit__btn">
@@ -321,7 +330,15 @@
                            @if(count($user->education()->get()) > 0)
                            @foreach($user->education()->get() as $education)
                            <div class="education_block"><h2>{{$education->title}}</h2>
-                            <p><span class="fromspan">{{$education->date_from}}</span> - <span class="tospan">{{$education->date_to}}</span></p>
+
+			    <p><span class="fromspan">{{$education->date_from}}</span> - 
+				@if($education->date_to_present == 1)
+				<span class="tospan">present</span>
+				@else
+				<span class="tospan">{{$education->date_to}}</span>
+				@endif
+			    </p>
+
                             <p class="mixed">{{$education->additional_info}}</p>
                             <div class="edit_profile" title="Edit education">
                                 <img src="{{asset('img/Profile/edit_pencil.png')}}" alt="alt">
@@ -330,8 +347,10 @@
                                 <input type="text" class="longinput jobtitle" placeholder="Education title">
                                 <div class="date login"><input type="text" class="from" readonly maxlength="10" placeholder="From">
                                     <input type="text" class="to" readonly maxlength="10" placeholder="To">
-                                    <input type="checkbox" id="present"/>
-                                    <label for="present" class="present">present</label>
+
+                                    <input type="checkbox" class="present" id="present-edu-{{ $education->id }}"/>
+                                    <label for="present-edu-{{ $education->id }}" class="present">present</label>
+
                                 </div>
                                 <textarea class="longinput addinfo" placeholder="Additional information"></textarea>
                                 <div class="work_edit__btn">

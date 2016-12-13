@@ -614,12 +614,42 @@ $(document).ready(function() {
         return {};
     	}
 		});
+
+
+	// hacky solution, make sure click nullifies
+	$( $('.work_block__wrapper .work_block:last-child .work_edit').find("label.present") ).on('click', function(e) {
+
+		// it's the opposite of what you would expect because of
+		// the display timing
+		//
+		// element beneath is unchecked. When this is checked, 
+		// at this point it means it's going to be unchecked soon
+		//
+		if ( !$( e.target.control ).is(':checked') ) {
+			$(this).parents(".work_edit").find(".to").val('');
+			$(this).parents(".work_edit").find(".to").val('').prop('disabled', true);
+			//$(this).parent().find(".work_edit").find(".to").val('');
+			//$(this).parent().find(".work_edit").find(".to").prop('disabled', true);
+		}
+		else {
+			$(this).parents(".work_edit").find(".to").val('').prop('disabled', false);
+			//$(this).parent().find(".work_edit").find(".to").prop('disabled', false);
+		}
+	});
+
   	$(".work_block__wrapper .work_block .workchange").click(function() {
-	  	if ($(this).parents(".work_edit").find(".jobtitle").val().length > 0 && $(this).parents(".work_edit").find(".from").val().length > 0 && $(this).parents(".work_edit").find(".to").val().length > 0) {
+
+		// CREATE NEW EXPERIENCE
+	  	if ($(this).parents(".work_edit").find(".jobtitle").val().length > 0 && $(this).parents(".work_edit").find(".from").val().length > 0 && ( $(this).parents(".work_edit").find(".to").val().length > 0 || $( $(this).parents(".work_edit").find("label.present")[0].control ).is(':checked') ) ) {
 	  		$(this).parents(".work_block").find("h2").text($(this).parents(".work_edit").find(".jobtitle").val());
 	  		$(this).parents(".work_block").find("p .defis").show();
 	  		$(this).parents(".work_block").find("p .fromspan").text($(this).parents(".work_edit").find(".from").val());
-  			$(this).parents(".work_block").find("p .tospan").text($(this).parents(".work_edit").find(".to").val());
+
+			if ($(this).parents(".work_edit").find(".to").val() == '')
+  			  $(this).parents(".work_block").find("p .tospan").text('present');
+			else
+  			  $(this).parents(".work_block").find("p .tospan").text($(this).parents(".work_edit").find(".to").val());
+
 	  		$(this).parents(".work_block").find(".mixed").text($(this).parents(".work_edit").find(".addinfo").val());
 	  		$(this).parents(".work_block").find(".work_edit").hide();
 	  		$(this).parents(".work_block").fadeIn("fast");
@@ -629,6 +659,7 @@ $(document).ready(function() {
 	  			title: $(this).parents(".work_edit").find(".jobtitle").val(),
 	  			date_from: $(this).parents(".work_edit").find(".from").val(),
 	  			date_to: $(this).parents(".work_edit").find(".to").val(),
+	  			date_to_present: $( $(this).parents(".work_edit").find("label.present")[0].control ).is(':checked'),
 	  			additional_info: $(this).parents(".work_edit").find(".addinfo").val()
 	  		}
 	  		console.log(obj);
@@ -676,6 +707,8 @@ $(".work_block__wrapper").on("click", ".delete", function() {
 	}
 });
 
+/// UPDATE EXPERIENCE
+//
 $(".work_block__wrapper").on("click", ".edit_profile", function() {
 	$(this).parent().find("h2").hide();
 	$(this).parent().find("p").hide();
@@ -705,8 +738,42 @@ $(".work_block__wrapper").on("click", ".edit_profile", function() {
 	$(this).parent().find(".work_edit").find(".to").val($(this).parent().find(".tospan").text());
 	$(this).parent().find(".work_edit").find(".addinfo").val($(this).parent().find(".mixed").text());
 	console.log($(this).parent().find("h2").text());
+
+	var toDate = $(this).parent().find(".tospan").text();
+
+	// conditional to date change and checkbox
+	if (toDate == 'present') {
+	  $(this).parent().find(".work_edit").find(".to").val('');
+	  $( $(this).parent().find(".work_edit").find("label.present")[0].control ).prop('checked', true);
+	}
+	else {
+	  $(this).parent().find(".work_edit").find(".to").val(toDate);
+	  $( $(this).parent().find(".work_edit").find("label.present")[0].control ).prop('checked', false);
+	}
+
+	// hacky solution, make sure click nullifies
+	$( $(this).parent().find(".work_edit").find("label.present") ).on('click', function(e) {
+
+		// it's the opposite of what you would expect because of
+		// the display timing
+		//
+		// element beneath is unchecked. When this is checked, 
+		// at this point it means it's going to be unchecked soon
+		//
+		if ( !$( e.target.control ).is(':checked') ) {
+			$(this).parents(".work_edit").find(".to").val('');
+			$(this).parents(".work_edit").find(".to").val('').prop('disabled', true);
+			//$(this).parent().find(".work_edit").find(".to").val('');
+			//$(this).parent().find(".work_edit").find(".to").prop('disabled', true);
+		}
+		else {
+			$(this).parents(".work_edit").find(".to").val('').prop('disabled', false);
+			//$(this).parent().find(".work_edit").find(".to").prop('disabled', false);
+		}
+	});
+
 	$(this).parent().find(".workchange").click(function() {
-		if ($(this).parents(".work_edit").find(".jobtitle").val().length > 0 && $(this).parents(".work_edit").find(".from").val().length > 0 && $(this).parents(".work_edit").find(".to").val().length > 0) {
+		if ($(this).parents(".work_edit").find(".jobtitle").val().length > 0 && $(this).parents(".work_edit").find(".from").val().length > 0 && ( $(this).parents(".work_edit").find(".to").val().length > 0 || $( $(this).parents(".work_edit").find("label.present")[0].control ).is(':checked') ) ) {
 			$(this).parents(".work_block").find("h2").fadeIn("fast");
 			$(this).parents(".work_block").find("p").fadeIn("fast");
 			$(this).parents(".work_block").find(".work_edit").hide();
@@ -714,13 +781,20 @@ $(".work_block__wrapper").on("click", ".edit_profile", function() {
 			$(this).parents(".work_block").find(".delete").hide();
 			$(this).parents(".work_block").find("h2").text($(this).parents(".work_edit").find(".jobtitle").val());
   		$(this).parents(".work_block").find("p .fromspan").text($(this).parents(".work_edit").find(".from").val());
-  		$(this).parents(".work_block").find("p .tospan").text($(this).parents(".work_edit").find(".to").val());
+
+		if ($(this).parents(".work_edit").find(".to").val() == '' )
+  		  $(this).parents(".work_block").find("p .tospan").text('present');
+		else
+  		  $(this).parents(".work_block").find("p .tospan").text($(this).parents(".work_edit").find(".to").val());
+
   		$(this).parents(".work_block").find(".mixed").text($(this).parents(".work_edit").find(".addinfo").val());
+
   		var obj = {
   			id: +$(this).parents(".work_edit").attr("data-id"),
   			title: $(this).parents(".work_edit").find(".jobtitle").val(),
   			date_from: $(this).parents(".work_edit").find(".from").val(),
   			date_to: $(this).parents(".work_edit").find(".to").val(),
+	  		date_to_present: $( $(this).parents(".work_edit").find("label.present")[0].control ).is(':checked'),
   			additional_info: $(this).parents(".work_edit").find(".addinfo").val()
   		}
   		console.log(obj);
@@ -749,6 +823,9 @@ $(".work_block__wrapper").on("click", ".edit_profile", function() {
 
 	//////////
 
+
+	// CREATE EDUCATION
+	//
 $(".one_more2 button").click(function() {
   	var obj = "<div class='education_block'>\
                   <h2></h2>\
@@ -789,12 +866,40 @@ $(".one_more2 button").click(function() {
 			return {};
 		}
 	});
+
+	// hacky solution, make sure click nullifies
+	$( $('.education_block__wrapper .education_block:last-child .work_edit').find("label.present") ).on('click', function(e) {
+
+		// it's the opposite of what you would expect because of
+		// the display timing
+		//
+		// element beneath is unchecked. When this is checked, 
+		// at this point it means it's going to be unchecked soon
+		//
+		if ( !$( e.target.control ).is(':checked') ) {
+			$(this).parents(".work_edit").find(".to").val('');
+			$(this).parents(".work_edit").find(".to").val('').prop('disabled', true);
+			//$(this).parent().find(".work_edit").find(".to").val('');
+			//$(this).parent().find(".work_edit").find(".to").prop('disabled', true);
+		}
+		else {
+			$(this).parents(".work_edit").find(".to").val('').prop('disabled', false);
+			//$(this).parent().find(".work_edit").find(".to").prop('disabled', false);
+		}
+	});
+
   	$(".education_block__wrapper .education_block .workchange").click(function() {
-	  	if ($(this).parents(".work_edit").find(".jobtitle").val().length > 0 && $(this).parents(".work_edit").find(".from").val().length > 0 && $(this).parents(".work_edit").find(".to").val().length > 0) {
+	  	if ($(this).parents(".work_edit").find(".jobtitle").val().length > 0 && $(this).parents(".work_edit").find(".from").val().length > 0 && ( $(this).parents(".work_edit").find(".to").val().length > 0 || $( $(this).parents(".work_edit").find("label.present")[0].control ).is(':checked') )) {
 	  		$(this).parents(".education_block").find("h2").text($(this).parents(".work_edit").find(".jobtitle").val());
 	  		$(this).parents(".education_block").find("p .defis").show();
 	  		$(this).parents(".education_block").find("p .fromspan").text($(this).parents(".work_edit").find(".from").val());
   			$(this).parents(".education_block").find("p .tospan").text($(this).parents(".work_edit").find(".to").val());
+
+			if ($(this).parents(".work_edit").find(".to").val() == '')
+  			  $(this).parents(".education_block").find("p .tospan").text('present');
+			else
+  			  $(this).parents(".education_block").find("p .tospan").text($(this).parents(".work_edit").find(".to").val());
+
 	  		$(this).parents(".education_block").find(".mixed").text($(this).parents(".work_edit").find(".addinfo").val());
 	  		$(this).parents(".education_block").find(".work_edit").hide();
 	  		$(this).parents(".education_block").fadeIn("fast");
@@ -804,6 +909,7 @@ $(".one_more2 button").click(function() {
 	  			title: $(this).parents(".work_edit").find(".jobtitle").val(),
 	  			date_from: $(this).parents(".work_edit").find(".from").val(),
 	  			date_to: $(this).parents(".work_edit").find(".to").val(),
+	  			date_to_present: $( $(this).parents(".work_edit").find("label.present")[0].control ).is(':checked'),
 	  			additional_info: $(this).parents(".work_edit").find(".addinfo").val()
 	  		}
 	  		console.log(obj);
@@ -851,6 +957,8 @@ $(".education_block__wrapper").on("click", ".delete", function() {
 	}
 });
 
+// UPDATE EDUCATION
+
 $(".education_block__wrapper").on("click", ".edit_profile", function() {
 	$(this).parent().find("h2").hide();
 	$(this).parent().find("p").hide();
@@ -877,11 +985,44 @@ $(".education_block__wrapper").on("click", ".edit_profile", function() {
 	});
 	$(this).parent().find(".work_edit").find(".jobtitle").val($(this).parent().find("h2").text());
 	$(this).parent().find(".work_edit").find(".from").val($(this).parent().find(".fromspan").text());
-	$(this).parent().find(".work_edit").find(".to").val($(this).parent().find(".tospan").text());
+
+	var toDate = $(this).parent().find(".tospan").text();
+
+	// conditional to date change and checkbox
+	if (toDate == 'present') {
+	  $(this).parent().find(".work_edit").find(".to").val('');
+	  $( $(this).parent().find(".work_edit").find("label.present")[0].control ).prop('checked', true);
+	}
+	else {
+	  $(this).parent().find(".work_edit").find(".to").val(toDate);
+	  $( $(this).parent().find(".work_edit").find("label.present")[0].control ).prop('checked', false);
+	}
+
+	// hacky solution, make sure click nullifies
+	$( $(this).parent().find(".work_edit").find("label.present") ).on('click', function(e) {
+
+		// it's the opposite of what you would expect because of
+		// the display timing
+		//
+		// element beneath is unchecked. When this is checked, 
+		// at this point it means it's going to be unchecked soon
+		//
+		if ( !$( e.target.control ).is(':checked') ) {
+			$(this).parents(".work_edit").find(".to").val('');
+			$(this).parents(".work_edit").find(".to").val('').prop('disabled', true);
+	  		//$(this).parent().find(".work_edit").find(".to").val('');
+	  		//$(this).parent().find(".work_edit").find(".to").prop('disabled', true);
+		}
+		else {
+			$(this).parents(".work_edit").find(".to").val('').prop('disabled', false);
+	  		//$(this).parent().find(".work_edit").find(".to").prop('disabled', false);
+		}
+	});
+		
 	$(this).parent().find(".work_edit").find(".addinfo").val($(this).parent().find(".mixed").text());
 	console.log($(this).parent().find("h2").text());
 	$(this).parent().find(".workchange").click(function() {
-		if ($(this).parents(".work_edit").find(".jobtitle").val().length > 0 && $(this).parents(".work_edit").find(".from").val().length > 0 && $(this).parents(".work_edit").find(".to").val().length > 0) {
+		if ($(this).parents(".work_edit").find(".jobtitle").val().length > 0 && $(this).parents(".work_edit").find(".from").val().length > 0 && ( $(this).parents(".work_edit").find(".to").val().length > 0 || $( $(this).parents(".work_edit").find("label.present")[0].control ).is(':checked')) ) {
 			$(this).parents(".education_block").find("h2").fadeIn("fast");
 			$(this).parents(".education_block").find("p").fadeIn("fast");
 			$(this).parents(".education_block").find(".work_edit").hide();
@@ -896,6 +1037,7 @@ $(".education_block__wrapper").on("click", ".edit_profile", function() {
   			title: $(this).parents(".work_edit").find(".jobtitle").val(),
   			date_from: $(this).parents(".work_edit").find(".from").val(),
   			date_to: $(this).parents(".work_edit").find(".to").val(),
+	  		date_to_present: $( $(this).parents(".work_edit").find("label.present")[0].control ).is(':checked'),
   			additional_info: $(this).parents(".work_edit").find(".addinfo").val()
   		}
   		console.log(obj);
