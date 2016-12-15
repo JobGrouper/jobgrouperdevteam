@@ -209,7 +209,7 @@
 			    {{ csrf_field() }}
 			    <input type="hidden" name="account_type" value="bank_account" />
                             <div class="block clearfix">
-                                <label>Account Name<span>*</span></label>
+                                <label>Name on Account<span>*</span></label>
                                 <input type="text" name="account_holder_name" autocomplete="off"/>
                             </div>
                             <div class="block clearfix">
