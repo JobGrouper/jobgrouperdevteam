@@ -18,18 +18,29 @@ class ExperienceController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'date_from' => 'required',
-            'date_to' => 'required',
+            'date_to' => 'required_if:date_to_present,false',
+	    'date_to_present' => 'required_without:date_to'
         ]);
 
 
         $user = Auth::user();
 	$date_from = \DateTime::createFromFormat('m-d-Y', $request->date_from )->format('Y-m-d H:i:s');
-	$date_to = \DateTime::createFromFormat('m-d-Y', $request->date_to )->format('Y-m-d H:i:s');
+
+	if ($request->date_to !== '')
+	  $date_to = \DateTime::createFromFormat('m-d-Y', $request->date_to )->format('Y-m-d H:i:s');
+	else
+	  $date_to = $request->date_to;
+
+	if ($request->date_to_present == 'true')
+	  $date_to_present = 1;
+	else
+	  $date_to_present = 0;
 
         $experience = $user->experience()->create([
             'title' => $request->title,
             'date_from' => $date_from,
             'date_to' => $date_to,
+	    'date_to_present' => $date_to_present,
             'additional_info' => $request->additional_info,
         ]);
 
@@ -61,7 +72,17 @@ class ExperienceController extends Controller
 
         $experience->fill($request->all());
 	$experience->date_from = \DateTime::createFromFormat('m-d-Y', $request->date_from )->format('Y-m-d H:i:s');
-	$experience->date_to = \DateTime::createFromFormat('m-d-Y', $request->date_to )->format('Y-m-d H:i:s');
+
+	if ($request->date_to !== '')
+	  $experience->date_to = \DateTime::createFromFormat('m-d-Y', $request->date_to )->format('Y-m-d H:i:s');
+	else
+	  $experience->date_to = $request->date_to;
+
+	if ($request->date_to_present == 'true')
+	  $experience->date_to_present = 1;
+	else
+	  $experience->date_to_present = 0;
+
         $experience->save();
 
 

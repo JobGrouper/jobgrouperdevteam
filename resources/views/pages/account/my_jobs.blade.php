@@ -44,6 +44,7 @@
 
                                 ?>
 
+				@if($buyer)
                                 <div class="workers_item clearfix" data-id="{{$order->id}}">
 
                                     <div class="img_wrapper">
@@ -77,6 +78,7 @@
                                         <button class="request_buyer_removal cancelbtn" data-order_id="{{$order->id}}">Report Buyer</button>
                                     @endif
                                 </div>
+				@endif
 
                             @endforeach
                         @else
