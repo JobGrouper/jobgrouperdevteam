@@ -83,7 +83,7 @@
 
 							@elseif($field_name == 'legal_entity.business_name')
 								<label for="postal">Business Name</label>
-								<input type="text" id="postal" name="legal_entity.business_name">
+								<input type="text" id="business_name" name="legal_entity.business_name">
 
 							@elseif($field_name == 'legal_entity.dob.day')
 								<label for="day">Birth day</label>
@@ -100,7 +100,7 @@
 								<input type="text" id="first" name="stripeAccountData[legal_entity][first_name]">
 							@elseif($field_name == 'legal_entity.last_name')
 								<label for="first">Last Name</label>
-								<input type="text" id="first" name="stripeAccountData[legal_entity][last_name]">
+								<input type="text" id="last" name="stripeAccountData[legal_entity][last_name]">
 
 							@elseif($field_name == 'legal_entity.ssn_last_4')
 								<label for="ssn">Social Security Number (last four digits only)</label>
@@ -112,13 +112,13 @@
 
 							@elseif($field_name == 'legal_entity.personal_id_number')
 								<label for="first">Personal ID-Number</label>
-								<input type="text" id="first" name="stripeAccountData[legal_entity][personal_id_number]">
+								<input type="text" id="pid_n" name="stripeAccountData[legal_entity][personal_id_number]">
 							@elseif($field_name == 'legal_entity.verification.document')
 								<label for="first">Verification Document</label>
 								{{ Form::file('verification_document') }}
 
-							@else
-								{{$field_name}}
+							{{--@else--}}
+								{{--{{$field_name}}--}}
 							@endif
 						@endforeach
 						@if (count($errors) > 0)

@@ -1,5 +1,31 @@
 $(document).ready(function() {
 
+	// /account/additional_info/13 validation
+	$(".forgotpass.login.signup .forgotpass_form form button").click(function(e){
+		e.preventDefault();
+		var form_elems_count = 0;
+		var form_elems = $(this).parents('form').find("input, select");
+		var form_elems_select = $(this).parents('form').find("select");
+		form_elems.map(function(item, index) {
+			if ($(index).attr("id") !== undefined) {
+				if ($(index).attr("id") === "postal" && $(index).val().trim().length === 5 && $.isNumeric($(index).val())) {
+					form_elems_count++;
+				} else if ($(index).attr("id") !== "postal" && $(index).val().trim().length > 0) {
+					form_elems_count++;
+				}
+			}
+		});
+		form_elems_select.map(function(item, index) {
+
+			if ($(index).val() !== '') {
+				form_elems_count++;
+			}
+		});
+
+		if ((+(form_elems.length)-2) === form_elems_count) {$(this).parents("form").submit();}
+		else {alert("Fill all the fields correctly!");}
+	});
+
 	var d = $('.message_chat .all_sms');
 	d.scrollTop(d.prop("scrollHeight"));
 	$(".dark_header__line .ham").click(function() {
@@ -1865,8 +1891,5 @@ if (window.innerWidth > 768) {
   });
 
 }
-
-    
-
 
 });
