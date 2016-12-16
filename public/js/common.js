@@ -1778,7 +1778,7 @@ if (window.innerWidth > 768) {
 										    console.log(obj);
 										    $.ajax({
 													type: "PUT",
-													url: "//api/user/update",
+													url: "/api/user/update",
 													data: obj,
 													datatype: "json",
 													success: function(response) {
