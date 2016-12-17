@@ -31,6 +31,18 @@ class Job extends Model
 
 
 
+    /**
+     * Accessors
+     */
+    public function getShortTitleAttribute()
+    {
+        return (strlen($this->title) < 40 ? $this->title : substr($this->title, 0, 40).'...');
+    }
+
+    public function getShortDescriptionAttribute()
+    {
+        return (strlen($this->description) < 40 ? $this->description : substr($this->description, 0, 60).'...');
+    }
 
     /**
      * Accessor to get in_progress orders count

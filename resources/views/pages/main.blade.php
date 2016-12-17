@@ -159,7 +159,7 @@
                                         </ul>
 
                                     </div>
-                                    
+
 
                                 </div>
 
@@ -173,9 +173,9 @@
 
                                     <div class="img_wrapper"><img src="{{ asset($job->image_url)}}" alt="alt"></div>
 
-                                    <h4>{{(strlen($job->title) < 40 ? $job->title : substr($job->title, 0, 40).'...')}}</h4>
+                                    <h4>{{$job->short_title}}</h4>
 
-                                    <p class="text">{{$job->description}}</p>
+                                    <p class="text">{{$job->short_description}}</p>
 
                                     <p class="count clearfix"><span class="left">${{$job->getConfiguredSale($user)}}/month</span><span class="right">{{$job->sales_count}}/{{$job->max_clients_count}} buyers</span></p>
 
