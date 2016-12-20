@@ -96,6 +96,18 @@ class CreditCardController extends Controller
 
 	$response = $psi->createExternalAccount($user, $token);
 
+	// The first time a card has been set, send email
+	// about Stripe Confirmation
+	if ($request->card_set == '0') {
+
+		Mail::send('emails.beginning_stripe_verification',['job_name'=> $job->title],function($u) use ($job)
+		{
+		    $u->from('admin@jobgrouper.com');
+		    $u->to('admin@jobgrouper.com');
+		    $u->subject('Job: ' . $job->title .' Is Being Created');
+		});
+	}
+
 	// Back to account page
         return redirect('/account');
     }

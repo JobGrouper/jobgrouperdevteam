@@ -60,12 +60,13 @@ class StripeAccountUpdated extends Job implements ShouldQueue
 		});
 	}
 	else {
-        if(count($fields_needed) > 0){
-            $stripeVerificationRequest = StripeVerificationRequest::create([
-                'managed_account_id' => $account_id,
-                'fields_needed' => json_encode($fields_needed),
-            ]);
-        }
+
+		if(count($fields_needed) > 0){
+		    $stripeVerificationRequest = StripeVerificationRequest::create([
+			'managed_account_id' => $account_id,
+			'fields_needed' => json_encode($fields_needed),
+		    ]);
+		}
 
 		Mail::send('emails.seller_need_additional_verification', ['id' => $employee->id], function($u) use ($employee)
 		{

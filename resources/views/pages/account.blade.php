@@ -205,6 +205,13 @@
                         <form id="seller_bank_account_form" method="POST" action="{{ url('/card/employee/create') }}">
 			    {{ csrf_field() }}
 			    <input type="hidden" name="account_type" value="bank_account" />
+
+		    	    @if ($card == NULL)
+			    <input type="hidden" name="card_set" value="0" />
+			    @else
+			    <input type="hidden" name="card_set" value="1" />
+			    @endif
+
                             <div class="block clearfix">
                                 <label>Account Name<span>*</span></label>
                                 <input type="text" name="account_holder_name" autocomplete="off"/>
@@ -228,6 +235,13 @@
                         <form id="seller_debit_card_form" method="POST" action="{{ url('/card/employee/create') }}">
 			    {{ csrf_field() }}
 			    <input type="hidden" name="account_type" value="card" />
+
+		    	    @if ($card == NULL)
+			    <input type="hidden" name="card_set" value="0" />
+			    @else
+			    <input type="hidden" name="card_set" value="1" />
+			    @endif
+
                             <div class="block clearfix">
                                 <label>Card Number<span>*</span></label>
                                 <input type="text" name="number" autocomplete="off"/>

@@ -19,7 +19,7 @@ class StripeWebhookController extends Controller
 {
     //
 	//
-	public function onInvoicePaid() {
+	public function onInvoicePaid(Request $request) {
 
 		// retrieve the request's body and parse it as json
 		$input = @file_get_contents("php://input");
@@ -30,7 +30,7 @@ class StripeWebhookController extends Controller
 		return response('Successful', 200);
 	}
 
-	public function onInvoiceCreated(PaymentServiceInterface $psi) {
+	public function onInvoiceCreated(Request $request, PaymentServiceInterface $psi) {
 
 		// retrieve the request's body and parse it as json
 		$input = @file_get_contents("php://input");
@@ -41,7 +41,7 @@ class StripeWebhookController extends Controller
 		return response('Successful', 200);
 	}
 
-	public function onInvoiceFailure() {
+	public function onInvoiceFailure(Request $request) {
 
 		// Retrieve the request's body and parse it as JSON
 		$input = @file_get_contents("php://input");
@@ -52,14 +52,25 @@ class StripeWebhookController extends Controller
 		return response('Successful', 200);
 	}
 
-	public function onAccountUpdated() {
+	public function onAccountUpdated(Request $request) {
 
 		// Retrieve the request's body and parse it as JSON
 		$input = @file_get_contents("php://input");
-		$event_json = json_decode($input, true);
+
+		$event_json = $this->inputOrRequest($request, $input);
 
 		dispatch( new StripeAccountUpdated($event_json) );
 
 		return response('Successful', 200);
+	}
+
+	private function inputOrRequest($request, $input, $name=NULL) {
+
+		if ($input == "") {
+			return $request->all();
+		}
+		else {
+			return json_decode($input, true);
+		}
 	}
 }

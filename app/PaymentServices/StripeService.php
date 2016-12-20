@@ -1038,7 +1038,7 @@ class StripeService implements PaymentServiceInterface {
 			//
 			Mail::send('emails.admin_job_activating',['job_name'=> $job->title],function($u) use ($job)
 			{
-			    $u->from('no-reply@jobgrouper.com');
+			    $u->from('admin@jobgrouper.com');
 			    $u->to('admin@jobgrouper.com');
 			    $u->subject('Job: ' . $job->title .' Is Being Created');
 			});

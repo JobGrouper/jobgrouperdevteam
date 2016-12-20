@@ -23,9 +23,9 @@ class StripeVerificationRequestsController extends Controller
             'stripeAccountData.legal_entity.address.postal_code' => 'digits:5',
             'stripeAccountData.legal_entity.address.state' => 'size:2',
 
-            'stripeAccountData.legal_entity.business_name' => 'min:2|max:255',
+            //'stripeAccountData.legal_entity.business_name' => 'min:2|max:255',
 
-            'stripeAccountData.legal_entity.business_tax_id' => 'min:2|max:255',
+            //'stripeAccountData.legal_entity.business_tax_id' => 'min:2|max:255',
 
             'stripeAccountData.legal_entity.dob.day' => 'digits_between:1,31',
             'stripeAccountData.legal_entity.dob.month' => 'digits_between:1,12',
@@ -44,7 +44,8 @@ class StripeVerificationRequestsController extends Controller
         $stripeAccountData = $request->stripeAccountData;
         $stripeAccountData['tos_acceptance']['date'] = time();
         //$stripeAccountData['tos_acceptance']['ip'] = $_SERVER['REMOTE_ADDR'];
-        $stripeAccountData['tos_acceptance']['ip'] = '89.252.17.119';   //for testing on local machine
+        //$stripeAccountData['tos_acceptance']['ip'] = '89.252.17.119';   //for testing on local machine
+	$stripeAccountData['tos_acceptance']['ip'] = $request->ip();
 
         //If file of verification document was attached.
         if ($request->hasFile('verification_document')) {
