@@ -108,29 +108,49 @@ class OrderController extends Controller
         $order->status = 'closed';
         $order->save();
 
+
+
         //If job has free place for buyer make it hot
         $job = $order->job()->first();
         if($job->status == 'working'){
             $job->make_hot();
         }
 
-	// Delete Stripe Customer if user signed on
-	// while an employee was active
-	//
-	// (Not completely correct)
-	// 	- what about cases where employee leaves?
-	// 	- or when there was no employee
-	//
-	if ($job->employee_id) {
+        $seller = $job->employee()->get()->first();
 
-		// get user who is closing order
-		//   and managed account
-		$user = DB::table('users')->where('id', $order->buyer_id)->first();
-		$seller_record = DB::table('stripe_managed_accounts')->where('user_id', $job->employee_id)->first();
+        // Delete Stripe Customer if user signed on
+        // while an employee was active
+        //
+        // (Not completely correct)
+        // 	- what about cases where employee leaves?
+        // 	- or when there was no employee
+        //
+        if ($job->employee_id) {
 
-		// Delete payment service records
-		$response = $psi->deleteCustomer($user, $seller_record->id);
-	}
+            // get user who is closing order
+            //   and managed account
+            $user = DB::table('users')->where('id', $order->buyer_id)->first();
+            $seller_record = DB::table('stripe_managed_accounts')->where('user_id', $job->employee_id)->first();
+
+            // Delete payment service records
+            $response = $psi->deleteCustomer($user, $seller_record->id);
+
+            //mail to seller
+            Mail::send('emails.buyer_leaving_job', ['buyer' => Auth::user(), 'job' => $job], function($u)
+            {
+                $u->from('admin@jobgrouper.com');
+                $u->to('admin@jobgrouper.com');
+                $u->subject('Buyer leaving the job.');
+            });
+
+            //mail to admin
+            Mail::send('emails.buyer_leaving_job', ['buyer' => Auth::user(), 'job' => $job], function($u) use ($seller)
+            {
+                $u->from('admin@jobgrouper.com');
+                $u->to($seller->email);
+                $u->subject('Buyer leaving the job.');
+            });
+        }
 
         $responseData['error'] = false;
         $responseData['status'] = 0;
