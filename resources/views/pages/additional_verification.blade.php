@@ -113,6 +113,8 @@
 							@elseif($field_name == 'legal_entity.personal_id_number')
 								<label for="first">Personal ID-Number</label>
 								<input type="text" id="pid_n" name="stripeAccountData[legal_entity][personal_id_number]">
+								<p class="attached bottom">Enter either your full Social Security Number
+								or your personal tax ID</p>
 							@elseif($field_name == 'legal_entity.verification.document')
 								<label for="first">Verification Document</label>
 								{{ Form::file('verification_document') }}

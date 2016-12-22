@@ -2,8 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\StripeVerificationRequest;
+
 use Illuminate\Console\Command;
 use Faker\Factory as Faker;
+use DB;
 
 class GenerateStripeVerificationRequest extends Command
 {
@@ -47,7 +50,7 @@ class GenerateStripeVerificationRequest extends Command
             'legal_entity.ssn_last_4',
             'legal_entity.type',
             'legal_entity.personal_id_number'
-	    ]
+	    ];
     }
 
     /**
@@ -62,11 +65,16 @@ class GenerateStripeVerificationRequest extends Command
 	$account_record = DB::table('stripe_managed_accounts')->
 		where('user_id', $user_id)->first();
 
-	$random_fields;
+	$random_fields = array();
+	foreach ($this->fields as $field) {
 
-	DB::table('stripe_verification_request')->insert([
+		if (rand(0,1) == 1) {
+			array_push($random_fields, $field);
+		}
+	}
+	StripeVerificationRequest::create([
 	    'managed_account_id' => $account_record->id,
-	    'fields_needed' => $random_fields,
+	    'fields_needed' => json_encode($random_fields),
 	]);
     }
 }

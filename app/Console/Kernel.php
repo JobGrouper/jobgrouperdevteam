@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\Inspire::class,
         Commands\ChatServer::class,
+	Commands\GenerateStripeVerificationRequest::class
     ];
 
     /**
