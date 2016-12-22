@@ -104,7 +104,7 @@
                     @endforeach
 
                 @else
-                    You have not any orders. You can order the job <a href="jobs">here</a>
+                    You do not have any orders. You can order a job <a href="jobs">here</a>.
                 @endif
 
             </div>

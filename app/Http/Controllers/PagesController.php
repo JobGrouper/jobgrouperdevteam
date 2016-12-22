@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Job;
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 
 class PagesController extends Controller
 {
     public function home(){
+
+	// get user
+	$user = Auth::user();
+
         //In the top of list are the hot cards (first of them in is in slider)
         $jobs = Job::hot()->get();
 
@@ -27,7 +32,7 @@ class PagesController extends Controller
         $jobs = $jobs->merge($notHotJobsOther);
         $chunks = $jobs->chunk(9); //9 = 1 in slider + 8 in rows
 
-        return view('pages.main', ['jobs' => $chunks->first()]);
+        return view('pages.main', ['user' => $user, 'jobs' => $jobs]);
     }
 
 

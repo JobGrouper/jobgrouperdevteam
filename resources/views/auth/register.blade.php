@@ -23,7 +23,7 @@
                 <a href="/social_login/facebook">
                     <span class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i>Facebook</span>
                 </a>
-                <a href="#">
+                <a onclick="alert('Sorry, we\'re still working on Twitter registration')">
                     <span class="twitter"><i class="fa fa-twitter"></i>Twitter</span>
                 </a>
             </div>
@@ -115,6 +115,7 @@
                 <label for="year">Birth year</label>
 		{{ Form::selectRange('dob_year', 1930, 2016, 'Select birth year...', ['placeholder' => 'Select birth year...', 'autocomplete' => 'off']) }}
                 <label for="ssn">Social Security Number (last four digits only)</label>
+		<p class="attached top">A little forward, we know, but we need it to verify your identity</p>
                 <input type="password" id="ssn" name="ssn_last_4" maxlength="4">
             </div>
             <input type="checkbox" id="terms">

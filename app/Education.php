@@ -31,7 +31,7 @@ class Education extends Model
      */
     public function getDateFromAttribute($value)
     {
-        return Carbon::parse($value)->toDateString();
+        return Carbon::parse($value)->format('m-j-Y');
     }
 
     /**
@@ -42,7 +42,7 @@ class Education extends Model
      */
     public function getDateToAttribute($value)
     {
-        return Carbon::parse($value)->toDateString();
+        return Carbon::parse($value)->format('m-j-Y');
     }
 
     /**

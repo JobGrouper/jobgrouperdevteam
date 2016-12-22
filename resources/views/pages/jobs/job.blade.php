@@ -5,17 +5,7 @@
 @section('content')
 
     <div class="view">
-        @if(!Auth::guest() && Auth::user()->user_type != 'employee')
-        <div class="alert_window month">
-            <div class="alert_window__block">
-                <p>{!! $pageTexts[13] !!}</p>
-                <p>Monthly price of the purchase: ${{number_format($job->salary, 2)}}</p>
-                <p>Markup: ${{number_format($job->salary, 2)}} * 15% fee = ${{number_format( $job->salary*0.15, 2)}}</p>
-                <p>Total: ${{number_format( $job->salary + ($job->salary*0.15), 2)}}</p>
-                <div class="cancel"></div>
-            </div>
-        </div>
-	@else
+        @if(!Auth::guest() && Auth::user()->user_type == 'employee')
         <div class="alert_window month">
             <div class="alert_window__block">
                 <p>{!! $pageTexts[13] !!}</p>
@@ -23,9 +13,21 @@
                 <div class="cancel"></div>
             </div>
         </div>
+	@else
+        <div class="alert_window month">
+            <div class="alert_window__block">
+		<p>JobGrouper applies a 15 percent service fee on top of the listed price</p>
+		<hr>
+                <p>Monthly price: ${{number_format($job->salary, 2)}}</p>
+                <p>Markup: ${{number_format($job->salary, 2)}} * 15% fee = ${{number_format( $job->salary*0.15, 2)}}</p>
+                <p>Total: ${{number_format( $job->salary + ($job->salary*0.15), 2)}}</p>
+                <div class="cancel"></div>
+            </div>
+        </div>
         @endif
 
         <div class="container">
+
             <div class="row">
 
                 <div class="col-md-12">
@@ -59,11 +61,36 @@
 
                                 <p class="name"><a href="/account/{{$employee->id}}">{{$employee->full_name}}</a></p>
 
-                                <div class="fb"><img src="{{asset('img/Profile/fb.png')}}" alt="alt">facebook.com/{{$employee->first_name.$employee->last_name}}</div>
+				<div class="fb">
+				<img src="{{asset('img/Profile/fb.png')}}" alt="alt">
+                                    @if($user['fb_url'])
+                                    {{ $user['fb_url'] }}
+                                    @else
+                                    No information yet.
+                                    @endif
+				</img>
+				</div>
 
-                                <div class="twitter"><img src="{{ asset('img/Profile/link.png') }}" alt="alt">linkedin.com/{{$employee->first_name.$employee->last_name}}</div>
+				<div class="twitter">
+				<img src="{{ asset('img/Profile/link.png') }}" alt="alt">
+                                    @if($user['linkid_url'])
+                                    {{ $user['linkid_url'] }}
+                                    @else
+                                    No information yet.
+                                    @endif
+				</img>
+				</div>
 
-                                <div class="twitter"><img src="{{ asset('img/Profile/github.png')}}" alt="alt">github.com/{{$employee->first_name.$employee->last_name}}</div>
+				<div class="twitter">
+				<img src="{{ asset('img/Profile/github.png')}}" alt="alt">
+                                  @if($user['git_url'])
+                                  {{ $user['git_url'] }}
+                                  @else
+                                  No information yet.
+                                  @endif
+				</img>
+				</div>
+
                                 <a href="/account/{{$employee->id}}">More details</a>
                                 @if($employeeStatus['status'] == 'leave')
                                     <span>Employee will leave this job at {{$employeeStatus['leave_date']}}</span>
@@ -83,7 +110,11 @@
 
                                 <div class="block bordered">
 
-                                    <span class="amount">${{(isset($user) && $user->user_type == 'employee' ? number_format($job->monthly_salary, 2) : number_format($job->monthly_price, 2))}}/mo</span>
+                                    <span class="amount">${{$job->getConfiguredSale($user)}}/mo</span>
+				    
+				    @if(!isset($user) || $user->user_type == 'buyer')
+				    <span class="disclaimer">A service charge will be added on to the purchase price</span>
+				    @endif
 
                                 </div>
 
@@ -120,7 +151,7 @@
                                 <a href="/login?fromJob={{$job->id}}"><button>Buy</button></a>
                                 @if(!$employee || $employeeStatus['status'] == 'leave')
                                     {{--If job has no employee or employee will leave this job--}}
-                                    <button class="apply">Apply for this Job</button>
+                                    <a href="/login?fromJob={{$job->id}}"><button class="apply noclick">Apply for this Job</button></a>
                                 @endif
                             @elseif(Auth::user()->user_type == 'employee')
                                 @if($employeeRequest)
@@ -170,6 +201,8 @@
                                         <?php
                                             $buyer = $order->buyer()->first();
                                         ?>
+
+					@if($buyer)
                                         <div class="recent_item">
 
                                             <div class="img_wrapper">
@@ -189,6 +222,7 @@
                                             </div>
 
                                         </div>
+					@endif
 
                                 @endforeach
 
