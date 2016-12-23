@@ -38,7 +38,7 @@ return [
     'facebook' => [
         'client_id' => '179542855756102',
         'client_secret' => 'a454d22cfbd3426ea4699d9797468c67',
-        'redirect' => 'http://jobgrouper.com/social_login/callback/facebook',
+        'redirect' => env('APP_URL').'/social_login/callback/facebook',
     ],
 
     'twitter' => [
