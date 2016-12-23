@@ -62,7 +62,7 @@ class StripeVerificationRequestsController extends Controller
         if($response){
             $stripeVerificationRequest->completed = true;
             $stripeVerificationRequest->save();
-            dd('Success'); //Redirect to "success page" will be here
+	    return view('pages.success_additional_verification');
         }
         else{
             Session::flash('message_error', 'Unknown error.');
