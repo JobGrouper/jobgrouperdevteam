@@ -18,6 +18,7 @@ class SocialAccountService
 
         //Check if UserSocialAccount already exist
         $providerUser = $providerObj->user();
+        //dd($providerUser->getName());
         $socialAccount = UserSocialAccount::whereProvider($providerName)
             ->whereProviderUserId($providerUser->getId())
             ->first();

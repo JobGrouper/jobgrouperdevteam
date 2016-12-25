@@ -7,6 +7,7 @@
         <form role="form" method="POST" action="{{ url('/custom_register') }}">
             {{ csrf_field() }}
             <input type="hidden" name="social_account_id" value="{{$userData['social_account_id']}}">
+            <input type="hidden" name="user_type" value="buyer">
             <h2>Finish registration</h2>
             <div class="signup_firstlast">
                 <div class="signup_firstlast__first">
@@ -23,14 +24,6 @@
             <div class="invalid_login"></div>
             <label for="pass">Password</label>
             <input type="password" id="pass" name="password">
-            <div class="radiodiv">
-                <input class="radio" type="radio" id="buyer" name="user_type" value="buyer">
-                <label class="buyer buy_radio" for="buyer">Buyer</label>
-            </div>
-            <div class="radiodiv">
-                <input class="radio" type="radio" id="employee" name="user_type" value="employee">
-                <label class="buyer employee_radio" for="employee">Prospective employee</label>
-            </div>
             <input type="checkbox" id="terms">
             <label class="terms" for="terms">I’ve read and agree to the <a href="#">Terms &amp; Conditions</a></label>
             <div class="btndiv clearfix">
