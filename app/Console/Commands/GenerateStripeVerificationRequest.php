@@ -36,21 +36,27 @@ class GenerateStripeVerificationRequest extends Command
         parent::__construct();
 
 	$this->fields = [
-            'legal_entity.address.city',
-            'legal_entity.address.line1',
-            'legal_entity.address.postal_code',
-            'legal_entity.address.state',
-            //'legal_entity.business_name',
-            //'legal_entity.business_tax_id',
-            'legal_entity.dob.day',
-            'legal_entity.dob.month',
-            'legal_entity.dob.year',
+            'legal_entity.address',
+            'legal_entity.dob',
             'legal_entity.first_name',
             'legal_entity.last_name',
             'legal_entity.ssn_last_4',
             'legal_entity.type',
             'legal_entity.personal_id_number'
 	    ];
+
+	$this->address_fields = [
+            'legal_entity.address.city',
+            'legal_entity.address.line1',
+            'legal_entity.address.postal_code',
+            'legal_entity.address.state',
+	];
+
+	$this->dob_fields = [
+            'legal_entity.dob.day',
+            'legal_entity.dob.month',
+            'legal_entity.dob.year',
+	];
     }
 
     /**
@@ -69,7 +75,16 @@ class GenerateStripeVerificationRequest extends Command
 	foreach ($this->fields as $field) {
 
 		if (rand(0,1) == 1) {
-			array_push($random_fields, $field);
+
+			if ($field == 'legal_entity.address') {
+				$random_fields = array_merge($random_fields, $this->address_fields);
+			}
+			else if ($field == 'legal_entity.dob') {
+				$random_fields = array_merge($random_fields, $this->dob_fields);
+			}
+			else {
+			   array_push($random_fields, $field);
+			}
 		}
 	}
 	StripeVerificationRequest::create([

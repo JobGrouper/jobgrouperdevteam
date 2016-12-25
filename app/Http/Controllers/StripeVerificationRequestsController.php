@@ -13,6 +13,8 @@ class StripeVerificationRequestsController extends Controller
 {
     public function update(Request $request, PaymentServiceInterface $psi){
 
+	return view('pages.success_additional_verification');
+/*
         $stripeVerificationRequest = StripeVerificationRequest::findOrFail($request->id);
 
         $this->authorize('edit', $stripeVerificationRequest);
@@ -58,15 +60,19 @@ class StripeVerificationRequestsController extends Controller
         }
 
         $response = $psi->updateAccount($stripeVerificationRequest->managed_account_id, $stripeAccountData);
+	var_dump($response);
 
-        if($response){
+        if(isset($response['error'])) {
+		echo "ERROR";
+	   return redirect()->back()->
+		withErrors([ $response['message'] ]);
+        }
+        else {
+		echo "SUCCESS";
             $stripeVerificationRequest->completed = true;
             $stripeVerificationRequest->save();
 	    return view('pages.success_additional_verification');
         }
-        else{
-            Session::flash('message_error', 'Unknown error.');
-            return redirect()->back();
-        }
+*/
     }
 }

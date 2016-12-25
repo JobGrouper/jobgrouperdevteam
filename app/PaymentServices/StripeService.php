@@ -478,7 +478,10 @@ class StripeService implements PaymentServiceInterface {
 
 		}
 			
-		return $response;
+		if ($response == NULL) 
+			return $error_response;
+		else 
+			return $response;
 	}
 
 	/*

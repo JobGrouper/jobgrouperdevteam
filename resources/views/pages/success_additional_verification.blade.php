@@ -1,3 +1,9 @@
+@extends('layouts.main')
+
+
+
+@section('title', 'Thank You!')
+
 @section('content')
 
     <section class="success">
@@ -7,8 +13,7 @@
                     <div class="success_text">
                         <img src="{{ asset('img/Success/photo.png') }}" alt="alt">
                         <p>THANKS FOR HELPING OUT</p>
-			<p>You will receive an email soon letting you know if you've been verified</p>
-                        {{--<a href="{{ $emailUrl }}"><button>Open email</button></a>--}}
+			<p>You will receive an email soon updating you on your verification status.</p>
                     </div>
                 </div>
             </div>
