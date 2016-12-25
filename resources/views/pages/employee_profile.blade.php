@@ -56,7 +56,15 @@
                             @if(count($user->experience()->get()) > 0)
                                 @foreach($user->experience()->get() as $experience)
                                     <h2>{{$experience->title}}</h2>
-                                    <p>{{$experience->date_from}} - {{$experience->date_to}}</p>
+
+					<p><span class="fromspan">{{$experience->date_from}}</span> - 
+					@if($experience->date_to_present == 1)
+					  <span class="tospan">present</span>
+					@else
+					  <span class="tospan">{{$experience->date_to}}</span>
+					@endif
+					</p>
+
                                     <p class="mixed">{{$experience->additional_info}}</p>
                                 @endforeach
                             @else
@@ -69,7 +77,15 @@
                             @if(count($user->education()->get()) > 0)
                                 @foreach($user->education()->get() as $education)
                                     <h2>{{$education->title}}</h2>
-                                    <p>{{$education->date_from}} - {{$education->date_to}}</p>
+
+				    <p><span class="fromspan">{{$education->date_from}}</span> - 
+					@if($education->date_to_present == 1)
+					<span class="tospan">present</span>
+					@else
+					<span class="tospan">{{$education->date_to}}</span>
+					@endif
+				    </p>
+
                                     <p class="mixed">{{$education->additional_info}}</p>
                                 @endforeach
                             @else
