@@ -107,7 +107,8 @@
 
                         {{--<a href="/register"><button class="email">Sign up with <span>email</span></button></a>--}}
 
-                        <a href="/social_login/twitter"><button class="email"><i class="fa fa-twitter" aria-hidden="true"></i>Sign up with <span>Twitter</span></button></a>
+                        <!--<a href="/social_login/twitter"><button class="email"><i class="fa fa-twitter" aria-hidden="true"></i>Sign up with <span>Twitter</span></button></a>-->
+                        <a href="#" onclick="alert('Apologies, we\'re still working on Twitter registration')"><button class="email"><i class="fa fa-twitter" aria-hidden="true"></i>Sign up with <span>Twitter</span></button></a>
 
                         <a href="/social_login/facebook"><button class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i>Sign up with <span>Facebook</span></button></a>
 
