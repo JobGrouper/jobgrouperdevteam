@@ -153,21 +153,21 @@ class EmployeeRequestController extends Controller
             $employeeRequest->status = 'rejected';
             $employeeRequest->save();
             $job = $employeeRequest->job()->first();
-            $employee = $job->employee()->first();
+            $employee = $employeeRequest->employee()->first();
             //Если пользователь еще не выполнитель этой карточни, отправляем письмо, что заявка отклонена
             if($job->employee_id != $employeeRequest->employee_id){
                 Mail::send('emails.employee_request_rejected', ['job_name' => $job->title], function ($u) use ($employee) {
                     $u->from('admin@jobgrouper.com');
                     $u->to($employee->email);
-                    $u->subject('Request rejected!');
+                    $u->subject('Your request has been rejected.');
                 });
             }
             //Если пользователь уже выполнитель этой карточни, отправляем письмо, что отстранен от работы
             else{
-                Mail::send('emails.discharged_of_work', ['job_name' => $job->title], function ($u) use ($employee) {
+                Mail::send('emails.discharged_of_work', ['job_name' => $job->title], function ($u) use ($employee, $job) {
                     $u->from('admin@jobgrouper.com');
                     $u->to($employee->email);
-                    $u->subject('You was discharged of work!');
+                    $u->subject('You have been removed from ' . $job->title);
                 });
             }
             $job->employee_id = null;

@@ -1,1 +1,1 @@
-<p>Your request for the "{{$job_name}}" has been rejected!</p>
+<p>Your request for the "{{$job_name}}" position has been rejected.</p>
