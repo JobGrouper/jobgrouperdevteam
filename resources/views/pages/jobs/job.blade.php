@@ -148,10 +148,10 @@
                         <div class="buttons">
 
                             @if (Auth::guest())
-                                <a href="/login?fromJob={{$job->id}}"><button>Buy</button></a>
+                                <a href="/login"><button>Buy</button></a>
                                 @if(!$employee || $employeeStatus['status'] == 'leave')
                                     {{--If job has no employee or employee will leave this job--}}
-                                    <a href="/login?fromJob={{$job->id}}"><button class="apply noclick">Apply for this Job</button></a>
+                                    <a href="/login"><button class="apply noclick">Apply for this Job</button></a>
                                 @endif
                             @elseif(Auth::user()->user_type == 'employee')
                                 @if($employeeRequest)

@@ -20,9 +20,8 @@ class MyAuth extends Controller
                 }
                 else{
                     //If buyer come to login from card buy process - redirect him to that card
-                    if(Session::get('formJob')){
-                        $jobID = Session::get('formJob');
-                        Session::forget('formJob');
+                    if(Session::get('last_visited_job')){
+                        $jobID = Session::pull('last_visited_job');
                         return redirect('/job/'.$jobID);
                     }
 

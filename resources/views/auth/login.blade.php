@@ -1,10 +1,3 @@
-<?php
-if(Request::input('fromJob')){
-    Session::put('formJob', Request::input('fromJob'));
-    //Session::forget('formJob');
-}
-?>
-
 @extends('layouts.main')
 
 @section('content')
