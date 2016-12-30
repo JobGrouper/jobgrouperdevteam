@@ -159,7 +159,7 @@ class EmployeeRequestController extends Controller
                 Mail::send('emails.employee_request_rejected', ['job_name' => $job->title], function ($u) use ($employee) {
                     $u->from('admin@jobgrouper.com');
                     $u->to($employee->email);
-                    $u->subject('Your request has been rejected.');
+                    $u->subject('Application Status Update');
                 });
             }
             //Если пользователь уже выполнитель этой карточни, отправляем письмо, что отстранен от работы
