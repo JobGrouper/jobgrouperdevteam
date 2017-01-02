@@ -15,7 +15,7 @@ class GenerateStripeVerificationRequest extends Command
      *
      * @var string
      */
-    protected $signature = 'generate:stripe_verification_request {user_id}';
+    protected $signature = 'generate:stripe_verification_request {user_id} {file_mandate=false}';
 
     protected $fields;
 
@@ -42,7 +42,8 @@ class GenerateStripeVerificationRequest extends Command
             'legal_entity.last_name',
             'legal_entity.ssn_last_4',
             'legal_entity.type',
-            'legal_entity.personal_id_number'
+            'legal_entity.personal_id_number',
+	    'legal_entity.verification.document'
 	    ];
 
 	$this->address_fields = [
@@ -73,6 +74,15 @@ class GenerateStripeVerificationRequest extends Command
 
 	$random_fields = array();
 	foreach ($this->fields as $field) {
+
+		// If file is specified, make sure to push it
+		//
+		if ($field == 'legal_entity.verification.document' && 
+			$this->argument('file_mandate') == true ) {
+
+			array_push($random_fields, $field);
+			continue;
+		}
 
 		if (rand(0,1) == 1) {
 

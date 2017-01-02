@@ -12,7 +12,7 @@
                 <div class="col-md-12">
                     <div class="success_text">
                         <img src="{{ asset('img/Success/photo.png') }}" alt="alt">
-                        <p>THANKS FOR HELPING OUT</p>
+                        <p>THANKS FOR YOUR COOPERATION</p>
 			<p>You will receive an email soon updating you on your verification status.</p>
                     </div>
                 </div>

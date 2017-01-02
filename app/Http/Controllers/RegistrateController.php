@@ -199,7 +199,7 @@ class RegistrateController extends Controller
         if (Auth::check()) {
             $user = Auth::user();
             $stripeVerificationRequest = StripeVerificationRequest::find($id);
-            if($user->can('edit', $stripeVerificationRequest)){
+            if($user->can('edit', $stripeVerificationRequest) && $stripeVerificationRequest->completed == false){
                 return view('pages.additional_verification', [
                     'fields_needed' => json_decode($stripeVerificationRequest->fields_needed, true),
                     'id' => $stripeVerificationRequest->id

@@ -61,19 +61,28 @@ class StripeAccountUpdated extends Job implements ShouldQueue
 	}
 	else {
 
-		if(count($fields_needed) > 0){
+		$stripeVerificationRequest = NULL;
+
+		if(count($fields_needed) > 0) {
 		    $stripeVerificationRequest = StripeVerificationRequest::create([
 			'managed_account_id' => $account_id,
 			'fields_needed' => json_encode($fields_needed),
 		    ]);
 		}
 
-		Mail::send('emails.seller_need_additional_verification', ['id' => $employee->id], function($u) use ($employee)
-		{
-		    $u->from('admin@jobgrouper.com');
-		    $u->to($employee->email);
-		    $u->subject('You\'re not fully verified on JobGrouper!');
-		});
+		// making sure svrequest is present
+		if ($stripeVerificationRequest) {
+
+			Mail::send('emails.seller_need_additional_verification', ['request_id' => $stripeVerificationRequest->id], function($u) use ($employee)
+			{
+			    $u->from('admin@jobgrouper.com');
+			    $u->to($employee->email);
+			    $u->subject('You\'re not fully verified on JobGrouper!');
+			});
+		}
+		else {
+			Log::error("Stripe Verification Request was not created for user: " . $employee->id . "; email: " . $employee->email);
+		}
 	}
 
     }

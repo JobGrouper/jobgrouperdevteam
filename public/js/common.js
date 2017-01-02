@@ -14,6 +14,11 @@ $(document).ready(function() {
 					form_elems_count++;
 				}
 			}
+			else if ($(index).attr("type") == 'file') {
+				// if file length is greater than 0
+				if ($(index).get(0).files.length > 0)
+					form_elems_count++;
+			}
 		});
 		form_elems_select.map(function(item, index) {
 

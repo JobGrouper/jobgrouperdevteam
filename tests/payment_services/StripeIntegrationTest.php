@@ -1030,4 +1030,40 @@ class StripeIntegrationTest extends TestCase
 		$this->seeInDatabase('stripe_verification_requests',
 			['managed_account_id' => $account_id]);
 	}
+
+	public function testAccountUpdatedRequestOnSuccess() {
+
+		// create buyer
+		//
+		$user = User::create([
+		    'first_name' => 'Teddy',
+		    'last_name' => 'Thanopoklos',
+		    'user_type' => 'buyer',
+		    'email' => 'teddy1@bearmail.com',
+		    'password' => bcrypt('password'),
+		]);
+
+		// create managed account
+		$account_id = 'acct_id';
+		$this->psi->insertAccountIntoDB($account_id, $user->id);
+		$event = ['data' => [
+				'object' => [
+					'id' => $account_id,
+					'legal_entity' => [
+						'verification' => [
+							'status' => 'verified'
+							]
+						],
+					'verification' => [
+						'disabled_reason' => NULL,
+						'fields_needed' => []
+						]
+					]
+				]
+			];
+
+		$response = $this->call('POST', '/api/stripe/account/updated', $event);
+
+		$this->assertEquals(200, $response->status());
+	}
 }
