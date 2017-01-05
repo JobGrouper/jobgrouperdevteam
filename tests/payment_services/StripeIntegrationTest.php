@@ -1042,6 +1042,7 @@ class StripeIntegrationTest extends TestCase
 		    'user_type' => 'buyer',
 		    'email' => 'teddy1@bearmail.com',
 		    'password' => bcrypt('password'),
+		    'verified' => true
 		]);
 
 		// create managed account
@@ -1066,6 +1067,7 @@ class StripeIntegrationTest extends TestCase
 		$response = $this->call('POST', '/api/stripe/account/updated', $event);
 
 		$this->assertEquals(200, $response->status());
+		$this->assertTrue($user->verified);
 	}
 
 	public function testSellerConfirmation() {

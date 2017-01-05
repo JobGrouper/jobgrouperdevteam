@@ -53,6 +53,10 @@ class StripeAccountUpdated extends Job implements ShouldQueue
 
 	if ($verification_status == 'verified') {
 
+		// set verified status to TRUE
+		$employee->verified = true;
+		$employee->save();
+
 		Mail::send('emails.seller_fully_verified', [], function($u) use ($employee)
 		{
 		    $u->from('admin@jobgrouper.com');

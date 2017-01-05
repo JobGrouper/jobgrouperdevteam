@@ -13,7 +13,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'user_type', 'email', 'password', 'linkid_url', 'fb_url', 'git_url', 'description', 'active', 'paypal_email'
+        'first_name', 'last_name', 'user_type', 'email', 'password', 'linkid_url', 'fb_url', 'git_url', 'description', 'active', 'paypal_email', 'verified'
     ];
 
     /**
@@ -34,6 +34,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_confirmed' => 'bool',
+	'verified' => 'bool'
     ];
 
     /**
