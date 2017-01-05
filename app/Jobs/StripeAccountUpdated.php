@@ -45,48 +45,72 @@ class StripeAccountUpdated extends Job implements ShouldQueue
 	$verification = $this->event['data']['object']['verification']['disabled_reason'];
 	$fields_needed = $this->event['data']['object']['verification']['fields_needed'];
 
-	// Get employee
-	$employee_record = DB::table('stripe_managed_accounts')->
-		where('id', $account_id)->first();
+	// Check for test parameter
+	if ($account_id == "acct_00000000000000") {
 
-	$employee = User::find($employee_record->user_id);
-
-	if ($verification_status == 'verified') {
-
-		// set verified status to TRUE
-		$employee->verified = true;
-		$employee->save();
-
-		Mail::send('emails.seller_fully_verified', [], function($u) use ($employee)
-		{
-		    $u->from('admin@jobgrouper.com');
-		    $u->to($employee->email);
-		    $u->subject('You are now fully verified!');
-		});
-	}
-	else {
-
-		$stripeVerificationRequest = NULL;
-
-		if(count($fields_needed) > 0) {
-		    $stripeVerificationRequest = StripeVerificationRequest::create([
-			'managed_account_id' => $account_id,
-			'fields_needed' => json_encode($fields_needed),
-		    ]);
-		}
-
-		// making sure svrequest is present
-		if ($stripeVerificationRequest) {
-
-			Mail::send('emails.seller_need_additional_verification', ['request_id' => $stripeVerificationRequest->id], function($u) use ($employee)
+		if ($verification_status == 'verified') {
+			Mail::send('emails.seller_fully_verified', [], function($u)
 			{
 			    $u->from('admin@jobgrouper.com');
-			    $u->to($employee->email);
-			    $u->subject('You\'re not fully verified on JobGrouper!');
+			    $u->to('test@test.com');
+			    $u->subject('TEST VERIFICATION RECEIVED');
 			});
 		}
 		else {
-			Log::error("Stripe Verification Request was not created for user: " . $employee->id . "; email: " . $employee->email);
+
+			Mail::send('emails.seller_need_additional_verification', ['request_id' => '000000'], function($u)
+			{
+			    $u->from('admin@jobgrouper.com');
+			    $u->to('test@test.com');
+			    $u->subject('TEST ADDITIONAL VERIFICATION RECEIVED');
+			});
+		}
+	}
+	else {
+
+		// Get employee
+		$employee_record = DB::table('stripe_managed_accounts')->
+			where('id', $account_id)->first();
+
+		$employee = User::find($employee_record->user_id);
+
+		if ($verification_status == 'verified') {
+
+			// set verified status to TRUE
+			$employee->verified = true;
+			$employee->save();
+
+			Mail::send('emails.seller_fully_verified', [], function($u) use ($employee)
+			{
+			    $u->from('admin@jobgrouper.com');
+			    $u->to($employee->email);
+			    $u->subject('You are now fully verified!');
+			});
+		}
+		else {
+
+			$stripeVerificationRequest = NULL;
+
+			if(count($fields_needed) > 0) {
+			    $stripeVerificationRequest = StripeVerificationRequest::create([
+				'managed_account_id' => $account_id,
+				'fields_needed' => json_encode($fields_needed),
+			    ]);
+			}
+
+			// making sure svrequest is present
+			if ($stripeVerificationRequest) {
+
+				Mail::send('emails.seller_need_additional_verification', ['request_id' => $stripeVerificationRequest->id], function($u) use ($employee)
+				{
+				    $u->from('admin@jobgrouper.com');
+				    $u->to($employee->email);
+				    $u->subject('You\'re not fully verified on JobGrouper!');
+				});
+			}
+			else {
+				Log::error("Stripe Verification Request was not created for user: " . $employee->id . "; email: " . $employee->email);
+			}
 		}
 	}
 
