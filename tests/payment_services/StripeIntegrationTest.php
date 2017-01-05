@@ -10,6 +10,7 @@ use \App\PaymentServices\StripeService;
 use App\Job;
 use App\User;
 use App\Sale;
+use App\ConfirmUsers;
 
 use App\Jobs\StripePlanActivation;
 use App\Jobs\StripeAccountUpdated;
@@ -1065,5 +1066,32 @@ class StripeIntegrationTest extends TestCase
 		$response = $this->call('POST', '/api/stripe/account/updated', $event);
 
 		$this->assertEquals(200, $response->status());
+	}
+
+	public function testSellerConfirmation() {
+
+		// Create employee
+		//
+		$user = User::create([
+		    'first_name' => 'Teddy',
+		    'last_name' => 'Thanopoklos',
+		    'user_type' => 'employee',
+		    'email' => 'teddy1@bearmail.com',
+		    'password' => bcrypt('password'),
+		]);
+
+		$token = 'test_token';
+
+		$confirmUser = new ConfirmUsers;
+		$confirmUser->email = $user->email;
+		$confirmUser->token = $token;
+		$confirmUser->save();
+
+		$response = $this->call('GET', '/register/confirm/' . $token);
+
+		$this->assertEquals(302, $response->status());
+		$pos = strpos($response->content(), 'account');
+
+		$this->assertGreaterThan(-1, $pos);
 	}
 }

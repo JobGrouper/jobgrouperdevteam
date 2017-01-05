@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Interfaces\PaymentServiceInterface;
 use App\StripeVerificationRequest;
 use Mail;
+use Log;
 use DB;
 
 use App\User;
@@ -56,7 +57,7 @@ class StripeAccountUpdated extends Job implements ShouldQueue
 		{
 		    $u->from('admin@jobgrouper.com');
 		    $u->to($employee->email);
-		    $u->subject('You\'re fully verified on JobGrouper!');
+		    $u->subject('You are now fully verified!');
 		});
 	}
 	else {

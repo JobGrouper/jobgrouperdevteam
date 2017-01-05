@@ -180,7 +180,16 @@ class RegistrateController extends Controller
             Auth::login($user);
             
             if($user->user_type == 'employee'){
-                return redirect('/account');
+
+		    //Sending confirmation mail to user
+		    Mail::send('emails.seller_confirm', [] ,function($u) use ($user)
+		    {
+			$u->from('admin@jobgrouper.com');
+			$u->to($user->email);
+			$u->subject('Final Steps for Verification');
+		    });
+
+		return redirect('/account');
             }
             else{
                 //If buyer come to login from card buy process - redirect him to that card
