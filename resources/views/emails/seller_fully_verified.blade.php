@@ -18,7 +18,7 @@
 
 <h1>You're Fully Verified!</h1>
 <p>Congratulations! You're fully verified and all set to begin working.
-Don't forget to add your education and experience to your <a href="{{ Request::root() }}/account">account
+Don't forget to add your education and experience to your <a href="{{ env('SERVICE_APP_URL') }}/account">account
 page</a>, so that you can present your best self to our hiring team,
 and to individual buyers who will see your profile.</p>
 

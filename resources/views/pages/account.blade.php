@@ -202,9 +202,9 @@
                 <div class="profile_text" style="border-bottom: none;">
                     <h2>Payment options</h2>
 		    @if ($card == NULL)
-                      <div class="payment_method">Need payment method</div>
+                      <div class="payment_method not_set">Need payment method</div>
 		    @else
-                      <div class="payment_method">Payment method set</div>
+                      <div class="payment_method set">Payment method set</div>
 		    @endif
                     <button class="seller_cards" id="bank_add">Add Bank Account</button>
 		    <p>...or...</p>

@@ -1234,7 +1234,6 @@ img {
 
     .profile_text .payment_method {
       text-transform: uppercase;
-      background-color: #DD4F43;
       color: #ffffff;
       width: 220px;
       height: 40px;
@@ -1242,6 +1241,12 @@ img {
       line-height: 40px;
       font-weight: 700;
       margin-bottom: 80px;
+    }
+    .profile_text .payment_method.not_set {
+      background-color: #DD4F43;
+    }
+    .profile_text .payment_method.set {
+      background-color: #7EDC6E;
     }
     .profile_text .bank_form {
       width: 500px;

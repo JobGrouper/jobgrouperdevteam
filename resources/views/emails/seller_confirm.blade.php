@@ -20,7 +20,7 @@
 <p>Now that you've activated your account, there is one final step needed
 for you to get paid for the amazing work you do at JobGrouper!</p>
 
-<p>To receive monthly payments, please proceed to your <a href="{{ Request::root() }}/account">
+<p>To receive monthly payments, please proceed to your <a href="{{ env('SERVICE_APP_URL') }}/account">
 page</a> as soon as possible and add a payment method to your profile;
 you can choose to be paid through your bank account or through a debit
 card. As soon as you do that, we will mark your profile as fully
