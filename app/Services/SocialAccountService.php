@@ -31,7 +31,9 @@ class SocialAccountService
             }
 
             $fullName = preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $providerUser->getName());
-            list($first_name, $last_name) = explode(' ', $fullName);
+            $arrayName = explode(' ', $fullName);
+            $first_name = $arrayName[0];
+            $last_name = (isset($arrayName[1]) ? $arrayName[1] : '');
             return ([
                 'social_account_id' => $socialAccount->id,
                 'email' => $providerUser->getEmail(),
@@ -47,7 +49,9 @@ class SocialAccountService
             $socialAccount->save();
 
             $fullName = preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $providerUser->getName());
-            list($first_name, $last_name) = explode(' ', $fullName);
+            $arrayName = explode(' ', $fullName);
+            $first_name = $arrayName[0];
+            $last_name = (isset($arrayName[1]) ? $arrayName[1] : '');
             return ([
                 'social_account_id' => $socialAccount->id,
                 'email' => $providerUser->getEmail(),

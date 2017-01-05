@@ -18,7 +18,7 @@ if(Request::input('fromJob')){
                     <a href="/social_login/facebook">
                         <span class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i>Facebook</span>
                     </a>
-                    <a onclick="alert('Sorry, we\'re still working on Twitter login')">
+                    <a href="/social_login/twitter">
                         <span class="twitter"><i class="fa fa-twitter"></i>Twitter</span>
                     </a>
                 </div>

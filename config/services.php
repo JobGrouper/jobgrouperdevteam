@@ -36,15 +36,15 @@ return [
     ],
 
     'facebook' => [
-        'client_id' => '179542855756102',
-        'client_secret' => 'a454d22cfbd3426ea4699d9797468c67',
-        'redirect' => 'http://jobgrouper.com/social_login/callback/facebook',
+        'client_id' => env('FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+        'redirect' => env('SERVICE_APP_URL').'/social_login/callback/facebook',
     ],
 
     'twitter' => [
-        'client_id' => 'siVjlagVI0MCuZ1lVRBE5ySUW',
-        'client_secret' => 'W4dnzAvvMgg0RWNNcaTVTIlhVk2jbsMSSQT8yvBwo8Rixk7Kj2',
-        'redirect' => 'http://jobgrouper.com/social_login/callback/twitter',
+        'client_id' => env('TWITTER_CLIENT_ID'),
+        'client_secret' => env('TWITTER_CLIENT_SECRET'),
+        'redirect' => env('SERVICE_APP_URL').'/social_login/callback/twitter',
     ],
 
 ];

@@ -36,12 +36,6 @@ class RegistrateController extends Controller
 
     public function register(Request $request, PaymentServiceInterface $psi)
     {
-
-        /*$user = User::where('email', '=', $request->input('email'))->first();
-        if ($user !== null) {
-            die('User with this email already exist');
-        }*/
-
         switch($request->user_type){
             case 'buyer':
                 $this->validate($request, [
@@ -95,8 +89,7 @@ class RegistrateController extends Controller
             //Check if registration began from creating the social account (fb / tw)
             if($request->input('social_account_id')){
                 $socialAccount = UserSocialAccount::whereId($request->input('social_account_id'))
-                    ->whereUserId(null)
-                    ->first();
+                    ->whereUserId(null)->get()->first();
 
                 //Associating user account with user social account
                 $socialAccount->user()->associate($user);
