@@ -13,7 +13,7 @@
 
             <div class="col-md-12">
 
-                <div class="profile_title">Profile</div>
+                <div class="profile_title"></div>
 
                 <div class="profile_info">
 
@@ -28,7 +28,13 @@
 
                 <div class="social">
 
-                    <p class="name">{{ $user['first_name'] }} {{ $user['last_name'] }}</p>
+		    <div class="name_header">
+			    <span class="name">{{ $user['first_name'] }} {{ $user['last_name'] }}</span> 
+
+			    @if($user->verified)
+			      <verified class="verified">&check;</verified>
+			    @endif
+		    </div>
                     <div class="edittitle">
                         <input class="edit_name" type="text" value="{{ $user['first_name'] }}">
                         <input class="edit_surname" type="text" value="{{ $user['last_name'] }}">

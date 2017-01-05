@@ -1575,11 +1575,25 @@ img {
       .profile_info .close img {
         width: 100%;
       }
-      .profile_info .social .name {
+      .profile_info .social .name_header {
+	margin-bottom:35px;
+      }
+      .profile_info .social .name_header .name {
         font-weight: 700;
         font-size: 48px;
         color: #3F3E40;
-        margin-bottom: 35px; }
+      }
+      .profile_info .social .name_header verified {
+	position:relative;
+	top:-3px;
+	display:inline-block;
+	color: white;
+	font-size:18px;
+	border-radius:50%;
+	padding:0 7px;
+	background-color:#4182D0;
+	margin-left:4px;
+      }
       .profile_info .social img {
         margin-right: 10px;
         float: left; }
