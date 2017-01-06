@@ -9,6 +9,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use URL;
+use Mail;
 
 class CreditCardController extends Controller
 {
@@ -100,11 +101,11 @@ class CreditCardController extends Controller
 	// about Stripe Confirmation
 	if ($request->card_set == '0') {
 
-		Mail::send('emails.beginning_stripe_verification',['job_name'=> $job->title],function($u) use ($job)
+		Mail::send('emails.beginning_stripe_verification',['job_name'=> $job->title],function($u) use ($job, $user)
 		{
 		    $u->from('admin@jobgrouper.com');
-		    $u->to('admin@jobgrouper.com');
-		    $u->subject('Job: ' . $job->title .' Is Being Created');
+		    $u->to($user->email);
+		    $u->subject();
 		});
 	}
 

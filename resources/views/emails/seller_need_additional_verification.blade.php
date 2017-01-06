@@ -1,5 +1,5 @@
 <style>
-    a{
+    a.button {
         transition: all .3s ease;
         -webkit-transition: all .3s ease;
         -moz-transition: all .3s ease;
