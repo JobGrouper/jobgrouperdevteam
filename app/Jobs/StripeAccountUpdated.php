@@ -113,6 +113,9 @@ class StripeAccountUpdated extends Job implements ShouldQueue
 			}
 		}
 	}
+    }
 
+    public function failed() {
+	Log::error("STRIPE ACCOUNT UPDATED FAILED: account->" . $account_id);
     }
 }

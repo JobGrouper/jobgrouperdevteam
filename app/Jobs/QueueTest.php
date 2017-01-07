@@ -33,4 +33,8 @@ class QueueTest extends Job implements ShouldQueue
         //
 	Log::info('Queue is running');
     }
+
+    public function failed() {
+	Log::error("QUEUE TEST FAILED");
+    }
 }
