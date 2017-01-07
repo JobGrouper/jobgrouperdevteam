@@ -105,7 +105,7 @@ class StripeAccountUpdated extends Job implements ShouldQueue
 				{
 				    $u->from('admin@jobgrouper.com');
 				    $u->to($employee->email);
-				    $u->subject('You\'re not fully verified on JobGrouper!');
+				    $u->subject('We need more information to complete your verification');
 				});
 			}
 			else {

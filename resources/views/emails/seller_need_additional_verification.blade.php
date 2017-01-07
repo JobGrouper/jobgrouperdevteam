@@ -16,7 +16,8 @@
     }
 </style>
 
-<h1>We Need Some More Information From You<h1>
+<h1>We Need Some More Information From You</h1>
+
 <p>It seems that we will require more information from you in order to fully verify your account.
 Not to worry, it shouldn't take long.</p>
 

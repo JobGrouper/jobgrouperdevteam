@@ -101,7 +101,7 @@ class CreditCardController extends Controller
 	// about Stripe Confirmation
 	if ($request->card_set == '0') {
 
-		Mail::send('emails.beginning_stripe_verification',['job_name'=> $job->title],function($u) use ($job, $user)
+		Mail::send('emails.beginning_stripe_verification', [], function($u) use ($user)
 		{
 		    $u->from('admin@jobgrouper.com');
 		    $u->to($user->email);
