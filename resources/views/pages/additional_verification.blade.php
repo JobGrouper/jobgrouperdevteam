@@ -5,7 +5,7 @@
 @section('content')
 
 
-	<div class="forgotpass login signup">
+	<div class="forgotpass login signup verification">
 		<div class="forgotpass_form">
 				<p>Additional data for Stripe verification</p>
 				@if (session('message_success'))
@@ -112,7 +112,7 @@
 
 							@elseif($field_name == 'legal_entity.personal_id_number')
 								<label for="first">Personal ID-Number</label>
-								<input type="text" id="pid_n" name="stripeAccountData[legal_entity][personal_id_number]">
+								<input type="password" id="pid_n" name="stripeAccountData[legal_entity][personal_id_number]">
 								<p class="attached bottom">Enter either your full Social Security Number
 								or your personal tax ID</p>
 							@elseif($field_name == 'legal_entity.verification.document')

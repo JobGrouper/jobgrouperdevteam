@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 	// /account/additional_info/13 validation
-	$(".forgotpass.login.signup .forgotpass_form form button").click(function(e){
+	$(".forgotpass.login.signup.verification .forgotpass_form form button").click(function(e){
 		e.preventDefault();
 		var form_elems_count = 0;
 		var form_elems = $(this).parents('form').find("input, select");
@@ -26,9 +26,9 @@ $(document).ready(function() {
 				form_elems_count++;
 			}
 		});
-
+		var silly = (+(form_elems.length)-2)
 		if ((+(form_elems.length)-2) === form_elems_count) {$(this).parents("form").submit();}
-		else {alert("Fill all the fields correctly!");}
+		else {alert("Fill in all the fields correctly!");}
 	});
 
 	var d = $('.message_chat .all_sms');
@@ -406,6 +406,7 @@ $(document).ready(function() {
 			}
 			});
 	}
+	/*
 	$(".signup .btndiv button").click(function(event) {
 		// event.preventDefault();
 		var checkedAttr = $("input[class='radio']").attr("checked");
@@ -427,6 +428,7 @@ $(document).ready(function() {
 			event.preventDefault();
 		}
 	});
+	*/
 
 	////REGISTER FINISH
 
@@ -1561,7 +1563,7 @@ $(".creditcard_info__form button").on("click", function(event) {
 		// 	}
 		// })
 	} else {
-		alert("Fill all the fields correctly!");
+		alert("Fill in all the fields correctly!");
 		event.preventDefault();
 	}
 });

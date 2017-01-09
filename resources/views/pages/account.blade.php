@@ -262,9 +262,17 @@
                             <div class="block clearfix">
                                 <label>Exp Month/Year<span>*</span></label>
                                 <div class="wrap">
+				    <div class="input_container">
                                     <input maxlength="2" class="data_input" type="text" name="exp_month" autocomplete="off"/>
-                                    <span>/</span>
+				    <p class="attached">eg. 5, or 05</p>
+				    </div>
+				    <div class="between">
+                                    <p class="between">/</p>
+				    </div>
+				    <div class="input_container">
                                     <input maxlength="4" class="data_input" type="text" name="exp_year" autocomplete="off"/>
+				    <p class="attached">Full year, eg. 2017</p>
+				    </div>
                                 </div>
                             </div>
 				<!--

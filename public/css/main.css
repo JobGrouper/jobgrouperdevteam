@@ -1289,6 +1289,25 @@ img {
       width: 300px;
       float: right;
     }
+    .profile_text .bank_form .block .input_container {
+      width: 120px;
+      display:inline-block;
+    }
+      .profile_text .bank_form .block .input_container p.attached {
+	float:none;
+	font-size: 12px;
+	color: #A0A0A0;
+	margin-top:-2px;
+      }
+    .profile_text .bank_form .block div.between {
+      display:inline-block;
+    }
+       .profile_text .bank_form .block div.between p {
+	 position:relative;
+	 top:-15px;
+	 font-size:32px;
+         margin: 0;
+       }
     .profile_text .bank_form button {
       display: block;
       margin: auto;
