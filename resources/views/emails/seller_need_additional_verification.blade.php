@@ -1,21 +1,6 @@
-<style>
-    a.button {
-        transition: all .3s ease;
-        -webkit-transition: all .3s ease;
-        -moz-transition: all .3s ease;
-        -o-transition: all .3s ease;
-        display: block;
-        width: 150px;
-        text-align: center;
-        margin: 20px auto;
-        padding: 15px 20px;
-        color: #fff;
-        background: #3e6372;
-        text-decoration: none;
-        border-radius: 5px;
-    }
-</style>
+@extends('layouts.email')
 
+@section('content')
 <h1>We Need Some More Information From You</h1>
 
 <p>It seems that we will require more information from you in order to fully verify your account.
@@ -33,3 +18,4 @@ becomes a problem.</p>
 <p>Thanks for working with us!</p>
 
 <p>--JobGrouper</p>
+@endsection

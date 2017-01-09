@@ -105,7 +105,7 @@ class CreditCardController extends Controller
 		{
 		    $u->from('admin@jobgrouper.com');
 		    $u->to($user->email);
-		    $u->subject();
+		    $u->subject('We\'ve begun verifying your account');
 		});
 	}
 
