@@ -18,6 +18,8 @@ class ResetLastVisitedJobVariable
         'register',
         'custom_register',
         'job/{id}',
+        'register/confirm/{token}',
+        'api/checkEmailFree',
     ];
     /**
      * Handle an incoming request.
