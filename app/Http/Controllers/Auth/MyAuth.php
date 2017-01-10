@@ -15,17 +15,15 @@ class MyAuth extends Controller
         {
             $user = Auth::user();
             if($user->active){
+                if(Session::get('last_visited_job')){
+                    $jobID = Session::pull('last_visited_job');
+                    return redirect('/job/'.$jobID);
+                }
+
                 if($user->user_type == 'employee'){
                     return redirect('/my_jobs');
                 }
                 else{
-                    //If buyer come to login from card buy process - redirect him to that card
-                    if(Session::get('formJob')){
-                        $jobID = Session::get('formJob');
-                        Session::forget('formJob');
-                        return redirect('/job/'.$jobID);
-                    }
-
                     return redirect('/my_orders');
                 }
             }

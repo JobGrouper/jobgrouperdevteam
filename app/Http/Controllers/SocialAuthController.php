@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Services\SocialAccountService;
 use Socialite;
 use Auth;
+use Illuminate\Support\Facades\Session;
 
 class SocialAuthController extends Controller
 {
@@ -25,6 +26,10 @@ class SocialAuthController extends Controller
         }
 
         Auth::login($user);
+        if(Session::get('last_visited_job')){
+            $jobID = Session::pull('last_visited_job');
+            return redirect('/job/'.$jobID);
+        }
         return redirect('/account');
     }
 }
