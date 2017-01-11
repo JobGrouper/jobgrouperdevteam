@@ -1,5 +1,14 @@
 $(document).ready(function() {
 
+
+// my order slice big text
+	var salaryText = $(".myjobs .workers_item .salary .month");
+	for	(var i=0; i < salaryText.length; i++) {
+		if (salaryText.eq(i).text().length > 170) {
+			salaryText.eq(i).text(salaryText.eq(i).text().slice(0, 170) + '...');
+		}
+	}
+
 	var d = $('.message_chat .all_sms');
 	d.scrollTop(d.prop("scrollHeight"));
 	$(".dark_header__line .ham").click(function() {
@@ -2020,8 +2029,5 @@ if (window.innerWidth > 768) {
   });
 
 }
-
-    
-
 
 });
