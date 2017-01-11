@@ -126,6 +126,7 @@
                                             <span class="purchased">Purchased</span>
 
                                         </div>
+                                        <p class="count clearfix"><span class="left"> {!! $job->pre_orders ? $job->pre_orders.' pre-order(s)' : '' !!} </span></p>
 
                                     </div>
 
