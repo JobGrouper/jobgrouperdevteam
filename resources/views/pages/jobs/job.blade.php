@@ -61,35 +61,29 @@
 
                                 <p class="name"><a href="/account/{{$employee->id}}">{{$employee->full_name}}</a></p>
 
-				<div class="fb">
-				<img src="{{asset('img/Profile/fb.png')}}" alt="alt">
-                                    @if($user['fb_url'])
-                                    {{ $user['fb_url'] }}
-                                    @else
-                                    No information yet.
-                                    @endif
-				</img>
-				</div>
+                @if($user['fb_url'])
+				    <div class="fb">
+                        <img src="{{asset('img/Profile/fb.png')}}" alt="alt">
+                            {{ $user['fb_url'] }}
+				        </img>
+				    </div>
+                @endif
 
-				<div class="twitter">
-				<img src="{{ asset('img/Profile/link.png') }}" alt="alt">
-                                    @if($user['linkid_url'])
-                                    {{ $user['linkid_url'] }}
-                                    @else
-                                    No information yet.
-                                    @endif
-				</img>
-				</div>
+                @if($user['linkid_url'])
+                    <div class="twitter">
+                        <img src="{{ asset('img/Profile/link.png') }}" alt="alt">
+                            {{ $user['linkid_url'] }}
+                        </img>
+                    </div>
+                @endif
 
+                @if($user['git_url'])
 				<div class="twitter">
-				<img src="{{ asset('img/Profile/github.png')}}" alt="alt">
-                                  @if($user['git_url'])
-                                  {{ $user['git_url'] }}
-                                  @else
-                                  No information yet.
-                                  @endif
-				</img>
+                    <img src="{{ asset('img/Profile/github.png')}}" alt="alt">
+                          {{ $user['git_url'] }}
+                    </img>
 				</div>
+                @endif
 
                                 <a href="/account/{{$employee->id}}">More details</a>
                                 @if($employeeStatus['status'] == 'leave')

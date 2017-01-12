@@ -15,27 +15,21 @@
                         </div>
                         <div class="social">
                             <p class="name">{{ $user['full_name'] }}</p>
-                            <div class="social_link"><img src="{{ asset('img/Profile/link.png') }}" alt="alt">
-                                @if($user['linkid_url'])
+                            @if($user['linkid_url'])
+                                <div class="social_link"><img src="{{ asset('img/Profile/link.png') }}" alt="alt">
                                     {{ $user['linkid_url'] }}
-                                @else
-                                    No information yet.
-                                @endif
-                            </div>
-                            <div class="social_link"><img src="{{ asset('img/Profile/fb.png')}}" alt="alt">
-                                @if($user['fb_url'])
-                                    {{ $user['fb_url'] }}
-                                @else
-                                    No information yet.
-                                @endif
-                            </div>
-                            <div class="social_link"><img src="{{ asset('img/Profile/github.png') }}" alt="alt">
-                                @if($user['git_url'])
-                                    {{ $user['git_url'] }}
-                                @else
-                                    No information yet.
-                                @endif
-                            </div>
+                                </div>
+                            @endif
+                            @if($user['fb_url'])
+                                <div class="social_link"><img src="{{ asset('img/Profile/fb.png')}}" alt="alt">
+                                        {{ $user['fb_url'] }}
+                                </div>
+                            @endif
+                            @if($user['git_url'])
+                                <div class="social_link"><img src="{{ asset('img/Profile/github.png') }}" alt="alt">
+                                        {{ $user['git_url'] }}
+                                </div>
+                            @endif
                         </div>
                         <div class="rating">
                             <p>Feedback Score</p>
