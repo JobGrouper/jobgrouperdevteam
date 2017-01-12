@@ -701,7 +701,6 @@ class StripeIntegrationTest extends TestCase
 
 	public function testInvoicePaidWebhook() {
 
-		$this->markTestSkipped();
 		// create buyer
 		//
 		$buyer = User::create([
@@ -993,6 +992,7 @@ class StripeIntegrationTest extends TestCase
 	public function testAccountUpdatedRequestOnFailure() {
 
 
+		$this->markTestSkipped();
 		// create buyer
 		//
 		$user = User::create([
@@ -1034,6 +1034,7 @@ class StripeIntegrationTest extends TestCase
 
 	public function testAccountUpdatedRequestOnSuccess() {
 
+		$this->markTestSkipped();
 		// create buyer
 		//
 		$user = User::create([
@@ -1072,6 +1073,7 @@ class StripeIntegrationTest extends TestCase
 
 	public function testSellerConfirmation() {
 
+		$this->markTestSkipped();
 		// Create employee
 		//
 		$user = User::create([
