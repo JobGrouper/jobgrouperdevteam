@@ -552,6 +552,11 @@ body {
 .addcard_wrapper .content_form .userslist_wrapper__item .buttons .reject {
   background-color: #CC181E;
 }
+
+.addcard_wrapper .content_form .userslist_wrapper__item .buttons .disabled {
+  background-color: #ccc;
+}
+
 .addcard_wrapper .content_form .userslist_wrapper__item .regdate_date {
   font-weight: 600;
   font-size: 16px; }

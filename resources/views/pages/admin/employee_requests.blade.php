@@ -47,14 +47,14 @@
                             <form role="form" method="POST" action="{{ url('/employee_request/approve') }}">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="employee_request_id" value="{{$employeeRequest->id}}">
-                                <button type="submit" class="approve">Approve</button>
+                                <button type="submit" {{$job->employee_id ? 'disabled' : ''}} class="{{$job->employee_id ? 'disabled' : 'approve'}}">Approve</button>
                             </form>
                     @endif
                     @if($employeeRequest->status == 'pending' || $employeeRequest->status == 'approved')
                             <form role="form" method="POST" action="{{ url('/employee_request/reject') }}">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="employee_request_id" value="{{$employeeRequest->id}}">
-                                <button type="submit" class="reject">Reject</button>
+                                <button type="submit"  class="reject">Reject</button>
                             </form>
 
                     @endif
