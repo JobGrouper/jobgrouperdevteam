@@ -1234,7 +1234,6 @@ img {
 
     .profile_text .payment_method {
       text-transform: uppercase;
-      background-color: #DD4F43;
       color: #ffffff;
       width: 220px;
       height: 40px;
@@ -1242,6 +1241,12 @@ img {
       line-height: 40px;
       font-weight: 700;
       margin-bottom: 80px;
+    }
+    .profile_text .payment_method.not_set {
+      background-color: #DD4F43;
+    }
+    .profile_text .payment_method.set {
+      background-color: #7EDC6E;
     }
     .profile_text .bank_form {
       width: 500px;
@@ -1284,6 +1289,25 @@ img {
       width: 300px;
       float: right;
     }
+    .profile_text .bank_form .block .input_container {
+      width: 120px;
+      display:inline-block;
+    }
+      .profile_text .bank_form .block .input_container p.attached {
+	float:none;
+	font-size: 12px;
+	color: #A0A0A0;
+	margin-top:-2px;
+      }
+    .profile_text .bank_form .block div.between {
+      display:inline-block;
+    }
+       .profile_text .bank_form .block div.between p {
+	 position:relative;
+	 top:-15px;
+	 font-size:32px;
+         margin: 0;
+       }
     .profile_text .bank_form button {
       display: block;
       margin: auto;
@@ -1575,11 +1599,25 @@ img {
       .profile_info .close img {
         width: 100%;
       }
-      .profile_info .social .name {
+      .profile_info .social .name_header {
+	margin-bottom:35px;
+      }
+      .profile_info .social .name_header .name {
         font-weight: 700;
         font-size: 48px;
         color: #3F3E40;
-        margin-bottom: 35px; }
+      }
+      .profile_info .social .name_header verified {
+	position:relative;
+	top:-3px;
+	display:inline-block;
+	color: white;
+	font-size:18px;
+	border-radius:50%;
+	padding:0 7px;
+	background-color:#4182D0;
+	margin-left:4px;
+      }
       .profile_info .social img {
         margin-right: 10px;
         float: left; }

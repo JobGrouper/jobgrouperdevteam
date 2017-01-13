@@ -127,7 +127,7 @@ class EmployeeRequestController extends Controller
             $job->save();
 
             $employee = $job->employee()->first();
-            Mail::send('emails.employee_request_approved',['job_name'=>$job->title],function($u) use ($employee)
+            Mail::send('emails.employee_request_approved',['job_name'=>$job->title, 'job_id'=>$job->id],function($u) use ($employee)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($employee->email);

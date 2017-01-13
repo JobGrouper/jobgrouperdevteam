@@ -9,6 +9,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use URL;
+use Mail;
 
 class CreditCardController extends Controller
 {
@@ -95,6 +96,18 @@ class CreditCardController extends Controller
         $token = $psi->createCreditCardToken($accountData, $request->account_type, true);
 
 	$response = $psi->createExternalAccount($user, $token);
+
+	// The first time a card has been set, send email
+	// about Stripe Confirmation
+	if ($request->card_set == '0') {
+
+		Mail::send('emails.beginning_stripe_verification', [], function($u) use ($user)
+		{
+		    $u->from('admin@jobgrouper.com');
+		    $u->to($user->email);
+		    $u->subject('We\'ve begun verifying your account');
+		});
+	}
 
 	// Back to account page
         return redirect('/account');

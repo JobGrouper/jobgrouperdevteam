@@ -42,40 +42,60 @@ class StripeInvoicePaid extends Job implements ShouldQueue
 	$customer_id = $this->event['data']['object']['customer'];
 	$plan_id = $this->event['data']['object']['lines']['data'][0]['plan']['id'];
 
-	// GET BUYER AND SELLER
-	//
-	// -- make this into a join later
-	//
-	$buyer_record = DB::table('stripe_connected_customers')->
-		where('id', $customer_id)->
-		where('managed_account_id', $account_id)->first();
+	// Check for test parameter
+	if ($account_id == "acct_00000000000000") {
 
-	$buyer = User::find($buyer_record->user_id);
+		if ($verification_status == 'verified') {
+			Mail::send('emails.seller_payment_succeeded', [], function($u)
+			{
+			    $u->from('admin@jobgrouper.com');
+			    $u->to('test@test.com');
+			    $u->subject('TEST INVOICE PAID RECEIVED');
+			});
+		}
 
-	// Get employee
-	$employee_record = DB::table('stripe_managed_accounts')->
-		where('id', $account_id)->first();
+	}
+	else {
 
-	$employee = User::find($employee_record->user_id);
+		// GET BUYER AND SELLER
+		//
+		// -- make this into a join later
+		//
+		$buyer_record = DB::table('stripe_connected_customers')->
+			where('id', $customer_id)->
+			where('managed_account_id', $account_id)->first();
 
-	// Get plan
-	$plan_record = DB::table('stripe_plans')->
-		where('id', $plan_id)->first();
+		$buyer = User::find($buyer_record->user_id);
 
-	$job = \App\Job::find($plan_record->job_id);
+		// Get employee
+		$employee_record = DB::table('stripe_managed_accounts')->
+			where('id', $account_id)->first();
 
-	Mail::send('emails.buyer_payment_successful', ['employee' => $employee->full_name, 'job_name' => $job->title], function($u) use ($buyer, $job)
-	{
-	    $u->from('admin@jobgrouper.com');
-	    $u->to($buyer->email);
-	    $u->subject('Your payment for '. $job->title . ' has gone through!');
-	});
-	
-	Mail::send('emails.seller_payment_successful', [], function($u) use ($employee, $job)
-	{
-	    $u->from('admin@jobgrouper.com');
-	    $u->to($employee->email);
-	    $u->subject('A payment for '. $job->title . ' has gone through!');
-	});
+		$employee = User::find($employee_record->user_id);
+
+		// Get plan
+		$plan_record = DB::table('stripe_plans')->
+			where('id', $plan_id)->first();
+
+		$job = \App\Job::find($plan_record->job_id);
+
+		Mail::send('emails.buyer_payment_successful', ['employee' => $employee->full_name, 'job_name' => $job->title], function($u) use ($buyer, $job)
+		{
+		    $u->from('admin@jobgrouper.com');
+		    $u->to($buyer->email);
+		    $u->subject('Your payment for '. $job->title . ' has gone through!');
+		});
+		
+		Mail::send('emails.seller_payment_successful', [], function($u) use ($employee, $job)
+		{
+		    $u->from('admin@jobgrouper.com');
+		    $u->to($employee->email);
+		    $u->subject('A payment for '. $job->title . ' has gone through!');
+		});
+	}
+    }
+
+    public function failed() {
+	Log::error("STRIPE INVOICE PAID FAILED: account->" . $account_id);
     }
 }

@@ -115,11 +115,10 @@ class UserController extends Controller
         }
     }
 
-    public function createStripeCustomerSource(Request $request, PaymentServiceInterface $psi){
+    /*public function createStripeCustomerSource(Request $request, PaymentServiceInterface $psi){
         $response = array();
 
         $user = Auth::user();
-        $user = User::where('id', 47)->first();
         $cardToken = $psi->createCreditCardToken([
             "number" => $request->number,
             "exp_month" => $request->exp_month,
@@ -134,5 +133,28 @@ class UserController extends Controller
         $response['status'] = 0;
         $response['info'] = 'Stripe customer source created successfully!';
         return response($response, 200);
+    }*/
+
+    public function createStripeExternalAccount(Request $request, PaymentServiceInterface $psi){
+        $response = array();
+        $user = Auth::user();
+        $user = User::where('id', 5)->first();
+
+        if($user->user_type == 'employee'){
+            $cardToken = $psi->createCreditCardToken([
+                "number" => $request->number,
+                "exp_month" => $request->exp_month,
+                "exp_year" => $request->exp_year,
+                "cvc" => $request->cvc,
+                "currency" => 'usd'
+            ], 'card', true);
+
+            $psi->createExternalAccount($user, $cardToken);
+
+            $response['errors'] = false;
+            $response['status'] = 0;
+            $response['info'] = 'Stripe external account created successfully!';
+            return response($response, 200);
+        }
     }
 }
