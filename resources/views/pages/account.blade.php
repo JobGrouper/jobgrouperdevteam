@@ -199,6 +199,7 @@
                       <div class="payment_method">Need payment method</div>
 		    @else
                       <div class="payment_method">Payment method set</div>
+                        <div class="profile_text">Card number: **** **** **** {{$card->last_four}}</div>
 		    @endif
                     <button class="seller_cards" id="bank_add">Add Bank Account</button>
 		    <p>...or...</p>
