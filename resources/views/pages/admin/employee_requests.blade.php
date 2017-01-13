@@ -1,7 +1,5 @@
 @extends('layouts.admin')
 
-
-
 @section('title', 'LIST OF EMPLOYEE REQUESTS')
 
 
@@ -17,7 +15,8 @@
                 <?php
                     $employee = $employeeRequest->employee()->first();
                     $job = $employeeRequest->job()->get()->first();
-
+                    if(!$employee || !$job)
+                        continue;
                 ?>
 
                 <div class="userslist_wrapper__item">
