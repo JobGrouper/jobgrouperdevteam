@@ -10,6 +10,8 @@ use App\Http\Requests;
 use App\Job;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
+
 class JobController extends Controller
 {
     /**
@@ -50,6 +52,10 @@ class JobController extends Controller
     
 
     public function show($jobID){
+
+        //Session variable for redirect after auth
+        Session::put('last_visited_job', $jobID);
+
         $employee = 0;
         $emploeeStatus = 0;
         $sales = 0;

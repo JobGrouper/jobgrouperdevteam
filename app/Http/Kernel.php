@@ -30,6 +30,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class, //commented out for disable  VerifyCsrf for api
             \App\Http\Middleware\BlockedUser::class,
+            \App\Http\Middleware\ResetLastVisitedJobVariable::class,
         ],
 
         'api' => [

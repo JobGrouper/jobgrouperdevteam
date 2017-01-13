@@ -154,7 +154,6 @@ class RegistrateController extends Controller
         else {
             die('Something went wrong. Please try again later.');
         }
-
         return view('pages.success');
     }
 
@@ -171,6 +170,11 @@ class RegistrateController extends Controller
             $model->delete();
 
             Auth::login($user);
+
+            if(Session::get('last_visited_job')){
+                $jobID = Session::pull('last_visited_job');
+                return redirect('/job/'.$jobID);
+            }
             
             if($user->user_type == 'employee'){
 
@@ -185,13 +189,6 @@ class RegistrateController extends Controller
 		return redirect('/account');
             }
             else{
-                //If buyer come to login from card buy process - redirect him to that card
-                if(Session::get('formJob')){
-                    $jobID = Session::get('formJob');
-                    Session::forget('formJob');
-                    return redirect('/job/'.$jobID);
-                }
-
                 return redirect('/');
             }
         }
