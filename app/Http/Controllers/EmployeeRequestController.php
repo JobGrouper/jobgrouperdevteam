@@ -104,10 +104,11 @@ class EmployeeRequestController extends Controller
 
     public function approve(Request $request, PaymentServiceInterface $psi){
         $employeeRequest = EmployeeRequest::where('id', '=', $request->employee_request_id)->first();
+        $job = $employeeRequest->job()->first();
+
         if($employeeRequest->status != 'approved'){
             $employeeRequest->status = 'approved';
 
-            $job = $employeeRequest->job()->first();
             $employee  = $employeeRequest->employee()->first();
             //If job already has a seller (employee) but he had make request to leave this job, make new seller as potential
             if($job->employee_status['status'] == 'leave'){
@@ -137,7 +138,8 @@ class EmployeeRequestController extends Controller
 	    // Email buyers
 	    dispatch( new EmailBuyers($employee, $job, 'employee_approved') ); 
         }
-        return redirect('/admin/employee_requests/'.$job->id);
+
+        return redirect('/admin/employee_requests/'. $job->id);
     }
 
     /**
