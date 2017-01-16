@@ -495,7 +495,22 @@ $(document).ready(function() {
   		fb_url: $(".editfacebook input").val(),
     	git_url: $(".editgithub input").val()
     }
-    console.log(obj);
+    console.log('aAlaalLaLalaalalla');
+	  if($(".editlinkedin input").val().length == 0){
+
+		  $(".social_link.linkedin span").text('No information yet.');
+
+	  }
+	  if($(".editfacebook input").val().length == 0){
+
+		  $(".social_link.facebook span").text('No information yet.');
+
+	  }
+	  if($(".editgithub input").val().length == 0){
+
+		  $(".social_link.github span").text('No information yet.');
+
+	  }
     if($(".profile_info .social .edittitle .edit_name").val().length > 0 || $(".profile_info .social .edittitle .edit_surname").val().length > 0) {
     	 $.ajax({
 				type: "PUT",
