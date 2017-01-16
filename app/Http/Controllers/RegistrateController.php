@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\StripeVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Interfaces\PaymentServiceInterface;
@@ -10,6 +11,7 @@ use App\UserSocialAccount;
 use App\ConfirmUsers;
 use Mail;
 use Auth;
+use DB;
 use Illuminate\Support\Facades\Session;
 
 
@@ -175,7 +177,16 @@ class RegistrateController extends Controller
             }
             
             if($user->user_type == 'employee'){
-                return redirect('/account');
+
+		    //Sending confirmation mail to user
+		    Mail::send('emails.seller_confirm', [] ,function($u) use ($user)
+		    {
+			$u->from('admin@jobgrouper.com');
+			$u->to($user->email);
+			$u->subject('Final Steps for Verification');
+		    });
+
+		return redirect('/account');
             }
             else{
                 return redirect('/');
@@ -184,7 +195,21 @@ class RegistrateController extends Controller
     }
 
     public function getMoreVerification($id) {
-
-	    return view('pages.additional_verification');
+        if (Auth::check()) {
+            $user = Auth::user();
+            $stripeVerificationRequest = StripeVerificationRequest::find($id);
+            if($user->can('edit', $stripeVerificationRequest) && $stripeVerificationRequest->completed == false){
+                return view('pages.additional_verification', [
+                    'fields_needed' => json_decode($stripeVerificationRequest->fields_needed, true),
+                    'id' => $stripeVerificationRequest->id
+                ]);
+            }
+            else{
+                dd('This action is unauthorized.');
+            }
+        }
+        else{
+            return redirect('/login');
+        }
     }
 }

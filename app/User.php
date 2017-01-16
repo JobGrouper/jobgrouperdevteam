@@ -13,7 +13,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'user_type', 'email', 'password', 'linkid_url', 'fb_url', 'git_url', 'description', 'active', 'paypal_email'
+        'first_name', 'last_name', 'user_type', 'email', 'password', 'linkid_url', 'fb_url', 'git_url', 'description', 'active', 'paypal_email', 'verified'
     ];
 
     /**
@@ -34,6 +34,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_confirmed' => 'bool',
+	'verified' => 'bool'
     ];
 
     /**
@@ -225,6 +226,16 @@ class User extends Authenticatable
     public function rates()
     {
         return $this->hasMany('App\Rate', 'rated_id');
+    }
+
+    public function stripeManagedAccount()
+    {
+        return $this->hasOne('App\StripeManagedAccount', 'user_id');
+    }
+
+    public function StripeVerificationRequests()
+    {
+        return $this->hasManyThrough('App\StripeVerificationRequest', 'App\StripeManagedAccount','user_id', 'managed_account_id');
     }
 
 

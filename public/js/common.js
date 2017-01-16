@@ -1,6 +1,5 @@
 $(document).ready(function() {
 
-
 // my order slice big text
 	var salaryText = $(".myjobs .workers_item .salary .month");
 	for	(var i=0; i < salaryText.length; i++) {
@@ -8,6 +7,36 @@ $(document).ready(function() {
 			salaryText.eq(i).text(salaryText.eq(i).text().slice(0, 170) + '...');
 		}
 	}
+
+	// /account/additional_info/13 validation
+	$(".forgotpass.login.signup.verification .forgotpass_form form button").click(function(e){
+		e.preventDefault();
+		var form_elems_count = 0;
+		var form_elems = $(this).parents('form').find("input, select");
+		var form_elems_select = $(this).parents('form').find("select");
+		form_elems.map(function(item, index) {
+			if ($(index).attr("id") !== undefined) {
+				if ($(index).attr("id") === "postal" && $(index).val().trim().length === 5 && $.isNumeric($(index).val())) {
+					form_elems_count++;
+				} else if ($(index).attr("id") !== "postal" && $(index).val().trim().length > 0) {
+					form_elems_count++;
+				}
+			}
+			else if ($(index).attr("type") == 'file') {
+				// if file length is greater than 0
+				if ($(index).get(0).files.length > 0)
+					form_elems_count++;
+			}
+		});
+		form_elems_select.map(function(item, index) {
+
+			if ($(index).val() !== '') {
+				form_elems_count++;
+			}
+		});
+		if ((+(form_elems.length)-2) === form_elems_count) {$(this).parents("form").submit();}
+		else {alert("Fill in all the fields correctly!");}
+	});
 
 	var d = $('.message_chat .all_sms');
 	d.scrollTop(d.prop("scrollHeight"));
@@ -384,6 +413,7 @@ $(document).ready(function() {
 			}
 			});
 	}
+	/*
 	$(".signup .btndiv button").click(function(event) {
 		// event.preventDefault();
 		var checkedAttr = $("input[class='radio']").attr("checked");
@@ -405,6 +435,7 @@ $(document).ready(function() {
 			event.preventDefault();
 		}
 	});
+	*/
 
 	////REGISTER FINISH
 
@@ -1539,7 +1570,7 @@ $(".creditcard_info__form button").on("click", function(event) {
 		// 	}
 		// })
 	} else {
-		alert("Fill all the fields correctly!");
+		alert("Fill in all the fields correctly!");
 		event.preventDefault();
 	}
 });

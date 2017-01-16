@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Log;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -28,6 +29,11 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot($events);
 
-        //
+	$events->listen('mailer.sending', function ($message) {
+
+		if (env('MAIL_DRIVER') == 'log') {
+			Log::info('Sending email: '.$message);
+		}
+    	});
     }
 }

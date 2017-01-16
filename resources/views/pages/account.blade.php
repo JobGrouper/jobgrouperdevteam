@@ -13,7 +13,7 @@
 
             <div class="col-md-12">
 
-                <div class="profile_title">Profile</div>
+                <div class="profile_title"></div>
 
                 <div class="profile_info">
 
@@ -28,7 +28,13 @@
 
                 <div class="social">
 
-                    <p class="name">{{ $user['first_name'] }} {{ $user['last_name'] }}</p>
+		    <div class="name_header">
+			    <span class="name">{{ $user['first_name'] }} {{ $user['last_name'] }}</span> 
+
+			    @if($user->verified)
+			      <verified class="verified">&check;</verified>
+			    @endif
+		    </div>
                     <div class="edittitle">
                         <input class="edit_name" type="text" value="{{ $user['first_name'] }}">
                         <input class="edit_surname" type="text" value="{{ $user['last_name'] }}">
@@ -196,10 +202,10 @@
                 <div class="profile_text" style="border-bottom: none;">
                     <h2>Payment options</h2>
 		    @if ($card == NULL)
-                      <div class="payment_method">Need payment method</div>
+                      <div class="payment_method not_set">Need payment method</div>
 		    @else
-                      <div class="payment_method">Payment method set</div>
-                        <div class="profile_text">Card number: **** **** **** {{$card->last_four}}</div>
+                      <div class="payment_method set">Payment method set</div>
+                      <div class="profile_text">Card number: **** **** **** {{$card->last_four}}</div>
 		    @endif
                     <button class="seller_cards" id="bank_add">Add Bank Account</button>
 		    <p>...or...</p>
@@ -209,6 +215,13 @@
                         <form id="seller_bank_account_form" method="POST" action="{{ url('/card/employee/create') }}">
 			    {{ csrf_field() }}
 			    <input type="hidden" name="account_type" value="bank_account" />
+
+		    	    @if ($card == NULL)
+			    <input type="hidden" name="card_set" value="0" />
+			    @else
+			    <input type="hidden" name="card_set" value="1" />
+			    @endif
+
                             <div class="block clearfix">
                                 <label>Name on Account<span>*</span></label>
                                 <input type="text" name="account_holder_name" autocomplete="off"/>
@@ -232,6 +245,13 @@
                         <form id="seller_debit_card_form" method="POST" action="{{ url('/card/employee/create') }}">
 			    {{ csrf_field() }}
 			    <input type="hidden" name="account_type" value="card" />
+
+		    	    @if ($card == NULL)
+			    <input type="hidden" name="card_set" value="0" />
+			    @else
+			    <input type="hidden" name="card_set" value="1" />
+			    @endif
+
                             <div class="block clearfix">
                                 <label>Card Number<span>*</span></label>
                                 <input type="text" name="number" autocomplete="off"/>
@@ -243,9 +263,17 @@
                             <div class="block clearfix">
                                 <label>Exp Month/Year<span>*</span></label>
                                 <div class="wrap">
+				    <div class="input_container">
                                     <input maxlength="2" class="data_input" type="text" name="exp_month" autocomplete="off"/>
-                                    <span>/</span>
+				    <p class="attached">eg. 5, or 05</p>
+				    </div>
+				    <div class="between">
+                                    <p class="between">/</p>
+				    </div>
+				    <div class="input_container">
                                     <input maxlength="4" class="data_input" type="text" name="exp_year" autocomplete="off"/>
+				    <p class="attached">Full year, eg. 2017</p>
+				    </div>
                                 </div>
                             </div>
 				<!--

@@ -20,6 +20,7 @@ use \Stripe\Plan;
 use \Stripe\Subscription;
 use \Stripe\Invoice;
 use \Stripe\Transfer;
+use \Stripe\FileUpload;
 
 class StripeService implements PaymentServiceInterface {
 
@@ -115,7 +116,7 @@ class StripeService implements PaymentServiceInterface {
 			'error' => True,
 			'http' => $response->getHttpStatus(),
 			'type' => $error['type'],
-			'param' => $error['param'],
+			//'param' => $error['param'],
 			'message' => $error['message'],
 			'user' => NULL
 		);
@@ -411,6 +412,15 @@ class StripeService implements PaymentServiceInterface {
 							$account->$key->$le_key->$address_key = $stripeAccountData[$key][$le_key][$address_key];
 						}
 					}
+					// VERIFICATION
+					else if ($le_key == 'verification') {
+
+						$verification_keys = array_keys($stripeAccountData[$key][$le_key]);
+
+						foreach ($verification_keys as $verification_key) {
+							$account->$key->$le_key->$verification_key = $stripeAccountData[$key][$le_key][$verification_key];
+						}
+					}
 					else {
 						// otherwise
 						$account->$key->$le_key = $stripeAccountData[$key][$le_key];
@@ -429,37 +439,6 @@ class StripeService implements PaymentServiceInterface {
 				$account->$key = $stripeAccountData[$key];
 			}
 		}
-
-		/*
-		if($stripeAccountData['legal_entity']['address']){
-			$account->legal_entity->address->city = $stripeAccountData['legal_entity']['address']['city'];
-			$account->legal_entity->address->line1 = $stripeAccountData['legal_entity']['address']['line1'];
-			$account->legal_entity->address->postal_code = $stripeAccountData['legal_entity']['address']['postal_code'];
-			$account->legal_entity->address->state = $stripeAccountData['legal_entity']['address']['state'];
-		}
-
-		if($stripeAccountData['legal_entity']['dob']){
-			$account->legal_entity->dob->day = $stripeAccountData['legal_entity']['dob']['day'];
-			$account->legal_entity->dob->month = $stripeAccountData['legal_entity']['dob']['month'];
-			$account->legal_entity->dob->year = $stripeAccountData['legal_entity']['dob']['year'];
-		}
-
-		if($stripeAccountData['legal_entity']['ssn_last_4']) {
-			$account->legal_entity->ssn_last_4 = $stripeAccountData['legal_entity']['ssn_last_4'];
-		}
-
-		if($stripeAccountData['legal_entity']['type']) {
-			$account->legal_entity->type = $stripeAccountData['legal_entity']['type'];
-		}
-
-		if($stripeAccountData['tos_acceptance']['date']) {
-			$account->tos_acceptance->date = $stripeAccountData['tos_acceptance']['date'];
-		}
-
-		if($stripeAccountData['tos_acceptance']['ip']) {
-			$account->tos_acceptance->ip = $stripeAccountData['tos_acceptance']['ip'];
-		}
-		 */ 
 
 		try {
 			$response = $account->save();
@@ -499,7 +478,10 @@ class StripeService implements PaymentServiceInterface {
 
 		}
 			
-		return $response;
+		if ($response == NULL) 
+			return $error_response;
+		else 
+			return $response;
 	}
 
 	/*
@@ -1059,7 +1041,7 @@ class StripeService implements PaymentServiceInterface {
 			//
 			Mail::send('emails.admin_job_activating',['job_name'=> $job->title],function($u) use ($job)
 			{
-			    $u->from('no-reply@jobgrouper.com');
+			    $u->from('admin@jobgrouper.com');
 			    $u->to('admin@jobgrouper.com');
 			    $u->subject('Job: ' . $job->title .' Is Being Created');
 			});
@@ -1409,6 +1391,18 @@ class StripeService implements PaymentServiceInterface {
 		DB::table('stripe_transfers')->insert(
 			['id' => $transfer_id, 'managed_account_id' => $account_id]
 		);
+	}
+
+	public function uploadDocument($path_to_file, $account_id){
+		$response = FileUpload::create(
+			array(
+				"purpose" => "identity_document",
+				"file" => fopen($path_to_file, 'r')
+			),
+			array("stripe_account" => $account_id)
+		);
+
+		return $response->id;
 	}
 }
 

@@ -2,9 +2,7 @@
 
 
 
-@section('title', 'Submitted Successfully!')
-
-
+@section('title', 'Thank You!')
 
 @section('content')
 
@@ -14,8 +12,8 @@
                 <div class="col-md-12">
                     <div class="success_text">
                         <img src="{{ asset('img/Success/photo.png') }}" alt="alt">
-                        <p>YOU HAVE SUCCESSFULLY SIGNED UP, GO TO YOUR INBOX TO VERIFY YOUR ACCOUNT</p>
-                        {{--<a href="{{ $emailUrl }}"><button>Open email</button></a>--}}
+                        <p>THANKS FOR YOUR COOPERATION</p>
+			<p>You will receive an email soon updating you on your verification status.</p>
                     </div>
                 </div>
             </div>
