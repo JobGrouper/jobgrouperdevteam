@@ -9,6 +9,8 @@
 /public/images/jobs/*.png
 /public/images/users/*.png
 public/error_log
+storage/logs
+storage/files
 Homestead.yaml
 Homestead.json
 error_log
