@@ -23,7 +23,8 @@ class Kernel extends ConsoleKernel
 	Commands\GenerateStripeVerificationRequest::class,
 	Commands\QueueTest::class,
 	Commands\PromptForPaymentMethod::class,
-	Commands\SendVerificationRequest::class
+	Commands\SendVerificationRequest::class,
+	Commands\VerifyEmployees::class
     ];
 
     /**
