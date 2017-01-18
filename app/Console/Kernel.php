@@ -21,7 +21,10 @@ class Kernel extends ConsoleKernel
         Commands\Inspire::class,
         Commands\ChatServer::class,
 	Commands\GenerateStripeVerificationRequest::class,
-	Commands\QueueTest::class
+	Commands\QueueTest::class,
+	Commands\PromptForPaymentMethod::class,
+	Commands\SendVerificationRequest::class,
+	Commands\VerifyEmployees::class
     ];
 
     /**
