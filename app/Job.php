@@ -146,8 +146,8 @@ class Job extends Model
 
     public function getPreOrdersAttribute()
     {
-        if(!$this->employee_id && $this->status == 'waiting'){
-            return $this->sales()->get()->count();
+        if($this->status == 'waiting'){
+            return $this->sales()->where('status', '=', 'pending')->where('card_set', 0)->get()->count();
         }
     }
 
