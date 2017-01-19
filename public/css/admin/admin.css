@@ -1049,3 +1049,14 @@ body {
   -o-transform-origin: left top;
   transform-origin: left top;
 }
+.addcard_wrapper .content_form .add_form .maintenance_inputs_wrapper input {
+  width: 30%;
+}
+
+.item__maintenance  input:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.item__maintenance  input[name='date_to'] {
+  margin-bottom: 0;
+}

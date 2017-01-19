@@ -14,7 +14,7 @@ class MaintenanceWarningsController extends Controller
             $responseCode = 200;
             $responseData['error'] = false;
 
-            return response($responseData, $responseCode);
+            return redirect()->back();
         }
     }
 

@@ -570,6 +570,10 @@
 
 	}
 
+	.addcard_wrapper .content_form .add_form .maintenance_inputs_wrapper input {
+		width: 100%;
+	}
+
 }
 
 

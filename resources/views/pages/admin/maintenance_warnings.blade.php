@@ -12,13 +12,16 @@
 
         <div class="admincat_wrapper">
 
-            <div class="admincat_wrapper__new">
+            <div class="admincat_wrapper__new admincat_wrapper_maintenance__new">
 
-                <form class="add_form" role="form" method="POST" action="{{ url('/category/store') }}">
+                <form class="add_form" role="form" method="POST" action="{{ url('/maintenance_warnings/store') }}">
 
                     {{ csrf_field() }}
-
-                    <input type="text"  placeholder="Name" name="title">
+                    <div class="maintenance_inputs_wrapper">
+                        <input type="text"  placeholder="Text" name="text">
+                        <input type="text"  placeholder="From(2017-01-20)" name="date_from">
+                        <input type="text"  placeholder="To(2017-01-20)" name="date_to">
+                    </div>
 
                     <button type="submit">Create new maintenance warning</button>
 
@@ -34,19 +37,21 @@
 
                     @foreach($warnings as $warning)
 
-                    <div class="item clearfix" id="item_{{$warning->id}}">
+                    <div class="item item__maintenance clearfix" id="item_{{$warning->id}}">
 
                         <p>{{$warning->text}}</p>
-                        <p>Date from: {{$warning->date_from}}</p>
-                        <p>Date to: {{$warning->date_to}}</p>
+                        <p>Date from: <span>{{$warning->date_from}}</span></p>
+                        <p>Date to: <span>{{$warning->date_to}}</span></p>
 
-                        <input type="text" name="catname" id="category_{{$warning->id}}_title">
+                        <input type="text" name="text" id="category_{{$warning->id}}_text">
+                        <input type="text" name="date_from" id="category_{{$warning->id}}_date_from">
+                        <input type="text" name="date_to" id="category_{{$warning->id}}_date_to">
 
-                        <button class="saveButton" data-category_id="{{$warning->id}}">Save</button>
+                        <button class="saveButton save_maintenance__btn" data-category_id="{{$warning->id}}">Save</button>
 
                         <div class="buttons">
                             <button><img src="{{asset('img/Admin/edit.png')}}" alt="alt"></button>
-                            <a class="popup-with-move-anim" href="#small-dialog3"><button class="deleteButton" data-category_id="{{$warning->id}}"><img src="{{asset('img/Admin/delete.png')}}" alt="alt"></button></a>
+                            <a class="popup-with-move-anim" href="#small-dialog4"><button class="deleteButton delete_maintenance__btn" data-category_id="{{$warning->id}}"><img src="{{asset('img/Admin/delete.png')}}" alt="alt"></button></a>
                         </div>
                     </div>
 
@@ -86,11 +91,36 @@
             //     });
             // }
             // console.log(category_id);
-            category_id = $(this).attr('data-category_id');
-            $("#category option").attr("disabled", false);
-            $("#category option[value='" + category_id + "']").attr("disabled", true);
-            $("#small-dialog3 h1").text('To delete "' + $(this).parents(".item").find(">p").text() + '" , please choose a new label for jobs in this category:');
-            
+
+            if ($(this).hasClass("delete_maintenance__btn")) {
+
+                if (confirm("You would like to remove this maintenance?")) {
+                    var maint_id = $(this).attr('data-category_id');
+                    $.ajax({
+                        url: '/api/maintenance_warnings/'+ maint_id,
+                        type: 'DELETE',
+                        success: function (data) {
+//                            switch(data){
+//                                case 'success':
+                            $('#item_' + maint_id).remove();
+                            alert("Maintenance has been successfully deleted!");
+                            $.magnificPopup.close();
+//                                    break;
+//                                default:
+//                                    alert('Error has been occurred!');
+//                            }
+                        }
+                    });
+                }
+
+            } else {
+
+                category_id = $(this).attr('data-category_id');
+                $("#category option").attr("disabled", false);
+                $("#category option[value='" + category_id + "']").attr("disabled", true);
+                $("#small-dialog3 h1").text('To delete "' + $(this).parents(".item").find(">p").text() + '" , please choose a new label for jobs in this category:');
+
+            }
         });
 
         $("#category").on("change", function() {
@@ -119,8 +149,19 @@
             });
 
 
-
         $('.saveButton').click(function () {
+            if ($(this).hasClass("save_maintenance__btn")) {
+                var category_id = $(this).attr('data-category_id');
+                var text  = $('#category_'+category_id+'_text').val();
+                var date_from  = $('#category_'+category_id+'_date_from').val();
+                var date_to  = $('#category_'+category_id+'_date_to').val();
+                $.ajax({
+                    url: '/api/maintenance_warnings/'+ category_id,
+                    type: 'PUT',
+                    data: { text:text, date_from:date_from, date_to:date_to} ,
+                    success: function (data) { }
+                });
+            } else {
                 var category_id = $(this).attr('data-category_id');
                 var title  = $('#category_'+category_id+'_title').val();
                 $.ajax({
@@ -129,6 +170,7 @@
                     data: { title:title} ,
                     success: function (data) { }
                 });
+            }
         });
     </script>
 
