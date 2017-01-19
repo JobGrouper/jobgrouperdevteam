@@ -2649,3 +2649,14 @@ img {
 .job_item h1 .job_item__title .potent_span {
   font-style: italic;
 }
+
+.card_wrapper {
+  position: relative;
+}
+
+.card_wrapper p {
+  position: absolute;
+  top: 8px;
+  left: 25px;
+  color: #fff;
+}

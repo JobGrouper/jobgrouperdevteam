@@ -287,11 +287,18 @@
 			    @endforeach
                         </form>
                     </div>
+                    @if($card)
+                        <div class="added_credit_card">
+                            <h2>Card added</h2>
+                            <div class="card_wrapper">
+                                <img src="{{asset('img/Profile/credit_card.png')}}" alt="alt">
+                                <p>**** **** **** {{$card->last_four}}</p>
+                            </div>
+                        </div>
+                    @endif
                 </div>
 		@endif
                 </div>
-
-
 
                 <div class="profile_portfolio">
 
