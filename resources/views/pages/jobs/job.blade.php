@@ -61,7 +61,7 @@
 
                                 <p class="name"><a href="/account/{{$employee->id}}">{{$employee->full_name}}</a></p>
 
-                @if($user['fb_url'])
+                @if($employee['fb_url'])
 				    <div class="fb">
                         <img src="{{asset('img/Profile/fb.png')}}" alt="alt">
                             {{ $user['fb_url'] }}
@@ -69,18 +69,18 @@
 				    </div>
                 @endif
 
-                @if($user['linkid_url'])
+                @if($employee['linkid_url'])
                     <div class="twitter">
                         <img src="{{ asset('img/Profile/link.png') }}" alt="alt">
-                            {{ $user['linkid_url'] }}
+                            {{ $employee['linkid_url'] }}
                         </img>
                     </div>
                 @endif
 
-                @if($user['git_url'])
+                @if($employee['git_url'])
 				<div class="twitter">
                     <img src="{{ asset('img/Profile/github.png')}}" alt="alt">
-                          {{ $user['git_url'] }}
+                          {{ $employee['git_url'] }}
                     </img>
 				</div>
                 @endif

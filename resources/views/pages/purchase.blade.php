@@ -6,7 +6,7 @@
     <div class="alert_window month">
         <div class="alert_window__block">
             <p></p>
-            <p>Monthly price of the purchase:  {{$job->salary}} USD</p>
+            <p>Monthly purchase price:  {{$job->salary}} USD</p>
             <p>Markup:  {{$job->salary}} * 15% fee = {{$job->salary*0.15}} USD</p>
             <p>Total:  {{$job->salary + ($job->salary*0.15)}} USD</p>
             <div class="cancel"></div>
@@ -23,7 +23,7 @@
                     </form>
 			-->
                     <label>Summary</label>
-                    <p>Monthly price of the purchase: <span>${{number_format($job->salary, 2)}}</span></p>
+                    <p>Monthly purchase price: <span>${{number_format($job->salary, 2)}}</span></p>
                     <p>Markup: <img src="{{asset('img/View/circle.png')}}" alt="alt"><span>${{number_format( $job->salary*0.15, 2)}}</span></p>
                     <p>Total: <span>${{number_format( $job->salary + ($job->salary*0.15), 2)}}</span></p>
 		    <hr>
