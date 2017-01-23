@@ -73,6 +73,7 @@
 <body>
 <div class="container">
     <div class="content">
+        <img src="../img/logo2.png" alt="logo" style="width: 250px; margin-top: 10px;">
         <h2>5<span>0</span>0</h2>
         <span class="descr">Sorry... It's not you. It's us</span>
         <p>Internal server error</p>

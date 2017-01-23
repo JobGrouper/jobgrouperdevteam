@@ -10,6 +10,7 @@
             padding: 0;
         }
         .content {
+
             font-family: 'Roboto', sans-serif;
             font-weight: 700;
             text-align: center;
@@ -34,7 +35,7 @@
             display: block;
         }
         h2 span {
-            color: #a3bf00;
+            color: #4281D0;
             line-height: 1;
             margin: 0;
             display: inline-block;
@@ -72,6 +73,7 @@
 <body>
 <div class="container">
     <div class="content">
+        <img src="../img/logo2.png" alt="logo" style="width: 250px; margin-top: 10px;">
         <h2><span>4</span>04</h2>
         <p>Oops! The page you were looking for doesn't exist.</p>
         <span class="descr">You may have mistyped the address or the page may have moved.</span>
