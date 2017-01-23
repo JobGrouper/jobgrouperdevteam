@@ -8,6 +8,7 @@ use App\EmployeeExitRequest;
 use App\EmployeeRequest;
 use App\Interfaces\PaymentServiceInterface;
 use App\Job;
+use App\Jobs\EmailNotApprovedSellers;
 use App\User;
 use Auth;
 use Illuminate\Http\Request;
@@ -136,7 +137,10 @@ class EmployeeRequestController extends Controller
             });
 
 	    // Email buyers
-	    dispatch( new EmailBuyers($employee, $job, 'employee_approved') ); 
+	    dispatch( new EmailBuyers($employee, $job, 'employee_approved') );
+
+        // Email others Sellers (not approved)
+        dispatch( new EmailNotApprovedSellers($job) );
         }
 
         return redirect('/admin/employee_requests/'. $job->id);

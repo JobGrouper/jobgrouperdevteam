@@ -46,7 +46,8 @@ Route::auth();
 /*
  * Job Cards
  */
-Route::get('job/{id}','JobController@show');
+Route::pattern('job', '(?i)job(?-i)');
+Route::get('{job}/{id}', ['middleware' => 'lowercase', 'uses' => 'JobController@show']);
 Route::get('jobs','JobController@all');
 Route::get('jobs/category/{id?}','JobController@all');
 Route::post('job/store','JobController@store');

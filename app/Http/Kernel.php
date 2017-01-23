@@ -1,9 +1,6 @@
 <?php
-
 namespace App\Http;
-
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-
 class Kernel extends HttpKernel
 {
     /**
@@ -16,7 +13,6 @@ class Kernel extends HttpKernel
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
     ];
-
     /**
      * The application's route middleware groups.
      *
@@ -32,12 +28,10 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\BlockedUser::class,
             \App\Http\Middleware\ResetLastVisitedJobVariable::class,
         ],
-
         'api' => [
             'throttle:60,1',
         ],
     ];
-
     /**
      * The application's route middleware.
      *
@@ -53,6 +47,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
-        'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class
+        'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
+        'lowercase' =>  \App\Http\Middleware\RedirectToLowercase::class,
     ];
 }

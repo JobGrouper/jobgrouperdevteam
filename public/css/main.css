@@ -1073,14 +1073,16 @@ img {
       padding-top: 0px;
       font-weight: 600;
       margin-right: 50px;
-      width: 200px;
+      width: 400px;
       word-wrap: break-word;
       font-size: 23px; }
       .myjobs .workers_item .order_salary {
         float: left;
         word-wrap: break-word;
         width: 135px;
-        padding-top: 10px;
+        padding-top: 16px;
+        font-weight: 700;
+        font-size: 20px;
       }
       .myjobs .workers_item .credit_card {
         display: inline-block;
@@ -1127,6 +1129,8 @@ img {
       }
     .myjobs .workers_item .purchasebtn {
       right: 185px;
+      font-weight: 400;
+      font-size: 14px;
     }
     .myjobs .workers_item .cancelbtn {
       z-index: 1;
@@ -2649,3 +2653,4 @@ img {
 .job_item h1 .job_item__title .potent_span {
   font-style: italic;
 }
+

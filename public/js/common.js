@@ -1,5 +1,13 @@
 $(document).ready(function() {
 
+// my order slice big text
+	var salaryText = $(".myjobs .workers_item .salary .month");
+	for	(var i=0; i < salaryText.length; i++) {
+		if (salaryText.eq(i).text().length > 170) {
+			salaryText.eq(i).text(salaryText.eq(i).text().slice(0, 170) + '...');
+		}
+	}
+
 	// /account/additional_info/13 validation
 	$(".forgotpass.login.signup.verification .forgotpass_form form button").click(function(e){
 		e.preventDefault();
@@ -26,7 +34,6 @@ $(document).ready(function() {
 				form_elems_count++;
 			}
 		});
-		var silly = (+(form_elems.length)-2)
 		if ((+(form_elems.length)-2) === form_elems_count) {$(this).parents("form").submit();}
 		else {alert("Fill in all the fields correctly!");}
 	});
@@ -488,7 +495,22 @@ $(document).ready(function() {
   		fb_url: $(".editfacebook input").val(),
     	git_url: $(".editgithub input").val()
     }
-    console.log(obj);
+    console.log('aAlaalLaLalaalalla');
+	  if($(".editlinkedin input").val().length == 0){
+
+		  $(".social_link.linkedin span").text('No information yet.');
+
+	  }
+	  if($(".editfacebook input").val().length == 0){
+
+		  $(".social_link.facebook span").text('No information yet.');
+
+	  }
+	  if($(".editgithub input").val().length == 0){
+
+		  $(".social_link.github span").text('No information yet.');
+
+	  }
     if($(".profile_info .social .edittitle .edit_name").val().length > 0 || $(".profile_info .social .edittitle .edit_surname").val().length > 0) {
     	 $.ajax({
 				type: "PUT",

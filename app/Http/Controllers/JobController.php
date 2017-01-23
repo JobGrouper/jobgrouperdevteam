@@ -51,8 +51,8 @@ class JobController extends Controller
     }
     
 
-    public function show($jobID){
-
+    public function show(Request $request){
+        $jobID = $request->id;
         //Session variable for redirect after auth
         Session::put('last_visited_job', $jobID);
 
