@@ -44,7 +44,7 @@
 
 @include('partials.small-header')
 
-
+@include('partials.maintenance-message')
 
 
 

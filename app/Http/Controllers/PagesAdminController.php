@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\EmployeeRequest;
 use App\Job;
+use App\MaintenanceWarning;
 use App\PageText;
 use App\User;
 use Illuminate\Http\Request;
@@ -82,5 +83,10 @@ class PagesAdminController extends Controller
     public function texts(){
         $texts = PageText::all();
         return view('pages.admin.texts', compact('texts'));
+    }
+
+    public function maintenance_warnings(){
+        $warnings = MaintenanceWarning::all();
+        return view('pages.admin.maintenance_warnings', compact('warnings'));
     }
 }

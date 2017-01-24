@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Category;
+use App\MaintenanceWarning;
 use App\PageText;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,6 +19,7 @@ class ViewComposerServiceProvider extends ServiceProvider
         //С помощью View Composer мы передаем переменную в хежер
         $this->composeSmallHeader();
         $this->composeBigHeader();
+        $this->composeMaintenanceMessage();
         $this->composeAdminHeader();
         $this->composeMyOrders();
         $this->composeMyJobs();
@@ -58,6 +60,16 @@ class ViewComposerServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+    * Compose the maintenance mode message
+    */
+    public function composeMaintenanceMessage()
+    {
+        view()->composer('partials.maintenance-message', function ($view) {
+            $maintenanceWarning = MaintenanceWarning::where('date_to', '>=', \Carbon\Carbon::now())->get()->first();
+            $view->with('maintenanceWarning', $maintenanceWarning);
+        });
+    }
 
 
     public function composeAdminHeader()
