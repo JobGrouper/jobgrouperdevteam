@@ -14,13 +14,11 @@ class CreateMaintenanceWarningsTable extends Migration
     {
         Schema::create('maintenance_warnings', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('text');
-            $table->timestamp('date_from');
-            $table->timestamp('date_to');
-            $table->timestamps();
+            $table->string('date');
+            $table->string('time');
+            $table->string('duration');
         });
     }
-
     /**
      * Reverse the migrations.
      *

@@ -104,14 +104,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check_role'], function () {
     Route::get('/employee_requests/{job_id}', ['as' => 'employee_requests', 'uses' => 'PagesAdminController@employee_requests']);
     Route::get('/orders/{job_id}', ['uses' => 'PagesAdminController@orders']);
     Route::get('/texts', ['as' => 'texts', 'uses' => 'PagesAdminController@texts']);
-    Route::get('/maintenance_warnings', ['as' => 'maintenance_warnings', 'uses' => 'PagesAdminController@maintenance_warnings']);
 });
 
 Route::post('category/store', 'CategoryController@store');
 Route::post('/employee_request/approve', ['middleware' => 'check_role', 'uses' => 'EmployeeRequestController@approve']);
 Route::post('/employee_request/reject', ['middleware' => 'check_role', 'uses' => 'EmployeeRequestController@reject']);
 
-Route::post('maintenance_warnings/store', 'MaintenanceWarningsController@store');
 /*
  * API routes
  */
@@ -165,10 +163,6 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('stripe/invoice/created', 'StripeWebhookController@onInvoiceCreated');
     Route::post('stripe/invoice/failed', 'StripeWebhookController@onInvoiceFailure');
     Route::post('stripe/account/updated', 'StripeWebhookController@onAccountUpdated');
-
-    Route::resource('maintenance_warnings', 'MaintenanceWarningsController');
-
-
 });
 
 

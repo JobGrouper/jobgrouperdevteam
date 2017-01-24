@@ -1,6 +1,6 @@
 @if($maintenanceWarning)
     <header>
-        <p class="text-center text-danger">{{$maintenanceWarning->text}} <b>From:</b>  {{$maintenanceWarning->date_from}} <b>To:</b> {{$maintenanceWarning->date_to}}</p>
+        <p class="text-center text-danger">Maintenance mod will be {{$maintenanceWarning->date}} at {{$maintenanceWarning->time}} during {{$maintenanceWarning->duration}} hour{{$maintenanceWarning->duration > 1 ? 's':''}} </p>
     </header>
 @endif
 
