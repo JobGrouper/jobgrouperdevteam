@@ -19,7 +19,7 @@ class MaintenanceSet extends Command
      *
      * @var string
      */
-    protected $description = 'Set the maintenance period';
+    protected $description = 'Set the maintenance period. Arguments: {date} {time} {duration}';
 
     /**
      * Create a new command instance.
@@ -47,6 +47,6 @@ class MaintenanceSet extends Command
             'time' => $time,
             'duration' => $duration,
             ]);
-        $this->info("Next maintenance period created, Date: $date Time: $time Duration: $duration hour".($duration < 1 ? 's' : ''));
+        $this->info("A new maintenance period notice has been set:: Date: $date Time: $time Duration: $duration hour".($duration < 1 ? 's' : ''));
     }
 }

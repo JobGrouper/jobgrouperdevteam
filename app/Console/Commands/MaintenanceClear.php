@@ -20,7 +20,7 @@ class MaintenanceClear extends Command
      *
      * @var string
      */
-    protected $description = 'Removing the maintenance period';
+    protected $description = 'Removes the current maintenance period notice';
 
     /**
      * Create a new command instance.
@@ -41,10 +41,10 @@ class MaintenanceClear extends Command
     {
         if(MaintenanceWarning::all()->count() > 0){
             DB::table('maintenance_warnings')->delete();
-            $this->info("Next maintenance period removed");
+            $this->info("Maintenance period notice taken down");
         }
         else{
-            $this->error("Maintenance period does not exist");
+            $this->error("Error: No maintenance period has been set.");
         }
 
     }
