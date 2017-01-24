@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class MaintenanceWarning extends Model
 {
+    public $timestamps = false;
     protected $fillable = [
-      'text', 'date_from', 'date_to'
+      'date', 'time', 'duration'
     ];
 }

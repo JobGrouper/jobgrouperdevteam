@@ -81,7 +81,6 @@
 
                 <li class="{{(Route::current()->getName() == 'categories' ? 'active' : '')}}"><a href="/admin/categories"><img src="{{ asset('img/Admin/Stats_Alt.png') }}" alt="alt"><span>Categories</span></a></li>
 
-                <li class="{{(Route::current()->getName() == 'maintenance_warnings' ? 'active' : '')}}"><a href="/admin/maintenance_warnings"><img src="{{ asset('img/Admin/Stats_Alt.png') }}" alt="alt"><span>Maintenance</span></a></li>
 
             </ul>
 

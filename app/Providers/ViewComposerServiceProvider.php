@@ -66,7 +66,7 @@ class ViewComposerServiceProvider extends ServiceProvider
     public function composeMaintenanceMessage()
     {
         view()->composer('partials.maintenance-message', function ($view) {
-            $maintenanceWarning = MaintenanceWarning::where('date_to', '>=', \Carbon\Carbon::now())->get()->first();
+            $maintenanceWarning = MaintenanceWarning::first();
             $view->with('maintenanceWarning', $maintenanceWarning);
         });
     }
