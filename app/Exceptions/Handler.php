@@ -36,7 +36,6 @@ class Handler extends ExceptionHandler
     {
         //return parent::report($e);
 	Log::error('Error: ' . $e->getMessage() . ' :: ' . $e->getFile() . ' (' . $e->getLine() . ')');
-	Log::info('Testing where this gets written');
 	Log::error('Trace: ' . $e->getTraceAsString());
     }
 
