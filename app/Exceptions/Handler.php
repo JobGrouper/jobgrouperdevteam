@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -20,7 +21,7 @@ class Handler extends ExceptionHandler
         AuthorizationException::class,
         HttpException::class,
         ModelNotFoundException::class,
-        ValidationException::class,
+        ValidationException::class
     ];
 
     /**
@@ -33,7 +34,10 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
-        //parent::report($e);
+        //return parent::report($e);
+	Log::error('Error: ' . $e->getMessage() . ' :: ' . $e->getFile() . ' (' . $e->getLine() . ')');
+	Log::info('Testing where this gets written');
+	Log::error('Trace: ' . $e->getTraceAsString());
     }
 
     /**
