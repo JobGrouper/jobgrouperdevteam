@@ -175,12 +175,16 @@ class EmployeeRequestController extends Controller
                     $u->to($employee->email);
                     $u->subject('You have been removed from ' . $job->title);
                 });
+
+		$job->employee_id = null;
+
+	    	if ($job->status == 'working') {
+		    $job->status = 'waiting';
+            	    $job->work_stop();
+		}
+
+		$job->save();
             }
-            $job->employee_id = null;
-
-            $job->save();
-
-            $job->work_stop();
         }
         return redirect('/admin/employee_requests/'.$job->id);
     }

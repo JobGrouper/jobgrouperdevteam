@@ -24,9 +24,9 @@ class EmployeeRequest extends Model
      * @param  string  $value
      * @return string
      */
-    public function getFormatedCreatedAtAttribute($value)
+    public function getFormatedCreatedAtAttribute()
     {
-        return Carbon::parse($value)->format('F j, Y g:i A');
+        return Carbon::parse($this->created_at)->setTimezone('America/New_York')->format('F j, Y g:i A');
     }
 
     /**
