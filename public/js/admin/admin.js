@@ -49,10 +49,22 @@ $(document).ready(function() {
 
     $(".admincat_wrapper__new button").click(function(e) {
         e.preventDefault();
-        if ($(this).prev().val().trim().length > 0) {
-            $(this).parent().submit();
+        if ($(this).parents(".admincat_wrapper__new").hasClass("admincat_wrapper_maintenance__new")) {
+
+            if ($(this).prev().find("input").eq(0).val().trim().length > 0 &&
+                $(this).prev().find("input").eq(1).val().trim().length > 0 &&
+                $(this).prev().find("input").eq(2).val().trim().length > 0) {
+                $(this).parent().submit();
+            } else {
+                alert("Fill all the fields!");
+            }
+
         } else {
-            alert("Please enter category name correctly!");
+            if ($(this).prev().val().trim().length > 0) {
+                $(this).parent().submit();
+            } else {
+                alert("Please enter category name correctly!");
+            }
         }
     });
 
@@ -94,14 +106,29 @@ $(document).ready(function() {
 	$(".admincat_wrapper__items .item .buttons button:first-child").on("click", function() {
 		$(this).parent().parent().find("p").hide();
 		$(this).parent().parent().find(">button").fadeIn("fast");
-		$(this).parent().parent().find("input").val($(this).parent().parent().find("p").text()).fadeIn("fast");
+        if ($(this).parents(".item").hasClass("item__maintenance")) {
+            $(this).parent().parent().find("input").eq(0).val($(this).parent().parent().find("p").eq(0).text()).fadeIn("fast");
+            $(this).parent().parent().find("input").eq(1).val($(this).parent().parent().find("p span").eq(0).text()).fadeIn("fast");
+            $(this).parent().parent().find("input").eq(2).val($(this).parent().parent().find("p span").eq(1).text()).fadeIn("fast");
+        } else {
+            $(this).parent().parent().find("input").val($(this).parent().parent().find("p").text()).fadeIn("fast");
+        }
 	});
 
 	$(".admincat_wrapper__items .item >button").on("click", function() {
-		$(this).hide();
-		$(this).prev().hide();
-		$(this).parent().find("p").text($(this).prev().val());
-		$(this).parent().find("p").fadeIn("fast");
+        if ($(this).parents(".item").hasClass("item__maintenance")) {
+            $(this).hide();
+            $(this).parent().find("input").hide();
+            $(this).parent().find("p").eq(0).text($(this).parent().find("input").eq(0).val());
+            $(this).parent().find("p span").eq(0).text($(this).parent().find("input").eq(1).val());
+            $(this).parent().find("p span").eq(1).text($(this).parent().find("input").eq(2).val());
+            $(this).parent().find("p").fadeIn("fast");
+        }else {
+            $(this).hide();
+            $(this).prev().hide();
+            $(this).parent().find("p").text($(this).prev().val());
+            $(this).parent().find("p").fadeIn("fast");
+        }
 	});
 
     jQuery.fn.ForceNumericOnly =
@@ -115,7 +142,7 @@ function()
             // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
             // home, end, period, and numpad decimal
             return (
-                key == 8 || 
+                key == 8 ||
                 key == 9 ||
                 key == 13 ||
                 key == 46 ||

@@ -29,4 +29,8 @@ class StripeManagedAccount extends Model
     public function StripeVerificationRequests(){
         return $this->hasMany('App\StripeVerificationRequest', 'managed_account_id');
     }
+
+    public function StripeExternalAccounts(){
+        return $this->hasMany('App\StripeExternalAccount', 'managed_account_id');
+    }
 }

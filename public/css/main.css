@@ -2654,3 +2654,13 @@ img {
   font-style: italic;
 }
 
+.card_wrapper {
+  position: relative;
+}
+
+.card_wrapper p {
+  position: absolute;
+  top: 8px;
+  left: 25px;
+  color: #fff;
+}

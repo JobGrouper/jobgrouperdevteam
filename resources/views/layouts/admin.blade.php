@@ -81,6 +81,7 @@
 
                 <li class="{{(Route::current()->getName() == 'categories' ? 'active' : '')}}"><a href="/admin/categories"><img src="{{ asset('img/Admin/Stats_Alt.png') }}" alt="alt"><span>Categories</span></a></li>
 
+
             </ul>
 
         </div>

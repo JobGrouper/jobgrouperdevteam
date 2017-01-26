@@ -41,6 +41,20 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+/* Creates separate file for errors */
+$app->configureMonologUsing(function ($monolog) {
+    $formatter = new \Monolog\Formatter\LineFormatter(null, null, true, true);
+
+    $info_stream = new \Monolog\Handler\StreamHandler( realpath(__DIR__.'/../') . '/storage/logs/laravel.log', \Monolog\Logger::INFO, false);
+    $info_stream->setFormatter($formatter);
+    $monolog->pushHandler($info_stream);
+
+    $error_stream = new \Monolog\Handler\StreamHandler( realpath(__DIR__.'/../') . '/storage/logs/error.log', \Monolog\Logger::ERROR, false);
+    $error_stream->setFormatter($formatter);
+    $monolog->pushHandler($error_stream);
+
+});
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application

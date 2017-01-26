@@ -20,6 +20,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\Inspire::class,
         Commands\ChatServer::class,
+        Commands\MaintenanceSet::class,
+        Commands\MaintenanceClear::class,
 	Commands\GenerateStripeVerificationRequest::class,
 	Commands\QueueTest::class,
 	Commands\PromptForPaymentMethod::class,

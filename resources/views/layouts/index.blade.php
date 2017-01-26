@@ -52,7 +52,7 @@
 @include('partials.big-header')
 
 
-
+@include('partials.maintenance-message')
 
 
 @yield('content')
