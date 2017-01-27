@@ -167,7 +167,7 @@
                                 @if($jobPaid)
                                     <span class="approved">YOU HAVE ORDERED THIS JOB</span>
                                 @elseif($jobOrdered && $job->employee_id != NULL)
-                                    <a href="/purchase/{{ $user_order_info->id }}"><span class="approved need">PLEASE COMPLETE PAYMENT</span></a>
+                                    <a href="/purchase/{{ $user_order_info->id }}"><span class="approved need">PLEASE CONFIRM ORDER</span></a>
                                 @elseif($jobOrdered && $job->employee_id == NULL)
                                     <span class="approved need">Waiting For Employee</span>
                                 @else

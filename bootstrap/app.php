@@ -49,6 +49,10 @@ $app->configureMonologUsing(function ($monolog) {
     $info_stream->setFormatter($formatter);
     $monolog->pushHandler($info_stream);
 
+    $debug_stream = new \Monolog\Handler\StreamHandler( realpath(__DIR__.'/../') . '/storage/logs/laravel.log', \Monolog\Logger::DEBUG, false);
+    $debug_stream->setFormatter($formatter);
+    $monolog->pushHandler($debug_stream);
+
     $error_stream = new \Monolog\Handler\StreamHandler( realpath(__DIR__.'/../') . '/storage/logs/error.log', \Monolog\Logger::ERROR, false);
     $error_stream->setFormatter($formatter);
     $monolog->pushHandler($error_stream);
