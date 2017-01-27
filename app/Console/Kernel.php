@@ -49,10 +49,12 @@ class Kernel extends ConsoleKernel
         /*
          * Task to run chat socket server and check it`s status
          */
+	/*
         $schedule->call(function () {
             //This script will check if socket server is running and run it if no
             shell_exec('storage/shell/run_socket_server.sh');
         })->everyMinute();
+	 */
 
 
 
