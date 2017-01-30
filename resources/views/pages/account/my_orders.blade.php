@@ -86,7 +86,7 @@
                             @elseif(!$order->card_set && $job->employee_id == NULL)
                                 <button class="purchasebtn">Waiting on Employee</button>
 			    @elseif(!$order->card_set && $job->employee_id != NULL)
-                                <a href="/purchase/{{$order->id}}"><button class="purchasebtn">Purchase</button></a>
+                                <a href="/purchase/{{$order->id}}"><button class="purchasebtn">Confirm</button></a>
                             @endif
 
                             <form role="form" method="POST" action="{{ url('/order/close/' . $order->id ) }}">
