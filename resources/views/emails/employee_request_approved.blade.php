@@ -1,3 +1,6 @@
+@extends('layouts.email')
+
+@section('content')
 <p>Your request for the "{{$job_name}}" has been approved!</p>
 
 <p>Your request for the <a href="{{ env("SERVICE_APP_URL") }}/job/{{ $job_id }}">"{{$job_name}}" position</a> has been approved! 
@@ -18,3 +21,4 @@ some cases, we may be able to increase the number of buyers or adjust the salary
 <p>Anyhow, we're looking forward to an awesome time working together!</p>
 
 <p>--JobGrouper</p>
+@endsection
