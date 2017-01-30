@@ -11,6 +11,7 @@ use App\Job;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
+use DB;
 
 class JobController extends Controller
 {
@@ -191,6 +192,7 @@ class JobController extends Controller
         $job = Job::findOrFail($job_id);
         $job->delete();
         $job = Job::find($job_id);
+        DB::table('sales')->where('job_id', '=', $job_id)->delete();
 
         if(!isset($job->id)){
             die('success');
