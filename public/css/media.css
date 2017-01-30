@@ -475,6 +475,21 @@
 		width: 100%;
 		margin-right: 0;
 	}
+
+	.user_btns_wrapper {
+		z-index: 5;
+	}
+
+	.header_welcome__btn:hover .user_btns_wrapper {
+		top: 100px;
+		width: 100%;
+	}
+	.header_welcome__btn:hover .user_btns_wrapper a button {
+		width: 100%;
+	}
+	.main_header__btn button, .main_header__btn .header_welcome__btn {
+		margin-left: 0;
+	}
 }
 
 @media only screen and (max-width : 480px) {
@@ -505,6 +520,7 @@
 	}
 	.main_header__btn {
 		padding-top: 50px;
+		z-index: 100;
 	}
 	.main_header__title {
 		padding-top: 50px;

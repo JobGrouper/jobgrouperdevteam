@@ -48,12 +48,14 @@ img {
     .main_header__btn a {
       text-decoration: none;
     }
-    .main_header__btn button {
+    .main_header__btn button, .main_header__btn .header_welcome__btn {
       color: #fff;
       background-color: #FF6200;
       border: none;
       padding: 10px 40px;
       text-transform: uppercase;
+      display: inline-block;
+      cursor: pointer;
       font-size: 14px;
       font-weight: 700;
       margin-left: 15px;
@@ -2674,4 +2676,19 @@ img {
 .datecvv .item {
   width: 45%;
   display: inline-block;
+}
+
+.main_header__btn {
+  position: relative;
+}
+
+.header_welcome__btn:hover .user_btns_wrapper {
+  top: 84px;
+}
+
+.user_btns_wrapper {
+  transition: top .3s ease;
+  position: absolute;
+  left: 0;
+  top: -300px;
 }

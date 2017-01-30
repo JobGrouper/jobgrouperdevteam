@@ -75,12 +75,23 @@
                         <a href="/login"><button>Log In</button></a>
 
                     @else
+                        <span class="header_welcome__btn">Welcome
+                        <div class="user_btns_wrapper">
                         @if(Auth::user()->role == 'admin')
+                            <a href="/account"><button>Profile</button></a>
+                            <a href="/my_orders"><button>My Orders</button></a>
+                            <a href="/my_transactions"><button>Transactions</button></a>
                             <a href="/admin/users"><button>Admin Panel</button></a>
+                        @elseif(Auth::user()->role == 'employee')
+                            <a href="/account"><button>Profile</button></a>
+                            <a href="/my_jobs"><button>My Jobs</button></a>
+                        @else
+                            <a href="/account"><button>Profile</button></a>
+                            <a href="/my_orders"><button>My Orders</button></a>
+                            <a href="/my_transactions"><button>Transactions</button></a>
                         @endif
-                        <a href="/account"><button>Profile</button></a>
-                        <a href="/logout"><button>Log Out</button></a>
-
+                        </div>
+                        </span>
                     @endif
 
                 </div>
