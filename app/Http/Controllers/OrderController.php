@@ -224,13 +224,14 @@ class OrderController extends Controller
 	$account = $psi->retrieveAccount($employee_record->id);
 
 	// Create credit card token
+    $type = 'card';
 	$token = $psi->createCreditCardToken(
 		array(
 			'number' => $request->card_number,
 			'exp_month' => $request->exp_month,
 			'exp_year' => $request->exp_year,
 			'cvc' => $request->cvc
-		), 'card', true);
+		), $type, true);
 
 	if (!isset($token['id'])) {
 
@@ -250,7 +251,7 @@ class OrderController extends Controller
 			withErrors(['Server error. Try again later.']);
 	}
 
-	$source = $psi->updateCustomerSource($user, $token, $account['id']);
+	$source = $psi->updateCustomerSource($user, $token, $type, $account['id']);
 	
 	if (isset($source['id'])) {
 	  $order->status = 'in_progress';

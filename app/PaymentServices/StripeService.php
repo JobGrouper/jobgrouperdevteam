@@ -707,7 +707,7 @@ class StripeService implements PaymentServiceInterface {
 	 * @returns
 	 * 	...
 	 */
-	public function updateCustomerSource($user, $token, $account_id=NULL) {
+	public function updateCustomerSource($user, $token, $type,  $account_id=NULL) {
 		
 		$response = NULL;
 		$error_response = NULL;
@@ -774,7 +774,7 @@ class StripeService implements PaymentServiceInterface {
 			}
 
 			$this->updateCustomerSourceInDB($response['sources']['data'][0]['id'], $customer_record->id, 
-				$response['sources']['data'][0]['last4']);
+				$response['sources']['data'][0]['last4'], $type);
 		}
 		else {
 			$customer = Customer::retrieve($customer_record->id);
@@ -819,19 +819,20 @@ class StripeService implements PaymentServiceInterface {
 			}
 
 			$this->updateCustomerSourceInDB($response['sources']['data'][0]['id'], $customer_record->id, 
-				$response['sources']['data'][0]['last4'] );
+				$response['sources']['data'][0]['last4'], $type);
 		}
 
 		return $response;
 	}
 
-	public function updateCustomerSourceInDB($source_id, $customer_id, $last_four) {
+	public function updateCustomerSourceInDB($source_id, $customer_id, $last_four, $type) {
 
 		// insert into db
 		DB::table('stripe_customer_sources')->insert( 
 			['id' => $source_id,
 			'connected_customer_id' => $customer_id,
 			'last_four' => $last_four,
+			'type' => $type,
 			'created_at' => time()] );
 	}
 
