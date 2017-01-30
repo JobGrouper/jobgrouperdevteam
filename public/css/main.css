@@ -2664,3 +2664,14 @@ img {
   left: 25px;
   color: #fff;
 }
+
+.datecvv .item:first-child {
+  margin-right: 34px;
+}
+.datecvv .item label {
+  display: block;
+}
+.datecvv .item {
+  width: 45%;
+  display: inline-block;
+}
