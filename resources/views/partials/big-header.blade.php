@@ -92,6 +92,7 @@
                         @endif
                         </div>
                         </span>
+			<a href="/logout"><button>Log Out</button></a>
                     @endif
 
                 </div>
