@@ -86,10 +86,10 @@
 			-->
                     <input type="hidden" name="order_id" value="{{$order->id}}">
                     <div class="invalid_login"></div>
-                    {!! ($changeCard ? false : ' <p>The first month will be paid.</p>') !!}
-                    <p>Payments for all subsequent months of work will be done automatically using this card.</p>
+                    {!! ($changeCard ? false : ' <p>You will not be charged immediately.</p>') !!}
+                    <p>As soon as work begins, this card will be charged automatically every month.</p>
                     <!--<a href="{{url('card/create')}}">Add payment card</a>-->
-                    <button>{{ ($changeCard ? 'Change credit card' : 'Purchase') }}</button>
+                    <button>{{ ($changeCard ? 'Change credit card' : 'Confirm') }}</button>
                 </form>
             @endif
         </div>
