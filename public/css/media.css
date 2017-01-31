@@ -295,6 +295,18 @@
 	.main_footer {
 		text-align: center;
 	}
+	.user_btns_wrapper {
+		top: 135px;
+		width: 100%;
+	}
+
+	.main_header__btn button, .main_header__btn .header_welcome__btn {
+		width: 50%;
+	}
+	.main_header__btn {
+		width: auto;
+		z-index: 999;
+	}
 }
 
 @media only screen and (max-width : 768px) {
@@ -480,15 +492,17 @@
 		z-index: 5;
 	}
 
-	.header_welcome__btn:hover .user_btns_wrapper {
-		top: 100px;
+	.main_header__btn .user_btns_wrapper {
+		top: 135px;
 		width: 100%;
 	}
-	.header_welcome__btn:hover .user_btns_wrapper a button {
+	.header_welcome__btn .user_btns_wrapper a button {
 		width: 100%;
+		margin-bottom: 0;
 	}
 	.main_header__btn button, .main_header__btn .header_welcome__btn {
 		margin-left: 0;
+		width: 100%;
 	}
 }
 
@@ -730,6 +744,9 @@
 	}
 	.slider_img {
 		height: auto;
+	}
+	.main_header__btn .user_btns_wrapper {
+		top: 90px;
 	}
 }
 

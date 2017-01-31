@@ -1,5 +1,9 @@
 $(document).ready(function() {
 
+	$('.header_welcome__btn').click(function(){
+		$(".user_btns_wrapper").fadeToggle();
+	})
+
 // my order slice big text
 	var salaryText = $(".myjobs .workers_item .salary .month");
 	for	(var i=0; i < salaryText.length; i++) {

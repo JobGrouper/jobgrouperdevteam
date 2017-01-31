@@ -42,6 +42,7 @@ img {
         }
   .main_header__btn {
     float: right;
+      width: 202px;
     padding-top: 44px;
     position: relative;
     z-index: 3; }
@@ -2682,13 +2683,14 @@ img {
   position: relative;
 }
 
-.header_welcome__btn:hover .user_btns_wrapper {
-  top: 84px;
-}
-
 .user_btns_wrapper {
-  transition: top .3s ease;
   position: absolute;
   left: 0;
-  top: -300px;
+    display: none;
+    top: 84px;
+}
+
+.main_header__btn button, .main_header__btn .header_welcome__btn {
+    width: 100%;
+    text-align: center;
 }

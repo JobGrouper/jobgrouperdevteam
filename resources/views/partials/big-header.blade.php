@@ -82,7 +82,7 @@
                             <a href="/my_orders"><button>My Orders</button></a>
                             <a href="/my_transactions"><button>Transactions</button></a>
                             <a href="/admin/users"><button>Admin Panel</button></a>
-                        @elseif(Auth::user()->role == 'employee')
+                        @elseif(Auth::user()->user_type == 'employee')
                             <a href="/account"><button>Profile</button></a>
                             <a href="/my_jobs"><button>My Jobs</button></a>
                         @else
@@ -90,9 +90,9 @@
                             <a href="/my_orders"><button>My Orders</button></a>
                             <a href="/my_transactions"><button>Transactions</button></a>
                         @endif
+                            <a href="/logout"><button>Log Out</button></a>
                         </div>
                         </span>
-			<a href="/logout"><button>Log Out</button></a>
                     @endif
 
                 </div>
