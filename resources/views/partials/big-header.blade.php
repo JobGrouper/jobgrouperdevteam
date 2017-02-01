@@ -75,7 +75,7 @@
                         <a href="/login"><button>Log In</button></a>
 
                     @else
-                        <span class="header_welcome__btn">Welcome
+                        <span class="header_welcome__btn">Profile
                         <div class="user_btns_wrapper">
                         @if(Auth::user()->role == 'admin')
                             <a href="/account"><button>Profile</button></a>
