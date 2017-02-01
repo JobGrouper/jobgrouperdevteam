@@ -1028,10 +1028,17 @@ class StripeService implements PaymentServiceInterface {
 		}
 
 		// Add plan to database
-		DB::table('stripe_plans')->insert(
-			['id' => $plan->id , 'managed_account_id' => $managed_account->id,
-			'job_id' => $job->id, 'activated' => 1]
-		);
+		$res = DB::select("SELECT id FROM stripe_plans WHERE managed_account_id = ? AND job_id = ?", [$managed_account->id, $job->id]);
+		if(!count($res)){
+			DB::table('stripe_plans')->insert(
+				[
+					'id' => $plan->id ,
+					'managed_account_id' => $managed_account->id,
+					'job_id' => $job->id,
+					'activated' => 1
+				]
+			);
+		}
 
 		if (!$testing) {
 
