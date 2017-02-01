@@ -2697,3 +2697,13 @@ img {
     width: 100%;
     text-align: center;
 }
+
+.main_header__btn a .sign__up {
+  position: relative;
+  right: 220px;
+}
+
+.main_header__btn a .log__in {
+  position: relative;
+  top: -39px;
+}

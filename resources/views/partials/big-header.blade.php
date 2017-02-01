@@ -71,8 +71,8 @@
 
 
                     @if (Auth::guest())
-                        <a href="register"><button>Sign Up</button></a>
-                        <a href="/login"><button>Log In</button></a>
+                        <a href="register"><button class="sign__up">Sign Up</button></a>
+                        <a href="/login"><button class="log__in">Log In</button></a>
 
                     @else
                         <span class="header_welcome__btn"><span class="header_welcome_txt">Profile</span>
