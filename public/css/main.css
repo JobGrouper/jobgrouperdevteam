@@ -63,6 +63,9 @@ img {
       -webkit-transition: background-color .3s ease;
        -o-transition: background-color .3s ease;
        transition: background-color .3s ease; }
+       .main_header__btn span:hover {
+        background-color: #72B3A6;
+       }
        .main_header__btn button:hover {
         background-color: #72B3A6;
        }
