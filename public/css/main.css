@@ -42,24 +42,30 @@ img {
         }
   .main_header__btn {
     float: right;
+      width: 202px;
     padding-top: 44px;
     position: relative;
     z-index: 3; }
     .main_header__btn a {
       text-decoration: none;
     }
-    .main_header__btn button {
+    .main_header__btn button, .main_header__btn .header_welcome__btn {
       color: #fff;
       background-color: #FF6200;
       border: none;
       padding: 10px 40px;
       text-transform: uppercase;
+      display: inline-block;
+      cursor: pointer;
       font-size: 14px;
       font-weight: 700;
       margin-left: 15px;
       -webkit-transition: background-color .3s ease;
        -o-transition: background-color .3s ease;
        transition: background-color .3s ease; }
+       .main_header__btn span:hover {
+        background-color: #72B3A6;
+       }
        .main_header__btn button:hover {
         background-color: #72B3A6;
        }
@@ -2663,4 +2669,41 @@ img {
   top: 8px;
   left: 25px;
   color: #fff;
+}
+
+.datecvv .item:first-child {
+  margin-right: 34px;
+}
+.datecvv .item label {
+  display: block;
+}
+.datecvv .item {
+  width: 45%;
+  display: inline-block;
+}
+
+.main_header__btn {
+  position: relative;
+}
+
+.user_btns_wrapper {
+  position: absolute;
+  left: 0;
+    display: none;
+    top: 84px;
+}
+
+.main_header__btn button, .main_header__btn .header_welcome__btn {
+    width: 100%;
+    text-align: center;
+}
+
+.main_header__btn a .sign__up {
+  position: relative;
+  right: 220px;
+}
+
+.main_header__btn a .log__in {
+  position: relative;
+  top: -39px;
 }

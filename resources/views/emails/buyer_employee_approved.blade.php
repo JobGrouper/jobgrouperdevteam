@@ -1,4 +1,7 @@
-<p>We have approved {{ $employee_name }} to work 
+@extends('layouts.email')
+
+@section('content')
+<p>We have approved {{ $employee_name }} to work
 on {{ $job_name }}. The job will officially begin once all buyers have placed an 
 order and set their payment information.</p>
 
@@ -9,3 +12,4 @@ you submit your credit/debit card information as soon as you can, following
 
 <p>You're helping build the future of employment, workers are gaining a steady 
 paycheck and you're getting the job done at a great price. Thanks for putting your faith in us!</p>
+@endsection

@@ -1,5 +1,20 @@
 $(document).ready(function() {
 
+	var header_open = false;
+	$('.header_welcome__btn').click(function(){
+
+		if (!header_open) {
+			header_open = true;
+			$('span.header_welcome_txt').text('Close');
+		}
+		else {
+			header_open = false;
+			$('span.header_welcome_txt').text('Profile');
+		}
+
+		$(".user_btns_wrapper").fadeToggle('fast');
+	});
+
 // my order slice big text
 	var salaryText = $(".myjobs .workers_item .salary .month");
 	for	(var i=0; i < salaryText.length; i++) {

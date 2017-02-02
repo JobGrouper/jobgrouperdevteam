@@ -1,3 +1,6 @@
+@extends('layouts.email')
+
+@section('content')
 <p>Your application for the "{{$job_name}}" position has been denied.</p>
 
 <p>
@@ -7,10 +10,11 @@ promising candidates.
 </p>
 
 <p>
-Please feel free to apply for other positions on the site – 
+Please feel free to apply for other positions on the site ï¿½ 
 and even the same position, if we post it again!
 </p>
 
 <p>Best of luck,</p>
 
 <p>--JobGrouper</p>
+@endsection

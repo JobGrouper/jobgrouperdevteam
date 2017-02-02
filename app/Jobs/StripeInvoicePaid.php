@@ -46,7 +46,7 @@ class StripeInvoicePaid extends Job implements ShouldQueue
 	if ($account_id == "acct_00000000000000") {
 
 		if ($verification_status == 'verified') {
-			Mail::send('emails.seller_payment_succeeded', [], function($u)
+			Mail::send('emails.seller_payment_successful', [], function($u)
 			{
 			    $u->from('admin@jobgrouper.com');
 			    $u->to('test@test.com');

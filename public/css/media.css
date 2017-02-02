@@ -295,6 +295,21 @@
 	.main_footer {
 		text-align: center;
 	}
+	.user_btns_wrapper {
+		top: 135px;
+		width: 100%;
+	}
+
+	.main_header__btn button, .main_header__btn .header_welcome__btn {
+		width: 50%;
+	}
+	.main_header__btn {
+		width: auto;
+		z-index: 999;
+	}
+	.main_header__btn a .sign__up, .main_header__btn a .log__in {
+		position: static;
+	}
 }
 
 @media only screen and (max-width : 768px) {
@@ -471,6 +486,27 @@
 		margin-left: 0;
 		height: auto;
 	}
+	.datecvv .item {
+		width: 100%;
+		margin-right: 0;
+	}
+
+	.user_btns_wrapper {
+		z-index: 5;
+	}
+
+	.main_header__btn .user_btns_wrapper {
+		top: 135px;
+		width: 100%;
+	}
+	.header_welcome__btn .user_btns_wrapper a button {
+		width: 100%;
+		margin-bottom: 0;
+	}
+	.main_header__btn button, .main_header__btn .header_welcome__btn {
+		margin-left: 0;
+		width: 100%;
+	}
 }
 
 @media only screen and (max-width : 480px) {
@@ -501,6 +537,7 @@
 	}
 	.main_header__btn {
 		padding-top: 50px;
+		z-index: 100;
 	}
 	.main_header__title {
 		padding-top: 50px;
@@ -710,6 +747,9 @@
 	}
 	.slider_img {
 		height: auto;
+	}
+	.main_header__btn .user_btns_wrapper {
+		top: 90px;
 	}
 }
 
