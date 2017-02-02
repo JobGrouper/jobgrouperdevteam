@@ -17,6 +17,9 @@
 		<testsuite name="payment_services">
 			<directory suffix="Test.php">./tests/payment_services</directory>
 		</testsuite>
+		<testsuite name="emails">
+			<directory suffix="Test.php">./tests/emails</directory>
+		</testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
@@ -28,6 +31,7 @@
     </filter>
     <php>
         <env name="APP_ENV" value="testing"/>
+        <env name="MAIL_DRIVER" value="log"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_DRIVER" value="sync"/>
