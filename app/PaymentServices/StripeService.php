@@ -707,7 +707,7 @@ class StripeService implements PaymentServiceInterface {
 	 * @returns
 	 * 	...
 	 */
-	public function updateCustomerSource($user, $token, $type,  $account_id=NULL) {
+	public function updateCustomerSource($user, $token, $account_id=NULL) {
 		
 		$response = NULL;
 		$error_response = NULL;
@@ -774,7 +774,7 @@ class StripeService implements PaymentServiceInterface {
 			}
 
 			$this->updateCustomerSourceInDB($response['sources']['data'][0]['id'], $customer_record->id, 
-				$response['sources']['data'][0]['last4'], $type);
+				$response['sources']['data'][0]['last4']);
 		}
 		else {
 			$customer = Customer::retrieve($customer_record->id);
@@ -819,20 +819,19 @@ class StripeService implements PaymentServiceInterface {
 			}
 
 			$this->updateCustomerSourceInDB($response['sources']['data'][0]['id'], $customer_record->id, 
-				$response['sources']['data'][0]['last4'], $type);
+				$response['sources']['data'][0]['last4']);
 		}
 
 		return $response;
 	}
 
-	public function updateCustomerSourceInDB($source_id, $customer_id, $last_four, $type) {
+	public function updateCustomerSourceInDB($source_id, $customer_id, $last_four) {
 
 		// insert into db
 		DB::table('stripe_customer_sources')->insert( 
 			['id' => $source_id,
 			'connected_customer_id' => $customer_id,
 			'last_four' => $last_four,
-			'type' => $type,
 			'created_at' => time()] );
 	}
 
@@ -1028,6 +1027,15 @@ class StripeService implements PaymentServiceInterface {
 		}
 
 		// Add plan to database
+		DB::table('stripe_plans')->insert(
+			[
+				'id' => $plan->id ,
+				'managed_account_id' => $managed_account->id,
+				'job_id' => $job->id,
+				'activated' => 1
+			]
+		);
+		/*
 		$res = DB::select("SELECT id FROM stripe_plans WHERE managed_account_id = ? AND job_id = ?", [$managed_account->id, $job->id]);
 		if(!count($res)){
 			DB::table('stripe_plans')->insert(
@@ -1039,6 +1047,7 @@ class StripeService implements PaymentServiceInterface {
 				]
 			);
 		}
+		 */
 
 		if (!$testing) {
 
