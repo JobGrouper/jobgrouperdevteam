@@ -37,35 +37,35 @@
 		$job_stuff = array(
 			array('title' => '无限制的修改文章',
 				'description' => '对于一个月的费用，我们资深专业编辑将为您所有的文章进行修改校对。无论您需要在大学期间拿到4.0的满分，或者需要修改您的最喜欢的工作的cover letter，或者需要帮助您发表文章，我们致力于为您提供优质的满意的服务！对于学生，我们的专业作家，不但能随时修改您的作业，还能修改您的邮件',
-				'image_url' => '',
+				'image_url' => 'img/Demo/j_1.png',
 				'sales_count' => 3,
 				'max_clients_count' => 5,
 				'pre_orders' => 1,
 				'price' => '99.00'),
 			array('title' => '基金申请文书的作家',
 				'description' => '购买者将会拥有一个专门写基金申请文书的专家',
-				'image_url' => '',
+				'image_url' => 'img/Demo/j_2.png',
 				'sales_count' => 0,
 				'max_clients_count' => 5,
 				'pre_orders' => 0,
 				'price' => '519.00'),
 			array('title' => '随传随到的杂物工',
 				'description' => '对于每个月非常合算的价钱，您将拥有一个随传随到的杂物工来帮您处理任何事物。',
-				'image_url' => '',
+				'image_url' => 'img/Demo/j_3.png',
 				'sales_count' => 14,
 				'max_clients_count' => 75,
 				'pre_orders' => 5,
 				'price' => '38.00'),
 			array('title' => '中国的社交媒体营销',
 				'description' => '您将拥有一个专业的精通中英文双语营销者来营销推广您的生意',
-				'image_url' => '',
+				'image_url' => 'img/Demo/j_4.png',
 				'sales_count' => 0,
 				'max_clients_count' => 15,
 				'pre_orders' => 12,
 				'price' => '84.00'),
 			array('title' => '学校代理',
 				'description' => '您将拥有一个校园代理，在全球范围内为您营销推广生意',
-				'image_url' => '',
+				'image_url' => 'img/Demo/j_5.png',
 				'sales_count' => 0,
 				'max_clients_count' => 3,
 				'pre_orders' => 0,
@@ -200,7 +200,7 @@
                                 </div>
 
                                 <div class="slider_img"
-                                     style="background-image: url('images/jobs/j_{{$job->id}}.png');">
+                                     style="background-image: url('{{$job->image_url}}');">
                                      <a href="/job/{{$job->id}}" class="hot_a"></a>
                                          <h3>{{$job->title}}</h3>
 

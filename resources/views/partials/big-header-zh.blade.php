@@ -23,7 +23,6 @@
             <div class="row">
                 <div class="col-md-3">
                 <?php
-				$categories=array('one', 'two');
 				$categories=array(
 				'所有类别',
 				'设计与创新',
