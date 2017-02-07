@@ -37,7 +37,7 @@ class PagesController extends Controller
 
     public function zhTest() {
 
-	return view('pages.main', ['user' => NULL, 'jobs' => NULL]);
+	return view('pages.zh', ['user' => NULL, 'jobs' => NULL]);
     }
 
 
