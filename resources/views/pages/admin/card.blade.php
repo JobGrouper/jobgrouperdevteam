@@ -38,6 +38,14 @@
 
                 </div>
 
+                <div class="max min">
+
+                    <label for="max">min clients</label>
+
+                    <input type="text" id="min" name="min_clients_count" value="{{(isset($job->title) ? $job->min_clients_count : '')}}">
+
+                </div>
+
                 <div class="perclient">
 
                     <label for="per">Payment/Client</label>
