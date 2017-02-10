@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddMinimumClientsCountToJobsTable extends Migration
+class AddMinClientsCountToJobsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddMinimumClientsCountToJobsTable extends Migration
     {
         Schema::table('jobs', function($table)
         {
-            $table->integer('minimum_clients_count')->unsigned()->after('salary');
+            $table->integer('min_clients_count')->unsigned()->after('salary');
         });
     }
 
@@ -27,7 +27,7 @@ class AddMinimumClientsCountToJobsTable extends Migration
     {
         Schema::table('users', function($table)
         {
-            $table->dropColumn('minimum_clients_count');
+            $table->dropColumn('min_clients_count');
         });
     }
 }
