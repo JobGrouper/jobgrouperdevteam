@@ -32,6 +32,17 @@
             </div>
 
         </div>
+	<div class="row">
+		<div class="dropdown language-select col-lg-3 col-md-3 col-sm-2 col-xs-2">
+		  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+		    English
+		    <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+		    <li><a href="{{ Request::root() }}/zh">中文（演示）</a></li>
+		  </ul>
+		</div>
+	</div>
 
     </div>
 

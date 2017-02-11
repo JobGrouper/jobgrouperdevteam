@@ -9,7 +9,7 @@
 
 
                 <div class="content">
-                    <span class="copy">(pageTexts8) | (pageTexts9) | (pageTexts10)</span>
+                    <span class="copy">Jobgrouper.com | All Rights Reserved | Copyright © 2016</span>
                 </div>
 
                 <span class="links"><a href="/help">Help</a>|<a href="/terms">Terms &amp; Conditions</a>| Contact us at support@jobgrouper.com</span>
@@ -32,6 +32,18 @@
             </div>
 
         </div>
+
+	<div class="row">
+		<div class="dropdown language-select col-lg-3 col-md-3 col-sm-2 col-xs-2">
+		  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+		   中文（演示） 
+		    <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+		    <li><a href="{{ Request::root() }}/">English</a></li>
+		  </ul>
+		</div>
+	</div>
 
     </div>
 
