@@ -606,6 +606,8 @@ body {
   text-align: center; }
 .addcard_wrapper .content_form .list_wrapper__item .item_info__numbers .max {
   border-right: 1px solid #CDCCCE; }
+.addcard_wrapper .content_form .list_wrapper__item .item_info__numbers .min {
+  border-right: 1px solid #CDCCCE; }
 .addcard_wrapper .content_form .list_wrapper__item .item_info .buttons {
   float: right; }
 .addcard_wrapper .content_form .list_wrapper__item .title {

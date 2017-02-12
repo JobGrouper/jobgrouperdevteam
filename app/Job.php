@@ -27,6 +27,7 @@ class Job extends Model
      */
     protected $casts = [
         'max_clients_count' => 'int',
+	'min_clients_count' => 'int'
     ];
 
 
