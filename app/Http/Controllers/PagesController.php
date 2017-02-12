@@ -35,6 +35,11 @@ class PagesController extends Controller
         return view('pages.main', ['user' => $user, 'jobs' => $jobs]);
     }
 
+    public function zhTest() {
+
+	return view('pages.zh', ['user' => NULL, 'jobs' => NULL]);
+    }
+
 
     public function help(){
         return view('pages.help');

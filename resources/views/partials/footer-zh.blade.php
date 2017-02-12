@@ -9,10 +9,10 @@
 
 
                 <div class="content">
-                    <span class="copy">{!! $pageTexts[8] !!} | {!! $pageTexts[9] !!} | {!! $pageTexts[10] !!}</span>
+                    <span class="copy">Jobgrouper.com | 版权所有 | 版权 © 2016</span>
                 </div>
 
-                <span class="links"><a href="/help">Help</a>|<a href="/terms">Terms &amp; Conditions</a>| Contact us at support@jobgrouper.com</span>
+                <span class="links"><a href="/help">帮助</a>|<a href="/terms">条款和条件</a>| 联系方式 support@jobgrouper.com</span>
 
 
                 <div class="main_footer__social">
@@ -32,14 +32,15 @@
             </div>
 
         </div>
+
 	<div class="row">
 		<div class="dropdown language-select col-lg-3 col-md-3 col-sm-2 col-xs-2">
 		  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-		    English
+		   中文（演示） 
 		    <span class="caret"></span>
 		  </button>
 		  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-		    <li><a href="{{ Request::root() }}/zh">中文（演示）</a></li>
+		    <li><a href="{{ Request::root() }}/">English</a></li>
 		  </ul>
 		</div>
 	</div>
