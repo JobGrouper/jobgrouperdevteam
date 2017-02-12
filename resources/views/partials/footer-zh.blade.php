@@ -9,10 +9,10 @@
 
 
                 <div class="content">
-                    <span class="copy">Jobgrouper.com | All Rights Reserved | Copyright © 2016</span>
+                    <span class="copy">Jobgrouper.com | 版权所有 | 版权 © 2016</span>
                 </div>
 
-                <span class="links"><a href="/help">Help</a>|<a href="/terms">Terms &amp; Conditions</a>| Contact us at support@jobgrouper.com</span>
+                <span class="links"><a href="/help">帮助</a>|<a href="/terms">条款和条件</a>| 联系方式 support@jobgrouper.com</span>
 
 
                 <div class="main_footer__social">

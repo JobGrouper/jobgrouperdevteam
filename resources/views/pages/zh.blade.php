@@ -14,7 +14,7 @@
 
             <div class="col-md-12">
 
-                <h2>(pageTexts5)</h2>
+                <h2>你可以用原价的几分之一，来雇佣全世界各行业最顶级的人物</h2>
 
                 <p>用我们的特殊的团购的方法与其它人共同分担费用</p>
 
@@ -189,7 +189,7 @@
                                             <span class="purchased">购买</span>
 
                                         </div>
-                                        <p class="count clearfix"><span class="left"> {!! $job->pre_orders ? $job->pre_orders.' pre-order(s)' : '' !!} </span></p>
+                                        <p class="count clearfix"><span class="left"> {!! $job->pre_orders ? $job->pre_orders.' 预定' : '' !!} </span></p>
 
                                     </div>
 
@@ -241,8 +241,8 @@
 
                                     <p class="text">{{$job->description}}</p>
 
-                                    <p class="count clearfix"><span class="left">${{$job->price}}/month</span><span class="right">{{$job->sales_count}}/{{$job->max_clients_count}} 购买者</span></p>
-                                    <p class="count clearfix"><span class="left"> {!! $job->pre_orders ? $job->pre_orders.' pre-order(s)' : '<br>' !!} </span></p>
+                                    <p class="count clearfix"><span class="left">${{$job->price}}/月</span><span class="right">{{$job->sales_count}}/{{$job->max_clients_count}} 购买者</span></p>
+                                    <p class="count clearfix"><span class="left"> {!! $job->pre_orders ? $job->pre_orders.' 预定' : '<br>' !!} </span></p>
                                 </div>
 
                                 </a>
