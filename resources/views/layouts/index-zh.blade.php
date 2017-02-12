@@ -41,13 +41,17 @@
 <body>
     <div class="dark_bg"></div>
 	<div id="small-dialog" class="zoom-anim-dialog mfp-hide">
-    <h1>对于招聘人才 (talent)</h1>
-    <p>(page_texts)</p>
+    <h1>对于招聘人才</h1>
+    <p>与其选择很多的一次性工作，不知道下次什么时候能找到工作拿到工资，
+	还不如加入JobGrouper。 
+	JobGrouper会帮你将各种的短暂的兼职工作变成全职工作。</p>
 	</div>
 
 	<div id="small-dialog2" class="zoom-anim-dialog mfp-hide">
-    <h1>对于团购者 (buyers)</h1>
-    <p>(page_texts)</p>
+    <h1>对于团购者</h1>
+    <p>无论是创业者需要寻找顶级的编程人员,需要其它创业团队, 
+	还是一群街坊邻居需要寻找房屋管理员，
+	在我们网站上团购服务是最便宜最简单的方法</p>
 	</div>
 @include('partials.big-header-zh')
 
