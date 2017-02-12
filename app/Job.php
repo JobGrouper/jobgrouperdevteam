@@ -291,4 +291,9 @@ class Job extends Model
     {
         return $this->hasMany('App\EmployeeExitRequest', 'job_id');
     }
+
+    public function buyer_adjustment_requests() {
+
+	    return $this->hasMany('App\BuyerAdjustmentRequest', 'job_id');
+    }
 }

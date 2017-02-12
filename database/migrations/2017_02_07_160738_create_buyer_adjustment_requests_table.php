@@ -14,6 +14,7 @@ class CreateBuyerAdjustmentRequestsTable extends Migration
     {
         Schema::create('buyer_adjustment_requests', function (Blueprint $table) {
             $table->increments('id');
+	    $table->integer('job_id')->unsigned();
             $table->integer('employee_id')->unsigned();
             $table->integer('current_client_max')->unsigned();
             $table->integer('current_client_min')->unsigned();
@@ -23,6 +24,7 @@ class CreateBuyerAdjustmentRequestsTable extends Migration
             $table->timestamp('accepted_date')->nullable()->default(null);
             $table->timestamps();
 
+            $table->foreign('job_id')->references('id')->on('jobs');
             $table->foreign('employee_id')->references('id')->on('users');
         });
     }
