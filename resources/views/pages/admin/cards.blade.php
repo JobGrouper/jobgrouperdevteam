@@ -25,7 +25,7 @@
                                 </a>
                             @endif
                         </span>
-			<span class="min">Min to Start: {{$card->minimum_clients_count}}
+			<span class="min">Min to Start: {{$card->min_clients_count}}
 			</span>
                         <span class="permorm">
                             @if($card->employees_count > 0 ||  $card->employee_requests_count)
