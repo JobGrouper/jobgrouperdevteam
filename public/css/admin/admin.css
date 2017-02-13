@@ -687,7 +687,10 @@ body {
 }
 .addcard_wrapper .content_form .add_form .double .max {
   float: left;
-  width: 30%; }
+  width: 14%; }
+.addcard_wrapper .content_form .add_form .double .max.min {
+  margin-left: 2%;
+}
 .addcard_wrapper .content_form .add_form .double .perclient {
   display: inline-block; }
 .addcard_wrapper .content_form .add_form .double .salary {
