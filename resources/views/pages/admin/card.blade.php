@@ -28,6 +28,7 @@
 
             <textarea id="descr" name="description">{{(isset($job->title) ? $job->description : '')}}</textarea>
 
+	    @if($operation == 'create')
             <div class="double">
 
                 <div class="max">
@@ -63,6 +64,51 @@
                 </div>
 
             </div>
+	    @endif
+
+	    @if($operation == 'edit')
+	    <div>
+
+                <div class="max">
+
+                    <label for="max">max clients</label>
+
+                    <input type="text" id="max" name="max_clients_count" value="{{(isset($job->title) ? $job->max_clients_count : '')}}" disabled>
+
+                </div>
+
+                <div class="max min">
+
+                    <label for="max">min clients</label>
+
+                    <input type="text" id="min" name="min_clients_count" value="{{(isset($job->title) ? $job->min_clients_count : '')}}" disabled>
+
+                </div>
+
+		<div>
+			<button>Adjust</button>
+		</div>
+	    </div>
+            <div class="double">
+
+                <div class="perclient">
+
+                    <label for="per">Payment/Client</label>
+
+                    <input type="text" id="per" name="salary" value="{{(isset($job->title) ? $job->salary : '')}}">
+
+                </div>
+
+                <div class="salary">
+
+                    <label for="salary">Monthly salary</label>
+
+                    <input readonly type="text" id="salary" value="{{(isset($job->title) ? round(($job->salary * $job->max_clients_count * 0.85) , 1) : '')}}">
+
+                </div>
+
+            </div>
+	    @endif
 
             <select id="category"  name="category_id" style="background-image: url({{asset('img/Admin/selectarrow.png')}}) !important;">
 

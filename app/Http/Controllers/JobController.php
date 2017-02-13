@@ -23,7 +23,7 @@ class JobController extends Controller
      */
     public function create(){
         $categories = Category::all();
-        return view('pages.admin.card', ['categories' => $categories]);
+        return view('pages.admin.card', ['operation' => 'create', 'categories' => $categories]);
     }
 
 
@@ -115,7 +115,7 @@ class JobController extends Controller
 
         $job = Job::findOrFail($jobID);
         $categories = Category::all();
-        return view('pages.admin.card', ['job' => $job, 'categories' => $categories]);
+        return view('pages.admin.card', ['operation' => 'edit', 'job' => $job, 'categories' => $categories]);
     }
     /**
      * Create new job
