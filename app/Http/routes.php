@@ -25,6 +25,7 @@ use Carbon\Carbon;
 |
 */
 Route::get('/', 'PagesController@home');
+Route::get('/zh', 'PagesController@zhTest');
 
 /*
  * Registration, Auth and Password Recovery
