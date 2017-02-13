@@ -112,6 +112,10 @@ Route::post('category/store', 'CategoryController@store');
 Route::post('/employee_request/approve', ['middleware' => 'check_role', 'uses' => 'EmployeeRequestController@approve']);
 Route::post('/employee_request/reject', ['middleware' => 'check_role', 'uses' => 'EmployeeRequestController@reject']);
 
+Route::post('/buyer_adjustment_requests', ['uses' => 'BuyerAdjustmentController@create_request']);
+
+
+
 /*
  * API routes
  */

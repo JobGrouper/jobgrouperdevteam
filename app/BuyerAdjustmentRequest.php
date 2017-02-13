@@ -12,6 +12,6 @@ class BuyerAdjustmentRequest extends Model
      * @var array
      */
     protected $fillable = [
-        'employee_id', 'current_client_max', 'current_client_min', 'requested_client_min', 'requested_client_max', 'accepted'
+        'job_id', 'employee_id', 'current_client_max', 'current_client_min', 'requested_client_min', 'requested_client_max', 'accepted'
     ];
 }

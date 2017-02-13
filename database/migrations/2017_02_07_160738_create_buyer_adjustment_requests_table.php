@@ -14,13 +14,13 @@ class CreateBuyerAdjustmentRequestsTable extends Migration
     {
         Schema::create('buyer_adjustment_requests', function (Blueprint $table) {
             $table->increments('id');
-	    $table->integer('job_id')->unsigned();
+	        $table->integer('job_id')->unsigned();
             $table->integer('employee_id')->unsigned();
             $table->integer('current_client_max')->unsigned();
             $table->integer('current_client_min')->unsigned();
             $table->integer('requested_client_min')->unsigned();
             $table->integer('requested_client_max')->unsigned();
-            $table->boolean('accepted');
+            $table->boolean('accepted')->default(false);
             $table->timestamp('accepted_date')->nullable()->default(null);
             $table->timestamps();
 
