@@ -153,6 +153,7 @@
                                             <span class="pending">Your request is pending</span>
                                     @elseif($employeeRequest->status == 'approved')
                                         <span class="approved">You got the job!</span>
+					<button class="apply">Request Buyer Adjustment</button>
                                     @elseif($employeeRequest->status == 'rejected' && !$employee)
                                         {{--If employee`s request has been rejected--}}
                                         <button class="apply">Re-apply for this Job</button>
