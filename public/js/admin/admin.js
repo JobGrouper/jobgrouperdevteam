@@ -155,15 +155,24 @@ function()
     });
 };
     
+   // CREATE CARD MONTHLY SALARY CALCULATOR
     $(".addcard_wrapper .content_form .add_form .double .max #max").ForceNumericOnly();
    $(".addcard_wrapper .content_form .add_form .double .perclient #per").ForceNumericOnly();
+
+   	
+   $(".addcard_wrapper .content_form .add_form .double .max #max, .addcard_wrapper .content_form .add_form .double .perclient #per").on('change', function() {
+	$(".addcard_wrapper .content_form .add_form .double .salary #salary").val(($(".addcard_wrapper .content_form .add_form .double .perclient #per").val() * +$(".addcard_wrapper .content_form .add_form .double .max #max").val()));
+   });
+
+   /*
 	setInterval(function(e) {
-		if ($(".addcard_wrapper .content_form .add_form .double .max #max").val().trim().length != 0 && $(".addcard_wrapper .content_form .add_form .double .perclient #per").val().trim().length != 0) {
-			$(".addcard_wrapper .content_form .add_form .double .salary #salary").val(($(".addcard_wrapper .content_form .add_form .double .perclient #per").val() * +$(".addcard_wrapper .content_form .add_form .double .max #max").val()));
+		if ($(".addcard_wrapper > .content_form > .add_form > .double > .max > #max").val().trim().length != 0 && $(".addcard_wrapper > .content_form > .add_form > .double > .perclient > #per").val().trim().length != 0) {
+			$(".addcard_wrapper > .content_form > .add_form > .double > .salary > #salary").val(($(".addcard_wrapper > .content_form > .add_form > .double > .perclient > #per").val() * +$(".addcard_wrapper > .content_form > .add_form > .double > .max > #max").val()));
 		} else {
-			$(".addcard_wrapper .content_form .add_form .double .salary #salary").val("");
+			$(".addcard_wrapper > .content_form > .add_form > .double > .salary > #salary").val("");
 		}
 	}, 100);
+	*/
 	// $(".addcard_wrapper .content_form .add_form .double .max #max").keyup(function() {
 	// 	$(".addcard_wrapper .content_form .add_form .double .salary #salary").val("");
 	// 	console.log($(this).val());
