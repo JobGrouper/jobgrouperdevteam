@@ -89,4 +89,10 @@ class PagesAdminController extends Controller
         $warnings = MaintenanceWarning::all();
         return view('pages.admin.maintenance_warnings', compact('warnings'));
     }
+
+    public function create_buyer_request($job_id) {
+        $job = Job::findOrFail($job_id);
+        $orders = $job->sales()->where('status', 'in_progress')->where('card_set', true)->get();
+        return view('pages.admin.buyer-adjustment', ['job' => $job, 'orders' => $orders]);
+    }
 }

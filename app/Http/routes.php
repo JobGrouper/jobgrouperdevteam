@@ -101,7 +101,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check_role'], function () {
     Route::get('/users', ['as' => 'users', 'uses' => 'PagesAdminController@users']);
     Route::get('/card', ['as' => 'cards', 'uses' => 'JobController@create']);
     Route::get('/card/{job_id}/edit', ['uses' => 'JobController@edit']);
-    Route::get('/buyer_adjustment', ['uses' => 'BuyerAdjustmentController@create']);
+    Route::get('/buyer_adjustment/{job_id}', ['uses' => 'PagesAdminController@create_buyer_request']);
     Route::get('/categories', ['as' => 'categories', 'uses' => 'PagesAdminController@categories']);
     Route::get('/employee_requests/{job_id}', ['as' => 'employee_requests', 'uses' => 'PagesAdminController@employee_requests']);
     Route::get('/orders/{job_id}', ['uses' => 'PagesAdminController@orders']);

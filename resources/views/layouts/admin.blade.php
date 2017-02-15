@@ -29,6 +29,10 @@
 
     <link rel="stylesheet" href="{{ asset('css/admin/adminmedia.css') }}">
 
+    <script type="text/javascript" src="{{ asset('js/utilities.js') }}"></script>
+
+    @yield('autoload_scripts')
+
 </head>
 
 <body>

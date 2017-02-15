@@ -86,7 +86,7 @@
                 </div>
 
 		<div>
-			<button>Adjust</button>
+			<a href="/admin/buyer_adjustment/{{ $job->id }}">Adjust</a>
 		</div>
 	    </div>
             <div class="double">
