@@ -37,6 +37,10 @@
 
     <link rel="stylesheet" href="{{ asset('css/media.css') }}">
 
+    <script type="text/javascript" src="{{ asset('js/utilities.js') }}"></script>
+
+    @yield('autoload_scripts')
+
 </head>
 
 <body>

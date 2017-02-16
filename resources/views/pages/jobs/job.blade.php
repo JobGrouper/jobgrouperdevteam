@@ -2,6 +2,28 @@
 
 @section('title', $job->title)
 
+@section('autoload_scripts')
+
+@if($employeeRequest)
+    @if($employeeRequest->status == 'approved')
+<script>
+	var buyer_adjuster;
+	jg.Autoloader(function() {
+
+		buyer_adjuster = new jg.BuyerAdjuster({
+			root: document.getElementById('buyer_adjuster'),
+			modal: {
+				root: document.getElementById('buyer_adjustment_alert_window'),
+				trigger: document.getElementById('buyer-adjustment-alert-button')
+			}
+		});
+	});
+</script>
+   @endif
+@endif
+
+@endsection
+
 @section('content')
 
     <div class="view">
@@ -13,6 +35,18 @@
                 <div class="cancel"></div>
             </div>
         </div>
+	
+	<!-- NESTED IF -->
+	@if($employeeRequest)
+	    @if($employeeRequest->status == 'approved')
+		<div id="buyer_adjustment_alert_window" class="alert_window month">
+		    <div class="alert_window__block">
+			@include('partials.buyer-adjustment-form', ['requested' => false])
+			<div class="cancel"></div>
+		    </div>
+		</div>
+	    @endif
+	@endif
 	@else
         <div class="alert_window month">
             <div class="alert_window__block">
@@ -153,7 +187,7 @@
                                             <span class="pending">Your request is pending</span>
                                     @elseif($employeeRequest->status == 'approved')
                                         <span class="approved">You got the job!</span>
-					<button class="apply">Request Buyer Adjustment</button>
+					<button id="buyer-adjustment-alert-button" class="nostyleyet">Request Buyer Adjustment</button>
                                     @elseif($employeeRequest->status == 'rejected' && !$employee)
                                         {{--If employee`s request has been rejected--}}
                                         <button class="apply">Re-apply for this Job</button>

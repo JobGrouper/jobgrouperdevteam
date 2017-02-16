@@ -172,10 +172,24 @@ jg.Autoloader = function(func) {
 jg.BuyerAdjuster = function(user_options) {
 
 	this._options = {
-		root : null
+		root : null,
+		modal : {
+			root: null,
+			trigger: null
+		},
+		is_modal : false
 	};
 
 	jg.extend(this._options, user_options);
+
+	this._modal_root = null;
+	this._modal_trigger = null;
+
+	if (this._options.modal.root != null) {
+		this._options['is_modal'] = true;
+		this._modal_root = this._options.modal['root'];
+		this._modal_trigger = this._options.modal['trigger'];
+	}
 
 	this._map = new jg.ElementMap( this._options['root'] );
 	this._max_value = this._map['max-input'].value;
@@ -199,6 +213,14 @@ jg.BuyerAdjuster.prototype = {
 		// -	- if so...
 		// -	-	- minimum must not go above level of current buyers
 		//
+
+		if (this._options['is_modal']) {
+
+			this._modal_trigger.onclick = function() {
+				$( self._modal_root ).fadeIn("fast");
+			}
+		}
+
 		this._map['min-input'].onchange = function() {
 
 			// Minimum must not be:
