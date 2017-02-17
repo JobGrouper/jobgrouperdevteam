@@ -106,7 +106,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check_role'], function () {
     Route::get('/employee_requests/{job_id}', ['as' => 'employee_requests', 'uses' => 'PagesAdminController@employee_requests']);
     Route::get('/orders/{job_id}', ['uses' => 'PagesAdminController@orders']);
     Route::get('/texts', ['as' => 'texts', 'uses' => 'PagesAdminController@texts']);
-    Route::post('/buyer_adjustment', ['uses' => 'BuyerAdjustmentController@create']);
 });
 
 Route::post('category/store', 'CategoryController@store');
@@ -170,6 +169,8 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('stripe/invoice/created', 'StripeWebhookController@onInvoiceCreated');
     Route::post('stripe/invoice/failed', 'StripeWebhookController@onInvoiceFailure');
     Route::post('stripe/account/updated', 'StripeWebhookController@onAccountUpdated');
+
+    Route::post('/buyer_adjustment', [/*'middleware' => 'check_role', */'uses' => 'BuyerAdjustmentController@create']);
 });
 
 

@@ -25,10 +25,10 @@ class BuyerAdjustmentController extends Controller
             ]
         );
 
-        if($v->failed()){
-            return redirect()->back()->with('validator_errors', $v->errors());
+        if($v->fails()){
+            return ['status' => 'error', 'data' => $v->errors(), 'message' => 'validator_error'];
         }
-
+        
         if($request->request_id){
             $buyerAdjustmentRequest = BuyerAdjustmentRequest::findOrFail($request->request_id);
             $job = $buyerAdjustmentRequest->job()->get()->first();
@@ -50,6 +50,7 @@ class BuyerAdjustmentController extends Controller
             if($buyerAdjustment->old_client_min >= $job->min_clients_count){
                 // Starts plan
             }
+            return ['status' => 'success'];
         }
         elseif($request->job_id){
             $job = Job::findOrFail($request->job_id);
@@ -69,8 +70,9 @@ class BuyerAdjustmentController extends Controller
             if($buyerAdjustment->old_client_min >= $job->min_clients_count){
                 // Starts plan
             }
-        }
 
+            return ['status' => 'success'];
+        }
 
 
     }
