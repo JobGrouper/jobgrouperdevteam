@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\BuyerAdjustment;
+use App\BuyerAdjustmentRequest;
 use App\Job;
 use App\User;
 use Illuminate\Http\Request;
@@ -13,6 +15,65 @@ use Mail;
 
 class BuyerAdjustmentController extends Controller
 {
+    public function create(Request $request){
+
+        $v = Validator::make($request->all(),[
+                'request_id' => 'required_without:job_id|numeric',
+                'job_id' => 'required_without:request_id|numeric',
+                'new_client_max' => 'required|numeric',
+                'new_client_min' => 'required|numeric',
+            ]
+        );
+
+        if($v->failed()){
+            return redirect()->back()->with('validator_errors', $v->errors());
+        }
+
+        if($request->request_id){
+            $buyerAdjustmentRequest = BuyerAdjustmentRequest::findOrFail($request->request_id);
+            $job = $buyerAdjustmentRequest->job()->get()->first();
+
+            $buyerAdjustment = BuyerAdjustment::create([
+                'from_request_id' => $request->request_id,
+                'job_id' => $job->id,
+                'old_client_min' => $job->min_clients_count,
+                'old_client_max' => $job->max_clients_count,
+                'new_client_min' => $request->new_client_min,
+                'new_client_max' => $request->new_client_max,
+            ]);
+
+
+            $job->min_clients_count = $request->new_client_min;
+            $job->max_clients_count = $request->new_client_max;
+            $job->save();
+
+            if($buyerAdjustment->old_client_min >= $job->min_clients_count){
+                // Starts plan
+            }
+        }
+        elseif($request->job_id){
+            $job = Job::findOrFail($request->job_id);
+            
+            $buyerAdjustment = BuyerAdjustment::create([
+                'job_id' => $job->id,
+                'old_client_min' => $job->min_clients_count,
+                'old_client_max' => $job->max_clients_count,
+                'new_client_min' => $request->new_client_min,
+                'new_client_max' => $request->new_client_max,
+            ]);
+
+            $job->min_clients_count = $request->new_client_min;
+            $job->max_clients_count = $request->new_client_max;
+            $job->save();
+
+            if($buyerAdjustment->old_client_min >= $job->min_clients_count){
+                // Starts plan
+            }
+        }
+
+
+
+    }
     public function create_request(Request $request){
         $v = Validator::make($request->all(),[
                 'job_id' => 'required|numeric',

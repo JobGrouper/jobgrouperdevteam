@@ -14,4 +14,13 @@ class BuyerAdjustmentRequest extends Model
     protected $fillable = [
         'job_id', 'employee_id', 'current_client_max', 'current_client_min', 'requested_client_min', 'requested_client_max', 'accepted'
     ];
+
+
+    /**
+     * Relations
+     */
+
+    public function job(){
+        return $this->belongsTo('App\Job');
+    }
 }

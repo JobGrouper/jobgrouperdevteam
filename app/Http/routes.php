@@ -106,6 +106,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check_role'], function () {
     Route::get('/employee_requests/{job_id}', ['as' => 'employee_requests', 'uses' => 'PagesAdminController@employee_requests']);
     Route::get('/orders/{job_id}', ['uses' => 'PagesAdminController@orders']);
     Route::get('/texts', ['as' => 'texts', 'uses' => 'PagesAdminController@texts']);
+    Route::post('/buyer_adjustment', ['uses' => 'BuyerAdjustmentController@create']);
 });
 
 Route::post('category/store', 'CategoryController@store');
