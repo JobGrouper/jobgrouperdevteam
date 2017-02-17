@@ -7,6 +7,16 @@
 
 
 @section('content')
+    <script>
+        var buyer_adjuster;
+        jg.Autoloader(function() {
+
+            buyer_adjuster = new jg.BuyerAdjuster({
+                root: document.getElementById('buyer_adjuster')
+            });
+        });
+    </script>
+
 
     <div class="content_form">
 
@@ -85,9 +95,12 @@
 
                 </div>
 
-		<div>
-			<a href="/admin/buyer_adjustment/{{ $job->id }}">Adjust</a>
+		<div class="adjust-wrapper clearfix">
+			{{--<a href="/admin/buyer_adjustment/{{ $job->id }}">Adjust</a>--}}
+			<span>Adjust</span>
 		</div>
+
+
 	    </div>
             <div class="double">
 
@@ -191,6 +204,9 @@
             </div>
         </form>
 
+    </div>
+    <div class="adjustment-block-wrapper">
+        @include('partials.buyer-adjustment-form', ['requested' => false])
     </div>
 
 @stop

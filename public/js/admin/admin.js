@@ -702,7 +702,36 @@ if (window.innerWidth > 768) {
   });
 }
 
+    $(".adjust-wrapper span").click(function(){
+       $(".adjustment-block-wrapper").fadeIn();
+    });
+
+    $("#buyer_adjuster .close__btn").click(function(){
+        $(".adjustment-block-wrapper").fadeOut();
+    });
 
 
+    $('#buyer_adjuster input[type="submit"]').click(function(e){
+        e.preventDefault();
+        var adj_info = {
+            "new_client_min": $(".min-input").val(),
+            "new_client_max": $(".max-input").val(),
+            "job_id": $(".job__id").val()
+        };
+
+        console.log(adj_info)
+        $.ajax({
+            method: "post",
+            url: "/api/buyer_adjustment",
+            data: adj_info,
+            datatype: "json",
+            success: function(response) {
+                console.log(response);
+                $("#min").val($(".min-input").val());
+                $("#max").val($(".max-input").val());
+                $(".adjustment-block-wrapper").fadeOut();
+            }
+        });
+    })
         // 
 });
