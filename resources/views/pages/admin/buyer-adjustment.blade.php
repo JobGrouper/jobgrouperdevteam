@@ -9,7 +9,8 @@
 	jg.Autoloader(function() {
 
 		buyer_adjuster = new jg.BuyerAdjuster({
-			root: document.getElementById('buyer_adjuster')
+			root: document.getElementById('buyer_adjuster'),
+			admin: true
 		});
 	});
 </script>
@@ -17,6 +18,6 @@
 
 @section('content')
 
-	@include('partials.buyer-adjustment-form', ['requested' => false])
+	@include('partials.buyer-adjustment-form')
 
 @stop

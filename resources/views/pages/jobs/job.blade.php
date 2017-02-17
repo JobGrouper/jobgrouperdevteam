@@ -15,7 +15,8 @@
 			modal: {
 				root: document.getElementById('buyer_adjustment_alert_window'),
 				trigger: document.getElementById('buyer-adjustment-alert-button')
-			}
+			},
+			request: true
 		});
 	});
 </script>
@@ -41,7 +42,7 @@
 	    @if($employeeRequest->status == 'approved')
 		<div id="buyer_adjustment_alert_window" class="alert_window month">
 		    <div class="alert_window__block">
-			@include('partials.buyer-adjustment-form', ['requested' => false])
+			@include('partials.buyer-adjustment-form', ['purpose' => 'request'])
 			<div class="cancel"></div>
 		    </div>
 		</div>

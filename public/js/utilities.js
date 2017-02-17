@@ -177,6 +177,8 @@ jg.BuyerAdjuster = function(user_options) {
 			root: null,
 			trigger: null
 		},
+		admin:null,
+		request:null,
 		is_modal : false
 	};
 
@@ -192,6 +194,7 @@ jg.BuyerAdjuster = function(user_options) {
 	}
 
 	this._map = new jg.ElementMap( this._options['root'] );
+	this._job_id = this._map['ba_job_id_field'].value;
 	this._max_value = this._map['max-input'].value;
 	this._min_value = this._map['min-input'].value;
 	this._sales_count = this._map['sales-count'].innerText;
@@ -324,5 +327,118 @@ jg.BuyerAdjuster.prototype = {
 			self._max_value++;
 			self._map['max-input'].value = self._max_value;
 		}
+
+		if (this._options['admin']) {
+
+			this._map['buyer-adjuster-start-work-button'].onclick = function(e) {
+				e.preventDefault();
+				self._startWorkNow();
+			}
+			this._map['buyer-adjuster-submit-button'].onclick = function(e) {
+				e.preventDefault();
+			}
+		}
+
+		if (this._options['request']) {
+
+			this._map['request-start-work-button'].onclick = function(e) {
+				e.preventDefault();
+				self._requestWorkNow();
+			}
+			this._map['request-submit-button'].onclick = function(e) {
+				e.preventDefault();
+				self._requestBuyerAdjustment();
+			}
+		}
+	},
+	_requestWorkNow: function() {
+
+		var post_data = $( this._map['buyer-adjuster-form'] ).serialize();
+
+		$.ajax({
+			type: "POST",
+			url: "/api/buyerAdjustmentRequest/" + this._job_id,
+			data: post_data,
+			datatype: "json",
+			success: function(response) {
+				var json_response = JSON.parse(response);
+				if(json_response.status == 0) {
+
+				} else {
+				}
+			}
+		});
+	},
+	_requestBuyerAdjustment: function() {
+
+		var post_data = $( this._map['buyer-adjuster-form'] ).serialize();
+
+		$.ajax({
+			type: "POST",
+			url: "/api/buyerAdjustmentRequest/" + this._job_id,
+			data: post_data,
+			datatype: "json",
+			success: function(response) {
+				var json_response = JSON.parse(response);
+				if(json_response.status == 0) {
+
+				} else {
+				}
+			}
+		});
+	},
+	_startWorkNow: function() {
+
+		var post_data = $( this._map['buyer-adjuster-form'] ).serialize();
+
+		$.ajax({
+			type: "POST",
+			url: "/api/buyerAdjustmentRequest/" + this._job_id,
+			data: post_data,
+			datatype: "json",
+			success: function(response) {
+				var json_response = JSON.parse(response);
+				if(json_response.status == 0) {
+
+				} else {
+				}
+			}
+		});
+	},
+	_makeBuyerAdjustment: function() {
+
+		var post_data = $( this._map['buyer-adjuster-form'] ).serialize();
+
+		$.ajax({
+			type: "POST",
+			url: "/api/buyerAdjustmentRequest/" + this._job_id,
+			data: post_data,
+			datatype: "json",
+			success: function(response) {
+				var json_response = JSON.parse(response);
+				if(json_response.status == 0) {
+
+				} else {
+				}
+			}
+		});
+	},
+	_denyBuyerAdjustment: function() {
+
+		var post_data = $( this._map['buyer-adjuster-form'] ).serialize();
+
+		$.ajax({
+			type: "POST",
+			url: "/api/buyerAdjustmentRequest/" + this._job_id,
+			data: post_data,
+			datatype: "json",
+			success: function(response) {
+				var json_response = JSON.parse(response);
+				if(json_response.status == 0) {
+
+				} else {
+				}
+			}
+		});
 	}
 };
