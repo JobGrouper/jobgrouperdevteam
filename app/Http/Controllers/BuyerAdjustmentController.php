@@ -97,11 +97,11 @@ class BuyerAdjustmentController extends Controller
         $employee->buyerAdjustmentRequests()->create($request->all());
 
         //Mail for admin
-        $admin = User::where('role', 'admin')->get()->first();
-        Mail::send('emails.buyer_adjustment_request_to_admin', ['job_title'=>$job->title],function($u) use ($admin)
+        $adminsEmails = User::where('role', 'admin')->get()->pluck('email')->toArray();
+        Mail::send('emails.buyer_adjustment_request_to_admin', ['job_title'=>$job->title],function($u) use ($adminsEmails)
         {
             $u->from('admin@jobgrouper.com');
-            $u->to($admin->email);
+            $u->to($adminsEmails);
             $u->subject('New buyer adjustment request');
         });
 
@@ -114,13 +114,12 @@ class BuyerAdjustmentController extends Controller
         });
 
         //Mail for buyers
-        $buyers_emails = array_values($job->buyers()->get()->pluck('email')->toArray());
-        //dd($buyers_emails);
-        Mail::send('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title],function($u) use ($buyers_emails)
+        $buyersEmails = array_values($job->buyers()->get()->pluck('email')->toArray());
+        Mail::send('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title],function($u) use ($buyersEmails)
         {
             $u->from('admin@jobgrouper.com');
-            $u->to(['ovch2009@ukr.net','ovch2008@ukr.net']);
-            $u->subject('Changing max  number of buyers');
+            $u->to($buyersEmails);
+            $u->subject('Changing max number of buyers');
         });
 
         return redirect()->back()->with('message', 'success');
