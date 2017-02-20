@@ -12,7 +12,7 @@ class BuyerAdjustmentRequest extends Model
      * @var array
      */
     protected $fillable = [
-        'job_id', 'employee_id', 'current_client_max', 'current_client_min', 'requested_client_min', 'requested_client_max', 'accepted'
+        'job_id', 'employee_id', 'current_client_max', 'current_client_min', 'requested_client_min', 'requested_client_max', 'status', 'decision_date'
     ];
 
 
@@ -22,5 +22,9 @@ class BuyerAdjustmentRequest extends Model
 
     public function job(){
         return $this->belongsTo('App\Job');
+    }
+
+    public function employee(){
+        return $this->belongsTo('App\User', 'employee_id');
     }
 }

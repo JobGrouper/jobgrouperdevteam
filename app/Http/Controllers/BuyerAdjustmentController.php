@@ -12,6 +12,7 @@ use App\Http\Requests;
 use Auth;
 use Validator;
 use Mail;
+use Carbon\Carbon;
 
 class BuyerAdjustmentController extends Controller
 {
@@ -76,6 +77,7 @@ class BuyerAdjustmentController extends Controller
 
 
     }
+
     public function create_request(Request $request){
         $v = Validator::make($request->all(),[
                 'job_id' => 'required|numeric',
@@ -123,5 +125,46 @@ class BuyerAdjustmentController extends Controller
         });
 
         return redirect()->back()->with('message', 'success');
+    }
+
+    public function deny_request($requestID){
+        $buyerAdjustmentRequest = BuyerAdjustmentRequest::findOrFail($requestID);
+        if($buyerAdjustmentRequest->status != 'pending'){
+            return response([
+                'status' => 'error',
+                'data' => null,
+                'message' => 'request_already_processed',
+            ], 200);
+        }
+
+        $employee = $buyerAdjustmentRequest->employee()->get()->first();
+
+        $buyerAdjustmentRequest->status = 'denied';
+        $buyerAdjustmentRequest->decision_date = Carbon::now();
+        $buyerAdjustmentRequest->save();
+
+        //Mail to employee
+        /*Mail::send('emails.buyer_adjustment_request_denied_to_employee', [],function($u) use ($employee)
+        {
+            $u->from('admin@jobgrouper.com');
+            $u->to($employee->email);
+            $u->subject('Your request has been denied');
+        });*/
+
+        //Mail to admin
+        /*$adminsEmails = User::where('role', 'admin')->get()->pluck('email')->toArray();
+        Mail::send('emails.buyer_adjustment_request_denied_to_admin', [],function($u) use ($adminsEmails)
+        {
+            $u->from('admin@jobgrouper.com');
+            $u->to($adminsEmails);
+            $u->subject('Denial was successful');
+        });*/
+
+        return response([
+            'status' => 'success',
+            'data' => null,
+            'message' => null,
+        ], 200);
+
     }
 }

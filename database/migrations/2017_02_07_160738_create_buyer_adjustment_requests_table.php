@@ -16,12 +16,12 @@ class CreateBuyerAdjustmentRequestsTable extends Migration
             $table->increments('id');
 	        $table->integer('job_id')->unsigned();
             $table->integer('employee_id')->unsigned();
-            $table->integer('current_client_max')->unsigned();
             $table->integer('current_client_min')->unsigned();
+            $table->integer('current_client_max')->unsigned();
             $table->integer('requested_client_min')->unsigned();
             $table->integer('requested_client_max')->unsigned();
-            $table->boolean('accepted')->default(false);
-            $table->timestamp('accepted_date')->nullable()->default(null);
+            $table->enum('status', ['pending', 'accepted', 'denied'])->default('pending');
+            $table->timestamp('decision_date')->nullable()->default(null);
             $table->timestamps();
 
             $table->foreign('job_id')->references('id')->on('jobs');
