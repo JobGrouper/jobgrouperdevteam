@@ -79,6 +79,23 @@ class Job extends Model
     }
 
     /**
+     * Accessor to get current buyer adjustment request 
+     */
+    public function getCurrentBuyerAdjustmentRequestAttribute() 
+    {
+	    return $this->buyer_adjustment_requests()->where('status', 'pending')->
+		    orderBy('created_at', 'desc')->first();
+    }
+
+    /**
+     * Accessor to get buyer adjustment requests with status = pending
+     */
+    public function getBuyerAdjustmentRequestsCountAttribute()
+    {
+        return $this->buyer_adjustment_requests()->where('status', '=', 'pending')->count();
+    }
+
+    /**
      * Accessor to get image_url attribute
      */
     public function getImageUrlAttribute()

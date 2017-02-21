@@ -44,10 +44,15 @@
                 </div>
 		<hr>
 		<div>
+		<ul>
 		    @if($card->employees_count > 0 ||  $card->employee_requests_count)
-			<a style="{{$card->employee_requests_count > 0 ? 'color: #ff480b;' : ''}}" href="/admin/employee_requests/{{$card->id}}">An employee is interested in this position</a>
+			<li><a style="{{$card->employee_requests_count > 0 ? 'color: #ff480b;' : ''}}" href="/admin/employee_requests/{{$card->id}}">An employee is interested in this position</a></li>
 		    @endif
 		    <!-- IF THERE ARE BUYER ADJUST REQUESTS -->
+		    @if($card->buyer_adjustment_requests_count > 0)
+			<li><a style="{{$card->buyer_adjustment_requests_count > 0 ? 'color: #ff480b;' : ''}}" href="/admin/buyer_adjustment/{{$card->id}}/{{ $card->current_buyer_adjustment_request->id }}">This job's employee is requesting changes to the number of buyers</a></li>
+		    @endif
+		</ul>
 		</div>
             </div>
             @endforeach

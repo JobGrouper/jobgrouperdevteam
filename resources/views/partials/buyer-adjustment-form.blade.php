@@ -6,8 +6,8 @@
 	</div>
 	@if($purpose == 'admin-from-request')
 	<div>
-		<div>Requested Min: O</div>
-		<div>Requested Max: P</div>
+		<div>Requested Min: <span>{{ $request->requested_client_min }}</span></div>
+		<div>Requested Max: <span>{{ $request->requested_client_max }}</span></div>
 	</div>
 	@endif
 	<div>
