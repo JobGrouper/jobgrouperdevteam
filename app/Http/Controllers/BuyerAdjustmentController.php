@@ -79,24 +79,36 @@ class BuyerAdjustmentController extends Controller
     }
 
     public function create_request(Request $request){
+
         $v = Validator::make($request->all(),[
                 'job_id' => 'required|numeric',
                 'current_client_max' => 'required|numeric',
                 'current_client_min' => 'required|numeric',
-                'requested_client_min' => 'required|numeric',
-                'requested_client_max' => 'required|numeric',
+                'new_client_min' => 'required|numeric',
+                'new_client_max' => 'required|numeric',
 
             ]
         );
         if ($v->fails())
         {
-            return redirect()->back()->with($v->errors());
+	    return response([
+		'status' => 'X',
+		'data' => $v->errors(),
+		'message' => 'Failed, check error object',
+	    ], 200);
         }
 
         $employee = Auth::user();
         $job = Job::findOrFail($request->job_id);
         
-        $employee->buyerAdjustmentRequests()->create($request->all());
+	$employee->buyerAdjustmentRequests()->create([
+		'job_id' => $request->job_id,
+		'employee_id' => $request->employee_id,
+		'current_client_max' => $request->current_client_max,
+		'current_client_min' => $request->current_client_min,
+		'requested_client_max' => $request->new_client_max,
+		'requested_client_min' => $request->new_client_min
+	]);
 
         //Mail for admin
         $adminsEmails = User::where('role', 'admin')->get()->pluck('email')->toArray();
@@ -124,7 +136,11 @@ class BuyerAdjustmentController extends Controller
             $u->subject('Changing max number of buyers');
         });
 
-        return redirect()->back()->with('message', 'success');
+	    return response([
+		'status' => 'OK',
+		'data' => null,
+		'message' => 'Buyer Request sent',
+	    ], 200);
     }
 
     public function deny_request($requestID){

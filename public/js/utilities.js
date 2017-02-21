@@ -336,6 +336,7 @@ jg.BuyerAdjuster.prototype = {
 			}
 			this._map['buyer-adjuster-submit-button'].onclick = function(e) {
 				e.preventDefault();
+				self._makeBuyerAdjustment();
 			}
 		}
 
@@ -375,7 +376,7 @@ jg.BuyerAdjuster.prototype = {
 
 		$.ajax({
 			type: "POST",
-			url: "/api/buyerAdjustmentRequest/" + this._job_id,
+			url: "/api/buyerAdjustmentRequest",
 			data: post_data,
 			datatype: "json",
 			success: function(response) {
@@ -393,7 +394,7 @@ jg.BuyerAdjuster.prototype = {
 
 		$.ajax({
 			type: "POST",
-			url: "/api/buyerAdjustmentRequest/" + this._job_id,
+			url: "/api/buyerAdjustmentRequest/",
 			data: post_data,
 			datatype: "json",
 			success: function(response) {
@@ -411,7 +412,7 @@ jg.BuyerAdjuster.prototype = {
 
 		$.ajax({
 			type: "POST",
-			url: "/api/buyerAdjustmentRequest/" + this._job_id,
+			url: "/api/buyerAdjustment",
 			data: post_data,
 			datatype: "json",
 			success: function(response) {
@@ -429,7 +430,7 @@ jg.BuyerAdjuster.prototype = {
 
 		$.ajax({
 			type: "POST",
-			url: "/api/buyerAdjustmentRequest/" + this._job_id,
+			url: "/api/denyBuyerAdjustmentRequest/" + this._request_id,
 			data: post_data,
 			datatype: "json",
 			success: function(response) {
