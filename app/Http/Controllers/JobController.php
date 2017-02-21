@@ -67,12 +67,19 @@ class JobController extends Controller
         if($job->employee_id){
             $employee = $job->employee()->first();
             $emploeeStatus = $job->employee_status;
+
         }
 
         $user = Auth::user();
 	$user_order_info = null;
         $jobOrdered = false;
         $jobPaid = false;
+	$adjustment_request = null;
+
+	// Check for buyer adjustment requests
+	if ($job->employee_id && ($job->employee_id == $user->id)) {
+		$adjustment_request = $user->buyerAdjustmentRequests()->where('status', 'pending')->orderBy('created_at', 'desc')->first();
+	}
 
         if($user){
             if($user->user_type == 'employee'){
@@ -107,7 +114,7 @@ class JobController extends Controller
 
 		}
 
-        return view('pages.jobs.job', ['user' => $user, 'job' => $job, 'category' => $category, 'employee' => $employee, 'employeeStatus' => $emploeeStatus, 'orders' => $orders, 'employeeRequest' => $employeeRequest, 'jobOrdered' => $jobOrdered, 'jobPaid' => $jobPaid, 'user_order_info' => $user_order_info]);
+        return view('pages.jobs.job', ['user' => $user, 'job' => $job, 'category' => $category, 'employee' => $employee, 'employeeStatus' => $emploeeStatus, 'orders' => $orders, 'employeeRequest' => $employeeRequest, 'jobOrdered' => $jobOrdered, 'jobPaid' => $jobPaid, 'user_order_info' => $user_order_info, 'adjustment_request' => $adjustment_request]);
     }
 
 

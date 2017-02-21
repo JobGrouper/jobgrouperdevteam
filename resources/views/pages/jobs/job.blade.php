@@ -5,7 +5,7 @@
 @section('autoload_scripts')
 
 @if($employeeRequest)
-    @if($employeeRequest->status == 'approved')
+    @if($employeeRequest->status == 'approved' && !$adjustment_request)
 <script>
 	var buyer_adjuster;
 	jg.Autoloader(function() {
@@ -188,7 +188,11 @@
                                             <span class="pending">Your request is pending</span>
                                     @elseif($employeeRequest->status == 'approved')
                                         <span class="approved">You got the job!</span>
+					@if(!$adjustment_request)
 					<button id="buyer-adjustment-alert-button" class="nostyleyet">Request Buyer Adjustment</button>
+					@else
+                                        <span class="pending">Your request is pending</span>
+					@endif
                                     @elseif($employeeRequest->status == 'rejected' && !$employee)
                                         {{--If employee`s request has been rejected--}}
                                         <button class="apply">Re-apply for this Job</button>
