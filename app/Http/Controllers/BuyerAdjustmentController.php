@@ -101,23 +101,25 @@ class BuyerAdjustmentController extends Controller
         $employee = Auth::user();
         $job = Job::findOrFail($request->job_id);
         
-	$employee->buyerAdjustmentRequests()->create([
-		'job_id' => $request->job_id,
-		'employee_id' => $request->employee_id,
-		'current_client_max' => $request->current_client_max,
-		'current_client_min' => $request->current_client_min,
-		'requested_client_max' => $request->new_client_max,
-		'requested_client_min' => $request->new_client_min
-	]);
+        $employee->buyerAdjustmentRequests()->create([
+            'job_id' => $request->job_id,
+            'employee_id' => $request->employee_id,
+            'current_client_max' => $request->current_client_max,
+            'current_client_min' => $request->current_client_min,
+            'requested_client_max' => $request->new_client_max,
+            'requested_client_min' => $request->new_client_min
+        ]);
 
         //Mail for admin
-        $adminsEmails = User::where('role', 'admin')->get()->pluck('email')->toArray();
-        Mail::send('emails.buyer_adjustment_request_to_admin', ['job_title'=>$job->title],function($u) use ($adminsEmails)
-        {
-            $u->from('admin@jobgrouper.com');
-            $u->to($adminsEmails);
-            $u->subject('New buyer adjustment request');
-        });
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin){
+            Mail::send('emails.buyer_adjustment_request_to_admin', ['job_title'=>$job->title],function($u) use ($admin)
+            {
+                $u->from('admin@jobgrouper.com');
+                $u->to($admin->email);
+                $u->subject('New buyer adjustment request');
+            });
+        }
 
         //Mail for employee
         Mail::send('emails.buyer_adjustment_request_to_employee', ['job_title'=>$job->title],function($u) use ($employee)
@@ -128,13 +130,16 @@ class BuyerAdjustmentController extends Controller
         });
 
         //Mail for buyers
-        $buyersEmails = array_values($job->buyers()->get()->pluck('email')->toArray());
-        Mail::send('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title],function($u) use ($buyersEmails)
-        {
-            $u->from('admin@jobgrouper.com');
-            $u->to($buyersEmails);
-            $u->subject('Changing max number of buyers');
-        });
+        /*$buyers = $job->buyers()->get();
+        foreach ($buyers as $buyer){
+            Mail::send('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title],function($u) use ($buyer)
+            {
+                $u->from('admin@jobgrouper.com');
+                $u->to($buyer->email);
+                $u->subject('Changing max number of buyers');
+            });
+        }*/
+
 
 	    return response([
 		'status' => 'OK',
@@ -168,13 +173,15 @@ class BuyerAdjustmentController extends Controller
         });*/
 
         //Mail to admin
-        /*$adminsEmails = User::where('role', 'admin')->get()->pluck('email')->toArray();
-        Mail::send('emails.buyer_adjustment_request_denied_to_admin', [],function($u) use ($adminsEmails)
-        {
-            $u->from('admin@jobgrouper.com');
-            $u->to($adminsEmails);
-            $u->subject('Denial was successful');
-        });*/
+        /*$admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin){
+            Mail::send('emails.buyer_adjustment_request_denied_to_admin', [],function($u) use ($admin)
+            {
+                $u->from('admin@jobgrouper.com');
+                $u->to($admin->email);
+                $u->subject('Denial was successful');
+            });
+        }*/
 
         return response([
             'status' => 'success',
