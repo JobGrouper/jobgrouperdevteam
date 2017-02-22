@@ -178,6 +178,7 @@ jg.BuyerAdjuster = function(user_options) {
 			trigger: null
 		},
 		admin:null,
+		admin_from_request:null,
 		request:null,
 		is_modal : false
 	};
@@ -195,6 +196,12 @@ jg.BuyerAdjuster = function(user_options) {
 
 	this._map = new jg.ElementMap( this._options['root'] );
 	this._job_id = this._map['ba_job_id_field'].value;
+	this._request_id = null;
+
+	if (this._options['admin_from_request']) {
+	  this._request_id = this._map['ba_request_id_field'].value;
+	}
+
 	this._max_value = this._map['max-input'].value;
 	this._min_value = this._map['min-input'].value;
 	this._sales_count = this._map['sales-count'].innerText;
@@ -328,7 +335,7 @@ jg.BuyerAdjuster.prototype = {
 			self._map['max-input'].value = self._max_value;
 		}
 
-		if (this._options['admin']) {
+		if (this._options['admin'] || this._options['admin_from_request']) {
 
 			this._map['buyer-adjuster-start-work-button'].onclick = function(e) {
 				e.preventDefault();
@@ -337,6 +344,15 @@ jg.BuyerAdjuster.prototype = {
 			this._map['buyer-adjuster-submit-button'].onclick = function(e) {
 				e.preventDefault();
 				self._makeBuyerAdjustment();
+			}
+		}
+
+		if (this._options['admin_from_request']) {
+
+			this._map['buyer-adjuster-deny-request-button'].onclick = function(e) {
+				e.preventDefault();
+				self._denyBuyerAdjustment();
+
 			}
 		}
 
@@ -426,13 +442,13 @@ jg.BuyerAdjuster.prototype = {
 	},
 	_denyBuyerAdjustment: function() {
 
-		var post_data = $( this._map['buyer-adjuster-form'] ).serialize();
+		var post_data = '';
 
 		$.ajax({
 			type: "POST",
 			url: "/api/denyBuyerAdjustmentRequest/" + this._request_id,
 			data: post_data,
-			datatype: "json",
+			datatype: "string",
 			success: function(response) {
 				var json_response = JSON.parse(response);
 				if(json_response.status == 0) {

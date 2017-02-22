@@ -10,7 +10,12 @@
 
 		buyer_adjuster = new jg.BuyerAdjuster({
 			root: document.getElementById('buyer_adjuster'),
+			@if($purpose == 'admin')
 			admin: true
+			@endif
+			@if($purpose == 'admin-from-request')
+			admin_from_request: true
+			@endif
 		});
 	});
 </script>

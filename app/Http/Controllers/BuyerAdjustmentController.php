@@ -34,6 +34,10 @@ class BuyerAdjustmentController extends Controller
             $buyerAdjustmentRequest = BuyerAdjustmentRequest::findOrFail($request->request_id);
             $job = $buyerAdjustmentRequest->job()->get()->first();
 
+	    $buyerAdjustmentRequest->status = 'accepted';
+	    $buyerAdjustmentRequest->decision_date = Carbon::now();
+	    $buyerAdjustmentRequest->save();
+
             $buyerAdjustment = BuyerAdjustment::create([
                 'from_request_id' => $request->request_id,
                 'job_id' => $job->id,

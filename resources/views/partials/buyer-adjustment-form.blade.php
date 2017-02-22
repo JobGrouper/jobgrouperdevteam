@@ -32,6 +32,9 @@
 		<input type="hidden" class="ba_job_id_field" name="job_id" value="{{ $job->id }}"/>
 		<input type="hidden" name="current_client_min" value="{{ $job->min_clients_count }}"/> 
 		<input type="hidden" name="current_client_max" value="{{ $job->max_clients_count }}"/> 
+		@if($purpose == 'admin-from-request')
+		<input type="hidden" class="ba_request_id_field" name="request_id" value="{{ $request->id }}"/> 
+		@endif
 		@if($purpose == 'request' || $purpose == 'admin-from-request')
 		<input type="hidden" name="employee_id" value="{{ $employee->id }}"/> 
 		@endif
@@ -42,7 +45,7 @@
 		<button id="buyer-adjuster-start-work-button">Start Work Now</button>
 		<input id="buyer-adjuster-submit-button" type="submit" value="Submit" />
 			@if($purpose == 'admin-from-request')
-			<button id="deny-request-button">Deny Request</button>
+			<button id="buyer-adjuster-deny-request-button">Deny Request</button>
 			@endif
 		@endif
 	</div>
