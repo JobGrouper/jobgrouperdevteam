@@ -158,7 +158,7 @@ class BuyerAdjustmentController extends Controller
             'requested_client_min' => $request->new_client_min
         ]);
 
-	$changes = $this->getChangesArray($request->current_client_min, $request->current_client_max,
+	    $changes = $this->getChangesArray($request->current_client_min, $request->current_client_max,
 		$request->new_client_min, $request->new_client_max);
 
         //Mail for admin
@@ -193,10 +193,57 @@ class BuyerAdjustmentController extends Controller
 
 
 	    return response([
-		'status' => 'OK',
-		'data' => null,
-		'message' => 'Buyer Request sent',
+            'status' => 'OK',
+            'data' => null,
+            'message' => 'Buyer Request sent',
 	    ], 200);
+    }
+
+    public function startWorkNow(Request $request){
+
+        $v = Validator::make($request->all(),[
+                'job_id' => 'required|numeric',
+            ]
+        );
+        if ($v->fails())
+        {
+            return response([
+                'status' => 'X',
+                'data' => $v->errors(),
+                'message' => 'Failed, check error object',
+            ], 200);
+        }
+
+        $job = Job::findOrFail($request->job_id);
+
+        if($job->sales_count == 0){
+            return response([
+                'status' => 'X',
+                'data' => null,
+                'message' => 'Failed, job has not any buyers',
+            ], 200);
+        }
+
+        if($job->status == 'working'){
+            return response([
+                'status' => 'X',
+                'data' => null,
+                'message' => 'Failed, work already started',
+            ], 200);
+        }
+
+        $job->min_clients_count = $job->sales_count;
+        $job->status = 'working';
+        $job->save();
+
+
+        //TODO: emails sending
+
+        return response([
+            'status' => 'OK',
+            'data' => null,
+            'message' => 'Work started',
+        ], 200);
     }
 
     public function deny_request($requestID){

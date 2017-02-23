@@ -121,6 +121,7 @@ Route::post('/buyer_adjustment_requests', ['uses' => 'BuyerAdjustmentController@
  * API routes
  */
 Route::group(['prefix' => 'api'], function () {
+    
     Route::post('order/close/{order_id}', 'OrderController@close');
 
     Route::post('checkEmailFree', 'RegistrateController@checkEmailFree');
@@ -174,6 +175,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/buyerAdjustment', ['middleware' => 'check_role', 'uses' => 'BuyerAdjustmentController@create']);
     Route::post('/buyerAdjustmentRequest', ['uses' => 'BuyerAdjustmentController@create_request']);
     Route::post('/denyBuyerAdjustmentRequest/{request_id}', ['middleware' => 'check_role', 'uses' => 'BuyerAdjustmentController@deny_request']);
+    Route::post('/startWorkNow', 'BuyerAdjustmentController@startWorkNow');
 });
 
 
