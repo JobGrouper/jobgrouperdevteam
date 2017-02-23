@@ -36,6 +36,7 @@ class BuyerAdjustmentController extends Controller
         if($request->request_id){
             $buyerAdjustmentRequest = BuyerAdjustmentRequest::findOrFail($request->request_id);
             $job = $buyerAdjustmentRequest->job()->get()->first();
+	    $employee = $buyerAdjustmentRequest->employee()->first();
 
 	    $buyerAdjustmentRequest->status = 'accepted';
 	    $buyerAdjustmentRequest->decision_date = Carbon::now();
@@ -57,7 +58,6 @@ class BuyerAdjustmentController extends Controller
             $job->max_clients_count = $request->new_client_max;
             $job->save();
 
-	    /*
             //Mail for employee
             Mail::send('emails.buyer_adjustment_request_approved_to_employee', ['job_title'=>$job->title],function($u) use ($employee)
             {
@@ -65,7 +65,6 @@ class BuyerAdjustmentController extends Controller
                 $u->to($employee->email);
                 $u->subject('Your request has gone through');
             });
-	     */
 
             if($buyerAdjustment->old_client_min >= $job->min_clients_count){
                 // Starts plan
@@ -94,7 +93,7 @@ class BuyerAdjustmentController extends Controller
                 // Starts plan
             }
 
-            return ['status' => 'success'];
+            return json_encode(['status' => 'success']);
 
 	    /*
 	    $admins = User::where('role', 'admin')->get();
@@ -258,7 +257,7 @@ class BuyerAdjustmentController extends Controller
 
 	    $changes = array(
 		    'min_change' => null,
-		    'max_change' => null
+		    'max_change' => null,
 		    'new_minimum' => $new_minimum,
 		    'new_maximum' => $new_maximum
 	    );

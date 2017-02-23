@@ -191,7 +191,7 @@
 					@if(!$adjustment_request)
 					<button id="buyer-adjustment-alert-button" class="nostyleyet">Request Buyer Adjustment</button>
 					@else
-                                        <span class="pending">Your request is pending</span>
+                                        <span id="buyer-adjustment-alert-button" class="pending">Your request is pending</span>
 					@endif
                                     @elseif($employeeRequest->status == 'rejected' && !$employee)
                                         {{--If employee`s request has been rejected--}}

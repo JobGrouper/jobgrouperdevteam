@@ -1,8 +1,8 @@
 <div id="buyer_adjuster">
 <form id="buyer-adjuster-form">
 	<div>
-		<div>Buyers: <span class="sales-count">{{ count($orders) }}</span>/{{ $job->max_clients_count }}</div>
-		<div>Min to Start: {{ $job->min_clients_count }}</div>
+		<div>Buyers: <span class="sales-count">{{ count($orders) }}</span>/<span class="current-max">{{ $job->max_clients_count }}</span></div>
+		<div>Min to Start: <span class="current-min">{{ $job->min_clients_count }}</span></div>
 	</div>
 	@if($purpose == 'admin-from-request')
 	<div>
@@ -29,6 +29,9 @@
 		</div>
 	</div>
 	<div>
+		<p id="ba-message-field"></p>
+	</div>
+	<div>
 		<input type="hidden" class="ba_job_id_field" name="job_id" value="{{ $job->id }}"/>
 		<input type="hidden" name="current_client_min" value="{{ $job->min_clients_count }}"/> 
 		<input type="hidden" name="current_client_max" value="{{ $job->max_clients_count }}"/> 
@@ -47,6 +50,14 @@
 			@if($purpose == 'admin-from-request')
 			<button id="buyer-adjuster-deny-request-button">Deny Request</button>
 			@endif
+		@endif
+	</div>
+	<div>
+		@if($purpose == 'admin-from-request')
+		<a href="/admin/cards">Back to Cards</a>
+		@endif
+		@if($purpose == 'admin')
+		<a href="/admin/card/{{ $job->id }}/edit">Back to edit page</a>
 		@endif
 	</div>
 </form>

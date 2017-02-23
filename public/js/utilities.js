@@ -202,8 +202,12 @@ jg.BuyerAdjuster = function(user_options) {
 	  this._request_id = this._map['ba_request_id_field'].value;
 	}
 
+	this._message_element = this._map['ba-message-field'];
+
 	this._max_value = this._map['max-input'].value;
 	this._min_value = this._map['min-input'].value;
+	this._current_max = parseInt( this._map['current-max'].innerText );
+	this._current_min = parseInt( this._map['current-min'].innerText );
 	this._sales_count = this._map['sales-count'].innerText;
 	this._init();
 };
@@ -213,6 +217,8 @@ jg.BuyerAdjuster.prototype = {
 	_init: function() {
 
 		var self = this;
+
+		this._enableButtons();
 
 		// REGISTER EVENTS
 
@@ -370,6 +376,7 @@ jg.BuyerAdjuster.prototype = {
 	},
 	_requestWorkNow: function() {
 
+		var self = this;
 		var post_data = $( this._map['buyer-adjuster-form'] ).serialize();
 
 		$.ajax({
@@ -378,8 +385,8 @@ jg.BuyerAdjuster.prototype = {
 			data: post_data,
 			datatype: "json",
 			success: function(response) {
-				var json_response = JSON.parse(response);
-				if(json_response.status == 0) {
+
+				if(response.status == 0) {
 
 				} else {
 				}
@@ -388,6 +395,7 @@ jg.BuyerAdjuster.prototype = {
 	},
 	_requestBuyerAdjustment: function() {
 
+		var self = this;
 		var post_data = $( this._map['buyer-adjuster-form'] ).serialize();
 
 		$.ajax({
@@ -396,16 +404,19 @@ jg.BuyerAdjuster.prototype = {
 			data: post_data,
 			datatype: "json",
 			success: function(response) {
-				var json_response = JSON.parse(response);
-				if(json_response.status == 0) {
+
+				if(response.status == 0) {
 
 				} else {
+					self._disableButtons();
+					self._disableJobStuff();
 				}
 			}
 		});
 	},
 	_startWorkNow: function() {
 
+		var self = this;
 		var post_data = $( this._map['buyer-adjuster-form'] ).serialize();
 
 		$.ajax({
@@ -414,8 +425,8 @@ jg.BuyerAdjuster.prototype = {
 			data: post_data,
 			datatype: "json",
 			success: function(response) {
-				var json_response = JSON.parse(response);
-				if(json_response.status == 0) {
+
+				if(response.status == 0) {
 
 				} else {
 				}
@@ -424,7 +435,13 @@ jg.BuyerAdjuster.prototype = {
 	},
 	_makeBuyerAdjustment: function() {
 
+		var self = this;
 		var post_data = $( this._map['buyer-adjuster-form'] ).serialize();
+			
+		if (!this._hasChanged()) {
+		   this._setMessage('No changes have been made.', 'error');
+		   return;
+		}
 
 		$.ajax({
 			type: "POST",
@@ -432,16 +449,18 @@ jg.BuyerAdjuster.prototype = {
 			data: post_data,
 			datatype: "json",
 			success: function(response) {
-				var json_response = JSON.parse(response);
-				if(json_response.status == 0) {
 
+				if(response.status == 0) {
+				  self._setMessage('The adjustment has gone through', 'error');
 				} else {
+				  self._setMessage('The adjustment has gone through', 'success');
 				}
 			}
 		});
 	},
 	_denyBuyerAdjustment: function() {
 
+		var self = this;
 		var post_data = '';
 
 		$.ajax({
@@ -450,12 +469,57 @@ jg.BuyerAdjuster.prototype = {
 			data: post_data,
 			datatype: "string",
 			success: function(response) {
-				var json_response = JSON.parse(response);
-				if(json_response.status == 0) {
 
+				if(response.status == 0) {
+				  self._setMessage('Server error', 'error');
 				} else {
+				  self._setMessage('Adjustment denied', 'success');
 				}
 			}
 		});
+	},
+	_enableButtons: function() {
+		
+		$( this._map['request-start-work-button'] ).prop('disabled', false);
+		$( this._map['request-submit-button'] ).prop('disabled', false);
+	},
+	_disableButtons: function() {
+
+		$( this._map['request-start-work-button'] ).prop('disabled', true);
+		$( this._map['request-submit-button'] ).prop('disabled', true);
+	},
+	_setMessage: function(message, style) {
+
+		var message_class = null;
+		if (style == 'success')
+		  message_class = 'text-success';
+		else if (style == 'error')
+		  message_class = 'text-danger';
+
+		$( this._message_element ).hide();
+
+		$( this._message_element ).addClass( message_class );
+		$( this._message_element ).text( message );
+
+		$( this._message_element ).fadeIn('fast').delay(3000).fadeOut('slow');
+	},
+	_disableJobStuff: function() {
+
+		// class: nostyle -> pending
+		// message: Your request is pending
+		$( '#buyer-adjustment-alert-button' ).removeClass('nostyleyet');
+		$( '#buyer-adjustment-alert-button' ).addClass('pending');
+		$( '#buyer-adjustment-alert-button' ).text('Your request is pending');
+		$( this._modal_root ).fadeOut("fast");
+	},
+	_hasChanged: function() {
+
+		if (this._max_value == this._current_max && 
+			this._min_value == this._current_min) {
+
+			return false;
+		}
+		
+		return true;
 	}
 };
