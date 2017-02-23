@@ -215,7 +215,6 @@ class BuyerAdjustmentController extends Controller
         }
 
         $job = Job::findOrFail($request->job_id);
-
         if($job->sales_count == 0){
             return response([
                 'status' => 'X',
@@ -237,7 +236,36 @@ class BuyerAdjustmentController extends Controller
         $job->save();
 
 
-        //TODO: emails sending
+        //Mail for admin
+        /*$admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin){
+            Mail::send('emails.', ['job_title'=>$job->title],function($u) use ($admin)
+            {
+                $u->from('admin@jobgrouper.com');
+                $u->to($admin->email);
+                $u->subject('');
+            });
+        }*/
+
+        //Mail for employee
+        /*$employee = $job->employee()->get()->first();
+        Mail::send('emails.', ['job_title'=>$job->title],function($u) use ($employee)
+        {
+            $u->from('admin@jobgrouper.com');
+            $u->to($employee->email);
+            $u->subject('');
+        });*/
+
+        //Mail for buyers
+        /*$buyers = $job->buyers()->get();
+        foreach ($buyers as $buyer){
+            Mail::send('emails.', ['job_title'=>$job->title],function($u) use ($buyer, $job)
+            {
+                $u->from('admin@jobgrouper.com');
+                $u->to($buyer->email);
+                $u->subject('');
+            });
+        }*/
 
         return response([
             'status' => 'OK',
