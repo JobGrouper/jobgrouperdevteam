@@ -142,6 +142,7 @@ class JobController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'salary' => $request->salary,
+	    'min_clients_count' => $request->min_clients_count,
             'max_clients_count' => $request->max_clients_count,
             'category_id' => $request->category_id,
         ]);

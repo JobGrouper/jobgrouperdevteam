@@ -379,21 +379,26 @@ jg.BuyerAdjuster.prototype = {
 		var self = this;
 		var post_data = $( this._map['buyer-adjuster-form'] ).serialize();
 
+		/*
 		if (this._sales_count == 0) {
 		   self._setMessage('Cannot start work without buyers', 'error');
 		   return;
 		}
+		*/
 
 		$.ajax({
 			type: "POST",
-			url: "/api/buyerAdjustmentRequest/" + this._job_id,
+			url: "/api/requestStartWorkNow",
 			data: post_data,
 			datatype: "json",
 			success: function(response) {
 
-				if(response.status == 0) {
-
+				if(response.status == 'X') {
+		   		   self._setMessage(response.message, 'error');
 				} else {
+					self._setMessage('Your request has gone through', 'success'); 
+					self._disableButtons();
+					self._disableJobStuff();
 				}
 			}
 		});
@@ -439,6 +444,7 @@ jg.BuyerAdjuster.prototype = {
 				if(response.status == 'X') {
 		   			self._setMessage(response.message, 'error');
 				} else {
+		   			self._setMessage(response.message, 'success');
 					self._disableButtons();
 				}
 			}
@@ -462,9 +468,10 @@ jg.BuyerAdjuster.prototype = {
 			success: function(response) {
 
 				if(response.status == 0) {
-				  self._setMessage('The adjustment has gone through', 'error');
+				  self._setMessage(response.message, 'error');
 				} else {
 				  self._setMessage('The adjustment has gone through', 'success');
+				  self._disableButtons();
 				}
 			}
 		});
@@ -485,19 +492,42 @@ jg.BuyerAdjuster.prototype = {
 				  self._setMessage('Server error', 'error');
 				} else {
 				  self._setMessage('Adjustment denied', 'success');
+				  self._disableButtons();
 				}
 			}
 		});
 	},
 	_enableButtons: function() {
 		
-		$( this._map['request-start-work-button'] ).prop('disabled', false);
-		$( this._map['request-submit-button'] ).prop('disabled', false);
+		if (this._options['request']) {
+			$( this._map['request-start-work-button'] ).prop('disabled', false);
+			$( this._map['request-submit-button'] ).prop('disabled', false);
+		}
+
+		if (this._options['admin'] || this._options['admin_from_request']) {
+			$( this._map['buyer-adjuster-start-work-button'] ).prop('disabled', false);
+			$( this._map['buyer-adjuster-submit-button'] ).prop('disabled', false);
+		}
+
+		if (this._options['admin_from_request']) {
+			$( this._map['buyer-adjuster-deny-request-button'] ).prop('disabled', false);
+		}
 	},
 	_disableButtons: function() {
 
-		$( this._map['request-start-work-button'] ).prop('disabled', true);
-		$( this._map['request-submit-button'] ).prop('disabled', true);
+		if (this._options['request']) {
+			$( this._map['request-start-work-button'] ).prop('disabled', true);
+			$( this._map['request-submit-button'] ).prop('disabled', true);
+		}
+
+		if (this._options['admin'] || this._options['admin_from_request']) {
+			$( this._map['buyer-adjuster-start-work-button'] ).prop('disabled', true);
+			$( this._map['buyer-adjuster-submit-button'] ).prop('disabled', true);
+		}
+
+		if (this._options['admin_from_request']) {
+			$( this._map['buyer-adjuster-deny-request-button'] ).prop('disabled', true);
+		}
 	},
 	_setMessage: function(message, style) {
 

@@ -285,6 +285,10 @@ class Job extends Model
         return $this->hasMany('App\Sale', 'job_id');
     }
 
+    public function purchases() {
+	return $this->sales()->where('status', 'in_progress')->get();
+    }
+
 
     /**
      * Get buyers of this job

@@ -175,6 +175,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/buyerAdjustment', ['middleware' => 'check_role', 'uses' => 'BuyerAdjustmentController@create']);
     Route::post('/buyerAdjustmentRequest', ['uses' => 'BuyerAdjustmentController@create_request']);
     Route::post('/denyBuyerAdjustmentRequest/{request_id}', ['middleware' => 'check_role', 'uses' => 'BuyerAdjustmentController@deny_request']);
+    Route::post('/requestStartWorkNow', ['uses' => 'BuyerAdjustmentController@requestStartWorkNow']);
     Route::post('/startWorkNow', 'BuyerAdjustmentController@startWorkNow');
 });
 

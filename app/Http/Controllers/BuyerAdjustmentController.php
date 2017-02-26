@@ -199,6 +199,70 @@ class BuyerAdjustmentController extends Controller
 	    ], 200);
     }
 
+    public function requestStartWorkNow(Request $request) {
+
+        $employee = Auth::user();
+        $job = Job::findOrFail($request->job_id);
+	$purchases = $job->purchases();
+
+	if (count($purchases) <= 0) {
+	    return response([
+            'status' => 'X',
+            'data' => null,
+            'message' => 'Cannot start work without buyers attached',
+	    ], 200);
+	}
+        
+        $employee->buyerAdjustmentRequests()->create([
+            'job_id' => $request->job_id,
+            'employee_id' => $request->employee_id,
+            'current_client_max' => $request->current_client_max,
+            'current_client_min' => $request->current_client_min,
+            'requested_client_max' => $request->new_client_max,
+            'requested_client_min' => count($purchases)
+        ]);
+
+	    $changes = $this->getChangesArray($request->current_client_min, $request->current_client_max,
+		count($purchases), $request->new_client_max);
+
+        //Mail for admin
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin){
+            Mail::send('emails.buyer_adjustment_request_to_admin', ['job_title'=>$job->title, 'employee_name' =>$employee->full_name, 'changes' => $changes],function($u) use ($admin)
+            {
+                $u->from('admin@jobgrouper.com');
+                $u->to($admin->email);
+                $u->subject('Request to modify buyers');
+            });
+        }
+
+        //Mail for employee
+        Mail::send('emails.buyer_adjustment_request_to_employee', ['job_title'=>$job->title],function($u) use ($employee)
+        {
+            $u->from('admin@jobgrouper.com');
+            $u->to($employee->email);
+            $u->subject('Your request has gone through');
+        });
+
+        //Mail for buyers
+        /*$buyers = $job->buyers()->get();
+        foreach ($buyers as $buyer){
+            Mail::send('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'changes' => $changes],function($u) use ($buyer, $job)
+            {
+                $u->from('admin@jobgrouper.com');
+                $u->to($buyer->email);
+                $u->subject($job->title . ' may be modified soon');
+            });
+        }*/
+
+
+	    return response([
+            'status' => 'OK',
+            'data' => null,
+            'message' => 'Buyer Request sent',
+	    ], 200);
+    }
+
     public function startWorkNow(Request $request){
 
         $v = Validator::make($request->all(),[
@@ -215,6 +279,7 @@ class BuyerAdjustmentController extends Controller
         }
 
         $job = Job::findOrFail($request->job_id);
+
         if($job->sales_count == 0){
             return response([
                 'status' => 'X',
@@ -230,6 +295,25 @@ class BuyerAdjustmentController extends Controller
                 'message' => 'Failed, work already started',
             ], 200);
         }
+
+        if($request->request_id){
+
+            $buyerAdjustmentRequest = BuyerAdjustmentRequest::findOrFail($request->request_id);
+            $job = $buyerAdjustmentRequest->job()->get()->first();
+	    $employee = $buyerAdjustmentRequest->employee()->first();
+
+	    $buyerAdjustmentRequest->status = 'accepted';
+	    $buyerAdjustmentRequest->decision_date = Carbon::now();
+	    $buyerAdjustmentRequest->save();
+	}
+
+	$buyerAdjustment = BuyerAdjustment::create([
+		'job_id' => $job->id,
+		'old_client_min' => $job->min_clients_count,
+		'old_client_max' => $job->max_clients_count,
+		'new_client_min' => $job->sales_count,
+		'new_client_max' => $job->max_clients_count,
+	]);
 
         $job->min_clients_count = $job->sales_count;
         $job->status = 'working';

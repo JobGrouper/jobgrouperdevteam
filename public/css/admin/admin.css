@@ -1272,6 +1272,10 @@ div.adjustment-message p {
   color: #4281D0;
 }
 
+.adjustment-submit button:disabled {
+  color:gray;
+}
+
 .adjustment-submit input[type="submit"] {
   background-color: #4281D0;
   width: 230px;
@@ -1290,12 +1294,20 @@ div.adjustment-message p {
   background-color:#558B8D
 }
 
+.adjustment-submit input[type="submit"]:disabled {
+  background-color:gray;
+}
+
 .adjustment-submit input[type="submit"].deny {
   background-color: #E14C3A;
 }
 
 .adjustment-submit input[type="submit"].deny:hover {
   background-color: #C14F1A;
+}
+
+.adjustment-submit input[type="submit"].deny:disabled {
+  background-color:gray;
 }
 
 .adjustment-links {
