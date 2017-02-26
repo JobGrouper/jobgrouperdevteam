@@ -18,7 +18,7 @@
                 @foreach($jobs as $job)
                 <div class="job_item">
                     <h1 class="active">
-                        <span class="job_item__title">{{$job->title}}{!!  ($job->status == 'working' ? '<span class="green">Active</span>' : '<span class="red">Waiting for buyers</span>')  !!}</span>
+                        <span class="job_item__title"><a href="/job/{{$job->id}}">{{$job->title}}</a>{!!  ($job->status == 'working' ? '<span class="green">Active</span>' : '<span class="red">Waiting for buyers</span>')  !!}</span>
                          <p class="myjobs_text">{{$job->description}}</p>
                     @if($job->employee_status['status'] == 'leave')
                             <span class="sent" style="display: block;">Leave request sent</span>
