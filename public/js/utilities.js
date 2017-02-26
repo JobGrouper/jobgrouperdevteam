@@ -379,6 +379,11 @@ jg.BuyerAdjuster.prototype = {
 		var self = this;
 		var post_data = $( this._map['buyer-adjuster-form'] ).serialize();
 
+		if (this._sales_count == 0) {
+		   self._setMessage('Cannot start work without buyers', 'error');
+		   return;
+		}
+
 		$.ajax({
 			type: "POST",
 			url: "/api/buyerAdjustmentRequest/" + this._job_id,
@@ -419,16 +424,22 @@ jg.BuyerAdjuster.prototype = {
 		var self = this;
 		var post_data = $( this._map['buyer-adjuster-form'] ).serialize();
 
+		if (this._sales_count == 0) {
+		   self._setMessage('Cannot start work without buyers', 'error');
+		   return;
+		}
+
 		$.ajax({
 			type: "POST",
-			url: "/api/buyerAdjustmentRequest/",
+			url: "/api/startWorkNow",
 			data: post_data,
 			datatype: "json",
 			success: function(response) {
 
-				if(response.status == 0) {
-
+				if(response.status == 'X') {
+		   			self._setMessage(response.message, 'error');
 				} else {
+					self._disableButtons();
 				}
 			}
 		});

@@ -1,7 +1,7 @@
 <div id="buyer_adjuster">
 <form id="buyer-adjuster-form">
 	<div>
-		<div>Buyers: <span class="sales-count">{{ count($orders) }}</span>/<span class="current-max">{{ $job->max_clients_count }}</span></div>
+		<div>Buyers: <span class="sales-count">{{ count($purchases) }}</span>/<span class="current-max">{{ $job->max_clients_count }}</span></div>
 		<div>Min to Start: <span class="current-min">{{ $job->min_clients_count }}</span></div>
 	</div>
 	@if($purpose == 'admin-from-request')
@@ -14,17 +14,17 @@
 		<div>
 		<p>Min Buyers</p>
 		<div class="adjuster_elem clearfix">
-			<button class="min-down">Down</button>
+			<button class="min-down">&#9668</button>
 			<input type="text" class="min-input" name="new_client_min" value="{{ $job->min_clients_count }}">
-			<button class="min-up">Up</button>
+			<button class="min-up">&#9658</button>
 		</div>
 		</div>
 		<div class="adjuster_elem clearfix">
 		<p>Max Buyers</p>
 		<div>
-			<button class="max-down">Down</button>
+			<button class="max-down">&#9668</button>
 			<input type="text" class="max-input" name="new_client_max" value="{{ $job->max_clients_count }}">
-			<button class="max-up">Up</button>
+			<button class="max-up">&#9658</button>
 		</div>
 		</div>
 	</div>

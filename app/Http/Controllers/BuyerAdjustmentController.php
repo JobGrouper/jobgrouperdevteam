@@ -219,7 +219,7 @@ class BuyerAdjustmentController extends Controller
             return response([
                 'status' => 'X',
                 'data' => null,
-                'message' => 'Failed, job has not any buyers',
+                'message' => 'Failed, job does not have any buyers',
             ], 200);
         }
 

@@ -93,15 +93,15 @@ class PagesAdminController extends Controller
 
     public function create_buyer_request($job_id) {
         $job = Job::findOrFail($job_id);
-        $orders = $job->sales()->where('status', 'in_progress')->where('card_set', true)->get();
-        return view('pages.admin.buyer-adjustment', ['job' => $job, 'orders' => $orders, 'purpose' => 'admin']);
+        $purchases = $job->sales()->where('status', 'in_progress')->where('card_set', true)->get();
+        return view('pages.admin.buyer-adjustment', ['job' => $job, 'purchases' => $purchases, 'purpose' => 'admin']);
     }
 
     public function review_buyer_request($job_id, $request_id) {
         $job = Job::findOrFail($job_id);
 	$employee = $job->employee()->first();
-        $orders = $job->sales()->where('status', 'in_progress')->where('card_set', true)->get();
+        $purchases = $job->sales()->where('status', 'in_progress')->where('card_set', true)->get();
 	$request = BuyerAdjustmentRequest::findOrFail($request_id);
-	return view('pages.admin.buyer-adjustment', ['job' => $job, 'employee' => $employee, 'orders' => $orders, 'request' => $request, 'purpose' => 'admin-from-request']);
+	return view('pages.admin.buyer-adjustment', ['job' => $job, 'employee' => $employee, 'purchases' => $purchases, 'request' => $request, 'purpose' => 'admin-from-request']);
     }
 }
