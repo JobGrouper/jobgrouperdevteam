@@ -178,7 +178,9 @@
 
                                     <p class="text">{{$job->short_description}}</p>
 
-                                    <p class="count clearfix"><span class="left">${{$job->getConfiguredSale($user)}}/month</span><span class="right">{{$job->sales_count}}/{{$job->max_clients_count}} buyers</span></p>
+				    <p class="count clearfix"><span class="left">${{$job->getConfiguredSale($user)}}/month</span></p>
+				    <p class="count clearfix"><span class="left">{{$job->sales_count}}/{{$job->max_clients_count}} buyers</span></p>
+				    <p class="count clearfix"><span class="left">Min to start work: {{$job->min_clients_count}}</span></p>
                                     <p class="count clearfix"><span class="left"> {!! $job->pre_orders ? $job->pre_orders.' pre-order(s)' : '<br>' !!} </span></p>
                                 </div>
 

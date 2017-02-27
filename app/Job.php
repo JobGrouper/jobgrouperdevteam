@@ -15,7 +15,7 @@ class Job extends Model
      * @var array
      */
     protected $fillable = [
-        'category_id', 'employee_id', 'potential_employee_id', 'title', 'title_ch', 'description', 'description_ch', 'salary', 'salary', 'max_clients_count', 'hot', 'become_hot', 'next_payment_date'
+        'category_id', 'employee_id', 'potential_employee_id', 'title', 'title_ch', 'description', 'description_ch', 'salary', 'salary', 'min_clients_count', 'max_clients_count', 'hot', 'become_hot', 'next_payment_date'
     ];
 
     /**

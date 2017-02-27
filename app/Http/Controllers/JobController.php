@@ -137,7 +137,6 @@ class JobController extends Controller
     public function store(Request $request)
     {
 
-
          $job = Job::create([
             'title' => $request->title,
             'description' => $request->description,
