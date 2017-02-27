@@ -79,7 +79,7 @@ class JobController extends Controller
 	// Check for buyer adjustment requests
 	if (isset($job->employee_id) && isset($user)) {
 		if ($job->employee_id == $user->id)
-		  $adjustment_request = $user->buyerAdjustmentRequests()->where('status', 'pending')->orderBy('created_at', 'desc')->first();
+		  $adjustment_request = $user->buyerAdjustmentRequests()->where('status', 'pending')->where('job_id', $job->id)->orderBy('created_at', 'desc')->first();
 	}
 
         if($user){
