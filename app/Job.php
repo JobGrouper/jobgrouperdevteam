@@ -292,6 +292,8 @@ class Job extends Model
 
     /**
      * Get buyers of this job
+     *
+     * - buyers with completed purchases: buyers()->where('status', 'in_progress')
      */
     public function buyers()
     {
