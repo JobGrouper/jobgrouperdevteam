@@ -29,8 +29,15 @@ class BuyerAdjustmentController extends Controller
             ]
         );
 
+	$v->after(function($v) use ($request) {
+
+		if ($request->new_client_max < $request->new_client_min) {
+			$v->errors()->add('new_client_max', 'Maximum number of buyers cannot be less than the minimum');
+		}
+	});
+
         if($v->fails()){
-            return ['status' => 'error', 'data' => $v->errors(), 'message' => 'validator_error'];
+            return ['status' => 0, 'data' => $v->errors(), 'message' => 'validator_error'];
         }
         
         if($request->request_id){
@@ -137,6 +144,14 @@ class BuyerAdjustmentController extends Controller
 
             ]
         );
+
+	$validator->after(function($validator) use ($request) {
+
+		if ($request->new_client_max < $request->new_client_min) {
+			$validator->errors()->add('new_client_max', 'Maximum number of buyers cannot be less than the minimum');
+		}
+	});
+
         if ($v->fails())
         {
 	    return response([
@@ -269,6 +284,14 @@ class BuyerAdjustmentController extends Controller
                 'job_id' => 'required|numeric',
             ]
         );
+
+	$validator->after(function($validator) use ($request) {
+
+		if ($request->new_client_max < $request->new_client_min) {
+			$validator->errors()->add('new_client_max', 'Maximum number of buyers cannot be less than the minimum');
+		}
+	});
+
         if ($v->fails())
         {
             return response([
@@ -362,7 +385,7 @@ class BuyerAdjustmentController extends Controller
         $buyerAdjustmentRequest = BuyerAdjustmentRequest::findOrFail($requestID);
         if($buyerAdjustmentRequest->status != 'pending'){
             return response([
-                'status' => 'error',
+                'status' => 0,
                 'data' => null,
                 'message' => 'request_already_processed',
             ], 200);

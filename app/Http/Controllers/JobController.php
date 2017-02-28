@@ -13,6 +13,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use DB;
 
+use Validator;
+
 class JobController extends Controller
 {
     /**
@@ -97,11 +99,11 @@ class JobController extends Controller
 
                     $jobOrdered = true;
 
-					// If credit card id is present, job has been paid for
-					//
-					if ($user_order_info->credit_card_set) {
-						$jobPaid = true;
-					}
+			// If credit card id is present, job has been paid for
+			//
+			if ($user_order_info->card_set) {
+				$jobPaid = true;
+			}
                 }
             }
         }
@@ -136,6 +138,27 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
+
+	$validator = Validator::make($request->all(), [
+		    'title' => 'required',
+		    'description' => 'required',
+		    'salary' => 'required',
+		    'min_clients_count' => 'required',
+		    'max_clients_count' => 'required',
+		    'category_id' => 'required'
+		    ]);
+
+	$validator->after(function($validator) use ($request) {
+
+		if ($request->min_clients_count > $request->max_clients_count) {
+			$validator->errors()->add('min_clients_count', 'Minimum number of buyers cannot be greater than the maximum');
+		}
+	});
+
+        if ($validator->fails()) {
+		return redirect()->back()
+			->withErrors($validator);
+        }
 
          $job = Job::create([
             'title' => $request->title,

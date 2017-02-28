@@ -324,7 +324,7 @@ jg.BuyerAdjuster.prototype = {
 			if ( parseInt(self._max_value) == parseInt(self._min_value) ) {
 				alert('The maximum number of buyers cannot be greater than the minimum');
 			}
-			else if( parseInt(this.value) == parseInt(self._sales_count) ) {
+			else if( parseInt(self._max_value) == parseInt(self._sales_count) ) {
 				alert('The maximum number of buyers can\'t be less than the current number of sales');
 			}
 			else {
@@ -468,7 +468,10 @@ jg.BuyerAdjuster.prototype = {
 			success: function(response) {
 
 				if(response.status == 0) {
-				  self._setMessage(response.message, 'error');
+				  
+					var message = self._handleValidatorError(response);
+					self._setMessage(message, 'error');
+
 				} else {
 				  self._setMessage('The adjustment has gone through', 'success');
 				  self._disableButtons();
@@ -562,5 +565,16 @@ jg.BuyerAdjuster.prototype = {
 		}
 		
 		return true;
+	},
+	_handleValidatorError: function(responseObject) {
+
+		var keys = Object.keys(responseObject.data);
+		var message = '';
+		
+		for (var i=0; i<keys.length; i++) {
+			message += responseObject.data[ keys[i] ];
+		}
+
+		return message;
 	}
 };

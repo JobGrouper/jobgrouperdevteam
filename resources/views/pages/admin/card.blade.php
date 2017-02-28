@@ -16,6 +16,17 @@
             @if(isset($job->title))
                 <input type="hidden" name="job_id" value="{{$job->id}}">
             @endif
+	    <div>
+		@if (count($errors) > 0)
+		<div class="alert alert-danger">
+			<ul>
+				@foreach ($errors->all() as $error)
+					<li>{{ $error }}</li>
+				@endforeach
+			</ul>
+		</div>
+		@endif
+	    </div>
             <label for="title">Title</label>
 
             <input type="text" id="title"  name="title" value="{{(isset($job->title) ? $job->title : '')}}"/>
