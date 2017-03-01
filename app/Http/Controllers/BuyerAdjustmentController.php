@@ -226,15 +226,15 @@ class BuyerAdjustmentController extends Controller
 
         $employee = Auth::user();
         $job = Job::findOrFail($request->job_id);
-	$purchases = $job->purchases();
+        $purchases = $job->purchases();
 
-	if (count($purchases) <= 0) {
-	    return response([
-            'status' => 'X',
-            'data' => null,
-            'message' => 'Cannot start work without buyers attached',
-	    ], 200);
-	}
+        if (count($purchases) <= 0) {
+            return response([
+                'status' => 'X',
+                'data' => null,
+                'message' => 'Cannot start work without buyers attached',
+            ], 200);
+        }
         
         $employee->buyerAdjustmentRequests()->create([
             'job_id' => $request->job_id,
@@ -286,19 +286,19 @@ class BuyerAdjustmentController extends Controller
 	    ], 200);
     }
 
-    public function startWorkNow(Request $request){
+    public function startWorkNow(Request $request,  PaymentServiceInterface $psi){
 
         $v = Validator::make($request->all(),[
                 'job_id' => 'required|numeric',
             ]
         );
 
-	$validator->after(function($validator) use ($request) {
+        $v->after(function($validator) use ($request) {
 
-		if ($request->new_client_max < $request->new_client_min) {
-			$validator->errors()->add('new_client_max', 'Maximum number of buyers cannot be less than the minimum');
-		}
-	});
+            if ($request->new_client_max < $request->new_client_min) {
+                $validator->errors()->add('new_client_max', 'Maximum number of buyers cannot be less than the minimum');
+            }
+        });
 
         if ($v->fails())
         {
@@ -331,7 +331,7 @@ class BuyerAdjustmentController extends Controller
 
             $buyerAdjustmentRequest = BuyerAdjustmentRequest::findOrFail($request->request_id);
             $job = $buyerAdjustmentRequest->job()->get()->first();
-	    $employee = $buyerAdjustmentRequest->employee()->first();
+	        $employee = $buyerAdjustmentRequest->employee()->first();
 
 	    $buyerAdjustmentRequest->status = 'accepted';
 	    $buyerAdjustmentRequest->decision_date = Carbon::now();
@@ -349,6 +349,13 @@ class BuyerAdjustmentController extends Controller
         $job->min_clients_count = $job->sales_count;
         $job->status = 'working';
         $job->save();
+
+        //if card has enough count of buyers and sellers the work begins
+        if($job->sales_count >= $job->min_clients_count && null != $job->employee_id){
+
+            $employee = $job->employee()->first();
+            $psi->createPlan($employee, $job);
+        }
 
 
         //Mail for admin
