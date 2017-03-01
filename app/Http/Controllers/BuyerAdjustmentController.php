@@ -13,10 +13,11 @@ use Auth;
 use Validator;
 use Mail;
 use Carbon\Carbon;
+use App\Interfaces\PaymentServiceInterface;
 
 class BuyerAdjustmentController extends Controller
 {
-    public function create(Request $request){
+    public function create(Request $request, PaymentServiceInterface $psi){
 
 	    // TODO: Change the control structure of this function,
 	    //  there are some common operations
@@ -29,12 +30,12 @@ class BuyerAdjustmentController extends Controller
             ]
         );
 
-	$v->after(function($v) use ($request) {
-
-		if ($request->new_client_max < $request->new_client_min) {
-			$v->errors()->add('new_client_max', 'Maximum number of buyers cannot be less than the minimum');
-		}
-	});
+        $v->after(function($v) use ($request) {
+    
+            if ($request->new_client_max < $request->new_client_min) {
+                $v->errors()->add('new_client_max', 'Maximum number of buyers cannot be less than the minimum');
+            }
+        });
 
         if($v->fails()){
             return ['status' => 0, 'data' => $v->errors(), 'message' => 'validator_error'];
@@ -43,11 +44,11 @@ class BuyerAdjustmentController extends Controller
         if($request->request_id){
             $buyerAdjustmentRequest = BuyerAdjustmentRequest::findOrFail($request->request_id);
             $job = $buyerAdjustmentRequest->job()->get()->first();
-	    $employee = $buyerAdjustmentRequest->employee()->first();
-
-	    $buyerAdjustmentRequest->status = 'accepted';
-	    $buyerAdjustmentRequest->decision_date = Carbon::now();
-	    $buyerAdjustmentRequest->save();
+            $employee = $buyerAdjustmentRequest->employee()->first();
+    
+            $buyerAdjustmentRequest->status = 'accepted';
+            $buyerAdjustmentRequest->decision_date = Carbon::now();
+            $buyerAdjustmentRequest->save();
 
             $buyerAdjustment = BuyerAdjustment::create([
                 'from_request_id' => $request->request_id,
@@ -58,12 +59,19 @@ class BuyerAdjustmentController extends Controller
                 'new_client_max' => $request->new_client_max,
             ]);
 
-	    $changes = $this->getChangesArray($job->min_clients_count, $job->max_clients_count,
-		$request->new_client_min, $request->new_client_max);
+            $changes = $this->getChangesArray($job->min_clients_count, $job->max_clients_count,
+            $request->new_client_min, $request->new_client_max);
 
             $job->min_clients_count = $request->new_client_min;
             $job->max_clients_count = $request->new_client_max;
             $job->save();
+
+            //if card has enough count of buyers and sellers the work begins
+            if($job->sales_count >= $job->min_clients_count && null != $job->employee_id){
+
+                $employee = $job->employee()->first();
+                $psi->createPlan($employee, $job);
+            }
 
             //Mail for employee
             Mail::send('emails.buyer_adjustment_request_approved_to_employee', ['job_title'=>$job->title],function($u) use ($employee)
@@ -89,8 +97,8 @@ class BuyerAdjustmentController extends Controller
                 'new_client_max' => $request->new_client_max,
             ]);
 
-	    $changes = $this->getChangesArray($job->min_clients_count, $job->max_clients_count,
-		$request->new_client_min, $request->new_client_max);
+            $changes = $this->getChangesArray($job->min_clients_count, $job->max_clients_count,
+            $request->new_client_min, $request->new_client_max);
 
             $job->min_clients_count = $request->new_client_min;
             $job->max_clients_count = $request->new_client_max;
