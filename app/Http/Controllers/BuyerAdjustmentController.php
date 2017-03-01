@@ -179,7 +179,7 @@ class BuyerAdjustmentController extends Controller
         //Mail for admin
         $admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin){
-            Mail::send('emails.buyer_adjustment_request_to_admin', ['job_title'=>$job->title, 'employee_name' =>$employee->full_name, 'changes' => $changes],function($u) use ($admin)
+            Mail::queue('emails.buyer_adjustment_request_to_admin', ['job_title'=>$job->title, 'employee_name' =>$employee->full_name, 'changes' => $changes],function($u) use ($admin)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($admin->email);
@@ -188,7 +188,7 @@ class BuyerAdjustmentController extends Controller
         }
 
         //Mail for employee
-        Mail::send('emails.buyer_adjustment_request_to_employee', ['job_title'=>$job->title],function($u) use ($employee)
+        Mail::queue('emails.buyer_adjustment_request_to_employee', ['job_title'=>$job->title],function($u) use ($employee)
         {
             $u->from('admin@jobgrouper.com');
             $u->to($employee->email);
@@ -198,7 +198,7 @@ class BuyerAdjustmentController extends Controller
         //Mail for buyers
         /*$buyers = $job->buyers()->get();
         foreach ($buyers as $buyer){
-            Mail::send('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'changes' => $changes],function($u) use ($buyer, $job)
+            Mail::queue('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'changes' => $changes],function($u) use ($buyer, $job)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($buyer->email);
@@ -243,7 +243,7 @@ class BuyerAdjustmentController extends Controller
         //Mail for admin
         $admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin){
-            Mail::send('emails.buyer_adjustment_request_to_admin', ['job_title'=>$job->title, 'employee_name' =>$employee->full_name, 'changes' => $changes],function($u) use ($admin)
+            Mail::queue('emails.buyer_adjustment_request_to_admin', ['job_title'=>$job->title, 'employee_name' =>$employee->full_name, 'changes' => $changes],function($u) use ($admin)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($admin->email);
@@ -252,7 +252,7 @@ class BuyerAdjustmentController extends Controller
         }
 
         //Mail for employee
-        Mail::send('emails.buyer_adjustment_request_to_employee', ['job_title'=>$job->title],function($u) use ($employee)
+        Mail::queue('emails.buyer_adjustment_request_to_employee', ['job_title'=>$job->title],function($u) use ($employee)
         {
             $u->from('admin@jobgrouper.com');
             $u->to($employee->email);
@@ -262,7 +262,7 @@ class BuyerAdjustmentController extends Controller
         //Mail for buyers
         /*$buyers = $job->buyers()->get();
         foreach ($buyers as $buyer){
-            Mail::send('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'changes' => $changes],function($u) use ($buyer, $job)
+            Mail::queue('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'changes' => $changes],function($u) use ($buyer, $job)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($buyer->email);
@@ -346,7 +346,7 @@ class BuyerAdjustmentController extends Controller
         //Mail for admin
         /*$admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin){
-            Mail::send('emails.', ['job_title'=>$job->title],function($u) use ($admin)
+            Mail::queue('emails.', ['job_title'=>$job->title],function($u) use ($admin)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($admin->email);
@@ -356,7 +356,7 @@ class BuyerAdjustmentController extends Controller
 
         //Mail for employee
         /*$employee = $job->employee()->get()->first();
-        Mail::send('emails.', ['job_title'=>$job->title],function($u) use ($employee)
+        Mail::queue('emails.', ['job_title'=>$job->title],function($u) use ($employee)
         {
             $u->from('admin@jobgrouper.com');
             $u->to($employee->email);
@@ -366,7 +366,7 @@ class BuyerAdjustmentController extends Controller
         //Mail for buyers
         /*$buyers = $job->buyers()->get();
         foreach ($buyers as $buyer){
-            Mail::send('emails.', ['job_title'=>$job->title],function($u) use ($buyer, $job)
+            Mail::queue('emails.', ['job_title'=>$job->title],function($u) use ($buyer, $job)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($buyer->email);
@@ -399,7 +399,7 @@ class BuyerAdjustmentController extends Controller
         $buyerAdjustmentRequest->save();
 
         //Mail to employee
-        /*Mail::send('emails.buyer_adjustment_request_denied_to_employee', ['job_title' => $job->title],function($u) use ($employee)
+        /*Mail::queue('emails.buyer_adjustment_request_denied_to_employee', ['job_title' => $job->title],function($u) use ($employee)
         {
             $u->from('admin@jobgrouper.com');
             $u->to($employee->email);
@@ -409,7 +409,7 @@ class BuyerAdjustmentController extends Controller
         //Mail to admin
         /*$admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin){
-            Mail::send('emails.buyer_adjustment_request_denied_to_admin', ['job_title' => $job->title, 'employee_name' => $employee->full_name'],function($u) use ($admin, $employee)
+            Mail::queue('emails.buyer_adjustment_request_denied_to_admin', ['job_title' => $job->title, 'employee_name' => $employee->full_name'],function($u) use ($admin, $employee)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($admin->email);
@@ -419,7 +419,7 @@ class BuyerAdjustmentController extends Controller
 
         /*$buyers = $job->buyers()->get();
         foreach ($buyers as $buyer){
-            Mail::send('emails.buyer_adjustment_request_denied_to_buyers', ['job_title'=>$job->title],function($u) use ($buyer, $job)
+            Mail::queue('emails.buyer_adjustment_request_denied_to_buyers', ['job_title'=>$job->title],function($u) use ($buyer, $job)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($buyer->email);
