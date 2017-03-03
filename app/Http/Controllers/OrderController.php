@@ -262,7 +262,7 @@ class OrderController extends Controller
 	}
 
         //if card has enough count of buyers and sellers the work begins
-        if($job->sales_count >= $job->min_clients_count && null != $job->employee_id){
+        if($job->sales_count >= $job->min_clients_count && null != $job->employee_id && $job->status != 'working'){
 
         	$employee = $job->employee()->first();
 		    $psi->createPlan($employee, $job);

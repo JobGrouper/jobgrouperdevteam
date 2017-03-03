@@ -2,16 +2,16 @@
 
 @section('content')
 
-@if(!{{ $changes['request_modified'] }})
+@if(!$changes['request_modified'])
 <p>Your request to modify the number of buyers for {{ $job_title }} has been approved.</p>
 @else
 <p>Your request to modify the number of buyers for {{ $job_title }} has been approved with modifications.</p>
 
-	@if({{ $changes['request_min_modified'] }})
+	@if($changes['request_min_modified'])
 	<p>The minimum number of buyers was changed to {{ $changes['new_minimum'] }}.</p>
 	@endif
 
-	@if({{ $changes['request_max_modified'] }})
+	@if($changes['request_max_modified'])
 	<p>The maximum number of buyers was changed to {{ $changes['new_maximum'] }}.</p>
 	@endif
 

@@ -2,15 +2,31 @@
 
 @section('content')
 <p>Our admins have decided to alter the number of buyers on {{ $job_title }}. Please check
-[Job url] for the most accurate information.</p>
+<a href="{{ env("SERVICE_APP_URL") }}/job/{{ $job_id }}">the job page</a> for the most accurate information.</p>
 
-(if max increased) The maximum number of buyers on [Job Title] has increased to [new_maximum]. This means that you will have more responsibility to handle, but also that you'll have higher income potential.
+@if( $changes['max_change'] == 'increase' ) 
+<p>The maximum number of buyers on {{ $job_title }} has increased to {{ $changes['new_maximum'] }}. 
+This means that you will have more responsibility to handle, 
+but also that you'll have higher income potential.
+<p>
+@endif
 
-(if max decreased) The maximum number of buyers on [Job Title] has decreased to [new_maximum], which means that the earning potential for this job is lowered, but hopefully you won't have more work than you desire.
+@if($changes['max_change'] == 'decrease') 
+<p>The maximum number of buyers on {{ $job_title }} has decreased to {{ $changes['new_maximum'] }}, which means 
+that the earning potential for this job is lowered, but hopefully you won't have more work than you desire.</p>
+@endif
 
-(if min increased) The minimum number of buyers on [Job Title] has increased to [new_minimum], which means that you'll have more time to prepare yourself before work starts.
+@if($changes['min_change'] == 'increase') 
+<p>The minimum number of buyers on {{ $job_title }} has increased to {{ $changes['new_minimum'] }}, 
+which means that you'll have more time to prepare yourself before work starts.</p>
+@endif
 
-(if min decreased) The minimum number of buyers on [Job Title] has decreased to [new_minimum], which means that you'll have less time to wait until you get to start working!
+@if($changes['min_change'] == 'decrease') 
+<p>The minimum number of buyers on {{ $job_title }} has decreased to {{ $changes['new_minimum'] }}, 
+which means that you'll have less time to wait until you get to start working!</p>
+@endif
 
-If you'd like us to make any further adjusments, please visit this job's page (link) and make a request. Our admins will be happy to review any changes you suggest.
+<p>If you'd like us to make any further adjusments, 
+please visit this <a href="{{ env("SERVICE_APP_URL") }}/job/{{ $job_id }}">this job's page</a> and 
+make a request. Our admins will be happy to review any changes you suggest.</p>
 @endsection

@@ -161,6 +161,12 @@ class StripeService implements PaymentServiceInterface {
 		return $response;
 	}
 
+
+	public function retrieveAccountFromUser($user) {
+		$account_record = DB::table('stripe_managed_accounts')->where('user_id', '=', $user->id)->first();
+		return Account::retrieve($account_record->id);
+	}
+
 	public function retrieveCustomer($customer_id, $account_id=NULL) {
 
 		$response = NULL;
@@ -1032,7 +1038,8 @@ class StripeService implements PaymentServiceInterface {
 				'id' => $plan->id ,
 				'managed_account_id' => $managed_account->id,
 				'job_id' => $job->id,
-				'activated' => 1
+				'activated' => 1,
+				'created_at' => Carbon::now()
 			]
 		);
 		/*
@@ -1049,8 +1056,8 @@ class StripeService implements PaymentServiceInterface {
 		}
 		 */
 		// Update job status
-		$this->job->status = 'working';
-		$this->job->save();
+		$job->status = 'working';
+		$job->save();
 
 		if (!$testing) {
 
@@ -1097,7 +1104,9 @@ class StripeService implements PaymentServiceInterface {
 		$plan = Plan::retrieve(array('id' => $plan_record->id),
 			array('stripe_account' => $account_id));
 
+		$this->cancelAllSubscriptions($plan, $account_id);
 		$response = $plan->delete();
+
 
 		$this->deletePlanFromDB($plan_record);
 
@@ -1106,6 +1115,18 @@ class StripeService implements PaymentServiceInterface {
 
 	public function deletePlanFromDB($plan) {
 		DB::table('stripe_plans')->where('id', '=', $plan->id)->delete();
+	}
+
+	public function cancelAllSubscriptions($plan, $account_id) {
+
+		$subscriptions = Subscription::all(array('plan' => $plan['id']),
+				array('stripe_account' => $account_id));
+
+		foreach ($subscriptions->data as $subscription) {
+			$subscription->cancel();
+
+			// cancel in db
+		}
 	}
 
 	/*
@@ -1215,7 +1236,8 @@ class StripeService implements PaymentServiceInterface {
 		// Add subscription to database
 		DB::table('stripe_subscriptions')->insert(
 			['id' => $id , 'plan_id' => $plan_id,
-			'connected_customer_id' => $customer_id, 'activated' => 1]
+			'connected_customer_id' => $customer_id, 'activated' => 1,
+			'created_at' => Carbon::now()]
 		);
 	}
 
