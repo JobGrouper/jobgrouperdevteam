@@ -13,10 +13,11 @@ use Auth;
 use Validator;
 use Mail;
 use Carbon\Carbon;
+use App\Interfaces\PaymentServiceInterface;
 
 class BuyerAdjustmentController extends Controller
 {
-    public function create(Request $request){
+    public function create(Request $request, PaymentServiceInterface $psi){
 
 	    // TODO: Change the control structure of this function,
 	    //  there are some common operations
@@ -29,12 +30,12 @@ class BuyerAdjustmentController extends Controller
             ]
         );
 
-	$v->after(function($v) use ($request) {
-
-		if ($request->new_client_max < $request->new_client_min) {
-			$v->errors()->add('new_client_max', 'Maximum number of buyers cannot be less than the minimum');
-		}
-	});
+        $v->after(function($v) use ($request) {
+    
+            if ($request->new_client_max < $request->new_client_min) {
+                $v->errors()->add('new_client_max', 'Maximum number of buyers cannot be less than the minimum');
+            }
+        });
 
         if($v->fails()){
             return ['status' => 0, 'data' => $v->errors(), 'message' => 'validator_error'];
@@ -43,11 +44,11 @@ class BuyerAdjustmentController extends Controller
         if($request->request_id){
             $buyerAdjustmentRequest = BuyerAdjustmentRequest::findOrFail($request->request_id);
             $job = $buyerAdjustmentRequest->job()->get()->first();
-	    $employee = $buyerAdjustmentRequest->employee()->first();
-
-	    $buyerAdjustmentRequest->status = 'accepted';
-	    $buyerAdjustmentRequest->decision_date = Carbon::now();
-	    $buyerAdjustmentRequest->save();
+            $employee = $buyerAdjustmentRequest->employee()->first();
+    
+            $buyerAdjustmentRequest->status = 'accepted';
+            $buyerAdjustmentRequest->decision_date = Carbon::now();
+            $buyerAdjustmentRequest->save();
 
             $buyerAdjustment = BuyerAdjustment::create([
                 'from_request_id' => $request->request_id,
@@ -59,11 +60,18 @@ class BuyerAdjustmentController extends Controller
             ]);
 
 	    $changes = $this->getChangesArray($job->min_clients_count, $job->max_clients_count,
-		$request->new_client_min, $request->new_client_max, $buyerAdjustmentRequest);
+	    $request->new_client_min, $request->new_client_max, $buyerAdjustmentRequest);
 
             $job->min_clients_count = $request->new_client_min;
             $job->max_clients_count = $request->new_client_max;
             $job->save();
+
+            //if card has enough count of buyers and sellers the work begins
+            if($job->sales_count >= $job->min_clients_count && null != $job->employee_id){
+
+                $employee = $job->employee()->first();
+                $psi->createPlan($employee, $job);
+            }
 
             //Mail for employee
             Mail::send('emails.buyer_adjustment_request_approved_to_employee', ['job_title'=>$job->title, 'changes' => $changes],function($u) use ($employee)
@@ -89,8 +97,8 @@ class BuyerAdjustmentController extends Controller
                 'new_client_max' => $request->new_client_max,
             ]);
 
-	    $changes = $this->getChangesArray($job->min_clients_count, $job->max_clients_count,
-		$request->new_client_min, $request->new_client_max);
+            $changes = $this->getChangesArray($job->min_clients_count, $job->max_clients_count,
+            $request->new_client_min, $request->new_client_max);
 
             $job->min_clients_count = $request->new_client_min;
             $job->max_clients_count = $request->new_client_max;
@@ -179,7 +187,7 @@ class BuyerAdjustmentController extends Controller
         //Mail for admin
         $admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin){
-            Mail::send('emails.buyer_adjustment_request_to_admin', ['job_title'=>$job->title, 'employee_name' =>$employee->full_name, 'changes' => $changes],function($u) use ($admin)
+            Mail::queue('emails.buyer_adjustment_request_to_admin', ['job_title'=>$job->title, 'employee_name' =>$employee->full_name, 'changes' => $changes],function($u) use ($admin)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($admin->email);
@@ -188,7 +196,7 @@ class BuyerAdjustmentController extends Controller
         }
 
         //Mail for employee
-        Mail::send('emails.buyer_adjustment_request_to_employee', ['job_title'=>$job->title],function($u) use ($employee)
+        Mail::queue('emails.buyer_adjustment_request_to_employee', ['job_title'=>$job->title],function($u) use ($employee)
         {
             $u->from('admin@jobgrouper.com');
             $u->to($employee->email);
@@ -198,7 +206,7 @@ class BuyerAdjustmentController extends Controller
         //Mail for buyers
         /*$buyers = $job->buyers()->get();
         foreach ($buyers as $buyer){
-            Mail::send('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'changes' => $changes],function($u) use ($buyer, $job)
+            Mail::queue('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'changes' => $changes],function($u) use ($buyer, $job)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($buyer->email);
@@ -218,15 +226,15 @@ class BuyerAdjustmentController extends Controller
 
         $employee = Auth::user();
         $job = Job::findOrFail($request->job_id);
-	$purchases = $job->purchases();
+        $purchases = $job->purchases();
 
-	if (count($purchases) <= 0) {
-	    return response([
-            'status' => 'X',
-            'data' => null,
-            'message' => 'Cannot start work without buyers attached',
-	    ], 200);
-	}
+        if (count($purchases) <= 0) {
+            return response([
+                'status' => 'X',
+                'data' => null,
+                'message' => 'Cannot start work without buyers attached',
+            ], 200);
+        }
         
         $employee->buyerAdjustmentRequests()->create([
             'job_id' => $request->job_id,
@@ -243,7 +251,7 @@ class BuyerAdjustmentController extends Controller
         //Mail for admin
         $admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin){
-            Mail::send('emails.buyer_adjustment_request_to_admin', ['job_title'=>$job->title, 'employee_name' =>$employee->full_name, 'changes' => $changes],function($u) use ($admin)
+            Mail::queue('emails.buyer_adjustment_request_to_admin', ['job_title'=>$job->title, 'employee_name' =>$employee->full_name, 'changes' => $changes],function($u) use ($admin)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($admin->email);
@@ -252,7 +260,7 @@ class BuyerAdjustmentController extends Controller
         }
 
         //Mail for employee
-        Mail::send('emails.buyer_adjustment_request_to_employee', ['job_title'=>$job->title],function($u) use ($employee)
+        Mail::queue('emails.buyer_adjustment_request_to_employee', ['job_title'=>$job->title],function($u) use ($employee)
         {
             $u->from('admin@jobgrouper.com');
             $u->to($employee->email);
@@ -262,7 +270,7 @@ class BuyerAdjustmentController extends Controller
         //Mail for buyers
         /*$buyers = $job->buyers()->get();
         foreach ($buyers as $buyer){
-            Mail::send('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'changes' => $changes],function($u) use ($buyer, $job)
+            Mail::queue('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'changes' => $changes],function($u) use ($buyer, $job)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($buyer->email);
@@ -278,19 +286,19 @@ class BuyerAdjustmentController extends Controller
 	    ], 200);
     }
 
-    public function startWorkNow(Request $request){
+    public function startWorkNow(Request $request,  PaymentServiceInterface $psi){
 
         $v = Validator::make($request->all(),[
                 'job_id' => 'required|numeric',
             ]
         );
 
-	$validator->after(function($validator) use ($request) {
+        $v->after(function($validator) use ($request) {
 
-		if ($request->new_client_max < $request->new_client_min) {
-			$validator->errors()->add('new_client_max', 'Maximum number of buyers cannot be less than the minimum');
-		}
-	});
+            if ($request->new_client_max < $request->new_client_min) {
+                $validator->errors()->add('new_client_max', 'Maximum number of buyers cannot be less than the minimum');
+            }
+        });
 
         if ($v->fails())
         {
@@ -323,7 +331,7 @@ class BuyerAdjustmentController extends Controller
 
             $buyerAdjustmentRequest = BuyerAdjustmentRequest::findOrFail($request->request_id);
             $job = $buyerAdjustmentRequest->job()->get()->first();
-	    $employee = $buyerAdjustmentRequest->employee()->first();
+	        $employee = $buyerAdjustmentRequest->employee()->first();
 
 	    $buyerAdjustmentRequest->status = 'accepted';
 	    $buyerAdjustmentRequest->decision_date = Carbon::now();
@@ -342,11 +350,18 @@ class BuyerAdjustmentController extends Controller
         $job->status = 'working';
         $job->save();
 
+        //if card has enough count of buyers and sellers the work begins
+        if($job->sales_count >= $job->min_clients_count && null != $job->employee_id){
+
+            $employee = $job->employee()->first();
+            $psi->createPlan($employee, $job);
+        }
+
 
         //Mail for admin
         /*$admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin){
-            Mail::send('emails.', ['job_title'=>$job->title],function($u) use ($admin)
+            Mail::queue('emails.', ['job_title'=>$job->title],function($u) use ($admin)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($admin->email);
@@ -356,7 +371,7 @@ class BuyerAdjustmentController extends Controller
 
         //Mail for employee
         /*$employee = $job->employee()->get()->first();
-        Mail::send('emails.', ['job_title'=>$job->title],function($u) use ($employee)
+        Mail::queue('emails.', ['job_title'=>$job->title],function($u) use ($employee)
         {
             $u->from('admin@jobgrouper.com');
             $u->to($employee->email);
@@ -366,7 +381,7 @@ class BuyerAdjustmentController extends Controller
         //Mail for buyers
         /*$buyers = $job->buyers()->get();
         foreach ($buyers as $buyer){
-            Mail::send('emails.', ['job_title'=>$job->title],function($u) use ($buyer, $job)
+            Mail::queue('emails.', ['job_title'=>$job->title],function($u) use ($buyer, $job)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($buyer->email);
@@ -399,7 +414,7 @@ class BuyerAdjustmentController extends Controller
         $buyerAdjustmentRequest->save();
 
         //Mail to employee
-        /*Mail::send('emails.buyer_adjustment_request_denied_to_employee', ['job_title' => $job->title],function($u) use ($employee)
+        /*Mail::queue('emails.buyer_adjustment_request_denied_to_employee', ['job_title' => $job->title],function($u) use ($employee)
         {
             $u->from('admin@jobgrouper.com');
             $u->to($employee->email);
@@ -409,7 +424,7 @@ class BuyerAdjustmentController extends Controller
         //Mail to admin
         /*$admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin){
-            Mail::send('emails.buyer_adjustment_request_denied_to_admin', ['job_title' => $job->title, 'employee_name' => $employee->full_name'],function($u) use ($admin, $employee)
+            Mail::queue('emails.buyer_adjustment_request_denied_to_admin', ['job_title' => $job->title, 'employee_name' => $employee->full_name'],function($u) use ($admin, $employee)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($admin->email);
@@ -419,7 +434,7 @@ class BuyerAdjustmentController extends Controller
 
         /*$buyers = $job->buyers()->get();
         foreach ($buyers as $buyer){
-            Mail::send('emails.buyer_adjustment_request_denied_to_buyers', ['job_title'=>$job->title],function($u) use ($buyer, $job)
+            Mail::queue('emails.buyer_adjustment_request_denied_to_buyers', ['job_title'=>$job->title],function($u) use ($buyer, $job)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($buyer->email);
