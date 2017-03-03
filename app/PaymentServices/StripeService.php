@@ -1048,6 +1048,9 @@ class StripeService implements PaymentServiceInterface {
 			);
 		}
 		 */
+		// Update job status
+		$this->job->status = 'working';
+		$this->job->save();
 
 		if (!$testing) {
 

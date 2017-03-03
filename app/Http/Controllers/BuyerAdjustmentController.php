@@ -59,14 +59,14 @@ class BuyerAdjustmentController extends Controller
             ]);
 
 	    $changes = $this->getChangesArray($job->min_clients_count, $job->max_clients_count,
-		$request->new_client_min, $request->new_client_max);
+		$request->new_client_min, $request->new_client_max, $buyerAdjustmentRequest);
 
             $job->min_clients_count = $request->new_client_min;
             $job->max_clients_count = $request->new_client_max;
             $job->save();
 
             //Mail for employee
-            Mail::send('emails.buyer_adjustment_request_approved_to_employee', ['job_title'=>$job->title],function($u) use ($employee)
+            Mail::send('emails.buyer_adjustment_request_approved_to_employee', ['job_title'=>$job->title, 'changes' => $changes],function($u) use ($employee)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($employee->email);
@@ -435,7 +435,7 @@ class BuyerAdjustmentController extends Controller
 
     }
 
-    private function getChangesArray($current_minimum, $current_maximum, $new_minimum, $new_maximum) {
+    private function getChangesArray($current_minimum, $current_maximum, $new_minimum, $new_maximum, $request=NULL) {
 
 	    $changes = array(
 		    'min_change' => null,
@@ -456,6 +456,19 @@ class BuyerAdjustmentController extends Controller
 	    }
 	    else if ($new_maximum < $current_maximum) {
 		$changes['max_change'] = 'decrease';
+	    }
+
+	    if ($request) {
+
+		    if ($new_minimum != $request->requested_client_min) {
+			$changes['request_modified'] = true;
+			$changes['request_min_modified'] = true;
+		    }
+
+		    if ($new_minimum != $request->requested_client_min) {
+			$changes['request_modified'] = true;
+			$changes['request_max_modified'] = true;
+		    }
 	    }
 
 	    return $changes;
