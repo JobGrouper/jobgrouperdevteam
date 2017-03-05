@@ -91,4 +91,8 @@ class StripePlanActivation extends Job implements ShouldQueue
  	    $u->subject('Job: ' . $job->title . ' has begun');
 	});
     }
+
+    public function failed() {
+	Log::error("STRIPE PLAN ACTIVATION FAILED: job->" . $this->stripe_job->id);
+    }
 }

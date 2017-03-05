@@ -116,6 +116,7 @@ class StripeAccountUpdated extends Job implements ShouldQueue
     }
 
     public function failed() {
+	$account_id = $this->event['data']['object']['id'];
 	Log::error("STRIPE ACCOUNT UPDATED FAILED: account->" . $account_id);
     }
 }

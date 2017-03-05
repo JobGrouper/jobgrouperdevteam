@@ -96,6 +96,7 @@ class StripeInvoicePaid extends Job implements ShouldQueue
     }
 
     public function failed() {
+	$account_id = $this->event['user_id'];
 	Log::error("STRIPE INVOICE PAID FAILED: account->" . $account_id);
     }
 }
