@@ -5,7 +5,7 @@
 <p>First and foremost, we want you to know that your individual monthly payment has not 
 (and will not) change because of any changes to the number of buyers. This courtesy 
 notice is meant to let you know how a change in the number of buyers might affect work 
-on this job.<p>
+on this job.</p>
 
 @if($changes['max_change'])
 @if($changes['max_change'] == 'increase')

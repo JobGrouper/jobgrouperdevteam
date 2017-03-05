@@ -1,14 +1,14 @@
 @extends('layouts.email')
 
 @section('content')
-<p>{{ $employee_name }}, the employee attached to [Job Name] has requested the following change(s):<p>
+<p>{{ $employee_name }}, the employee attached to {{ $job_title }} has requested the following change(s):<p>
 
 @if($changes['max_change'])
-<p>- That the maximum number of buyers for this job be changed from [current #buyers required] to [new #buyers required].</p>
+<p>- That the maximum number of buyers for this job be changed from {{ $changes['current_maximum'] }} to {{ $changes['new_maximum'] }}.</p>
 @endif
 
 @if($changes['min_change'])
-<p>- That the minimum number of buyers for this job be changed from [current #buyers required] to [new #buyers required].</p>
+<p>- That the minimum number of buyers for this job be changed from {{ $changes['current_minimum'] }} to {{ $changes['new_minimum'] }}.</p>
 
 @if($changes['min_change'] == 'decrease')
 <p>If approved, this will mean that work will begin sooner than expected.</p>

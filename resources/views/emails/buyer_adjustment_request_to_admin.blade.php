@@ -6,10 +6,10 @@
 
 <ul>
 @if($changes['max_change'])
-<li>That the maximum number of buyers for this job be changed from [current #buyers required] to [new #buyers required].</li>
+<li>That the maximum number of buyers for this job be changed from {{ $changes['current_maximum'] }} to {{ $changes['new_maximum'] }}.</li>
 @endif
 @if($changes['min_change'])
-<li>That the minimum number of buyers for this job be changed from [current #buyers required] to [new #buyers required].</li>
+<li>That the minimum number of buyers for this job be changed from {{ $changes['current_minimum'] }} to {{ $changes['new_minimum'] }}.</li>
 @endif
 </ul>
 

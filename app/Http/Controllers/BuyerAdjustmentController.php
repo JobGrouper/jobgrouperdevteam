@@ -274,7 +274,7 @@ class BuyerAdjustmentController extends Controller
         });
 
         //Mail for buyers
-        /*$buyers = $job->buyers()->get();
+        $buyers = $job->buyers()->get();
         foreach ($buyers as $buyer){
             Mail::queue('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'changes' => $changes],function($u) use ($buyer, $job)
             {
@@ -282,7 +282,7 @@ class BuyerAdjustmentController extends Controller
                 $u->to($buyer->email);
                 $u->subject($job->title . ' may be modified soon');
             });
-        }*/
+        }
 
 
 	    return response([
@@ -466,6 +466,8 @@ class BuyerAdjustmentController extends Controller
 	    $changes = array(
 		    'min_change' => null,
 		    'max_change' => null,
+		    'current_minimum' => $current_minimum,
+		    'current_maximum' => $current_maximum,
 		    'new_minimum' => $new_minimum,
 		    'new_maximum' => $new_maximum,
 		    'request_modified' => false,
