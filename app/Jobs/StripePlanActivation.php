@@ -6,6 +6,7 @@ use Mail;
 use DB;
 
 use App\User;
+use App\Interfaces\PaymentServiceInterface;
 
 use App\Jobs\Job;
 use Illuminate\Support\Facades\Log;
@@ -17,10 +18,10 @@ class StripePlanActivation extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
-    protected $psi;
-    protected $seller_account;
-    protected $plan;
-    protected $stripe_job;
+    public $psi;
+    public $seller_account;
+    public $plan;
+    public $stripe_job;
 
     /**
      * Create a new job instance.
@@ -42,7 +43,7 @@ class StripePlanActivation extends Job implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(PaymentServiceInterface $psi)
     {
 
 	// Making a copy
@@ -57,10 +58,10 @@ class StripePlanActivation extends Job implements ShouldQueue
 		$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $buyer->id)->
 			where('managed_account_id', '=', $this->seller_account->id)->first();
 
-		$customer = $this->psi->retrieveCustomer($customer_record->id, $this->seller_account->id);
+		$customer = $psi->retrieveCustomer($customer_record->id, $this->seller_account->id);
 
 		// create subscription
-		$response = $this->psi->createSubscription($this->plan, $customer, $this->seller_account);
+		$response = $psi->createSubscription($this->plan, $customer, $this->seller_account);
 
 		// Send email to user, saying that 
 		// the job has begun and their first payment 
