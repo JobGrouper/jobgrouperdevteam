@@ -8,6 +8,7 @@ use DB;
 use App\User;
 
 use App\Jobs\Job;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;

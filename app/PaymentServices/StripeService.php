@@ -626,7 +626,8 @@ class StripeService implements PaymentServiceInterface {
 				'id' => $customer['id'],
 				'user_id' => $user->id,
 				//'root_customer_id' => $root->id,
-				'managed_account_id' => $account_id
+				'managed_account_id' => $account_id,
+				'created_at' => Carbon::now()
 				]);
 		}
 		else {
