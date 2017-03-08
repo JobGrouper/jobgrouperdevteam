@@ -1,7 +1,7 @@
 @extends('layouts.email')
 
 @section('content')
-<p>{{ $employee_name }}, the employee attached to {{ $job_title }} has requested the following change(s):<p>
+<p>{{ $employee_name }}, the employee attached to {{ $job_title }}, has requested the following change(s):<p>
 
 @if($changes['max_change'])
 <p>- That the maximum number of buyers for this job be changed from {{ $changes['current_maximum'] }} to {{ $changes['new_maximum'] }}.</p>
