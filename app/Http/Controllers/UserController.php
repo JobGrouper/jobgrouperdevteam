@@ -70,11 +70,12 @@ class UserController extends Controller
             return redirect('/');
         }
 
-        $jobs = $employee->jobs()->get();
-        $potentialJobs = $employee->potential_jobs()->get();
+        $jobs = $employee->jobs()->where('status', 'working')->get();
+        $jobsAwaitingActivation = $employee->jobs()->where('status', 'waiting')->get();
         $employeeRequests = $employee->employee_requests()->where('status', 'pending')->get();
+        $potentialJobs = $employee->potential_jobs()->get();
 
-        return view('pages.account.my_jobs', compact('jobs', 'potentialJobs', 'employeeRequests'));
+        return view('pages.account.my_jobs', compact('jobs', 'jobsAwaitingActivation',  'potentialJobs', 'employeeRequests'));
     }
 
     public function showOrders(){

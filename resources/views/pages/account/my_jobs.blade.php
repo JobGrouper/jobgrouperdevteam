@@ -177,9 +177,27 @@
                 @endforeach
             @endif
 
-
-
             <p class="potent">Jobs awaiting activation</p>
+
+            @if($jobsAwaitingActivation->count())
+                @foreach($jobsAwaitingActivation as $jobAwaitingActivation)
+                    <div class="job_item">
+                        <h1 class="active">
+                            <span class="job_item__title">{{$jobAwaitingActivation->title}}</span>
+                            <p class="myjobs_text">{{$jobAwaitingActivation->description}}</p>
+                            <button request-id="{{$jobAwaitingActivation->id}}" class="request_close close_api">Cancel</button>
+                        </h1>
+
+                        <div class="jobs_acc">
+
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+
+
+
+            <p class="potent">Pending jobs applications</p>
 
             @if($employeeRequests->count())
                 @foreach($employeeRequests as $employeeRequest)
