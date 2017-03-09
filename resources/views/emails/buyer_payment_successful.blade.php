@@ -24,7 +24,7 @@
 		<td>${{ number_format( $salary + ( $salary * 0.15), 2) }}</td>
 	  </tr>
 	</tbody>
-	<p>Please keep this receipt for your records.</p>
 </table>
+<p>Please keep this receipt for your records.</p>
 @endsection
 

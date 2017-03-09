@@ -26,6 +26,11 @@
 	font-weight: 400;
     }
 
+    table, th, td, tr {
+	border: 1px solid black;
+	border-collapse:collapse;
+    }
+
 </style>
 </head>
 
