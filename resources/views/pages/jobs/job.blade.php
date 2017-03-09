@@ -211,13 +211,13 @@
                                 @elseif($jobOrdered && $job->employee_id == NULL)
                                     <span class="approved need">Waiting For Employee</span>
                                 @else
-                                    {{--Это было для сохранения карт и авто-оплат--}}
-                                    {{--<a href="/purchase/{{$job->id}}"><button>Buy</button></a>--}}
-                                    <form role="form" method="POST" action="{{ url('/order/store') }}">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="job_id" value="{{$job->id}}">
-                                        <button type="submit">Order</button>
-                                    </form>
+                                    @if($job->sales_count < $job->max_clients_count)
+                                        <form role="form" method="POST" action="{{ url('/order/store') }}">
+                                            {{ csrf_field() }}
+                                            <input type="hidden" name="job_id" value="{{$job->id}}">
+                                            <button type="submit">Order</button>
+                                        </form>
+                                    @endif
                                 @endif
                             @endif
 
