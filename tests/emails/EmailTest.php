@@ -21,6 +21,7 @@ class EmailTest extends TestCase {
 		$this->job = new StdClass();
 		$this->job->id = 1;
 		$this->job->title = 'Test Job';
+		$this->job->salary = 50.00;
 
 		$this->order = new StdClass();
 		$this->order->id = 1;
@@ -68,7 +69,7 @@ class EmailTest extends TestCase {
 		$employee = $this->user;
 		$job = $this->job;
 
-		Mail::send('emails.buyer_payment_successful', ['employee' => $employee->full_name, 'job_name' => $job->title], function($u) use ($buyer, $job)
+		Mail::send('emails.buyer_payment_successful', ['employee' => $employee->full_name, 'job' => $job], function($u) use ($buyer, $job)
 		{
 		    $u->from('admin@jobgrouper.com');
 		    $u->to($buyer->email);
