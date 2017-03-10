@@ -10,9 +10,8 @@ use Illuminate\Support\Facades\Auth;
 class PagesController extends Controller
 {
     public function home(){
-
-	// get user
-	$user = Auth::user();
+        // get user
+        $user = Auth::user();
 
         //In the top of list are the hot cards (first of them in is in slider)
         $jobs = Job::hot()->get();
@@ -30,7 +29,11 @@ class PagesController extends Controller
 
         $jobs = $jobs->merge($notHotJobsAbove25);
         $jobs = $jobs->merge($notHotJobsOther);
-        $chunks = $jobs->chunk(9); //9 = 1 in slider + 8 in rows
+
+        //Filtering out jobs with max buyers and employee
+        $jobs =  $jobs->filter(function ($job) {
+            return ($job->sales_count < $job->max_clients_count || $job->employee == null);
+        });
 
         return view('pages.main', ['user' => $user, 'jobs' => $jobs]);
     }
