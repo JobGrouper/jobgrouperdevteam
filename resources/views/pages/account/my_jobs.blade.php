@@ -141,9 +141,13 @@
                         <h1 class="active">
                             <span class="job_item__title">{{$jobAwaitingActivation->title}}</span>
                             <p class="myjobs_text">{{$jobAwaitingActivation->description}}</p>
-                            <button request-id="{{$jobAwaitingActivation->id}}" class="request_close close_api">
-                                Cancel
-                            </button>
+                            @if($job->employee_status['status'] == 'leave')
+                                <span class="sent" style="display: block;">Leave request sent</span>
+                            @else
+                                <button job-id="{{$job->id}}" class="request_close leave_api">Leave job request
+                                </button>
+                                <span class="sent before">Leave request sent</span>
+                            @endif
                         </h1>
 
                         <div class="jobs_acc">
