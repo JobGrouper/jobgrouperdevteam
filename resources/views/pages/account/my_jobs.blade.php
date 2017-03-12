@@ -135,19 +135,14 @@
             @endif
 
             <p class="potent">Jobs awaiting activation</p>
-            @if($jobsAwaitingActivation->count())
+            @if(count($jobsAwaitingActivation) > 0)
                 @foreach($jobsAwaitingActivation as $jobAwaitingActivation)
                     <div class="job_item">
                         <h1 class="active">
                             <span class="job_item__title">{{$jobAwaitingActivation->title}}</span>
                             <p class="myjobs_text">{{$jobAwaitingActivation->description}}</p>
-                            @if($job->employee_status['status'] == 'leave')
-                                <span class="sent" style="display: block;">Leave request sent</span>
-                            @else
-                                <button job-id="{{$job->id}}" class="request_close leave_api">Leave job request
-                                </button>
-                                <span class="sent before">Leave request sent</span>
-                            @endif
+                            <button job-id="{{$jobAwaitingActivation->id}}" class="request_close leave_api">Leave job
+                            </button>
                         </h1>
 
                         <div class="jobs_acc">
@@ -160,7 +155,7 @@
             @endif
 
 
-            <p class="potent">Pending jobs applications</p>
+            <p class="potent">Jobs with pending applications</p>
             @if($employeeRequests->count())
                 @foreach($employeeRequests as $employeeRequest)
                     <div class="job_item">

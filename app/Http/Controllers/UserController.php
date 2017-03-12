@@ -71,7 +71,8 @@ class UserController extends Controller
         }
 
         $jobs = $employee->jobs()->where('status', 'working')->get();
-        $jobsAwaitingActivation = $employee->jobs()->where('status', 'waiting')->get();
+	$jobsAwaitingActivation = $employee->jobs()->where('status', 'waiting')->get();
+
         $employeeRequests = $employee->employee_requests()->where('status', 'pending')->get();
         $potentialJobs = $employee->potential_jobs()->get();
 
