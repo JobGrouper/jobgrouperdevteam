@@ -1095,6 +1095,14 @@ class StripeService implements PaymentServiceInterface {
 		return  'plan_' . random_int(10000000, 99999999) . substr( hash('md5', $plan_name), 20);
 	}
 
+	public function retrievePlan($job, $account_id) {
+
+		$plan_record = DB::table('stripe_plans')->where('job_id', '=', $job->id)->first();
+
+		return Plan::retrieve(array('id' => $plan_record->id),
+			array('stripe_account' => $account_id));
+	}
+
 	public function deletePlan($user, $job, $account_id) {
 
 		$response = NULL;

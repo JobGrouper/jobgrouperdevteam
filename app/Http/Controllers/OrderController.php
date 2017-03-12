@@ -268,6 +268,20 @@ class OrderController extends Controller
 		    $psi->createPlan($employee, $job);
         }
 
+	if ($job->sales_count >= $job->min_clients_count && $job->employee_id != null && $job->status == 'working') {
+
+		$employee = $job->employee()->first();
+		$seller_account = $psi->retrieveAccountFromUser($employee);
+		$plan = $psi->retrievePlan($job, $seller_account['id']);
+		$response = $psi->createSubscription($plan, $customer, $seller_account);
+	}
+
+	Mail::queue('emails.buyer_order_confirmed', ['job' => $job], function($u) use ($user) {
+		$u->from('admin@jobgrouper.com');
+		$u->to($user->email);
+		$u->subject('Order confirmed!');
+	});
+
 	/*
         if(!isset($creditCard->id)){
             die('Credit Card not found');
