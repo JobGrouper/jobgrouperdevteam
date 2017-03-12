@@ -105,10 +105,6 @@ class OrderController extends Controller
         $responseData= array();
 
         $order = Sale::find($request->order_id);
-        $order->status = 'closed';
-        $order->save();
-
-
 
         //If job has free place for buyer make it hot
         $job = $order->job()->first();
@@ -132,8 +128,17 @@ class OrderController extends Controller
             $user = DB::table('users')->where('id', $order->buyer_id)->first();
             $seller_record = DB::table('stripe_managed_accounts')->where('user_id', $job->employee_id)->first();
 
+	    // Cancel subscription
+	    // 	Must be subscribed if sale in progress and job is working
+	    //
+	    if ($order->status == 'in_progress' && $job->status == 'working') {
+		    $plan = $psi->retrievePlan($job, $seller_record->id);
+		    $customer = $psi->retrieveCustomerFromUser($user, $job, $seller_record->id);
+		    $subscription_response = $psi->cancelSubscription($plan, $customer, $seller_record->id);
+	    }
+
             // Delete payment service records
-            $response = $psi->deleteCustomer($user, $seller_record->id);
+            $response = $psi->deleteCustomer($user, $job, $seller_record->id);
 
             //mail to seller
             Mail::send('emails.buyer_leaving_job', ['buyer' => Auth::user(), 'job' => $job], function($u)
@@ -151,6 +156,9 @@ class OrderController extends Controller
                 $u->subject('Buyer leaving the job.');
             });
         }
+
+        $order->status = 'closed';
+        $order->save();
 
         $responseData['error'] = false;
         $responseData['status'] = 0;
@@ -217,6 +225,12 @@ class OrderController extends Controller
         $order = Sale::find($request->order_id);
         $job = $order->job()->first();
 
+        if($job->sales_count >= $job->max_clients_count){
+		// redirect
+		return redirect('purchase/' . $order->id)->
+			withErrors([ 'Cannot confirm order, the maximum amount of buyers has been reached' ]);
+	}
+
 	// Retrieve employee account
 	$employee_record = DB::table('stripe_managed_accounts')->where(
 		'user_id', '=', $job->employee_id)->first();
@@ -240,7 +254,7 @@ class OrderController extends Controller
 	}
 
 	// Create customer
-	$customer = $psi->createCustomer($user, array(
+	$customer = $psi->createCustomer($user, $job, array(
 		'email' => $user->email), $account['id']);
 
 	if (!isset($customer['id'])) {
@@ -259,21 +273,23 @@ class OrderController extends Controller
 	}
 	else {
 	  die('Payment saving failed!');
-	}
+	} 
+	
+	if ($job->sales_count >= $job->min_clients_count && $job->employee_id != null) {
 
-        //if card has enough count of buyers and sellers the work begins
-        if($job->sales_count >= $job->min_clients_count && null != $job->employee_id && $job->status != 'working'){
+		//if card has enough count of buyers and sellers the work begins
+		if($job->status != 'working'){
 
-        	$employee = $job->employee()->first();
-		    $psi->createPlan($employee, $job);
-        }
+			$employee = $job->employee()->first();
+			$psi->createPlan($employee, $job);
+		}
+		else {
 
-	if ($job->sales_count >= $job->min_clients_count && $job->employee_id != null && $job->status == 'working') {
-
-		$employee = $job->employee()->first();
-		$seller_account = $psi->retrieveAccountFromUser($employee);
-		$plan = $psi->retrievePlan($job, $seller_account['id']);
-		$response = $psi->createSubscription($plan, $customer, $seller_account);
+			$employee = $job->employee()->first();
+			$seller_account = $psi->retrieveAccountFromUser($employee);
+			$plan = $psi->retrievePlan($job, $seller_account['id']);
+			$response = $psi->createSubscription($plan, $customer, $seller_account);
+		}
 	}
 
 	Mail::queue('emails.buyer_order_confirmed', ['job' => $job], function($u) use ($user) {

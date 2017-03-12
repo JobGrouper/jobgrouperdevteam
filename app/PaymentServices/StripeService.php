@@ -222,6 +222,14 @@ class StripeService implements PaymentServiceInterface {
 			return $response;
 	}
 
+	public function retrieveCustomerFromUser($user, $job, $account_id) {
+		$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $user->id)
+			->where('job_id', $job->id)
+			->where('managed_account_id', $account_id)->first();
+		return Customer::retrieve(array('id' => $customer_record->id),
+				array('stripe_account' => $account_id));
+	}
+
 	public function createCreditCardToken(array $creditCardData, $type, $is_managed=False) {
 
 		$response = NULL;
@@ -552,7 +560,7 @@ class StripeService implements PaymentServiceInterface {
 	/*
 	 * Creates a Customer object; used on job subscription / new subscriptions
 	 */
-	public function createCustomer($user, array $customerData, $account_id=NULL) {
+	public function createCustomer($user, $job, array $customerData, $account_id=NULL) {
 
 		$response = NULL;
 		$error_response = NULL;
@@ -610,13 +618,13 @@ class StripeService implements PaymentServiceInterface {
 
 		}
 
-		$this->createCustomerInDB($user, $response, $account_id);
+		$this->createCustomerInDB($user, $job, $response, $account_id);
 
 		return $response;
 
 	}
 
-	public function createCustomerInDB($user, $customer, $account_id=NULL) {
+	public function createCustomerInDB($user, $job, $customer, $account_id=NULL) {
 
 		if ($account_id) {
 
@@ -625,6 +633,7 @@ class StripeService implements PaymentServiceInterface {
 			DB::table('stripe_connected_customers')->insert([
 				'id' => $customer['id'],
 				'user_id' => $user->id,
+				'job_id' => $job->id,
 				//'root_customer_id' => $root->id,
 				'managed_account_id' => $account_id,
 				'created_at' => Carbon::now()
@@ -642,7 +651,7 @@ class StripeService implements PaymentServiceInterface {
 	/*
 	 * Deletes created customer
 	 */
-	public function deleteCustomer($user, $account_id=NULL) {
+	public function deleteCustomer($user, $job, $account_id=NULL) {
 
 		$response = NULL;
 		$error_response = NULL;
@@ -655,7 +664,8 @@ class StripeService implements PaymentServiceInterface {
 		if ($account_id) {
 
 			$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $user->id)->
-				where('managed_account_id', '=', $account_id)->first();
+				where('managed_account_id', '=', $account_id)->
+				where('job_id', '=', $job->id)->first();
 
 			if ($customer_record) {
 
@@ -664,7 +674,7 @@ class StripeService implements PaymentServiceInterface {
 
 				$response = $customer->delete();
 
-				$this->deleteCustomerFromDB($user);
+				$this->deleteCustomerFromDB($user, $job, $account_id);
 			}
 			else {
 
@@ -677,7 +687,7 @@ class StripeService implements PaymentServiceInterface {
 			$customer = Customer::retrieve($customer_record->id);
 			$response = $customer->delete();
 
-			$this->deleteCustomerFromDB($user, $account_id);
+			$this->deleteCustomerFromDB($user, $job, $account_id);
 		}
 
 		if ($response == NULL)
@@ -689,14 +699,16 @@ class StripeService implements PaymentServiceInterface {
 	/*
 	 * Deletes created customer from database
 	 */
-	public function deleteCustomerFromDB($user, $account_id=NULL) {
+	public function deleteCustomerFromDB($user, $job, $account_id=NULL) {
 
 		if ($account_id) {
 			DB::table('stripe_connected_customers')->where('user_id', '=', $user->id)->
-				where('managed_account_id', '=', $account_id)->delete();
+				where('managed_account_id', '=', $account_id)->
+				where('job_id', '=', $job->id)->delete();
 		}
 		else {
-			DB::table('stripe_connected_customers')->where('user_id', '=', $user->id)->delete();
+			DB::table('stripe_connected_customers')->where('user_id', '=', $user->id)->
+				where('job_id', '=', $job->id)->delete();
 		}
 	}
 
