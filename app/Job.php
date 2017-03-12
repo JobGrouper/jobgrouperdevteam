@@ -300,6 +300,10 @@ class Job extends Model
         return $this->belongsToMany('App\User', 'sales',  'job_id', 'buyer_id');
     }
 
+    public function confirmed_buyers() {
+	return $this->buyers()->where('status', 'in_progress');
+    }
+
     /**
      * Get job`s employee requests.
      */

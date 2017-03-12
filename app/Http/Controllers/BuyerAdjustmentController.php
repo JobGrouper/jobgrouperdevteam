@@ -234,7 +234,7 @@ class BuyerAdjustmentController extends Controller
         }
 
 
-        $buyers = $job->buyers()->get();
+        $buyers = $job->buyers()->distinct()->get();
         foreach ($buyers as $buyer) {
 
 	    //Mail to buyers 
@@ -312,7 +312,7 @@ class BuyerAdjustmentController extends Controller
         });
 
         //Mail for buyers
-        $buyers = $job->buyers()->get();
+        $buyers = $job->buyers()->distinct()->get();
         foreach ($buyers as $buyer){
             Mail::queue('emails.buyer_adjustment_request_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'changes' => $changes],function($u) use ($buyer, $job)
             {
@@ -376,7 +376,7 @@ class BuyerAdjustmentController extends Controller
         });
 
         //Mail for buyers
-        $buyers = $job->buyers()->get();
+        $buyers = $job->buyers()->distinct()->get();
         foreach ($buyers as $buyer){
             Mail::queue('emails.buyer_adjustment_request_start_work_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'changes' => $changes],function($u) use ($buyer, $job)
             {
@@ -485,7 +485,7 @@ class BuyerAdjustmentController extends Controller
 		});
 
 		//Mail for buyers
-		$buyers = $job->buyers()->get();
+		$buyers = $job->buyers()->distinct()->get();
 		foreach ($buyers as $buyer){
 
 		    Mail::queue('emails.buyer_adjustment_starting_work_now_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'employee_first_name' => $employee->first_name, 'changes' => $changes],function($u) use ($buyer, $job)
@@ -530,7 +530,7 @@ class BuyerAdjustmentController extends Controller
         });
 
         //Mail for buyers
-        $buyers = $job->buyers()->get();
+        $buyers = $job->buyers()->distinct()->get();
         foreach ($buyers as $buyer){
 
 	    Mail::queue('emails.buyer_adjustment_request_approved_to_buyers', ['job_title'=>$job->title, 'employee_name' => $employee->full_name, 'employee_first_name' => $employee->first_name, 'changes' => $changes],function($u) use ($buyer, $job)
@@ -585,7 +585,7 @@ class BuyerAdjustmentController extends Controller
             });
         }
 
-        $buyers = $job->buyers()->get();
+        $buyers = $job->buyers()->distinct()->get();
         foreach ($buyers as $buyer){
             Mail::queue('emails.buyer_adjustment_request_denied_to_buyers', ['job_title'=>$job->title],function($u) use ($buyer, $job)
             {

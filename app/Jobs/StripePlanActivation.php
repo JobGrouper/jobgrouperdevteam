@@ -50,7 +50,7 @@ class StripePlanActivation extends Job implements ShouldQueue
 	$job = $this->stripe_job;
 	
 	// Gather everyone
-	$buyers = $this->stripe_job->buyers()->where('status', 'in_progress')->get();
+	$buyers = $this->stripe_job->confirmed_buyers()->get();
 
         //
 	foreach ($buyers as $buyer) {
