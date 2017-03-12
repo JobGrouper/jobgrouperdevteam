@@ -177,11 +177,13 @@
                         <div class="buttons">
 
                             @if (Auth::guest())
+			       @if( $job->sales_count < $job->max_clients_count )
                                 <a href="/login"><button>Buy</button></a>
                                 @if(!$employee || $employeeStatus['status'] == 'leave')
                                     {{--If job has no employee or employee will leave this job--}}
                                     <a href="/login"><button class="apply noclick">Apply for this Job</button></a>
                                 @endif
+			       @endif
                             @elseif(Auth::user()->user_type == 'employee')
                                 @if($employeeRequest)
                                     @if($employeeRequest->status == 'pending')
