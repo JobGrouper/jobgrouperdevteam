@@ -149,8 +149,10 @@
 
                                 <div class="block orange">
 
-                                    <span class="dole">Purchased:</span>
+                                    <span class="purchased">Work starts with {{$job->min_clients_count}} purchases</span>
 
+				    </br>
+                                    <span class="dole">Purchased:</span>
                                     <span class="purchased">{{$job->sales_count}}/{{$job->max_clients_count}}</span>
 
                                 </div>
