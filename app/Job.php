@@ -192,6 +192,22 @@ class Job extends Model
 	    }
     }
 
+    public function getMinClientsOrdinalAttribute() {
+
+	    $ordinal = '' . $this->min_clients_count;
+
+	    if ($this->min_clients_count == 1 || $this->min_clients_count == -1)
+		    $ordinal .= 'st'; 
+	    else if ($this->min_clients_count == 2 || $this->min_clients_count == -2) 
+		    $ordinal .= 'nd'; 
+	    else if ($this->min_clients_count == 3 || $this->min_clients_count == -3)
+		    $ordinal .= 'rd'; 
+	    else 
+		    $ordinal .= 'th'; 
+
+	    return $ordinal;
+    }
+
 
     /**
      * Scope for hot jobs

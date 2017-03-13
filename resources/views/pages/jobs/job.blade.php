@@ -149,7 +149,7 @@
 
                                 <div class="block orange">
 
-                                    <span class="purchased">Work starts with {{$job->min_clients_count}} purchases</span>
+                                    <span class="purchased">Work starts on the {{$job->min_clients_ordinal}} purchase</span>
 
 				    </br>
                                     <span class="dole">Purchased:</span>

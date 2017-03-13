@@ -139,7 +139,7 @@
                 @foreach($jobsAwaitingActivation as $jobAwaitingActivation)
                     <div class="job_item">
                         <h1 class="active">
-                            <span class="job_item__title">{{$jobAwaitingActivation->title}}</span>
+                            <span class="job_item__title"><a href="/job/{{$jobAwaitingActivation->id}}">{{$jobAwaitingActivation->title}}</a></span>
                             <p class="myjobs_text">{{$jobAwaitingActivation->description}}</p>
                             <button job-id="{{$jobAwaitingActivation->id}}" class="request_close leave_api">Leave job
                             </button>
@@ -160,7 +160,7 @@
                 @foreach($employeeRequests as $employeeRequest)
                     <div class="job_item">
                         <h1 class="active">
-                            <span class="job_item__title">{{$employeeRequest->job()->first()->title}}</span>
+                            <span class="job_item__title"><a href="/job/{{$employeeRequest->job()->first()->id}}">{{$employeeRequest->job()->first()->title}}</a></span>
                             <p class="myjobs_text">{{$employeeRequest->job()->first()->description}}</p>
                             <button request-id="{{$employeeRequest->id}}" class="request_close close_api">Cancel
                             </button>
