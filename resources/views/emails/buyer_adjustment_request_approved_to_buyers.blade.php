@@ -31,7 +31,7 @@ first payment. Please stay tuned for future emails regarding the status of this 
 @endif
 @if($changes['min_change'] == 'decrease')
 <p>The minimum number of buyers on {{ $job_title }} has decreased to {{ $changes['new_minimum'] }}, 
-which means that you'll have less time to wait until you get to start working! Since this 
+which means that you'll have less time to wait until the job begins! Since this 
 job may become active sooner that you might have expected, please stay tuned for future 
 emails regarding the status of this job.</p>
 @endif
