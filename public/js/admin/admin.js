@@ -164,6 +164,30 @@ function()
 	$(".addcard_wrapper .content_form .add_form .double .salary #salary").val(($(".addcard_wrapper .content_form .add_form .double .perclient #per").val() * +$(".addcard_wrapper .content_form .add_form .double .max #max").val()));
    });
 
+   // BEGIN MAX MIN CHECK
+   //
+   // TODO: Can simplify this little bag of jquery
+   $("div.max #max").on('change', function(e) {
+	var max = $( e.target ).val();
+	var min = $("div.min #min").val();
+
+	if (min > max) {
+ 	    alert('Minimum number of buyers cannot be less than maximum');
+	    $( e.target ).val( min );
+	}
+   });
+
+   $("div.min #min").on('change', function(e) {
+	var min = $( e.target ).val();
+    	var max = $("div.max #max").val();
+
+	if (min > max) { 
+ 	    alert('Minimum number of buyers cannot be less than maximum');
+	   $( e.target ).val( max );
+	}
+   });
+   // END MAX MIN CHECK
+
    /*
 	setInterval(function(e) {
 		if ($(".addcard_wrapper > .content_form > .add_form > .double > .max > #max").val().trim().length != 0 && $(".addcard_wrapper > .content_form > .add_form > .double > .perclient > #per").val().trim().length != 0) {
@@ -702,7 +726,36 @@ if (window.innerWidth > 768) {
   });
 }
 
+    $(".adjust-wrapper span").click(function(){
+       $(".adjustment-block-wrapper").fadeIn();
+    });
+
+    $("#buyer_adjuster .close__btn").click(function(){
+        $(".adjustment-block-wrapper").fadeOut();
+    });
 
 
+    $('#buyer_adjuster input[type="submit"]').click(function(e){
+        e.preventDefault();
+        var adj_info = {
+            "new_client_min": $(".min-input").val(),
+            "new_client_max": $(".max-input").val(),
+            "job_id": $(".job__id").val()
+        };
+
+        console.log(adj_info)
+        $.ajax({
+            method: "post",
+            url: "/api/buyer_adjustment",
+            data: adj_info,
+            datatype: "json",
+            success: function(response) {
+                console.log(response);
+                $("#min").val($(".min-input").val());
+                $("#max").val($(".max-input").val());
+                $(".adjustment-block-wrapper").fadeOut();
+            }
+        });
+    })
         // 
 });

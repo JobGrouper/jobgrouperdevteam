@@ -13,6 +13,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use DB;
 
+use Validator;
+
 class JobController extends Controller
 {
     /**
@@ -23,7 +25,7 @@ class JobController extends Controller
      */
     public function create(){
         $categories = Category::all();
-        return view('pages.admin.card', ['categories' => $categories]);
+        return view('pages.admin.card', ['operation' => 'create', 'categories' => $categories]);
     }
 
 
@@ -67,12 +69,20 @@ class JobController extends Controller
         if($job->employee_id){
             $employee = $job->employee()->first();
             $emploeeStatus = $job->employee_status;
+
         }
 
         $user = Auth::user();
 	$user_order_info = null;
         $jobOrdered = false;
         $jobPaid = false;
+	$adjustment_request = null;
+
+	// Check for buyer adjustment requests
+	if (isset($job->employee_id) && isset($user)) {
+		if ($job->employee_id == $user->id)
+		  $adjustment_request = $user->buyerAdjustmentRequests()->where('status', 'pending')->where('job_id', $job->id)->orderBy('created_at', 'desc')->first();
+	}
 
         if($user){
             if($user->user_type == 'employee'){
@@ -89,11 +99,11 @@ class JobController extends Controller
 
                     $jobOrdered = true;
 
-					// If credit card id is present, job has been paid for
-					//
-					if ($user_order_info->credit_card_set) {
-						$jobPaid = true;
-					}
+			// If credit card id is present, job has been paid for
+			//
+			if ($user_order_info->card_set) {
+				$jobPaid = true;
+			}
                 }
             }
         }
@@ -102,12 +112,15 @@ class JobController extends Controller
 
         //$sales = $job->buyers()->get();
         $orders = $job->sales()->whereIn('status', ['in_progress', 'pending'])->get();
+	$purchases = $orders->filter(function($order) {
+		return $order->status == 'in_progress';
+	});
 
 		if ($jobOrdered && !$jobPaid) {
 
 		}
 
-        return view('pages.jobs.job', ['user' => $user, 'job' => $job, 'category' => $category, 'employee' => $employee, 'employeeStatus' => $emploeeStatus, 'orders' => $orders, 'employeeRequest' => $employeeRequest, 'jobOrdered' => $jobOrdered, 'jobPaid' => $jobPaid, 'user_order_info' => $user_order_info]);
+        return view('pages.jobs.job', ['user' => $user, 'job' => $job, 'category' => $category, 'employee' => $employee, 'employeeStatus' => $emploeeStatus, 'orders' => $orders, 'purchases' => $purchases, 'employeeRequest' => $employeeRequest, 'jobOrdered' => $jobOrdered, 'jobPaid' => $jobPaid, 'user_order_info' => $user_order_info, 'adjustment_request' => $adjustment_request]);
     }
 
 
@@ -115,7 +128,7 @@ class JobController extends Controller
 
         $job = Job::findOrFail($jobID);
         $categories = Category::all();
-        return view('pages.admin.card', ['job' => $job, 'categories' => $categories]);
+        return view('pages.admin.card', ['operation' => 'edit', 'job' => $job, 'categories' => $categories]);
     }
     /**
      * Create new job
@@ -126,11 +139,32 @@ class JobController extends Controller
     public function store(Request $request)
     {
 
+	$validator = Validator::make($request->all(), [
+		    'title' => 'required',
+		    'description' => 'required',
+		    'salary' => 'required',
+		    'min_clients_count' => 'required',
+		    'max_clients_count' => 'required',
+		    'category_id' => 'required'
+		    ]);
+
+	$validator->after(function($validator) use ($request) {
+
+		if ($request->min_clients_count > $request->max_clients_count) {
+			$validator->errors()->add('min_clients_count', 'Minimum number of buyers cannot be greater than the maximum');
+		}
+	});
+
+        if ($validator->fails()) {
+		return redirect()->back()
+			->withErrors($validator);
+        }
 
          $job = Job::create([
             'title' => $request->title,
             'description' => $request->description,
             'salary' => $request->salary,
+	    'min_clients_count' => $request->min_clients_count,
             'max_clients_count' => $request->max_clients_count,
             'category_id' => $request->category_id,
         ]);

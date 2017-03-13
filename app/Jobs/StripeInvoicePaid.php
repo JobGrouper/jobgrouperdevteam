@@ -9,6 +9,7 @@ use App\Jobs\Job;
 
 use App\User;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -79,7 +80,7 @@ class StripeInvoicePaid extends Job implements ShouldQueue
 
 		$job = \App\Job::find($plan_record->job_id);
 
-		Mail::send('emails.buyer_payment_successful', ['employee' => $employee->full_name, 'job_name' => $job->title], function($u) use ($buyer, $job)
+		Mail::send('emails.buyer_payment_successful', ['employee' => $employee->full_name, 'job' => $job], function($u) use ($buyer, $job)
 		{
 		    $u->from('admin@jobgrouper.com');
 		    $u->to($buyer->email);
@@ -96,6 +97,7 @@ class StripeInvoicePaid extends Job implements ShouldQueue
     }
 
     public function failed() {
+	$account_id = $this->event['user_id'];
 	Log::error("STRIPE INVOICE PAID FAILED: account->" . $account_id);
     }
 }

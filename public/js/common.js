@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+var jg = jg || {};
+
 	var header_open = false;
 	$('.header_welcome__btn').click(function(){
 

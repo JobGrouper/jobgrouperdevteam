@@ -12,6 +12,7 @@
                     <button type="submit" class="reject">Reject</button>
                 </div>
                 <h2>{{$card->title}}</h2>
+                <p class="title">{{$card->category()->first()->title}}</p>
                 <p>{{$card->description}}</p>
                 <div class="item_info">
                     <div class="item_info__numbers">
@@ -24,6 +25,8 @@
                                 </a>
                             @endif
                         </span>
+			<span class="min">Min to Start: {{$card->min_clients_count}}
+			</span>
                         <span class="permorm">
                             @if($card->employees_count > 0 ||  $card->employee_requests_count)
                                 <a style="{{$card->employee_requests_count > 0 ? 'color: #ff480b;' : ''}}" href="/admin/employee_requests/{{$card->id}}">
@@ -34,12 +37,23 @@
                             @endif
                         </span>
                     </div>
-                    <span class="title">{{$card->category()->first()->title}}</span>
                     <div class="buttons">
                         <a href="/admin/card/{{$card->id}}/edit"><button><img src="{{asset('img/Admin/edit.png')}}" alt="alt"></button></a>
                         <button class="deleteCardButton" data-card_id = "{{$card->id}}"><img src="{{asset('img/Admin/delete.png')}}" alt="alt"></button>
                     </div>
                 </div>
+		<hr>
+		<div>
+		<ul>
+		    @if($card->employees_count > 0 ||  $card->employee_requests_count)
+			<li><a style="{{$card->employee_requests_count > 0 ? 'color: #ff480b;' : ''}}" href="/admin/employee_requests/{{$card->id}}">An employee is interested in this position</a></li>
+		    @endif
+		    <!-- IF THERE ARE BUYER ADJUST REQUESTS -->
+		    @if($card->buyer_adjustment_requests_count > 0)
+			<li><a style="{{$card->buyer_adjustment_requests_count > 0 ? 'color: #ff480b;' : ''}}" href="/admin/buyer_adjustment/{{$card->id}}/{{ $card->current_buyer_adjustment_request->id }}">This job's employee is requesting changes to the number of buyers</a></li>
+		    @endif
+		</ul>
+		</div>
             </div>
             @endforeach
         </div>

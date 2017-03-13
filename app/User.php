@@ -238,5 +238,9 @@ class User extends Authenticatable
         return $this->hasManyThrough('App\StripeVerificationRequest', 'App\StripeManagedAccount','user_id', 'managed_account_id');
     }
 
+    public function buyerAdjustmentRequests(){
+        return $this->hasMany('App\BuyerAdjustmentRequest', 'employee_id');
+    }
+
 
 }

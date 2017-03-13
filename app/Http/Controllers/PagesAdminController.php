@@ -8,6 +8,7 @@ use App\Job;
 use App\MaintenanceWarning;
 use App\PageText;
 use App\User;
+use App\BuyerAdjustmentRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use DB;
@@ -25,7 +26,7 @@ class PagesAdminController extends Controller
             return $cards->employee_requests_count;
         });*/
         $cardsWithRequests = $allCards->filter(function ($card) {
-            return $card->employee_requests_count > 0;
+            return $card->employee_requests_count > 0 || $card->buyer_adjustment_requests_count > 0;
         });
 
         $cardsWithRequests = $cardsWithRequests->sortByDesc(function($card) {
@@ -88,5 +89,19 @@ class PagesAdminController extends Controller
     public function maintenance_warnings(){
         $warnings = MaintenanceWarning::all();
         return view('pages.admin.maintenance_warnings', compact('warnings'));
+    }
+
+    public function create_buyer_request($job_id) {
+        $job = Job::findOrFail($job_id);
+        $purchases = $job->sales()->where('status', 'in_progress')->where('card_set', true)->get();
+        return view('pages.admin.buyer-adjustment', ['job' => $job, 'purchases' => $purchases, 'purpose' => 'admin']);
+    }
+
+    public function review_buyer_request($job_id, $request_id) {
+        $job = Job::findOrFail($job_id);
+	$employee = $job->employee()->first();
+        $purchases = $job->sales()->where('status', 'in_progress')->where('card_set', true)->get();
+	$request = BuyerAdjustmentRequest::findOrFail($request_id);
+	return view('pages.admin.buyer-adjustment', ['job' => $job, 'employee' => $employee, 'purchases' => $purchases, 'request' => $request, 'purpose' => 'admin-from-request']);
     }
 }

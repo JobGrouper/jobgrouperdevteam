@@ -16,6 +16,17 @@
             @if(isset($job->title))
                 <input type="hidden" name="job_id" value="{{$job->id}}">
             @endif
+	    <div>
+		@if (count($errors) > 0)
+		<div class="alert alert-danger">
+			<ul>
+				@foreach ($errors->all() as $error)
+					<li>{{ $error }}</li>
+				@endforeach
+			</ul>
+		</div>
+		@endif
+	    </div>
             <label for="title">Title</label>
 
             <input type="text" id="title"  name="title" value="{{(isset($job->title) ? $job->title : '')}}"/>
@@ -28,6 +39,7 @@
 
             <textarea id="descr" name="description">{{(isset($job->title) ? $job->description : '')}}</textarea>
 
+	    @if($operation == 'create')
             <div class="double">
 
                 <div class="max">
@@ -35,6 +47,14 @@
                     <label for="max">max clients</label>
 
                     <input type="text" id="max" name="max_clients_count" value="{{(isset($job->title) ? $job->max_clients_count : '')}}">
+
+                </div>
+
+                <div class="max min">
+
+                    <label for="max">min clients</label>
+
+                    <input type="text" id="min" name="min_clients_count" value="{{(isset($job->title) ? $job->min_clients_count : '')}}">
 
                 </div>
 
@@ -55,6 +75,54 @@
                 </div>
 
             </div>
+	    @endif
+
+	    @if($operation == 'edit')
+	    <div>
+
+                <div class="max">
+
+                    <label for="max">max clients</label>
+
+                    <input type="text" id="max" name="max_clients_count" value="{{(isset($job->title) ? $job->max_clients_count : '')}}" disabled>
+
+                </div>
+
+                <div class="max min">
+
+                    <label for="max">min clients</label>
+
+                    <input type="text" id="min" name="min_clients_count" value="{{(isset($job->title) ? $job->min_clients_count : '')}}" disabled>
+
+                </div>
+
+		<div class="adjust-wrapper clearfix">
+			<a href="/admin/buyer_adjustment/{{ $job->id }}">Adjust</a>
+			<!--<span>Adjust</span>-->
+		</div>
+
+
+	    </div>
+            <div class="double">
+
+                <div class="perclient">
+
+                    <label for="per">Payment/Client</label>
+
+                    <input type="text" id="per" name="salary" value="{{(isset($job->title) ? $job->salary : '')}}">
+
+                </div>
+
+                <div class="salary">
+
+                    <label for="salary">Monthly salary</label>
+
+                    <input readonly type="text" id="salary" value="{{(isset($job->title) ? round(($job->salary * $job->max_clients_count * 0.85) , 1) : '')}}">
+
+                </div>
+
+            </div>
+	    @endif
 
             <select id="category"  name="category_id" style="background-image: url({{asset('img/Admin/selectarrow.png')}}) !important;">
 

@@ -51,7 +51,7 @@
 
                         <div class="salary">
 
-                            <p>{{$job->title}}</p>
+                            <p><a href="/job/{{$job->id}}">{{$job->title}}</a></p>
 
                             <p class="month">{{$job->description}}</p>
 

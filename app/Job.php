@@ -15,7 +15,7 @@ class Job extends Model
      * @var array
      */
     protected $fillable = [
-        'category_id', 'employee_id', 'potential_employee_id', 'title', 'title_ch', 'description', 'description_ch', 'salary', 'salary', 'max_clients_count', 'hot', 'become_hot', 'next_payment_date'
+        'category_id', 'employee_id', 'potential_employee_id', 'title', 'title_ch', 'description', 'description_ch', 'salary', 'salary', 'min_clients_count', 'max_clients_count', 'hot', 'become_hot', 'next_payment_date'
     ];
 
     /**
@@ -27,6 +27,7 @@ class Job extends Model
      */
     protected $casts = [
         'max_clients_count' => 'int',
+	'min_clients_count' => 'int'
     ];
 
 
@@ -75,6 +76,23 @@ class Job extends Model
     public function getEmployeeRequestsCountAttribute()
     {
         return $this->employee_requests()->where('status', '=', 'pending')->count();
+    }
+
+    /**
+     * Accessor to get current buyer adjustment request 
+     */
+    public function getCurrentBuyerAdjustmentRequestAttribute() 
+    {
+	    return $this->buyer_adjustment_requests()->where('status', 'pending')->
+		    orderBy('created_at', 'desc')->first();
+    }
+
+    /**
+     * Accessor to get buyer adjustment requests with status = pending
+     */
+    public function getBuyerAdjustmentRequestsCountAttribute()
+    {
+        return $this->buyer_adjustment_requests()->where('status', '=', 'pending')->count();
     }
 
     /**
@@ -174,6 +192,22 @@ class Job extends Model
 	    }
     }
 
+    public function getMinClientsOrdinalAttribute() {
+
+	    $ordinal = '' . $this->min_clients_count;
+
+	    if ($this->min_clients_count == 1 || $this->min_clients_count == -1)
+		    $ordinal .= 'st'; 
+	    else if ($this->min_clients_count == 2 || $this->min_clients_count == -2) 
+		    $ordinal .= 'nd'; 
+	    else if ($this->min_clients_count == 3 || $this->min_clients_count == -3)
+		    $ordinal .= 'rd'; 
+	    else 
+		    $ordinal .= 'th'; 
+
+	    return $ordinal;
+    }
+
 
     /**
      * Scope for hot jobs
@@ -267,13 +301,23 @@ class Job extends Model
         return $this->hasMany('App\Sale', 'job_id');
     }
 
+    public function purchases() {
+	return $this->sales()->where('status', 'in_progress')->get();
+    }
+
 
     /**
      * Get buyers of this job
+     *
+     * - buyers with completed purchases: buyers()->where('status', 'in_progress')
      */
     public function buyers()
     {
         return $this->belongsToMany('App\User', 'sales',  'job_id', 'buyer_id');
+    }
+
+    public function confirmed_buyers() {
+	return $this->buyers()->where('status', 'in_progress');
     }
 
     /**
@@ -290,5 +334,10 @@ class Job extends Model
     public function employee_exit_requests()
     {
         return $this->hasMany('App\EmployeeExitRequest', 'job_id');
+    }
+
+    public function buyer_adjustment_requests() {
+
+	    return $this->hasMany('App\BuyerAdjustmentRequest', 'job_id');
     }
 }

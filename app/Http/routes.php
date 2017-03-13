@@ -101,6 +101,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check_role'], function () {
     Route::get('/users', ['as' => 'users', 'uses' => 'PagesAdminController@users']);
     Route::get('/card', ['as' => 'cards', 'uses' => 'JobController@create']);
     Route::get('/card/{job_id}/edit', ['uses' => 'JobController@edit']);
+    Route::get('/buyer_adjustment/{job_id}', ['uses' => 'PagesAdminController@create_buyer_request']);
+    Route::get('/buyer_adjustment/{job_id}/{request_id}', ['uses' => 'PagesAdminController@review_buyer_request']);
     Route::get('/categories', ['as' => 'categories', 'uses' => 'PagesAdminController@categories']);
     Route::get('/employee_requests/{job_id}', ['as' => 'employee_requests', 'uses' => 'PagesAdminController@employee_requests']);
     Route::get('/orders/{job_id}', ['uses' => 'PagesAdminController@orders']);
@@ -111,10 +113,15 @@ Route::post('category/store', 'CategoryController@store');
 Route::post('/employee_request/approve', ['middleware' => 'check_role', 'uses' => 'EmployeeRequestController@approve']);
 Route::post('/employee_request/reject', ['middleware' => 'check_role', 'uses' => 'EmployeeRequestController@reject']);
 
+Route::post('/buyer_adjustment_requests', ['uses' => 'BuyerAdjustmentController@create_request']);
+
+
+
 /*
  * API routes
  */
 Route::group(['prefix' => 'api'], function () {
+    
     Route::post('order/close/{order_id}', 'OrderController@close');
 
     Route::post('checkEmailFree', 'RegistrateController@checkEmailFree');
@@ -164,6 +171,12 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('stripe/invoice/created', 'StripeWebhookController@onInvoiceCreated');
     Route::post('stripe/invoice/failed', 'StripeWebhookController@onInvoiceFailure');
     Route::post('stripe/account/updated', 'StripeWebhookController@onAccountUpdated');
+
+    Route::post('/buyerAdjustment', ['middleware' => 'check_role', 'uses' => 'BuyerAdjustmentController@create']);
+    Route::post('/buyerAdjustmentRequest', ['uses' => 'BuyerAdjustmentController@create_request']);
+    Route::post('/denyBuyerAdjustmentRequest/{request_id}', ['middleware' => 'check_role', 'uses' => 'BuyerAdjustmentController@deny_request']);
+    Route::post('/requestStartWorkNow', ['uses' => 'BuyerAdjustmentController@requestStartWorkNow']);
+    Route::post('/startWorkNow', 'BuyerAdjustmentController@startWorkNow');
 });
 
 

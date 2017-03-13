@@ -2,6 +2,29 @@
 
 @section('title', $job->title)
 
+@section('autoload_scripts')
+
+@if($employeeRequest)
+    @if($employeeRequest->status == 'approved' && !$adjustment_request)
+<script>
+	var buyer_adjuster;
+	jg.Autoloader(function() {
+
+		buyer_adjuster = new jg.BuyerAdjuster({
+			root: document.getElementById('buyer_adjuster'),
+			modal: {
+				root: document.getElementById('buyer_adjustment_alert_window'),
+				trigger: document.getElementById('buyer-adjustment-alert-button')
+			},
+			request: true
+		});
+	});
+</script>
+   @endif
+@endif
+
+@endsection
+
 @section('content')
 
     <div class="view">
@@ -13,6 +36,18 @@
                 <div class="cancel"></div>
             </div>
         </div>
+	
+	<!-- NESTED IF -->
+	@if($employeeRequest)
+	    @if($employeeRequest->status == 'approved')
+		<div id="buyer_adjustment_alert_window" class="alert_window month">
+		    <div class="alert_window__block">
+			@include('partials.buyer-adjustment-form', ['purpose' => 'request'])
+			<div class="cancel"></div>
+		    </div>
+		</div>
+	    @endif
+	@endif
 	@else
         <div class="alert_window month">
             <div class="alert_window__block">
@@ -114,8 +149,10 @@
 
                                 <div class="block orange">
 
-                                    <span class="dole">Purchased:</span>
+                                    <span class="purchased">Work starts on the {{$job->min_clients_ordinal}} purchase</span>
 
+				    </br>
+                                    <span class="dole">Purchased:</span>
                                     <span class="purchased">{{$job->sales_count}}/{{$job->max_clients_count}}</span>
 
                                 </div>
@@ -142,17 +179,24 @@
                         <div class="buttons">
 
                             @if (Auth::guest())
+			       @if( $job->sales_count < $job->max_clients_count )
                                 <a href="/login"><button>Buy</button></a>
                                 @if(!$employee || $employeeStatus['status'] == 'leave')
                                     {{--If job has no employee or employee will leave this job--}}
                                     <a href="/login"><button class="apply noclick">Apply for this Job</button></a>
                                 @endif
+			       @endif
                             @elseif(Auth::user()->user_type == 'employee')
                                 @if($employeeRequest)
                                     @if($employeeRequest->status == 'pending')
                                             <span class="pending">Your request is pending</span>
                                     @elseif($employeeRequest->status == 'approved')
                                         <span class="approved">You got the job!</span>
+					@if(!$adjustment_request)
+					<button id="buyer-adjustment-alert-button" class="nostyleyet">Request Buyer Adjustment</button>
+					@else
+                                        <span id="buyer-adjustment-alert-button" class="pending">Your request is pending</span>
+					@endif
                                     @elseif($employeeRequest->status == 'rejected' && !$employee)
                                         {{--If employee`s request has been rejected--}}
                                         <button class="apply">Re-apply for this Job</button>
@@ -171,13 +215,13 @@
                                 @elseif($jobOrdered && $job->employee_id == NULL)
                                     <span class="approved need">Waiting For Employee</span>
                                 @else
-                                    {{--Это было для сохранения карт и авто-оплат--}}
-                                    {{--<a href="/purchase/{{$job->id}}"><button>Buy</button></a>--}}
-                                    <form role="form" method="POST" action="{{ url('/order/store') }}">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="job_id" value="{{$job->id}}">
-                                        <button type="submit">Order</button>
-                                    </form>
+                                    @if($job->sales_count < $job->max_clients_count)
+                                        <form role="form" method="POST" action="{{ url('/order/store') }}">
+                                            {{ csrf_field() }}
+                                            <input type="hidden" name="job_id" value="{{$job->id}}">
+                                            <button type="submit">Order</button>
+                                        </form>
+                                    @endif
                                 @endif
                             @endif
 
