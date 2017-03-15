@@ -6,6 +6,8 @@ use App\Category;
 use App\MaintenanceWarning;
 use App\PageText;
 use Illuminate\Support\ServiceProvider;
+use File;
+use Session;
 
 class ViewComposerServiceProvider extends ServiceProvider
 {
@@ -50,13 +52,37 @@ class ViewComposerServiceProvider extends ServiceProvider
     }
 
     /**
-     * Compose the big header
+     * Random image getting method
      */
+    private function getRandomBgImage()
+    {
+        $imagesArray = File::files('../public/images/homepage-bg');
+        if(count($imagesArray) == 0){
+            return '../img/base.png';
+        }
+        elseif(count($imagesArray) == 1){
+            return '../images/homepage-bg/'.pathinfo($imagesArray[0])['basename'];
+        }
+        else{
+            $imageName = pathinfo($imagesArray[rand(0, count($imagesArray) - 1)])['basename'];
+            if($imageName == Session::get('previousImageName')){
+                return $this->getRandomBgImage();
+            }
+            else{
+                Session::put('previousImageName', $imageName);
+                return '../images/homepage-bg/'.$imageName;
+            }
+        }
+    }
+
     public function composeBigHeader()
     {
         view()->composer('partials.big-header', function ($view) {
+
+            $imageName = $this->getRandomBgImage();
             $view->with('userData', \Auth::user());
             $view->with('categories', Category::all()->prepend(new Category(['title' => 'All Categories'])));
+            $view->with('bgImagePath', $imageName);
         });
     }
 

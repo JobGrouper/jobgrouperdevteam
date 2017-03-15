@@ -1,4 +1,4 @@
-<header class="main_header">
+<header class="main_header" style="background-image: url({{$bgImagePath}}) !important;">
     <div class="dark_header__line">
 
         <div class="container">
