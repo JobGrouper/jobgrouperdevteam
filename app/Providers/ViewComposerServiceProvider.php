@@ -75,6 +75,9 @@ class ViewComposerServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Compose the big header
+     */
     public function composeBigHeader()
     {
         view()->composer('partials.big-header', function ($view) {

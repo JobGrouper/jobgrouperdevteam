@@ -107,6 +107,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check_role'], function () {
     Route::get('/employee_requests/{job_id}', ['as' => 'employee_requests', 'uses' => 'PagesAdminController@employee_requests']);
     Route::get('/orders/{job_id}', ['uses' => 'PagesAdminController@orders']);
     Route::get('/texts', ['as' => 'texts', 'uses' => 'PagesAdminController@texts']);
+    Route::get('/homepage-bg-images', ['as' => 'homepage-bg-images', 'uses' => 'PagesAdminController@homepageBgImages']);
 });
 
 Route::post('category/store', 'CategoryController@store');
@@ -177,6 +178,9 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/denyBuyerAdjustmentRequest/{request_id}', ['middleware' => 'check_role', 'uses' => 'BuyerAdjustmentController@deny_request']);
     Route::post('/requestStartWorkNow', ['uses' => 'BuyerAdjustmentController@requestStartWorkNow']);
     Route::post('/startWorkNow', 'BuyerAdjustmentController@startWorkNow');
+
+    Route::post('/homepage-bg-image', 'HomepageBgImagesController@store');
+    Route::delete('/homepage-bg-image/{image_name}', 'HomepageBgImagesController@delete');
 });
 
 

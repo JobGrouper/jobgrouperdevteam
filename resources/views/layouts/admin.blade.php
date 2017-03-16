@@ -78,12 +78,11 @@
             <ul>
 
                 <li class="{{(Route::current()->getName() == 'users' ? 'active' : '')}}" ><a href="/admin/users"><img src="{{ asset('img/Admin/Profile.png') }}" alt="alt"><span>list of users</span></a></li>
-
                 <li class="{{(Route::current()->getName() == 'cards' ? 'active' : '')}}" ><a href="/admin/cards"><img src="{{ asset('img/Admin/Notepad.png') }}" alt="alt"><span>list of cards</span></a></li>
-
                 <li class="{{(Route::current()->getName() == 'texts' ? 'active' : '')}}"><a href="/admin/texts"><img src="{{ asset('img/Admin/New_Post.png') }}" alt="alt"><span>text of website</span></a></li>
-
+                <li class="{{(Route::current()->getName() == 'homepage-bg-images' ? 'active' : '')}}"><a href="/admin/homepage-bg-images"><img src="{{ asset('img/Admin/Stats_Alt.png') }}" alt="alt"><span>homepage bg</span></a></li>
                 <li class="{{(Route::current()->getName() == 'categories' ? 'active' : '')}}"><a href="/admin/categories"><img src="{{ asset('img/Admin/Stats_Alt.png') }}" alt="alt"><span>Categories</span></a></li>
+
 
 
             </ul>

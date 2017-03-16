@@ -122,6 +122,7 @@ return [
     */
 
     'images_dir' => 'images/',
+    'homepage_bg_images_dir' => 'images/homepage-bg/',
 
     'providers' => [
 

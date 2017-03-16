@@ -12,6 +12,7 @@ use App\BuyerAdjustmentRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use DB;
+use File;
 
 class PagesAdminController extends Controller
 {
@@ -103,5 +104,13 @@ class PagesAdminController extends Controller
         $purchases = $job->sales()->where('status', 'in_progress')->where('card_set', true)->get();
 	$request = BuyerAdjustmentRequest::findOrFail($request_id);
 	return view('pages.admin.buyer-adjustment', ['job' => $job, 'employee' => $employee, 'purchases' => $purchases, 'request' => $request, 'purpose' => 'admin-from-request']);
+    }
+
+    public function homepageBgImages(){
+        $imagesArray = File::files('../public/images/homepage-bg');
+        foreach ($imagesArray as &$image){
+            $image = pathinfo($image)['basename'];
+        }
+        return view('pages.admin.homepage-bg-images', compact('imagesArray'));
     }
 }
