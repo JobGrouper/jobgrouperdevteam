@@ -27,7 +27,8 @@ class Kernel extends ConsoleKernel
 	Commands\PromptForPaymentMethod::class,
 	Commands\SendVerificationRequest::class,
 	Commands\VerifyEmployees::class,
-	Commands\StopJob::class
+	Commands\StopJob::class,
+	Commands\LogTest::class
     ];
 
     /**
