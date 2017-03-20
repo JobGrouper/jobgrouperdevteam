@@ -220,8 +220,10 @@
                         </div>
 		    @endif
                     <button class="seller_cards" id="bank_add">Add Bank Account</button>
+		<!--
 		    <p>...or...</p>
                     <button class="seller_cards" id="debit_add">Add Debit card</button>
+		-->
                     <div class="bank_form bank">
                         <h2>Bank Account Form<img src="{{asset('img/Profile/cancel.png')}}" alt="alt"></h2>
                         <form id="seller_bank_account_form" method="POST" action="{{ url('/card/employee/create') }}">
@@ -252,6 +254,7 @@
 			    @endforeach
                         </form>
                     </div>
+			<!--
                     <div class="bank_form debit">
                         <h2>Debit Card Form<img src="{{asset('img/Profile/cancel.png')}}" alt="alt"></h2>
                         <form id="seller_debit_card_form" method="POST" action="{{ url('/card/employee/create') }}">
@@ -288,18 +291,13 @@
 				    </div>
                                 </div>
                             </div>
-				<!--
-                            <div class="block clearfix">
-                                <label>ZIP Code<span>*</span></label>
-                                <input type="text" />
-                            </div>
-				-->
                             <button type="submit">Submit</button>
 			    @foreach ($errors->all() as $error)
 				<p>{{ $error }}</p>
 			    @endforeach
                         </form>
                     </div>
+			-->
                 </div>
 		@endif
                 </div>
