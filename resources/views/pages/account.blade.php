@@ -205,7 +205,19 @@
                       <div class="payment_method not_set">Need payment method</div>
 		    @else
                       <div class="payment_method set">Payment method set</div>
-                      <div class="profile_text">Card number: **** **** **** {{$card->last_four}}</div>
+                        <div class="added_credit_card">
+			    @if ($card->account_type == 'card')
+                            <div class="card_wrapper">
+                                <img src="{{asset('img/Profile/credit_card.png')}}" alt="alt">
+                                <p>**** **** **** {{$card->last_four}}</p>
+                            </div>
+			    @elseif ($card->account_type == 'bank_account')
+                            <div class="card_wrapper">
+                                <img src="{{asset('img/Profile/credit_card.png')}}" alt="alt">
+                                <p>********{{$card->last_four}}</p>
+                            </div>
+			    @endif
+                        </div>
 		    @endif
                     <button class="seller_cards" id="bank_add">Add Bank Account</button>
 		    <p>...or...</p>
@@ -288,15 +300,6 @@
 			    @endforeach
                         </form>
                     </div>
-                    @if($card)
-                        <div class="added_credit_card">
-                            <h2>Card added</h2>
-                            <div class="card_wrapper">
-                                <img src="{{asset('img/Profile/credit_card.png')}}" alt="alt">
-                                <p>**** **** **** {{$card->last_four}}</p>
-                            </div>
-                        </div>
-                    @endif
                 </div>
 		@endif
                 </div>
