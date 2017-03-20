@@ -90,6 +90,7 @@
                             <a href="/my_orders"><button>My Orders</button></a>
                             <a href="/my_transactions"><button>Transactions</button></a>
                         @endif
+                            <a href="/messages"><button>Messages</button></a>
                             <a href="/logout"><button>Log Out</button></a>
                         </div>
                         </span>
