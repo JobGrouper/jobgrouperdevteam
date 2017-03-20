@@ -45,7 +45,7 @@
 
                             <a class="quest" href="/help"><img src="{{ asset('img/Myjobs/circled-help.png')}}" alt="alt"></a>
 
-                            <!--<a class="mail" href="/messages"><img src="{{ asset('img/Myjobs/mail.png')}}" alt="alt"> <span id="newMessagesCount">{{$userData->getNewMessages()}}</span></a>-->
+                            <a class="mail" href="/messages"><img src="{{ asset('img/Myjobs/mail.png')}}" alt="alt"> <span id="newMessagesCount">{{$userData->getNewMessages()}}</span></a>
 
                             <span>
                                 {{$userData->fullName}}<img src="{{ asset('img/Category/arrow.png')}}" alt="alt">
