@@ -237,7 +237,7 @@
 			    @endif
 
                             <div class="block clearfix">
-                                <label>Name on Account<span>*</span></label>
+                                <label>Account Holder's Name<span>*</span></label>
                                 <input type="text" name="account_holder_name" autocomplete="off"/>
                             </div>
                             <div class="block clearfix">
