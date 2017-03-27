@@ -32,8 +32,10 @@
             <input type="text" id="title"  name="title" value="{{(isset($job->title) ? $job->title : '')}}"/>
 
             <input type="checkbox" id="hot" name="hot" value="1" {{((isset($job->hot) && $job->hot) ? 'checked' : '')}}/>
-
             <label class="hot_label" for="hot">Hot</label>
+
+            <input type="checkbox" id="is_dummy" name="is_dummy" value="1" {{$job->is_dummy  ? 'checked' : ''}}/>
+            <label class="is_dummy_label" for="is_dummy">Dummy</label>
 
             <label for="descr">Description</label>
 

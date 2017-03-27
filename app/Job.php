@@ -4,6 +4,7 @@ namespace App;
 use Mail;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 use Auth;
 
@@ -15,7 +16,7 @@ class Job extends Model
      * @var array
      */
     protected $fillable = [
-        'category_id', 'employee_id', 'potential_employee_id', 'title', 'title_ch', 'description', 'description_ch', 'salary', 'salary', 'min_clients_count', 'max_clients_count', 'hot', 'become_hot', 'next_payment_date'
+        'category_id', 'employee_id', 'potential_employee_id', 'title', 'title_ch', 'description', 'description_ch', 'salary', 'salary', 'min_clients_count', 'max_clients_count', 'hot', 'become_hot', 'next_payment_date', 'is_dummy'
     ];
 
     /**
@@ -339,5 +340,13 @@ class Job extends Model
     public function buyer_adjustment_requests() {
 
 	    return $this->hasMany('App\BuyerAdjustmentRequest', 'job_id');
+    }
+
+    /**
+     * Scopes
+     */
+    public function scopeNotDummy($query)
+    {
+        return $query->where('is_dummy', false);
     }
 }

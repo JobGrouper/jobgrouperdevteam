@@ -21,7 +21,7 @@ class PagesAdminController extends Controller
     }
 
     public function cards(){
-        $allCards = Job::all();
+        $allCards = Job::withoutGlobalScopes()->get();
         /*$cards = $cards->sortByDesc(function($cards){
             return $cards->employee_requests_count;
         });*/

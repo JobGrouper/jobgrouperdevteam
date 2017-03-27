@@ -646,10 +646,10 @@ body {
   height: 54px;
   padding-left: 15px;
   margin-bottom: 20px; }
-.addcard_wrapper .content_form .add_form #hot {
+.addcard_wrapper .content_form .add_form #hot, .addcard_wrapper .content_form .add_form #is_dummy {
   display: none; }
 
-.addcard_wrapper .content_form .add_form #hot + label::before {
+.addcard_wrapper .content_form .add_form #hot, .addcard_wrapper .content_form .add_form #is_dummy + label::before {
   content: '';
   background-color: #fff;
   border: 1px solid #D4D9E3;
@@ -665,11 +665,11 @@ body {
   font-size: 14px;
   color: #000; }
 
-.addcard_wrapper .content_form .add_form .hot_label {
+.addcard_wrapper .content_form .add_form .hot_label, .addcard_wrapper .content_form .add_form .is_dummy_label {
   margin-bottom: 30px;
 }
 
-.addcard_wrapper .content_form .add_form #hot:checked + label::before {
+.addcard_wrapper .content_form .add_form #hot:checked, .addcard_wrapper .content_form .add_form #is_dummy:checked + label::before {
   content: '\2713'; }
 .addcard_wrapper .content_form .add_form textarea {
   width: 100%;
