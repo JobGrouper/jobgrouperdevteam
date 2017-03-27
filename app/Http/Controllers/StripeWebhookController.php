@@ -64,6 +64,54 @@ class StripeWebhookController extends Controller
 		return response('Successful', 200);
 	}
 
+	public function onTransferCreated(Request $request) {
+
+		// Retrieve the request's body and parse it as JSON
+		$input = @file_get_contents("php://input");
+
+		$event_json = $this->inputOrRequest($request, $input);
+
+		//dispatch( new StripeAccountUpdated($event_json) );
+
+		return response('Successful', 200);
+	}
+
+	public function onTransferPaid(Request $request) {
+
+		// Retrieve the request's body and parse it as JSON
+		$input = @file_get_contents("php://input");
+
+		$event_json = $this->inputOrRequest($request, $input);
+
+		//dispatch( new StripeAccountUpdated($event_json) );
+
+		return response('Successful', 200);
+	}
+
+	public function onTransferFailed(Request $request) {
+
+		// Retrieve the request's body and parse it as JSON
+		$input = @file_get_contents("php://input");
+
+		$event_json = $this->inputOrRequest($request, $input);
+
+		//dispatch( new StripeAccountUpdated($event_json) );
+
+		return response('Successful', 200);
+	}
+
+	public function onTransferUpdated(Request $request) {
+
+		// Retrieve the request's body and parse it as JSON
+		$input = @file_get_contents("php://input");
+
+		$event_json = $this->inputOrRequest($request, $input);
+
+		//dispatch( new StripeAccountUpdated($event_json) );
+
+		return response('Successful', 200);
+	}
+
 	private function inputOrRequest($request, $input, $name=NULL) {
 
 		if ($input == "") {
