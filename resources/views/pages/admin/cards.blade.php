@@ -11,7 +11,7 @@
                     <button type="submit" class="approve">Approve</button>
                     <button type="submit" class="reject">Reject</button>
                 </div>
-                <h2>{{$card->title}}</h2>
+                <h2><a href="/job/{{$card->id}}">{{$card->title}}</a></h2>
                 <p class="title">{{$card->category()->first()->title}}</p>
                 <p>{{$card->description}}</p>
                 <div class="item_info">

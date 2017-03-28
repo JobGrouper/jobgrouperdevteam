@@ -167,6 +167,7 @@ class JobController extends Controller
 	    'min_clients_count' => $request->min_clients_count,
             'max_clients_count' => $request->max_clients_count,
             'category_id' => $request->category_id,
+	    'is_dummy' => $request->is_dummy != NULL ? $request->is_dummy : 0
         ]);
 
 

@@ -168,22 +168,33 @@ function()
    //
    // TODO: Can simplify this little bag of jquery
    $("div.max #max").on('change', function(e) {
-	var max = $( e.target ).val();
-	var min = $("div.min #min").val();
+	var max = parseInt( $( e.target ).val() );
+	var min = parseInt( $("div.min #min").val() );
 
 	if (min > max) {
- 	    alert('Minimum number of buyers cannot be less than maximum');
+ 	    alert('Minimum number of buyers cannot be greater than maximum');
 	    $( e.target ).val( min );
+	}
+
+	if (max <= 0) { 
+ 	    alert('Maximum number of buyers cannot be less than zero');
+	    alert(min);
+	    $( e.target ).val( 1 );
 	}
    });
 
    $("div.min #min").on('change', function(e) {
-	var min = $( e.target ).val();
-    	var max = $("div.max #max").val();
+	var min = parseInt( $( e.target ).val() );
+    	var max = parseInt( $("div.max #max").val() );
 
 	if (min > max) { 
- 	    alert('Minimum number of buyers cannot be less than maximum');
+ 	    alert('Minimum number of buyers cannot be greater than maximum');
 	   $( e.target ).val( max );
+	}
+
+	if (min <= 0) { 
+ 	    alert('Minimum number of buyers cannot be less than zero');
+	   $( e.target ).val( 1 );
 	}
    });
    // END MAX MIN CHECK
