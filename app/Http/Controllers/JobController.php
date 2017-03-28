@@ -40,12 +40,12 @@ class JobController extends Controller
         $pageUrl = '';
         if($categoryID){
             $category = Category::findOrFail($categoryID);
-            $jobs = $category->jobs()->paginate(12);
+            $jobs = $category->jobs()->notDummy()->paginate(12);
             $categoryTitle = $category->title;
             $pageUrl = '/jobs/category/'.$category->id;
         }
         else{
-            $jobs = Job::where('id', '>', '0')->paginate(12);
+            $jobs = Job::notDummy()->where('id', '>', '0')->paginate(12);
             $categoryTitle = 'All categories';
             $pageUrl = '/jobs';
         }
@@ -167,6 +167,7 @@ class JobController extends Controller
 	    'min_clients_count' => $request->min_clients_count,
             'max_clients_count' => $request->max_clients_count,
             'category_id' => $request->category_id,
+	    'is_dummy' => $request->is_dummy != NULL ? $request->is_dummy : 0
         ]);
 
 
@@ -205,6 +206,10 @@ class JobController extends Controller
             $job->hot = false;
             $job->become_hot = null;
         }
+
+        if(!$request->is_dummy)
+            $job->is_dummy = false;
+
         $job->save();
 
         if($request->image_hash){
