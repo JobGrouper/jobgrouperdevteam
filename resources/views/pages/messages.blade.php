@@ -41,7 +41,7 @@
 
                                     <div class="name">
 
-                                        <h2>{{$dialog['userName']}}</h2>
+                                        <h2>{{$dialog['userName']}} <span class="unread_messages_indicator" id="unread_messages_indicator_{{$dialog['userID']}}"  style="{{$dialog['hasUnreadMessages'] ? 'display:inline-block' : ''}}"></span></h2>
 
                                         <p>
                                             <span id="last_message_{{$dialog['userID']}}"><b>{{$dialog['lastSender']}}</b> {{$dialog['lastMessage']}}</span>
@@ -141,6 +141,7 @@
             switch (message.type) {
 
                 case 'message':
+
                     var messageUserPhotoUrl = '';               //Recipient photo url will be here
                     if (currentRecipientID == message.senderID) {
                         audio["message"].play();
@@ -165,6 +166,7 @@
 
                     //Add new message text to dialogs list (left side)
                     $('#last_message_' + message.senderID).html(message.text);
+                    showUnreadMessagesMarker(message.senderID);
 
 
                     //Перемотка чата вниз
@@ -295,6 +297,8 @@
                 }
                 
                 $('#newMessagesCount').html(data);
+
+                hideUnreadMessagesMarker(currentRecipientID);
             });
         }
 
@@ -313,6 +317,13 @@
         $('.message_chat').delegate('#sendMsg', 'click', sendMessage);
         $('#sendMsg').click(sendMessage);
 
+        function showUnreadMessagesMarker(userID) {
+            $("#unread_messages_indicator_" + userID).css('display', 'inline-block');
+        }
+
+        function hideUnreadMessagesMarker(userID) {
+            $("#unread_messages_indicator_" + userID).css('display', 'none');
+        }
     </script>
 
 @endsection
