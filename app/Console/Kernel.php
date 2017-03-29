@@ -28,7 +28,8 @@ class Kernel extends ConsoleKernel
 	Commands\SendVerificationRequest::class,
 	Commands\VerifyEmployees::class,
 	Commands\StopJob::class,
-	Commands\LogTest::class
+	Commands\LogTest::class,
+	Commands\TestStripePlanActivation::class
     ];
 
     /**
