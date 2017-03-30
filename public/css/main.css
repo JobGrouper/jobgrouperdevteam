@@ -2880,3 +2880,11 @@ div.alert_window__block > #buyer_adjuster {
 .adjustment-submit input[type="submit"]:hover {
   background-color:#558B8D
 }
+
+.unread_messages_indicator{
+  width: 10px;
+  height: 10px;
+  background-color: #337ab7;
+  display: none;
+  border-radius: 50%;
+}
