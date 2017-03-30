@@ -14,6 +14,7 @@ class EmailsTemplatesController extends Controller
         $originTemplatePath = '../resources/views/emails/'.$emailTemplateName.'.blade.php';
         $tmpTemplatePath = '../resources/views/emails/tmp_template.blade.php';
 
+        //creating temporary template file with some changes to prevent Blade`s work
         File::copy($originTemplatePath, $tmpTemplatePath);
         $templateString = file_get_contents($tmpTemplatePath);
         $templateString = str_replace("@if", "<b>if</b>", $templateString);

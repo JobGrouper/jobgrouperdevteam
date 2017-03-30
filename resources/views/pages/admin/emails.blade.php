@@ -5,7 +5,6 @@
 @section('title', 'EMAIL VIEWER')
 
 
-
 @section('content')
 
     <div class="content_form">

@@ -88,6 +88,8 @@ class PagesAdminController extends Controller
     }
 
     public function emails(){
+
+        //creating array of emails templates names
         $emails  = File::files('../resources/views/emails');
         foreach ($emails as &$email)
             $email = str_replace('.blade.php', '', pathinfo($email)['basename']);
