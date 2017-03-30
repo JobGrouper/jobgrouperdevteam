@@ -62,9 +62,23 @@ class MessageController extends Controller
                $lastMessage = substr($lastMessage, 0, 25).'...';
             }
 
-            $dialogs[] = ['userID' => $recipient->id, 'userName' => $recipient->first_name.' '.$recipient->last_name, 'image_url' => $imageUrl, 'lastSender' => $lastSender, 'lastMessage' => $lastMessage];
+            $hasUnreadMessages = DB::table('messages')
+                ->select('id')
+                ->where('sender_id', $recipient->id)->where('recipient_id', $user->id)->where('new', 1)
+                ->first();
+
+
+            $dialogs[] = [
+                'userID' => $recipient->id,
+                'userName' => $recipient->first_name.' '.$recipient->last_name,
+                'image_url' => $imageUrl,
+                'lastSender' => $lastSender,
+                'lastMessage' => $lastMessage,
+                'hasUnreadMessages' => count($hasUnreadMessages),
+            ];
 
         }
+
 
         return view('pages.messages', ['dialogs' => $dialogs, 'recipientID' => $recipientID, 'userData' => $userData]);
     }
