@@ -103,6 +103,12 @@ $(document).ready(function() {
 
     });
 
+
+    $("#mailsTemplatesSelector").change(function() {
+        var mailTemplateName = this.value;
+        $('#mailTemplateIframe').attr('src', '/admin/renderEmailTemplate/' + mailTemplateName);
+    });
+
 	$(".admincat_wrapper__items .item .buttons button:first-child").on("click", function() {
 		$(this).parent().parent().find("p").hide();
 		$(this).parent().parent().find(">button").fadeIn("fast");

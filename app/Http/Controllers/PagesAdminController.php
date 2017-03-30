@@ -12,6 +12,7 @@ use App\BuyerAdjustmentRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use DB;
+use File;
 
 class PagesAdminController extends Controller
 {
@@ -84,6 +85,14 @@ class PagesAdminController extends Controller
     public function texts(){
         $texts = PageText::all();
         return view('pages.admin.texts', compact('texts'));
+    }
+
+    public function emails(){
+        $emails  = File::files('../resources/views/emails');
+        foreach ($emails as &$email)
+            $email = str_replace('.blade.php', '', pathinfo($email)['basename']);
+
+        return view('pages.admin.emails', compact('emails'));
     }
 
     public function maintenance_warnings(){

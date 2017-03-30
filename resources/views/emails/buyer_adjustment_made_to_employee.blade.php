@@ -2,7 +2,7 @@
 
 @section('content')
 <p>Our admins have decided to alter the number of buyers on {{ $job_title }}. Please check
-<a href="{{ env("SERVICE_APP_URL") }}/job/{{ $job_id }}">the job page</a> for the most accurate information.</p>
+<a href='{{ env("SERVICE_APP_URL") }}/job/{{ $job_id }}'>the job page</a> for the most accurate information.</p>
 
 @if( $changes['max_change'] == 'increase' ) 
 <p>The maximum number of buyers on {{ $job_title }} has increased to {{ $changes['new_maximum'] }}. 

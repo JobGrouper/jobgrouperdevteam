@@ -83,8 +83,9 @@
 
                 <li class="{{(Route::current()->getName() == 'texts' ? 'active' : '')}}"><a href="/admin/texts"><img src="{{ asset('img/Admin/New_Post.png') }}" alt="alt"><span>text of website</span></a></li>
 
-                <li class="{{(Route::current()->getName() == 'categories' ? 'active' : '')}}"><a href="/admin/categories"><img src="{{ asset('img/Admin/Stats_Alt.png') }}" alt="alt"><span>Categories</span></a></li>
+                <li class="{{(Route::current()->getName() == 'emails' ? 'active' : '')}}"><a href="/admin/emails"><img src="{{ asset('img/Admin/e-mail.png') }}" alt="alt"><span>email viewer</span></a></li>
 
+                <li class="{{(Route::current()->getName() == 'categories' ? 'active' : '')}}"><a href="/admin/categories"><img src="{{ asset('img/Admin/Stats_Alt.png') }}" alt="alt"><span>Categories</span></a></li>
 
             </ul>
 
