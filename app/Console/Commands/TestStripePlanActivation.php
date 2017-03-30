@@ -3,6 +3,12 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Interfaces\PaymentServiceInterface;
+
+use App\Job;
+use App\User;
+
+use Queue;
 
 class TestStripePlanActivation extends Command
 {
@@ -11,7 +17,7 @@ class TestStripePlanActivation extends Command
      *
      * @var string
      */
-    protected $signature = 'test:stripe_plan_activation';
+    protected $signature = 'test:stripe_plan_activation {user_id} {employee_id}';
 
     /**
      * The console command description.
@@ -35,33 +41,43 @@ class TestStripePlanActivation extends Command
      *
      * @return mixed
      */
-    public function handle(\PaymentServiceInterface $psi)
+    public function handle(PaymentServiceInterface $psi)
     {
 
 	/// Create a fake job
 	    //
 	$job = Job::create([
-	    'title' => $request->title,
-	    'description' => $request->description,
-	    'salary' => $request->salary,
-	    'min_clients_count' => $request->min_clients_count,
-	    'max_clients_count' => $request->max_clients_count,
-	    'category_id' => $request->category_id,
-	    'is_dummy' => $request->is_dummy != NULL ? $request->is_dummy : 0
+	    'title' => 'A Test Job (already deleted)',
+	    'description' => 'But not for looooooong...',
+	    'salary' => 15,
+	    'min_clients_count' => 15,
+	    'max_clients_count' => 2,
+	    'category_id' => 1,
+	    'is_dummy' => 1
 	]);
 
+	$buyer = User::findOrFail($this->argument('user_id'));
+	$employee = new \StdClass();
+	$employee->id = $this->argument('employee_id');
+	$employee->user_id = $this->argument('employee_id');
+
 	// Assign an employee to the job
-	$job->employee_id = NULL;
+	$job->employee_id = $employee->id;
 	$job->save();
 
 	// Add a buyer to the job
-        $order = $user->orders()->create($input);
-	$order->status = 'in_progress';
-	$order->card_set = True;
-        $order->save();
+	$order = $buyer->orders()->create([
+		'job_id' => $job->id,
+		'buyer_id' => $buyer->id,
+		'status' => 'in_progress',
+		'card_set' => 1
+		]);
 
 	// Create a plan
-	
-	dispatch(new \App\Jobs\StripePlanActivation($psi, $job, NULL, NULL) );
+	dispatch( new \App\Jobs\StripePlanActivation($psi, $job, 'test', $employee) );
+	Queue::push(function() use ($order, $job) {
+		$order->delete();
+		$job->delete();
+	});
     }
 }
