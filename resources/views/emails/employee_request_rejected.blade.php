@@ -10,8 +10,7 @@ promising candidates.
 </p>
 
 <p>
-Please feel free to apply for other positions on the site � 
-and even the same position, if we post it again!
+Please feel free to apply for other positions on the site and even the same position, if we post it again!
 </p>
 
 <p>Best of luck,</p>

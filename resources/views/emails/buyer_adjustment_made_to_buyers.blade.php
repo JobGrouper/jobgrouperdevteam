@@ -2,7 +2,7 @@
 
 @section('content')
 <p>Our admins have decided to alter the number of buyers on {{ $job_title }}. Please check
-<a href="{{ env("SERVICE_APP_URL") }}/job/{{ $job_id }}">the job page</a> for the most accurate information.</p>
+<a href='{{ env("SERVICE_APP_URL") }}/job/{{ $job_id }}'>the job page</a> for the most accurate information.</p>
 
 <p>Your individual monthly payment has not 
 (and will not) change because of any changes to the number of buyers. This courtesy 
