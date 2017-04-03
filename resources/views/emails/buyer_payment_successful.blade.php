@@ -4,24 +4,21 @@
 <p>Your payment to {{ $employee }} on {{ $job->title }} was made successfully.</p>
 <table>
 	<thead>
-	<?php 
-		$salary = $job->salary;
-	?>
 	</thead>
 	<tfoot>
 	</tfoot>
 	<tbody>
 	  <tr>
 		<td>Monthly purchase price</td>
-		<td>${{ number_format($salary, 2) }}</td>
+		<td>${{ number_format($job->salary, 2) }}</td>
 	  </tr>
 	  <tr>
 		<td>Markup</td>
-		<td>${{ number_format( $salary * 0.15, 2) }}</td>
+		<td>${{ number_format( $job->salary * 0.15, 2) }}</td>
 	  </tr>
 	  <tr>
 		<td>Total</td>
-		<td>${{ number_format( $salary + ( $salary * 0.15), 2) }}</td>
+		<td>${{ number_format( $job->salary + ( $job->salary * 0.15), 2) }}</td>
 	  </tr>
 	</tbody>
 </table>
