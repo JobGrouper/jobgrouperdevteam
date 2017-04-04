@@ -71,7 +71,7 @@ class StripeWebhookController extends Controller
 
 		$event_json = $this->inputOrRequest($request, $input);
 
-		//dispatch( new StripeAccountUpdated($event_json) );
+		dispatch( new StripeTransferCreated($event_json) );
 
 		return response('Successful', 200);
 	}
@@ -83,7 +83,7 @@ class StripeWebhookController extends Controller
 
 		$event_json = $this->inputOrRequest($request, $input);
 
-		//dispatch( new StripeAccountUpdated($event_json) );
+		dispatch( new StripeTransferPaid($event_json) );
 
 		return response('Successful', 200);
 	}
@@ -95,7 +95,7 @@ class StripeWebhookController extends Controller
 
 		$event_json = $this->inputOrRequest($request, $input);
 
-		//dispatch( new StripeAccountUpdated($event_json) );
+		dispatch( new StripeTransferFailed($event_json) );
 
 		return response('Successful', 200);
 	}
@@ -107,7 +107,7 @@ class StripeWebhookController extends Controller
 
 		$event_json = $this->inputOrRequest($request, $input);
 
-		//dispatch( new StripeAccountUpdated($event_json) );
+		dispatch( new StripeTransferUpdated($event_json) );
 
 		return response('Successful', 200);
 	}
