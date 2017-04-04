@@ -5,6 +5,7 @@ trait StripeTransferEvent {
 	function getEventVariables($event) {  
 
 		$vars = array(
+			'account_id' => $event['user_id'],
 			'date_created' => $event['data']['created'],
 			'arrival_date' => $event['data']['date'],
 			'amount_raw' => $event['data']['amount'], // given in cents

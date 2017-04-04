@@ -14,6 +14,10 @@ use App\Http\Requests;
 use App\Jobs\StripeAccountUpdated;
 use App\Jobs\StripeInvoiceFailed;
 use App\Jobs\StripeInvoicePaid;
+use App\Jobs\StripeTransferCreated;
+use App\Jobs\StripeTransferUpdated;
+use App\Jobs\StripeTransferPaid;
+use App\Jobs\StripeTransferFailed;
 
 class StripeWebhookController extends Controller
 {
