@@ -2,7 +2,7 @@
 
 @section('content')
 <p>Unfortunately, Stripe, our payments provider, has notified us that a scheduled transfer in the 
-amount of {{ data.amount }} has failed. This may be due to a number of factors, such as an 
+amount of ${{ $data['amount'] }} has failed. This may be due to a number of factors, such as an 
 account number, routing number, or account holder name entered incorrectly in your profile 
 section. <a href='{{ env("SERVICE_APP_URL") }}/account'>Please click here</a> to edit your information.</p>
 
