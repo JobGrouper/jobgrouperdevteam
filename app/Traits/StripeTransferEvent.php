@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Traits;
+
 trait StripeTransferEvent {
 
 	function getEventVariables($event) {  
