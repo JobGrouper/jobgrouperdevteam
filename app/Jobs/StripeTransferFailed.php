@@ -10,6 +10,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+use App\Traits\StripeTransferEvent;
+
 class StripeTransferFailed extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels, StripeTransferEvent;
