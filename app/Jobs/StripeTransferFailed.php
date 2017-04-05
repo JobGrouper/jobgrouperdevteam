@@ -38,8 +38,8 @@ class StripeTransferFailed extends Job implements ShouldQueue
     {
         // data
 	$data = $this->getEventVariables($this->event);
-	$data['failure_code'] = $this->event['data']['failure_code'];
-	$data['failure_message'] = $this->event['data']['failure_message'];
+	$data['failure_code'] = $this->event['data']['object']['failure_code'];
+	$data['failure_message'] = $this->event['data']['object']['failure_message'];
 
 	$employee = NULL;
 
