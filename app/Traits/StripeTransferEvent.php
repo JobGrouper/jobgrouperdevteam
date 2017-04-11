@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use \Carbon\Carbon;
+
 trait StripeTransferEvent {
 
 	function getEventVariables($event) {  
@@ -9,7 +11,8 @@ trait StripeTransferEvent {
 		$vars = array(
 			'account_id' => $event['user_id'],
 			'date_created' => $event['data']['object']['created'],
-			'arrival_date' => $event['data']['object']['arrival_date'],
+			'arrival_date_raw' => $event['data']['object']['arrival_date'],
+			'arrival_date' => Carbon::createFromTimestamp( $event['data']['object']['arrival_date'] )->format('m-d-Y'),
 			'amount_raw' => $event['data']['object']['amount'], // given in cents
 			'amount' => $event['data']['object']['amount'] / 100,
 			//'application_fee_raw' => $event['data']['object']['application_fee'], // given in cents
