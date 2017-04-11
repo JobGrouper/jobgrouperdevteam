@@ -10,6 +10,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+use App\Interfaces\PaymentServiceInterface;
+
 use App\Traits\StripeTransferEvent;
 
 class StripeTransferUpdated extends Job implements ShouldQueue
@@ -34,7 +36,7 @@ class StripeTransferUpdated extends Job implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(PaymentServiceInterface $psi)
     {
         //
 	$data = $this->getEventVariables($this->event);

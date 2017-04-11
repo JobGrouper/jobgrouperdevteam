@@ -1214,8 +1214,7 @@ class StripeService implements PaymentServiceInterface {
 			$response = Subscription::create(
 				array('customer' => $customer_id,
 				'plan' => $plan_id,
-				'application_fee_percent' => 15,
-				'trial_end' => strtotime('+1 day')  // starting a day after so we can modify invoice
+				'application_fee_percent' => 15
 			),
 				array('stripe_account' => $account_id)
 			);

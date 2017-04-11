@@ -73,7 +73,11 @@ class StripeWebhookController extends Controller
 		// Retrieve the request's body and parse it as JSON
 		$input = @file_get_contents("php://input");
 
+		var_dump($input);
+
 		$event_json = $this->inputOrRequest($request, $input);
+
+		var_dump($event_json);
 
 		dispatch( new StripeTransferCreated($event_json) );
 
