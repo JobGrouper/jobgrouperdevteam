@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use \Carbon\Carbon;
 
-trait StripeTransferEvent {
+trait StripePayoutEvent {
 
 	function getEventVariables($event) {  
 
