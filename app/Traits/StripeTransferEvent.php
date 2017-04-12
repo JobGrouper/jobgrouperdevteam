@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use \Carbon\Carbon;
+
 trait StripeTransferEvent {
 
 	function getEventVariables($event) {  
