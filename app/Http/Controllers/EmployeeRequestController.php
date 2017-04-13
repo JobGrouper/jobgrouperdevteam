@@ -111,19 +111,27 @@ class EmployeeRequestController extends Controller
             $employeeRequest->status = 'approved';
 
             $employee  = $employeeRequest->employee()->first();
-            //If job already has a seller (employee) but he had make request to leave this job, make new seller as potential
+
+            //If job's current seller has requested to step down, mark new guy as potential employee 
             if($job->employee_status['status'] == 'leave'){
                 $job->potential_employee_id = $employeeRequest->employee_id;
             }
-            else{
+	    else{ // otherwise, assign him to job officially
+
                 $job->employee_id = $employeeRequest->employee_id;
-                $psi->createPlan($employee, $job, true);
+
+		/* 
+		 * Need to review this
+		 *
+		if ($job->status == 'working') {
+                  $psi->createPlan($employee, $job);
+		}
+		 */
             }
 
             $employeeRequest->save();
             //if job has enough count of buyers and sellers the work begins
             if($job->sales_count == $job->max_clients_count){
-                //$job->work_start();
 		$psi->createPlan($employee, $job);
             }
             $job->save();

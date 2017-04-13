@@ -173,6 +173,10 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('stripe/invoice/created', 'StripeWebhookController@onInvoiceCreated');
     Route::post('stripe/invoice/failed', 'StripeWebhookController@onInvoiceFailure');
     Route::post('stripe/account/updated', 'StripeWebhookController@onAccountUpdated');
+    Route::post('stripe/payout/created', 'StripeWebhookController@onPayoutCreated');
+    Route::post('stripe/payout/failed', 'StripeWebhookController@onPayoutFailed');
+    Route::post('stripe/payout/updated', 'StripeWebhookController@onPayoutUpdated');
+    Route::post('stripe/payout/paid', 'StripeWebhookController@onPayoutPaid');
 
     Route::post('/buyerAdjustment', ['middleware' => 'check_role', 'uses' => 'BuyerAdjustmentController@create']);
     Route::post('/buyerAdjustmentRequest', ['uses' => 'BuyerAdjustmentController@create_request']);

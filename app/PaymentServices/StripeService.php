@@ -11,6 +11,8 @@ use \Carbon\Carbon;
 use Mail;
 use DB;
 
+use App\User;
+
 use \Stripe\Account;
 use \Stripe\Stripe;
 use \Stripe\Charge;
@@ -165,6 +167,12 @@ class StripeService implements PaymentServiceInterface {
 	public function retrieveAccountFromUser($user) {
 		$account_record = DB::table('stripe_managed_accounts')->where('user_id', '=', $user->id)->first();
 		return Account::retrieve($account_record->id);
+	}
+
+	public function retrieveUserFromAccount($account_id) {
+
+		$account_record = DB::table('stripe_managed_accounts')->where('id', '=', $account_id)->first();
+		return User::findOrFail($account_record->user_id);
 	}
 
 	public function retrieveCustomer($customer_id, $account_id=NULL) {
@@ -1206,8 +1214,7 @@ class StripeService implements PaymentServiceInterface {
 			$response = Subscription::create(
 				array('customer' => $customer_id,
 				'plan' => $plan_id,
-				'application_fee_percent' => 15,
-				'trial_end' => strtotime('+1 day')  // starting a day after so we can modify invoice
+				'application_fee_percent' => 15
 			),
 				array('stripe_account' => $account_id)
 			);

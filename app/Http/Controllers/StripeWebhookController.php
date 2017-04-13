@@ -14,6 +14,10 @@ use App\Http\Requests;
 use App\Jobs\StripeAccountUpdated;
 use App\Jobs\StripeInvoiceFailed;
 use App\Jobs\StripeInvoicePaid;
+use App\Jobs\StripePayoutCreated;
+use App\Jobs\StripePayoutUpdated;
+use App\Jobs\StripePayoutPaid;
+use App\Jobs\StripePayoutFailed;
 
 class StripeWebhookController extends Controller
 {
@@ -64,50 +68,50 @@ class StripeWebhookController extends Controller
 		return response('Successful', 200);
 	}
 
-	public function onTransferCreated(Request $request) {
+	public function onPayoutCreated(Request $request) {
 
 		// Retrieve the request's body and parse it as JSON
 		$input = @file_get_contents("php://input");
 
 		$event_json = $this->inputOrRequest($request, $input);
 
-		//dispatch( new StripeAccountUpdated($event_json) );
+		dispatch( new StripePayoutCreated($event_json) );
 
 		return response('Successful', 200);
 	}
 
-	public function onTransferPaid(Request $request) {
+	public function onPayoutPaid(Request $request) {
 
 		// Retrieve the request's body and parse it as JSON
 		$input = @file_get_contents("php://input");
 
 		$event_json = $this->inputOrRequest($request, $input);
 
-		//dispatch( new StripeAccountUpdated($event_json) );
+		dispatch( new StripePayoutPaid($event_json) );
 
 		return response('Successful', 200);
 	}
 
-	public function onTransferFailed(Request $request) {
+	public function onPayoutFailed(Request $request) {
 
 		// Retrieve the request's body and parse it as JSON
 		$input = @file_get_contents("php://input");
 
 		$event_json = $this->inputOrRequest($request, $input);
 
-		//dispatch( new StripeAccountUpdated($event_json) );
+		dispatch( new StripePayoutFailed($event_json) );
 
 		return response('Successful', 200);
 	}
 
-	public function onTransferUpdated(Request $request) {
+	public function onPayoutUpdated(Request $request) {
 
 		// Retrieve the request's body and parse it as JSON
 		$input = @file_get_contents("php://input");
 
 		$event_json = $this->inputOrRequest($request, $input);
 
-		//dispatch( new StripeAccountUpdated($event_json) );
+		dispatch( new StripePayoutUpdated($event_json) );
 
 		return response('Successful', 200);
 	}
