@@ -56,11 +56,11 @@ class StripePayoutUpdated extends Job implements ShouldQueue
 	}
 
 	// send mail
-	Mail::send('emails.seller_transfer_updated', ['data' => $data], function($u) use ($employee)
+	Mail::send('emails.seller_payout_updated', ['data' => $data], function($u) use ($employee)
 	{
 	    $u->from('admin@jobgrouper.com');
 	    $u->to($employee->email);
-	    $u->subject('Transfer Updated');
+	    $u->subject('Payout Updated');
 	});
     }
 

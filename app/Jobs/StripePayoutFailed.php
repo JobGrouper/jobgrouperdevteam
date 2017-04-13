@@ -57,11 +57,11 @@ class StripePayoutFailed extends Job implements ShouldQueue
 		$employee = $psi->retrieveUserFromAccount( $data['account_id'] );
 	}
 
-	Mail::send('emails.seller_transfer_failed', ['data' => $data], function($u) use ($employee)
+	Mail::send('emails.seller_payout_failed', ['data' => $data], function($u) use ($employee)
 	{
 	    $u->from('admin@jobgrouper.com');
 	    $u->to($employee->email);
-	    $u->subject('Transfer Failed. Please re-enter bank details');
+	    $u->subject('Payout Failed. Please re-enter bank details');
 	});
     }
 

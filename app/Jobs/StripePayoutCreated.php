@@ -55,11 +55,11 @@ class StripePayoutCreated extends Job implements ShouldQueue
 	}
 
 	// send mail
-	Mail::send('emails.seller_transfer_created', ['data' => $data], function($u) use ($employee)
+	Mail::send('emails.seller_payout_created', ['data' => $data], function($u) use ($employee)
 	{
 	    $u->from('admin@jobgrouper.com');
 	    $u->to($employee->email);
-	    $u->subject('Transfer Process Initiated');
+	    $u->subject('A New Payout Is on the Way!');
 	});
     }
 
