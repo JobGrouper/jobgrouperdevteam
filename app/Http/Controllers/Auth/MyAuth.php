@@ -21,6 +21,10 @@ class MyAuth extends Controller
                 }
 
                 if($user->user_type == 'employee'){
+                    if(Session::get('stripe_verification_request')){
+                        $stripeVerificationRequestsId = Session::pull('stripe_verification_request');
+                        return redirect('/account/additional_info/'.$stripeVerificationRequestsId);
+                    }
                     return redirect('/my_jobs');
                 }
                 else{
