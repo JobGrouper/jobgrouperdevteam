@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class PagesController extends Controller
 {
     public function home(){
+
         // get user
         $user = Auth::user();
 
