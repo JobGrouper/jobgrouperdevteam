@@ -48,10 +48,33 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if(!env('APP_DEBUG')){
-            if (!$this->isHttpException($e)) $e = new \Symfony\Component\HttpKernel\Exception\HttpException(500);
+	$render_500 = true;
+
+	// CASES WHERE WE DO NOT WANT 500 ERROR THROWN
+        if(env('APP_DEBUG')) {
+	   $render_500 = false;
         }
 
+	if ($this->isHttpException($e)) {
+	  $render_500 = false;
+	}
+
+	if ($e instanceof ValidationException) {
+	  $render_500 = false;
+	}
+
+	if ($e instanceof AuthorizationException) {
+	  $render_500 = false;
+	}
+
+	if ($e instanceof ModelNotFoundException) {
+	  $render_500 = false;
+	}
+
+	// Render 500 page
+	if ($render_500) { 
+	  $e = new \Symfony\Component\HttpKernel\Exception\HttpException(500);
+	}
 
         return parent::render($request, $e);
         //return response()->json(['message' => $e->getMessage()]);
