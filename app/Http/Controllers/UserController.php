@@ -162,11 +162,13 @@ class UserController extends Controller
         }
     }
 
-    public function xxx() {
+    public function showChangePassword() {
             return view('auth.passwords.change_password_form');
     }
 
-    public function yyy(Request $request) {
+    public function changePassword(Request $request) {
+
+	    $user = Auth::user();
 
 	    $validator = Validator::make($request->all(), [
 		    'current_password' => 'required',
@@ -178,11 +180,10 @@ class UserController extends Controller
 	    ]);
 
 
-	    $validator->after(function($validator) use ($request) {
+	    $validator->after(function($validator) use ($request, $user) {
 
 		    // Make sure current password matches
-		    if (Auth::attempt(['password' => $request->input('current_password')])) {
-			    $user = Auth::user();
+		    if (Auth::attempt(['email' => $user->email, 'password' => $request->input('current_password')])) {
 			    $user->password = bcrypt($request->new_password);
 			    $user->save();
 		    } else {
