@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Interfaces\PaymentServiceInterface;
 use Illuminate\Http\Request;
 use DB;
+use Validator;
 
 use App\Http\Requests;
 use Auth;
 use App\User;
+
 class UserController extends Controller
 {
     public function myAccount(){
@@ -158,5 +160,44 @@ class UserController extends Controller
             $response['info'] = 'Stripe external account created successfully!';
             return response($response, 200);
         }
+    }
+
+    public function xxx() {
+            return view('auth.passwords.change_password_form');
+    }
+
+    public function yyy(Request $request) {
+
+	    $validator = Validator::make($request->all(), [
+		    'current_password' => 'required',
+		    'new_password' => 'required|min:6|max:255|different:current_password',
+		    'confirm_new_password' => 'required|same:new_password'
+	    ], [
+	    	    'same' => 'The new password fields must match',
+	    	    'different' => 'The new password must be different than the current password'		    
+	    ]);
+
+
+	    $validator->after(function($validator) use ($request) {
+
+		    // Make sure current password matches
+		    if (Auth::attempt(['password' => $request->input('current_password')])) {
+			    $user = Auth::user();
+			    $user->password = bcrypt($request->new_password);
+			    $user->save();
+		    } else {
+
+			    // If not...
+			    $validator->errors()->add('current_password', 'The password you entered is incorrect');
+		    }
+	    });
+
+            if ($validator->fails()) {
+		return redirect()->back()
+			->withErrors($validator);
+            }
+	    else {
+		return view('auth.passwords.change_password_success');
+	    }
     }
 }
