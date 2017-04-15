@@ -475,6 +475,13 @@
                 </div>
 
             </div>
+            <div class="block">
+                <div class="one_more5">
+                    <a href={{ url('password/change') }}><button>Change Password</button></a>
+                </div>
+
+	    </div>
+
 
         </div>
 
