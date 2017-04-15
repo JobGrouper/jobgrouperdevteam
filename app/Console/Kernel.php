@@ -44,10 +44,12 @@ class Kernel extends ConsoleKernel
         /*
          * Cron task for delete users with overdue email verify
          */
+	    /*
         $schedule->call(function () {
             ConfirmUsers::where('updated_at','<',date('Y-m-d H:i:s', strtotime('-1 hours')))->delete();
             User::where('updated_at','<',date('Y-m-d H:i:s', strtotime('-1 hours')))->where('email_confirmed','=',0)->delete();
         })->everyMinute();
+	     */
 
         /*
          * Task to run chat socket server and check it`s status
