@@ -40,7 +40,7 @@
 	<!-- NESTED IF -->
 	@if($employeeRequest)
 	    @if($employeeRequest->status == 'approved')
-		<div id="buyer_adjustment_alert_window" class="alert_window month">
+		<div id="buyer_adjustment_alert_window" class="alert_window">
 		    <div class="alert_window__block">
 			@include('partials.buyer-adjustment-form', ['purpose' => 'request'])
 			<div class="cancel"></div>
