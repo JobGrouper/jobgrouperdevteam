@@ -2,6 +2,7 @@
 
 namespace App\PaymentServices;
 
+use App\User;
 use Illuminate\Support\Facades\Log;
 use App\Interfaces\PaymentServiceInterface;
 
@@ -12,6 +13,7 @@ use Mail;
 use DB;
 
 use \Stripe\Account;
+use Stripe\Refund;
 use \Stripe\Stripe;
 use \Stripe\Charge;
 use \Stripe\Token;
@@ -1466,6 +1468,60 @@ class StripeService implements PaymentServiceInterface {
 		);
 
 		return $response->id;
+	}
+
+	public function createRefund($account_id, $user_id){
+
+		$customer = User::findOrFail($user_id);
+
+		$res = DB::table('stripe_invoices')
+				->join('stripe_connected_customers', 'stripe_invoices.connected_customer_id', '=', 'stripe_connected_customers.id')
+				->select('stripe_invoices.id', 'stripe_invoices.created_at')
+				->where('stripe_connected_customers.user_id', $customer->id)
+				->orderBy('stripe_invoices.created_at', 'desc')
+				->first();
+
+		if(!$res){
+			$error_response = 'invoices_not_found';
+			return $error_response;
+		}
+
+		try{
+			$lastCharge = Charge::retrieve($res->id);
+		} catch (\Exception $e) {
+			$error_response = $this->constructErrorResponse($e);
+			return $error_response;
+
+		}
+
+		$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $user_id)->
+				where('managed_account_id', '=', $account_id)->first();
+		$customer = $this->retrieveCustomer($customer_record->id, $account_id);
+
+		try{
+			$ipcomingInvoice = Invoice::upcoming([
+				'customer' => $customer->id
+			]);
+		} catch (\Exception $e) {
+			$error_response = $this->constructErrorResponse($e);
+			return $error_response;
+
+		}
+
+
+		$lasInvoiceDate = Carbon::parse($res->created_at);
+		$ipcomingInvoiceDate = Carbon::createFromTimestamp($ipcomingInvoice->created);
+		$totalDaysBetweenInvoices = $ipcomingInvoiceDate->diffInDays($lasInvoiceDate);
+
+
+		$refundAmount = $lastCharge->amount * (1 - ($lasInvoiceDate->diffInDays() / $totalDaysBetweenInvoices));
+
+		$refund = Refund::create([
+			'charge' => 'ch_1AClXJ2eZvKYlo2C8OYs2YjM',
+			'amount' => (int)$refundAmount,
+		]);
+
+		return $refund;
 	}
 }
 
