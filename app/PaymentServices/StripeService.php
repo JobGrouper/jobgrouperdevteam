@@ -1472,31 +1472,25 @@ class StripeService implements PaymentServiceInterface {
 
 	public function createRefund($account_id, $user_id){
 
-		$customer = User::findOrFail($user_id);
-
-		$res = DB::table('stripe_invoices')
-				->join('stripe_connected_customers', 'stripe_invoices.connected_customer_id', '=', 'stripe_connected_customers.id')
-				->select('stripe_invoices.id', 'stripe_invoices.created_at')
-				->where('stripe_connected_customers.user_id', $customer->id)
-				->orderBy('stripe_invoices.created_at', 'desc')
-				->first();
-
-		if(!$res){
-			$error_response = 'invoices_not_found';
-			return $error_response;
-		}
-
-		try{
-			$lastCharge = Charge::retrieve($res->id);
-		} catch (\Exception $e) {
-			$error_response = $this->constructErrorResponse($e);
-			return $error_response;
-
-		}
 
 		$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $user_id)->
 				where('managed_account_id', '=', $account_id)->first();
+
 		$customer = $this->retrieveCustomer($customer_record->id, $account_id);
+
+		$lastInvoies = Invoice::all([
+			'customer' => $customer->id,
+			'limit' => 1
+		]);
+
+		$invoice = $lastInvoies->data[0];
+
+		try{
+			$lastCharge = Charge::retrieve($invoice->id);
+		} catch (\Exception $e) {
+			$error_response = $this->constructErrorResponse($e);
+			return $error_response;
+		}
 
 		try{
 			$ipcomingInvoice = Invoice::upcoming([
@@ -1505,11 +1499,10 @@ class StripeService implements PaymentServiceInterface {
 		} catch (\Exception $e) {
 			$error_response = $this->constructErrorResponse($e);
 			return $error_response;
-
 		}
 
 
-		$lasInvoiceDate = Carbon::parse($res->created_at);
+		$lasInvoiceDate = Carbon::createFromTimestamp($invoice->date);
 		$ipcomingInvoiceDate = Carbon::createFromTimestamp($ipcomingInvoice->created);
 		$totalDaysBetweenInvoices = $ipcomingInvoiceDate->diffInDays($lasInvoiceDate);
 
@@ -1517,7 +1510,7 @@ class StripeService implements PaymentServiceInterface {
 		$refundAmount = $lastCharge->amount * (1 - ($lasInvoiceDate->diffInDays() / $totalDaysBetweenInvoices));
 
 		$refund = Refund::create([
-			'charge' => 'ch_1AClXJ2eZvKYlo2C8OYs2YjM',
+			'charge' => $lastCharge->id,
 			'amount' => (int)$refundAmount,
 		]);
 
