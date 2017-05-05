@@ -106,7 +106,43 @@ $(document).ready(function() {
 
     $("#mailsTemplatesSelector").change(function() {
         var mailTemplateName = this.value;
-        $('#mailTemplateIframe').attr('src', '/admin/renderEmailTemplate/' + mailTemplateName);
+	var spec = email_spec[ mailTemplateName ];
+
+	// empty out radio buttons for next selection
+	$( "#mailTemplateSceneSelector" ).empty();
+
+	if (spec && spec['scenarios']) {
+
+		// clear iframe 
+		$('#mailTemplateIframe').attr('src', '' );
+
+		for (var i = 0; i < spec['scenarios'].length; i++) {
+
+			// Append input
+			$("<input/>", {
+				"name": "scenario",
+				"class": "mail-scenario-radio",
+				"type": "radio",
+	    			"value": spec['scenarios'][i]
+	    		}).appendTo( "#mailTemplateSceneSelector" );
+
+			// append label
+			$( "#mailTemplateSceneSelector" ).append( spec['scenarios'][i] );
+
+			// Append break
+			$( "<br/>", {}).appendTo( "#mailTemplateSceneSelector" );
+		}
+
+		// set click event
+		$( '.mail-scenario-radio' ).on('change', function(e) {
+
+			// set iframe
+	   		$('#mailTemplateIframe').attr('src', '/admin/renderEmailTemplate/' + mailTemplateName + '/' + e.target.value );
+		});
+	}
+	else {
+	   $('#mailTemplateIframe').attr('src', '/admin/renderEmailTemplate/' + mailTemplateName);
+	}
     });
 
 	$(".admincat_wrapper__items .item .buttons button:first-child").on("click", function() {
