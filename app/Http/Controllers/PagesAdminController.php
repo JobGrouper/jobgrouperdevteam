@@ -93,6 +93,10 @@ class PagesAdminController extends Controller
         $email_files  = File::files('../resources/views/emails');
 	$emails = array();
 
+	// load json email file
+	$email_spec = file_get_contents('../resources/views/emails/email-spec.json');
+	//$email_spec = json_decode($raw_spec, true);
+
         for($i=0; $i < count($email_files); $i++) {
 
 	    // get rid of files with ~ at the end
@@ -105,7 +109,7 @@ class PagesAdminController extends Controller
 	    array_push($emails, $file_str);
 	}
 
-        return view('pages.admin.emails', compact('emails'));
+        return view('pages.admin.emails', ['emails' => $emails, 'email_spec' => $email_spec]);
     }
 
     public function maintenance_warnings(){

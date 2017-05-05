@@ -1,0 +1,60 @@
+{
+    "admin_job_activating": {
+        "render_data": {
+            "job_name": "Test Job"
+        }
+    },
+    "buyer_adjustment_made_to_buyers": {
+        "scenarios": [
+	    "max_change_increase",
+	    "max_change_decrease",
+	    "min_change_increase",
+	    "min_change_decrease",
+	    "both_min_and_max",
+	    "no_change"
+	],
+        "render_data": {
+	    "common": {
+	        "job_title": "Job",
+		"job_id": 1,
+		"changes": {
+		    "new_maximum": 12,
+		    "new_minimum": 6,
+		    "max_change": null,
+		    "min_change": null
+		}
+	    },
+	    "max_change_increase": {
+	        "changes": {
+		    "max_change": "increase"
+	        }
+	    },
+	    "max_change_decrease": {
+	        "changes": {
+		    "max_change": "decrease"
+	        }
+	    },
+	    "min_change_increase": {
+	        "changes": {
+		    "min_change": "increase"
+	        }
+	    },
+	    "min_change_decrease": {
+	        "changes": {
+		    "min_change": "decrease"
+	        }
+	    },
+	    "both_min_and_max": {
+	        "changes": {
+		    "min_change": "decrease",
+		    "max_change": "increase"
+	        }
+	    },
+	    "no_change": {
+	    }
+	}
+    },
+    "payment_seller_successful": {
+
+    }
+}

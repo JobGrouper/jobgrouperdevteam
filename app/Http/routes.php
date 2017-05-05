@@ -111,6 +111,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check_role'], function () {
     Route::get('/texts', ['as' => 'texts', 'uses' => 'PagesAdminController@texts']);
     Route::get('/emails', ['as' => 'emails', 'uses' => 'PagesAdminController@emails']);
     Route::get('/renderEmailTemplate/{name}', ['uses' => 'EmailsTemplatesController@renderEmail']);
+    Route::get('/renderEmailTemplate/{name}/{scenario?}', ['uses' => 'EmailsTemplatesController@renderEmail']);
 });
 
 Route::post('category/store', 'CategoryController@store');
