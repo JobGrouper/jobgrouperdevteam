@@ -25,3 +25,4 @@ git-help.txt
 Vagrantfile
 app/Http/Controllers/TestController.php
 composer.lock
+resources/views/emails/tmp_template.blade.php
