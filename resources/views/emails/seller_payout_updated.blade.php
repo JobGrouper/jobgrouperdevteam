@@ -7,14 +7,14 @@ your customers are combined, or when the payout is briefly delayed.</p>
 @if( $data['modified_count'] == 1 || ( $data['modified_count'] == 2 && $data['modified']['other']))
 
 	@if( $data['modified']['arrival_date'] )
-	<p>In your case, the arrival date has changed</p>
+	<p>In your case, the arrival date has changed.</p>
 	@endif
 
 	@if( $data['modified']['amount'] )
 	<p>In your case, the amount of the payout has changed.</p>
 	@endif
 
-	@if( $data['modified']['other'] )
+	@if( $data['modified']['other'] && $data['modified_count'] < 2)
 	<p>In your case, it's not a change you need to worry about.</p>
 	@endif
 

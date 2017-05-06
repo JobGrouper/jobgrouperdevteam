@@ -19,6 +19,7 @@ error_log
 *.swp
 *.swo
 *.swn
+*.swm
 *~
 *.un*
 git-help.txt
