@@ -87,7 +87,7 @@ class StripeInvoicePaid extends Job implements ShouldQueue
 		    $u->subject('Your payment for '. $job->title . ' has gone through!');
 		});
 		
-		Mail::send('emails.seller_payment_successful', [], function($u) use ($employee, $job)
+		Mail::send('emails.seller_payment_successful', ['buyer_name' => $buyer->full_name], function($u) use ($employee, $job)
 		{
 		    $u->from('admin@jobgrouper.com');
 		    $u->to($employee->email);

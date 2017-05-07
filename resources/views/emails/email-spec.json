@@ -56,5 +56,80 @@
     },
     "payment_seller_successful": {
 
+    },
+    "seller_payout_updated": {
+        "scenarios": [
+	    "arrival_date_modified",
+	    "amount_modified",
+	    "other_modified",
+	    "date_and_amount_modified",
+	    "date_and_other_modified",
+	    "amount_and_other_modified"
+	],
+	"render_data": {
+	    "common": {
+	        "data": {
+		    "amount": 40.00,
+		    "arrival_date": "01-01-2019",
+		    "modified_count": null,
+		    "modified": {
+		        "arrival_date": false,
+		        "amount": false,
+		        "other": false
+		    }
+		}
+	    },
+	    "arrival_date_modified": {
+	        "data": {
+		    "modified_count": 1,
+		    "modified": {
+		        "arrival_date": true
+		    }
+		}
+	    },
+	    "amount_modified": {
+	        "data": {
+		    "modified_count": 1,
+		    "modified": {
+		        "amount": true
+		    }
+		}
+	    },
+	    "other_modified": {
+	        "data": {
+		    "modified_count": 1,
+		    "modified": {
+		        "other": true
+		    }
+		}
+	    },
+	    "date_and_amount_modified": {
+	        "data": {
+		    "modified_count": 2,
+		    "modified": {
+		        "arrival_date": true,
+			"amount": true
+		    }
+		}
+	    },
+	    "date_and_other_modified": {
+	        "data": {
+		    "modified_count": 2,
+		    "modified": {
+		        "arrival_date": true,
+			"other": true
+		    }
+		}
+	    },
+	    "amount_and_other_modified": {
+	        "data": {
+		    "modified_count": 2,
+		    "modified": {
+			"amount": true,
+			"other": true
+		    }
+		}
+	    }
+        }
     }
 }

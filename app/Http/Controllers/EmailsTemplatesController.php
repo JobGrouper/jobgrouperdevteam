@@ -29,6 +29,8 @@ class EmailsTemplatesController extends Controller
 		$email_scenario = array_replace_recursive($email_spec[ $emailTemplateName ]['render_data'][ 'common' ],
 			$email_spec[ $emailTemplateName ]['render_data'][ $scenario ]);
 
+		//var_dump($email_scenario);
+
 		return view('emails.' . $emailTemplateName, $email_scenario);
 	}
 	else {
