@@ -46,7 +46,6 @@ class StripePayoutUpdated extends Job implements ShouldQueue
 
 	// count the number of attributes that were modified
 	$data['modified_count'] = count(array_keys($data['previous_attributes']));
-	$inline_count = 0;
 
 	$data['modified'] = array(
 		'arrival_date' => false,
@@ -56,18 +55,17 @@ class StripePayoutUpdated extends Job implements ShouldQueue
 
 	if (isset( $data['previous_attributes']['arrival_date'] )) {
 		$data['modified']['arrival_date'] = true;
-		$inline_count++;
 	}
 
 	if (isset( $data['previous_attributes']['amount'] )) {
 		$data['modified']['amount'] = true;
-		$inline_count++;
 	}
 
-	// If the first two have been found, then an attribute
+	// If the first two have not been found, then an attribute
 	//  has changed that we don't provide a message for
 	//
-	if ($inline_count < $data['modified_count']) {
+	if ($data['modified']['amount'] == false && $data['modified']['arrival_date'] == false &&
+		$data['modified_count'] > 0) {
 		$data['modified']['other'] = true;
 	}
 
