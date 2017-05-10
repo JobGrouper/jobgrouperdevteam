@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\EmployeeExitRequest;
+use App\Interfaces\PaymentServiceInterface;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\User;
@@ -61,22 +62,34 @@ class Kernel extends ConsoleKernel
 
 
         //Approving employees exit requests two week old
-        $schedule->call(function () {
+        $schedule->call(function (PaymentServiceInterface $psi) {
             $employeeExitRequests = EmployeeExitRequest::where('status', 'pending')->where('created_at','<',date('Y-m-d H:i:s', strtotime('-2 weeks')))->get();
             foreach ($employeeExitRequests as $employeeExitRequest){
-                //Апрувим заявку выхода из работы
                 $employeeExitRequest->status = 'approved';
                 $employeeExitRequest->save();
 
                 $job = $employeeExitRequest->job()->first();
 
-                //Удаляем запрос юзера на выполнение этой работы
+                $buyers = $job->buyers()->get();
+
+                foreach ($buyers as $buyer){
+                    $psi->createRefund($job->employee_id, $buyer->id);
+                    if($buyers->count() <= 10){
+                        //todo send email to employee about refund
+                    }
+                }
+
+                if($buyers->count() > 10){
+                    //todo send email to employee about all refunds
+                }
+
+
+                
                 $job->employee_requests()->where('employee_id', $employeeExitRequest->employee_id)->delete();
 
-                //Удаляем исполнитея работы
                 $job->employee_id = null;
 
-                //Если есть потенциальный работник - ставим его основным
+                //Make potential employee as main employee
                 if($job->potential_employee_id){
                     $job->employee_id = $job->potential_employee_id;
                     $job->potential_employee_id = null;
