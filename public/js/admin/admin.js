@@ -203,7 +203,11 @@ function()
 
    	
    $(".addcard_wrapper .content_form .add_form .double .max #max, .addcard_wrapper .content_form .add_form .double .perclient #per").on('change', function() {
-	$(".addcard_wrapper .content_form .add_form .double .salary #salary").val(($(".addcard_wrapper .content_form .add_form .double .perclient #per").val() * +$(".addcard_wrapper .content_form .add_form .double .max #max").val()));
+ 	// per - price per month
+	// max - max number of buyers
+	var per = $(".addcard_wrapper .content_form .add_form .double .perclient #per").val();
+	var max = $("#max").val();
+	$(".addcard_wrapper .content_form .add_form .double .salary #salary").val( per * max );
    });
 
    // BEGIN MAX MIN CHECK
