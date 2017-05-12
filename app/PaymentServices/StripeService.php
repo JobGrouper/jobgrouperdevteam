@@ -1470,8 +1470,8 @@ class StripeService implements PaymentServiceInterface {
 		return $response->id;
 	}
 
-	public function createRefund($account_id, $user_id){
 
+	public function createRefund($account_id, $user_id){
 
 		$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $user_id)->
 				where('managed_account_id', '=', $account_id)->first();
@@ -1500,8 +1500,7 @@ class StripeService implements PaymentServiceInterface {
 			$error_response = $this->constructErrorResponse($e);
 			return $error_response;
 		}
-
-
+		
 		$lasInvoiceDate = Carbon::createFromTimestamp($invoice->date);
 		$ipcomingInvoiceDate = Carbon::createFromTimestamp($ipcomingInvoice->created);
 		$totalDaysBetweenInvoices = $ipcomingInvoiceDate->diffInDays($lasInvoiceDate);
