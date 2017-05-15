@@ -12,6 +12,8 @@ use \Carbon\Carbon;
 use Mail;
 use DB;
 
+use App\User;
+
 use \Stripe\Account;
 use Stripe\Refund;
 use \Stripe\Stripe;
@@ -167,6 +169,12 @@ class StripeService implements PaymentServiceInterface {
 	public function retrieveAccountFromUser($user) {
 		$account_record = DB::table('stripe_managed_accounts')->where('user_id', '=', $user->id)->first();
 		return Account::retrieve($account_record->id);
+	}
+
+	public function retrieveUserFromAccount($account_id) {
+
+		$account_record = DB::table('stripe_managed_accounts')->where('id', '=', $account_id)->first();
+		return User::findOrFail($account_record->user_id);
 	}
 
 	public function retrieveCustomer($customer_id, $account_id=NULL) {
@@ -876,7 +884,7 @@ class StripeService implements PaymentServiceInterface {
 	 * 	...
 	 *
 	 */
-	public function createExternalAccount($user, $token){
+	public function createExternalAccount($user, $token, $type) {
 
 		$response = NULL;
 		$error_response = NULL;
@@ -922,18 +930,24 @@ class StripeService implements PaymentServiceInterface {
 
 		}
 
-		$this->createExternalAccountInDB($account['id'], $response['id'], $response['last4']);
+		$this->createExternalAccountInDB($account['id'], $response['id'], $response['last4'], $type);
 
 		return $response;
 	}
 
-	public function createExternalAccountInDB($account_id, $card_id, $card_last4) {
+	public function createExternalAccountInDB($account_id, $card_id, $card_last4, $type) {
+
+		if (!in_array($type, array('card', 'bank_account'))){
+			throw new Exception('StripeService->createExternalAccountInDB: account type must be \'card\' or \'bank_account\'');
+		}
 
 		DB::table('stripe_external_accounts')->insert([
 			'id' => $card_id,
 			'managed_account_id' => $account_id,
 			'last_four' => $card_last4,
-			'created_at' => time()
+			'created_at' => Carbon::now(),
+			'updated_at' => Carbon::now(),
+			'account_type' => $type
 			]);
 	}
 
@@ -1202,8 +1216,7 @@ class StripeService implements PaymentServiceInterface {
 			$response = Subscription::create(
 				array('customer' => $customer_id,
 				'plan' => $plan_id,
-				'application_fee_percent' => 15,
-				'trial_end' => strtotime('+1 day')  // starting a day after so we can modify invoice
+				'application_fee_percent' => 15
 			),
 				array('stripe_account' => $account_id)
 			);

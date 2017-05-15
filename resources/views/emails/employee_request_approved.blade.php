@@ -3,13 +3,13 @@
 @section('content')
 <p>Your request for the "{{$job_name}}" has been approved!</p>
 
-<p>Your request for the <a href="{{ env("SERVICE_APP_URL") }}/job/{{ $job_id }}">"{{$job_name}}" position</a> has been approved! 
+<p>Your request for the <a href='{{ env("SERVICE_APP_URL") }}/job/{{ $job_id }}">"{{$job_name}}'> position</a> has been approved!
 You will receive a separate email if this job already has enough buyers, and is ready for you 
 to begin work.</p>
 
 <p>If this job still requires more buyers before becoming active, we'd like to invite you to 
 seek out further buyers, so that you can begin work. Please share the following link with any 
-potential buyers of your services: <a href="{{ env("SERVICE_APP_URL") }}/job/{{ $job_id }}">{{ env("SERVICE_APP_URL") }}/job/{{ $job_id }}</a></p>
+potential buyers of your services: <a href='{{ env("SERVICE_APP_URL") }}/job/{{ $job_id }}'>{{ env("SERVICE_APP_URL") }}/job/{{ $job_id }}</a></p>
 
 <p>JobGrouper will also work hard to find buyers for this position! By requiring a set 
 number of buyers before our jobs become active, we try to ensure that you gain a sustainable 

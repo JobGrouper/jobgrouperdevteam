@@ -21,5 +21,5 @@
 
 <h1>Confirm Your Email</h1>
 <p>Thanks for creating an account on JobGrouper!<br>Please confirm your email to verify your account by clicking on the button below</p>
-<a href="{{ Request::root() }}/register/confirm/{{$token}}">Verify email</a>
+<a href='{{ env("SERVICE_APP_URL") }}/register/confirm/{{$token}}'>Verify email</a>
 @endsection

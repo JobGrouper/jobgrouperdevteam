@@ -8,13 +8,18 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="profile_title">Profile</div>
                     <div class="profile_info">
                         <div class="img_wrapper">
                             <img src="{{ asset($user->image_url) }}" alt="alt">
                         </div>
                         <div class="social">
-                            <p class="name">{{ $user['full_name'] }}</p>
+			    <div class="name_header">
+				    <span class="name">{{ $user['first_name'] }} {{ $user['last_name'] }}</span> 
+
+				    @if($user->verified)
+				      <verified class="verified">&check;</verified>
+				    @endif
+			    </div>
                             @if($user['linkid_url'])
                                 <div class="social_link"><img src="{{ asset('img/Profile/link.png') }}" alt="alt">
                                     {{ $user['linkid_url'] }}

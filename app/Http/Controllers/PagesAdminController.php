@@ -12,6 +12,7 @@ use App\BuyerAdjustmentRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use DB;
+use File;
 
 class PagesAdminController extends Controller
 {
@@ -21,7 +22,7 @@ class PagesAdminController extends Controller
     }
 
     public function cards(){
-        $allCards = Job::all();
+        $allCards = Job::withoutGlobalScopes()->get();
         /*$cards = $cards->sortByDesc(function($cards){
             return $cards->employee_requests_count;
         });*/
@@ -84,6 +85,31 @@ class PagesAdminController extends Controller
     public function texts(){
         $texts = PageText::all();
         return view('pages.admin.texts', compact('texts'));
+    }
+
+    public function emails(){
+
+        //creating array of emails templates names
+        $email_files  = File::files('../resources/views/emails');
+	$emails = array();
+
+	// load json email file
+	$email_spec = file_get_contents('../resources/views/emails/email-spec.json');
+	//$email_spec = json_decode($raw_spec, true);
+
+        for($i=0; $i < count($email_files); $i++) {
+
+	    // get rid of files with ~ at the end
+	    if (strpos($email_files[$i], '~') !== False) {
+		continue;
+	    }
+
+            $file_str = str_replace('.blade.php', '', pathinfo($email_files[$i])['basename']);
+
+	    array_push($emails, $file_str);
+	}
+
+        return view('pages.admin.emails', ['emails' => $emails, 'email_spec' => $email_spec]);
     }
 
     public function maintenance_warnings(){

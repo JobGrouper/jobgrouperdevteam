@@ -14,6 +14,10 @@ use App\Http\Requests;
 use App\Jobs\StripeAccountUpdated;
 use App\Jobs\StripeInvoiceFailed;
 use App\Jobs\StripeInvoicePaid;
+use App\Jobs\StripePayoutCreated;
+use App\Jobs\StripePayoutUpdated;
+use App\Jobs\StripePayoutPaid;
+use App\Jobs\StripePayoutFailed;
 
 class StripeWebhookController extends Controller
 {
@@ -60,6 +64,54 @@ class StripeWebhookController extends Controller
 		$event_json = $this->inputOrRequest($request, $input);
 
 		dispatch( new StripeAccountUpdated($event_json) );
+
+		return response('Successful', 200);
+	}
+
+	public function onPayoutCreated(Request $request) {
+
+		// Retrieve the request's body and parse it as JSON
+		$input = @file_get_contents("php://input");
+
+		$event_json = $this->inputOrRequest($request, $input);
+
+		dispatch( new StripePayoutCreated($event_json) );
+
+		return response('Successful', 200);
+	}
+
+	public function onPayoutPaid(Request $request) {
+
+		// Retrieve the request's body and parse it as JSON
+		$input = @file_get_contents("php://input");
+
+		$event_json = $this->inputOrRequest($request, $input);
+
+		dispatch( new StripePayoutPaid($event_json) );
+
+		return response('Successful', 200);
+	}
+
+	public function onPayoutFailed(Request $request) {
+
+		// Retrieve the request's body and parse it as JSON
+		$input = @file_get_contents("php://input");
+
+		$event_json = $this->inputOrRequest($request, $input);
+
+		dispatch( new StripePayoutFailed($event_json) );
+
+		return response('Successful', 200);
+	}
+
+	public function onPayoutUpdated(Request $request) {
+
+		// Retrieve the request's body and parse it as JSON
+		$input = @file_get_contents("php://input");
+
+		$event_json = $this->inputOrRequest($request, $input);
+
+		dispatch( new StripePayoutUpdated($event_json) );
 
 		return response('Successful', 200);
 	}

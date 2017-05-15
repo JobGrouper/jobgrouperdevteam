@@ -9,7 +9,7 @@ and having a verified account will ensure that you have the
 smoothest possible experience with JobGrouper.</p>
 
 <p>It's a simple process. All you have to do is go to 
-your <a href="{{ env("SERVICE_APP_URL") }}/account">account page</a>, find the Payment Options section 
+your <a href='{{ env("SERVICE_APP_URL") }}/account'>account page</a>, find the Payment Options section
 and fill in the form provided. After that, we'll take care 
 of the rest. It's what we do.</p>
 

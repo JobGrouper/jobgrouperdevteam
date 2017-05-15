@@ -37,6 +37,8 @@ Route::get('password/email', 'Auth\PasswordController@getEmail');
 Route::post('password/email', 'Auth\PasswordController@postEmail');
 Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
+Route::get('password/change', 'UserController@showChangePassword');
+Route::post('password/change_submit', 'UserController@changePassword');
 Route::get('social_login/{provider}', 'SocialAuthController@login');
 Route::get('social_login/callback/{provider}', 'SocialAuthController@callback');
 Route::get('account/additional_info/{id}', 'RegistrateController@getMoreVerification');
@@ -107,6 +109,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check_role'], function () {
     Route::get('/employee_requests/{job_id}', ['as' => 'employee_requests', 'uses' => 'PagesAdminController@employee_requests']);
     Route::get('/orders/{job_id}', ['uses' => 'PagesAdminController@orders']);
     Route::get('/texts', ['as' => 'texts', 'uses' => 'PagesAdminController@texts']);
+    Route::get('/emails', ['as' => 'emails', 'uses' => 'PagesAdminController@emails']);
+    Route::get('/renderEmailTemplate/{name}', ['uses' => 'EmailsTemplatesController@renderEmail']);
+    Route::get('/renderEmailTemplate/{name}/{scenario?}', ['uses' => 'EmailsTemplatesController@renderEmail']);
 });
 
 Route::post('category/store', 'CategoryController@store');
@@ -171,6 +176,10 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('stripe/invoice/created', 'StripeWebhookController@onInvoiceCreated');
     Route::post('stripe/invoice/failed', 'StripeWebhookController@onInvoiceFailure');
     Route::post('stripe/account/updated', 'StripeWebhookController@onAccountUpdated');
+    Route::post('stripe/payout/created', 'StripeWebhookController@onPayoutCreated');
+    Route::post('stripe/payout/failed', 'StripeWebhookController@onPayoutFailed');
+    Route::post('stripe/payout/updated', 'StripeWebhookController@onPayoutUpdated');
+    Route::post('stripe/payout/paid', 'StripeWebhookController@onPayoutPaid');
 
     Route::post('/buyerAdjustment', ['middleware' => 'check_role', 'uses' => 'BuyerAdjustmentController@create']);
     Route::post('/buyerAdjustmentRequest', ['uses' => 'BuyerAdjustmentController@create_request']);

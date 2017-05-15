@@ -205,11 +205,25 @@
                       <div class="payment_method not_set">Need payment method</div>
 		    @else
                       <div class="payment_method set">Payment method set</div>
-                      <div class="profile_text">Card number: **** **** **** {{$card->last_four}}</div>
+                        <div class="added_credit_card">
+			    @if ($card->account_type == 'card')
+                            <div class="card_wrapper">
+                                <img src="{{asset('img/Profile/credit_card.png')}}" alt="alt">
+                                <p>**** **** **** {{$card->last_four}}</p>
+                            </div>
+			    @elseif ($card->account_type == 'bank_account')
+                            <div class="card_wrapper">
+                                <img src="{{asset('img/Profile/credit_card.png')}}" alt="alt">
+                                <p>********{{$card->last_four}}</p>
+                            </div>
+			    @endif
+                        </div>
 		    @endif
                     <button class="seller_cards" id="bank_add">Add Bank Account</button>
+		<!--
 		    <p>...or...</p>
                     <button class="seller_cards" id="debit_add">Add Debit card</button>
+		-->
                     <div class="bank_form bank">
                         <h2>Bank Account Form<img src="{{asset('img/Profile/cancel.png')}}" alt="alt"></h2>
                         <form id="seller_bank_account_form" method="POST" action="{{ url('/card/employee/create') }}">
@@ -223,7 +237,7 @@
 			    @endif
 
                             <div class="block clearfix">
-                                <label>Name on Account<span>*</span></label>
+                                <label>Account Holder's Name<span>*</span></label>
                                 <input type="text" name="account_holder_name" autocomplete="off"/>
                             </div>
                             <div class="block clearfix">
@@ -240,6 +254,7 @@
 			    @endforeach
                         </form>
                     </div>
+			<!--
                     <div class="bank_form debit">
                         <h2>Debit Card Form<img src="{{asset('img/Profile/cancel.png')}}" alt="alt"></h2>
                         <form id="seller_debit_card_form" method="POST" action="{{ url('/card/employee/create') }}">
@@ -276,27 +291,13 @@
 				    </div>
                                 </div>
                             </div>
-				<!--
-                            <div class="block clearfix">
-                                <label>ZIP Code<span>*</span></label>
-                                <input type="text" />
-                            </div>
-				-->
                             <button type="submit">Submit</button>
 			    @foreach ($errors->all() as $error)
 				<p>{{ $error }}</p>
 			    @endforeach
                         </form>
                     </div>
-                    @if($card)
-                        <div class="added_credit_card">
-                            <h2>Card added</h2>
-                            <div class="card_wrapper">
-                                <img src="{{asset('img/Profile/credit_card.png')}}" alt="alt">
-                                <p>**** **** **** {{$card->last_four}}</p>
-                            </div>
-                        </div>
-                    @endif
+			-->
                 </div>
 		@endif
                 </div>
@@ -474,6 +475,13 @@
                 </div>
 
             </div>
+            <div class="block">
+                <div class="one_more5">
+                    <a href={{ url('password/change') }}><button>Change Password</button></a>
+                </div>
+
+	    </div>
+
 
         </div>
 

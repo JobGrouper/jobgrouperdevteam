@@ -103,6 +103,48 @@ $(document).ready(function() {
 
     });
 
+
+    $("#mailsTemplatesSelector").change(function() {
+        var mailTemplateName = this.value;
+	var spec = email_spec[ mailTemplateName ];
+
+	// empty out radio buttons for next selection
+	$( "#mailTemplateSceneSelector" ).empty();
+
+	if (spec && spec['scenarios']) {
+
+		// clear iframe 
+		$('#mailTemplateIframe').attr('src', '' );
+
+		for (var i = 0; i < spec['scenarios'].length; i++) {
+
+			// Append input
+			$("<input/>", {
+				"name": "scenario",
+				"class": "mail-scenario-radio",
+				"type": "radio",
+	    			"value": spec['scenarios'][i]
+	    		}).appendTo( "#mailTemplateSceneSelector" );
+
+			// append label
+			$( "#mailTemplateSceneSelector" ).append( spec['scenarios'][i] );
+
+			// Append break
+			$( "<br/>", {}).appendTo( "#mailTemplateSceneSelector" );
+		}
+
+		// set click event
+		$( '.mail-scenario-radio' ).on('change', function(e) {
+
+			// set iframe
+	   		$('#mailTemplateIframe').attr('src', '/admin/renderEmailTemplate/' + mailTemplateName + '/' + e.target.value );
+		});
+	}
+	else {
+	   $('#mailTemplateIframe').attr('src', '/admin/renderEmailTemplate/' + mailTemplateName);
+	}
+    });
+
 	$(".admincat_wrapper__items .item .buttons button:first-child").on("click", function() {
 		$(this).parent().parent().find("p").hide();
 		$(this).parent().parent().find(">button").fadeIn("fast");
@@ -161,29 +203,44 @@ function()
 
    	
    $(".addcard_wrapper .content_form .add_form .double .max #max, .addcard_wrapper .content_form .add_form .double .perclient #per").on('change', function() {
-	$(".addcard_wrapper .content_form .add_form .double .salary #salary").val(($(".addcard_wrapper .content_form .add_form .double .perclient #per").val() * +$(".addcard_wrapper .content_form .add_form .double .max #max").val()));
+ 	// per - price per month
+	// max - max number of buyers
+	var per = $(".addcard_wrapper .content_form .add_form .double .perclient #per").val();
+	var max = $("#max").val();
+	$(".addcard_wrapper .content_form .add_form .double .salary #salary").val( per * max );
    });
 
    // BEGIN MAX MIN CHECK
    //
    // TODO: Can simplify this little bag of jquery
    $("div.max #max").on('change', function(e) {
-	var max = $( e.target ).val();
-	var min = $("div.min #min").val();
+	var max = parseInt( $( e.target ).val() );
+	var min = parseInt( $("div.min #min").val() );
 
 	if (min > max) {
- 	    alert('Minimum number of buyers cannot be less than maximum');
+ 	    alert('Minimum number of buyers cannot be greater than maximum');
 	    $( e.target ).val( min );
+	}
+
+	if (max <= 0) { 
+ 	    alert('Maximum number of buyers cannot be less than zero');
+	    alert(min);
+	    $( e.target ).val( 1 );
 	}
    });
 
    $("div.min #min").on('change', function(e) {
-	var min = $( e.target ).val();
-    	var max = $("div.max #max").val();
+	var min = parseInt( $( e.target ).val() );
+    	var max = parseInt( $("div.max #max").val() );
 
 	if (min > max) { 
- 	    alert('Minimum number of buyers cannot be less than maximum');
+ 	    alert('Minimum number of buyers cannot be greater than maximum');
 	   $( e.target ).val( max );
+	}
+
+	if (min <= 0) { 
+ 	    alert('Minimum number of buyers cannot be less than zero');
+	   $( e.target ).val( 1 );
 	}
    });
    // END MAX MIN CHECK

@@ -60,12 +60,12 @@ class CreditCardController extends Controller
 		    'account_number' => 'required'
 		    ]);
 	}
-	else if ($request->account_type == 'debit') {
+	else if ($request->account_type == 'card') {
 
 	    $this->validate($request, [
 		    'number' => 'required',
 		    'cvc' => 'required',
-		    'exp_month' => 'required|size:2',
+		    'exp_month' => 'required',
 		    'exp_year' => 'required|size:4'
 		    ]);
 	}
@@ -95,7 +95,7 @@ class CreditCardController extends Controller
 
         $token = $psi->createCreditCardToken($accountData, $request->account_type, true);
 
-	$response = $psi->createExternalAccount($user, $token);
+	$response = $psi->createExternalAccount($user, $token, $request->account_type);
 
 	// The first time a card has been set, send email
 	// about Stripe Confirmation

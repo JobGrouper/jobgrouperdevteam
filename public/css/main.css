@@ -1250,16 +1250,17 @@ img {
       text-align: center;
       line-height: 40px;
       font-weight: 700;
-      margin-bottom: 80px;
     }
     .profile_text .payment_method.not_set {
       background-color: #DD4F43;
+      margin-bottom: 80px;
     }
     .profile_text .payment_method.set {
       background-color: #7EDC6E;
+      margin-bottom: 20px;
     }
     .profile_text .bank_form {
-      width: 500px;
+      width: 550px;
       border: 1px solid #E4E4E4;
       padding: 15px;
       display: none;
@@ -1387,6 +1388,7 @@ img {
     .profile_portfolio .block .one_more button,
     .profile_portfolio .block .one_more2 button,
     .profile_portfolio .block .one_more4 button,
+    .profile_portfolio .block .one_more5 button,
     .profile_portfolio .block .one_more3 button {
       font-weight: 600;
       font-size: 16px;
@@ -2878,4 +2880,12 @@ div.alert_window__block > #buyer_adjuster {
 
 .adjustment-submit input[type="submit"]:hover {
   background-color:#558B8D
+}
+
+.unread_messages_indicator{
+  width: 10px;
+  height: 10px;
+  background-color: #337ab7;
+  display: none;
+  border-radius: 50%;
 }

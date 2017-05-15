@@ -10,14 +10,15 @@ use Illuminate\Support\Facades\Auth;
 class PagesController extends Controller
 {
     public function home(){
+
         // get user
         $user = Auth::user();
 
         //In the top of list are the hot cards (first of them in is in slider)
-        $jobs = Job::hot()->get();
+        $jobs = Job::notDummy()->hot()->get();
 
         //Next will take place the not hot cards with buyers above 25%.
-        $notHotJobs = Job::where('hot', false)->get();
+        $notHotJobs = Job::notDummy()->where('hot', false)->get();
         $notHotJobsAbove25 =  $notHotJobs->filter(function ($job) {
             return $job->sales_percent >= 25;
         })->sortByDesc('sales_percent');

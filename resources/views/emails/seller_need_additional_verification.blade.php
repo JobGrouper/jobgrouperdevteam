@@ -6,7 +6,7 @@
 <p>It seems that we will require more information from you in order to fully verify your account.
 Not to worry, it shouldn't take long.</p>
 
-<p>You can follow this <a href="{{ env("SERVICE_APP_URL") }}/account/additional_info/{{ $request_id }}">link</a> to a form that
+<p>You can follow this <a href='{{ env("SERVICE_APP_URL") }}/account/additional_info/{{ $request_id }}'>link</a> to a form that
 will prompt you for the information that we need to get you fully verified. Once that information is sent off, we'll keep you informed
 on how the process is going. Typically, the verification process is completed in a few hours.</p>
 

@@ -46,6 +46,12 @@ class StripePlanActivation extends Job implements ShouldQueue
     public function handle(PaymentServiceInterface $psi)
     {
 
+	$testing = false;
+
+	if ($this->plan == 'test') {
+	   $testing = true;
+	}
+
 	// Making a copy
 	$job = $this->stripe_job;
 	
@@ -55,13 +61,16 @@ class StripePlanActivation extends Job implements ShouldQueue
         //
 	foreach ($buyers as $buyer) {
 
-		$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $buyer->id)->
-			where('managed_account_id', '=', $this->seller_account->id)->first();
+		if (!$testing) {
 
-		$customer = $psi->retrieveCustomer($customer_record->id, $this->seller_account->id);
+			$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $buyer->id)->
+				where('managed_account_id', '=', $this->seller_account->id)->first();
 
-		// create subscription
-		$response = $psi->createSubscription($this->plan, $customer, $this->seller_account);
+			$customer = $psi->retrieveCustomer($customer_record->id, $this->seller_account->id);
+
+			// create subscription
+			$response = $psi->createSubscription($this->plan, $customer, $this->seller_account);
+		}
 
 		// Send email to user, saying that 
 		// the job has begun and their first payment 

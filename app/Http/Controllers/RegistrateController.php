@@ -209,6 +209,7 @@ class RegistrateController extends Controller
             }
         }
         else{
+            Session::put('stripe_verification_request', $id);
             return redirect('/login');
         }
     }
