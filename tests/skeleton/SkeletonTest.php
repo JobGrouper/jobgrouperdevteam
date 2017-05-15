@@ -6,15 +6,15 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use \Carbon\Carbon;
 use App\Skeleton\Operation;
 
-class OperationTest extends TestCase {
+class SkeletonTest extends TestCase {
 
-	public function testConstruct() {
+	public function testConstructOperation() {
 
 		$op = new Operation();
 		$this->assertInstanceOf(Operation::class, $op);
 	}
 
-	public function testGo() {
+	public function testOperationGo() {
 
 		$op = new Operation();
 		$op->go();

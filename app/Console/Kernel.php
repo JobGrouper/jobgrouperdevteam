@@ -14,6 +14,8 @@ use SebastianBergmann\Environment\Console;
 use Illuminate\Support\Facades\Log;
 use Stripe\Plan;
 
+use App\Operations\EmployeeExitOP;
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -64,7 +66,15 @@ class Kernel extends ConsoleKernel
 
         //Approving employees exit requests two week old
         $schedule->call(function () {
-            $this->dispatch(new CreateRefund());
+            //$this->dispatch(new CreateRefund());
+	    //Getting employee`s exit requests that are older than 2 weeks
+	    $employeeExitRequests = EmployeeExitRequest::where('status', 'pending')->where('created_at','<',date('Y-m-d H:i:s', strtotime('-2 weeks')))->get();
+
+	    foreach ($employeeExitRequests as $employeeExitRequest){
+		$op = new EmployeeExitOP();
+		$op->go($employeeExitRequest);
+	    }
+
         })->everyMinute();
     }
 }

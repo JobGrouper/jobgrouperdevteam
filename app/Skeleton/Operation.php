@@ -2,15 +2,11 @@
 
 namespace App\Skeleton;
 
-class Operation {
+abstract class Operation {
 
 	protected $class_list;
 	
-	public function __construct() {
-
-	}
-
-	public function go() {
-
-	}
+	// TODO
+	//   - Put together OperationPackage Class
+	abstract public function go();
 }
