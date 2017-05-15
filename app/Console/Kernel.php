@@ -3,12 +3,18 @@
 namespace App\Console;
 
 use App\EmployeeExitRequest;
+use App\Interfaces\PaymentServiceInterface;
+use App\Jobs\CreateRefund;
+use App\StripeManagedAccount;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\User;
 use App\ConfirmUsers;
 use SebastianBergmann\Environment\Console;
 use Illuminate\Support\Facades\Log;
+use Stripe\Plan;
+
+use App\Operations\EmployeeExitOP;
 
 class Kernel extends ConsoleKernel
 {
@@ -54,41 +60,25 @@ class Kernel extends ConsoleKernel
         /*
          * Task to run chat socket server and check it`s status
          */
-	/*
-        $schedule->call(function () {
-            //This script will check if socket server is running and run it if no
-            shell_exec('storage/shell/run_socket_server.sh');
-        })->everyMinute();
-	 */
-
-
+        /*
+            $schedule->call(function () {
+                //This script will check if socket server is running and run it if no
+                shell_exec('storage/shell/run_socket_server.sh');
+            })->everyMinute();
+         */
 
 
         //Approving employees exit requests two week old
         $schedule->call(function () {
-            $employeeExitRequests = EmployeeExitRequest::where('status', 'pending')->where('created_at','<',date('Y-m-d H:i:s', strtotime('-2 weeks')))->get();
-            foreach ($employeeExitRequests as $employeeExitRequest){
-                //Апрувим заявку выхода из работы
-                $employeeExitRequest->status = 'approved';
-                $employeeExitRequest->save();
+            //$this->dispatch(new CreateRefund());
+	    //Getting employee`s exit requests that are older than 2 weeks
+	    $employeeExitRequests = EmployeeExitRequest::where('status', 'pending')->where('created_at','<',date('Y-m-d H:i:s', strtotime('-2 weeks')))->get();
 
-                $job = $employeeExitRequest->job()->first();
+	    foreach ($employeeExitRequests as $employeeExitRequest){
+		$op = \App::make('App\Operations\EmployeeExitOP');
+		$op->go($employeeExitRequest);
+	    }
 
-                //Удаляем запрос юзера на выполнение этой работы
-                $job->employee_requests()->where('employee_id', $employeeExitRequest->employee_id)->delete();
-
-                //Удаляем исполнитея работы
-                $job->employee_id = null;
-
-                //Если есть потенциальный работник - ставим его основным
-                if($job->potential_employee_id){
-                    $job->employee_id = $job->potential_employee_id;
-                    $job->potential_employee_id = null;
-                    $job->work_start();
-                }
-                $job->save();
-                $job->work_stop();
-            }
         })->everyMinute();
     }
 }

@@ -20,6 +20,12 @@
 		<testsuite name="emails">
 			<directory suffix="Test.php">./tests/emails</directory>
 		</testsuite>
+		<testsuite name="operations">
+			<directory suffix="Test.php">./tests/operations</directory>
+		</testsuite>
+		<testsuite name="skeleton">
+			<directory suffix="Test.php">./tests/skeleton</directory>
+		</testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

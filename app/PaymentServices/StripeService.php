@@ -2,6 +2,7 @@
 
 namespace App\PaymentServices;
 
+use App\User;
 use Illuminate\Support\Facades\Log;
 use App\Interfaces\PaymentServiceInterface;
 
@@ -14,6 +15,7 @@ use DB;
 use App\User;
 
 use \Stripe\Account;
+use Stripe\Refund;
 use \Stripe\Stripe;
 use \Stripe\Charge;
 use \Stripe\Token;
@@ -1479,6 +1481,65 @@ class StripeService implements PaymentServiceInterface {
 		);
 
 		return $response->id;
+	}
+
+
+	public function createRefund($account_id, $user_id){
+
+		$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $user_id)->
+				where('managed_account_id', '=', $account_id)->first();
+
+		$customer = $this->retrieveCustomer($customer_record->id, $account_id);
+
+		$lastInvoices = Invoice::all(array(
+			'customer' => $customer->id,
+			'limit' => 1
+		),
+		array('stripe_account' => $account_id));
+
+		// resolve to invoice object 
+		$invoice = $lastInvoices->data[0];
+
+		$lastCharge = NULL;
+
+		// Get charge
+		try {
+			$lastCharge = Charge::retrieve(array('id' => $invoice->charge),
+				array('stripe_account' => $account_id));
+		} 
+		catch (\Exception $e) {
+
+			$error_response = $this->constructErrorResponse($e);
+			return $error_response;
+		}
+
+		// Get upcoming invoice
+		try {
+			$upcomingInvoice = Invoice::upcoming(
+				array('customer' => $customer->id),
+				array('stripe_account' => $account_id)
+			);
+		} 
+		catch (\Exception $e) {
+
+			$error_response = $this->constructErrorResponse($e);
+			return $error_response;
+		}
+		
+		//$lastInvoiceDate = Carbon::createFromTimestamp($invoice->date);
+		$lastInvoiceDate = Carbon::createFromTimestamp($invoice->date);
+		$upcomingInvoiceDate = Carbon::createFromTimestamp($upcomingInvoice->next_payment_attempt);
+		$totalDaysBetweenInvoices = $upcomingInvoiceDate->diffInDays($lastInvoiceDate);
+
+		$refundAmount = $lastCharge->amount * (1 - ($lastInvoiceDate->diffInDays() / $totalDaysBetweenInvoices));
+
+		$refund = Refund::create(
+			array('charge' => $lastCharge->id,
+				'amount' => (int) $refundAmount),
+			array('stripe_account' => $account_id)
+		);
+
+		return $refund;
 	}
 }
 
