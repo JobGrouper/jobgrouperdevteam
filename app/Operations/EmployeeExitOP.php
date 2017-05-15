@@ -11,20 +11,24 @@ use App\Interfaces\PaymentServiceInterface;
 use App\Jobs\Job;
 use App\StripeManagedAccount;
 
+use \Stripe\Plan;
+
+use DB;
+
 class EmployeeExitOP extends Operation {
 
-	public function __construct() {
-
+	public function __construct(PaymentServiceInterface $psi) {
+		$this->psi = $psi;
 	}
 
 	public function go(EmployeeExitRequest $er = NULL) {
 
 	    //Approving EmployeeExitRequest
-	    $employeeExitRequest->status = 'approved';
-	    $employeeExitRequest->save();
+	    $er->status = 'approved';
+	    $er->save();
 
 	    //Getting employee`s job, and buyers
-	    $job = $employeeExitRequest->job()->first();
+	    $job = $er->job()->first();
 	    $buyers = $job->buyers()->get();
 	    $previousEmployee = $job->employee()->first();
 
@@ -43,19 +47,27 @@ class EmployeeExitOP extends Operation {
 	    foreach ($buyers as $buyer){
 
 		// create refund
-		$op = new CreateRefundOP();
 		//$psi->createRefund($previousEmployee->id, $buyer->id);
+		$op = \App::make('App\Operations\CreateRefundOP');
 		$op->go($previousEmployee, $buyer);
 
 		// cancel subscription
-		$plan = Plan::where('job_id', $job->id)->where('managed_account_id', $managedAccount->id);
-		$customer = $psi->retrieveCustomerFromUser($buyer, $job, $managedAccount->id);
-		$psi->cancelSubscription($plan, $customer, $managedAccount->id);
+		$plan_record = DB::table('stripe_plans')->
+			where('job_id', $job->id)->
+			where('managed_account_id', $managedAccount->id)->first();
+
+		$plan = Plan::retrieve(
+			array('id' => $plan_record->id),
+			array('stripe_account' => $managedAccount->id)
+		);
+
+		$customer = $this->psi->retrieveCustomerFromUser($buyer, $job, $managedAccount->id);
+		$this->psi->cancelSubscription($plan, $customer, $managedAccount->id);
 
 		// Replace employer on job
 		if($job->employee_id){
-		    $account = $psi->retrieveAccount($managedAccount->id);
-		    $psi->createCustomer($buyer, $job, ['email' => $buyer->email], $account);
+		    $account = $this->psi->retrieveAccount($managedAccount->id);
+		    $this->psi->createCustomer($buyer, $job, ['email' => $buyer->email], $account);
 		}
 		
 		if($buyers->count() <= 10){
@@ -69,7 +81,7 @@ class EmployeeExitOP extends Operation {
 
 	    // TODO
 	    // // modify db to save employee exit requests, make 'processed' state or something
-	    $job->employee_requests()->where('employee_id', $employeeExitRequest->employee_id)->delete();
+	    $job->employee_requests()->where('employee_id', $er->employee_id)->delete();
 	}
 
 }

@@ -71,7 +71,7 @@ class Kernel extends ConsoleKernel
 	    $employeeExitRequests = EmployeeExitRequest::where('status', 'pending')->where('created_at','<',date('Y-m-d H:i:s', strtotime('-2 weeks')))->get();
 
 	    foreach ($employeeExitRequests as $employeeExitRequest){
-		$op = new EmployeeExitOP();
+		$op = \App::make('App\Operations\EmployeeExitOP');
 		$op->go($employeeExitRequest);
 	    }
 

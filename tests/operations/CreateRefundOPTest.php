@@ -37,14 +37,6 @@ class CreateRefundOPTest extends TestCase {
 
 	public function testGo() {
 
-		/*
-		Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-			  $response = Customer::retrieve(array('id' => $this->customer_id),
-					array('stripe_account' => $this->account_id));
-		$psi = new StripeService();
-		$customer = $psi->retrieveCustomer($this->customer_id, $this->account_id);
-		 */
-
 		// create User:Employee
 		//
 		$employee = User::create([
@@ -56,7 +48,6 @@ class CreateRefundOPTest extends TestCase {
 		]);
 
 		$employee->managed_account_id = $this->account_id;
-
 
 		// Link User:Employee with Stripe Managed Account
 		DB::table('stripe_managed_accounts')->insert([
