@@ -242,5 +242,12 @@ class User extends Authenticatable
         return $this->hasMany('App\BuyerAdjustmentRequest', 'employee_id');
     }
 
+    public function early_bird_buyers(){
+        if($this->role == 'employee')
+            return $this->hasMany(EarlyBirdBuyer::class, 'employee_id');
+        else
+            return $this->hasMany(EarlyBirdBuyer::class, 'user_id');
+    }
+
 
 }

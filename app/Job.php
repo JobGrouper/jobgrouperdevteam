@@ -342,6 +342,10 @@ class Job extends Model
 	    return $this->hasMany('App\BuyerAdjustmentRequest', 'job_id');
     }
 
+    public function early_bird_buyers(){
+        return $this->hasMany(Job::class);
+    }
+
     /**
      * Scopes
      */
