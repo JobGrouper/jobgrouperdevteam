@@ -2,7 +2,6 @@
 
 namespace App\PaymentServices;
 
-use App\User;
 use Illuminate\Support\Facades\Log;
 use App\Interfaces\PaymentServiceInterface;
 
