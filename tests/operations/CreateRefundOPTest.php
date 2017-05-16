@@ -55,7 +55,6 @@ class CreateRefundOPTest extends TestCase {
 			'user_id' => $employee->id
 		]);
 
-
 		// create User:Buyer
 		$buyer = User::create([
 		    'first_name' => 'Buyer',
