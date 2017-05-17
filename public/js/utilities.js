@@ -578,3 +578,29 @@ jg.BuyerAdjuster.prototype = {
 		return message;
 	}
 };
+
+jg.EarlyBirdActivator = function(user_options) {
+
+	this._init();
+}
+
+jg.EarlyBirdActivator.prototype = {
+
+	_init: function() {
+
+		//
+		// PRIME EVENTS
+		//
+		$(".early-bird-buy-now").click(function(e) {
+
+			var button = e.target;
+			var job_id = $( button ).attr('job_id');
+
+			$(".alert_window.early_bird_job[job_id='" + job_id + "'").fadeIn("fast");
+		});
+
+		$(".alert_window__block .cancel").click(function() {
+			$(".alert_window").fadeOut("fast");
+		});
+	}
+}

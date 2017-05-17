@@ -2,6 +2,22 @@
 
 @section('title', 'My Orders')
 
+@section('autoload_scripts')
+
+<script>
+	var early_birds = [];
+	var early_bird_activator;
+
+	jg.Autoloader(function() {
+
+		early_bird_activator = new jg.EarlyBirdActivator({
+
+		});
+	});
+</script>
+
+@endsection
+
 @section('content')
 
 <div class="myjobs">
@@ -22,6 +38,13 @@
                             $closeRequest = $order->close_order_requests()->where('originator_id', '=', $buyer->id)->first();
 
                         ?>
+
+        	    <div class="alert_window early_bird_job" job_id="{{ $job->id }}">
+            		<div class="alert_window__block">
+				<p>Hello</p>
+                		<div class="cancel"></div>
+			</div>
+		    </div>
 
                     <div class="workers_item clearfix" data-id="{{$order->id}}" id="block_{{$order->id}}" data-hasEmployee="<?=($employee ? $employee->id : '0')?>">
 
@@ -83,6 +106,22 @@
 
                             @if($order->card_set)
                                 <!--<p class="credit_card"><span class="wrap"><span style="font-weight: 700">Credit Card:</span> <span class="number"></span></span><a href="/change_credit_card/{{$order->id}}">Change card</a></p>-->
+				@if($early_bird)
+				   	@if($early_bird->status == 'requested')
+					   <button class="early-bird-request-pending">Request Pending</button>
+					@elseif($early_bird->status == 'denied')
+					   <button class="early-bird-request-denied">Request Denied</button>
+					@elseif($early_bird->status == 'working')
+					   <button class="early-bird-working">Currently Working</button>
+					   <button class="early-bird-end-work">Cancel Early Work</button>
+					@elseif($early_bird->status == 'ended')
+					   <button class="early-bird-ended">Early Bird Ended</button>
+				   	@endif
+				@else
+					@if($job->employee_id != NULL)
+					   <button class="early-bird-buy-now" job_id={{$job->id}}>Buy Now</button>
+					@endif
+				@endif
                             @elseif(!$order->card_set && $job->employee_id == NULL)
                                 <button class="purchasebtn">Waiting on Employee</button>
 			    @elseif(!$order->card_set && $job->employee_id != NULL)
