@@ -1114,10 +1114,11 @@ img {
         font-size: 16px;
         margin-top: 10px; }
     .myjobs .workers_item button {
-      position: absolute;
+     /* position: absolute;
       top: 50%;
-      margin-top: -20px;
       right: 0;
+      */
+      margin-top: -20px;
       width: 170px;
       height: 40px;
       text-transform: uppercase;
