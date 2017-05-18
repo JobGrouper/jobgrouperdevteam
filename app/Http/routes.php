@@ -186,6 +186,8 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/denyBuyerAdjustmentRequest/{request_id}', ['middleware' => 'check_role', 'uses' => 'BuyerAdjustmentController@deny_request']);
     Route::post('/requestStartWorkNow', ['uses' => 'BuyerAdjustmentController@requestStartWorkNow']);
     Route::post('/startWorkNow', 'BuyerAdjustmentController@startWorkNow');
+
+    Route::post('/earlyBirdBuyers/sendRequest', 'EarlyBirdBuyerController@sendRequest');
 });
 
 
