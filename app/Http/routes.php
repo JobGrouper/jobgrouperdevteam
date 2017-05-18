@@ -189,6 +189,7 @@ Route::group(['prefix' => 'api'], function () {
 
     Route::post('/earlyBirdBuyers/sendRequest', 'EarlyBirdBuyerController@sendRequest');
     Route::put('/earlyBirdBuyers/confirmRequest', ['middleware' => 'check_role', 'uses' => 'EarlyBirdBuyerController@confirmRequest']);
+    Route::post('/earlyBirdBuyers/cancelRequest', ['uses' => 'EarlyBirdBuyerController@cancelRequest']);
 });
 
 

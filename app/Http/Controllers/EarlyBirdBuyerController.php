@@ -92,8 +92,39 @@ class EarlyBirdBuyerController extends Controller
 		}
 	}
 
-	public function cancelRequest() {
+	public function cancelRequest(Request $request) {
+		$user = Auth::user();
 
+		$v = Validator::make($request->all(),[
+			'early_bird_buyer_id' => 'required',
+		]);
+
+		if ($v->fails()) {
+			return response([
+				'status' => 'error',
+				'data' => $v->errors(),
+				'message' => 'validation failed',
+			], 200);
+		}
+		else {
+			$earlyBirdBuyer = $user->early_bird_buyers()->where('id', $request->early_bird_buyer_id)->where('status', 'requested')->first();
+
+			if (!$earlyBirdBuyer) {
+				return response([
+					'status' => 'error',
+					'data' => NULL,
+					'message' => 'EarlyBirdBuyer with id ' . $request->early_bird_buyer_id . ' does not exist',
+				], 200);
+			}
+
+			$earlyBirdBuyer->delete();
+
+			return response([
+				'status' => 'success',
+				'data' => null,
+				'message' => null,
+			], 200);
+		}
 	}
 
 	public function denyRequest() {
