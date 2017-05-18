@@ -16,6 +16,44 @@ jg.isArray = function( variable ) {
 	  return false;
 }
 
+jg.renderTemplate = function() {
+
+	var t = this._options.template;
+
+	var keys = data.keys();
+
+	for (var i = 0; i < keys.length; i++) {
+
+		var selector = data[ keys[i] ]['selector'];
+		var value = data[ keys[i] ]['value'];
+
+		/*
+		 * The main problem is *HERE*
+		 *
+		 * How do I know what attribute to set?
+		 *
+		 */
+		t.content.querySelector( selector ).value = value;
+	}
+
+	/*
+	t.content.querySelector('.entry-id').value = this._id;
+	t.content.querySelector('.entry-text').innerText = this._text;
+	t.content.querySelector('.entry-date').innerText = this._date;
+	*/
+
+	// create clone
+	var clone = document.importNode(t.content, true);
+
+	// create a reference to self
+	// 	document fragment (ie clone) will empty after append child
+	// 	, so need to make a copy of the nodes here
+	//this._node = [].slice.call(clone.children, 0)[0];
+
+	return clone;
+	//element.appendChild(clone);
+}
+
 jg.ElementMap = function(element) {
 
 	var child = element.firstChild;
@@ -588,19 +626,115 @@ jg.EarlyBirdActivator.prototype = {
 
 	_init: function() {
 
+		var self = this;
+
 		//
 		// PRIME EVENTS
 		//
-		$(".early-bird-buy-now").click(function(e) {
+		$(".early-bird-buy-now-caller").click(function(e) {
 
 			var button = e.target;
 			var job_id = $( button ).attr('job_id');
 
-			$(".alert_window.early_bird_job[job_id='" + job_id + "'").fadeIn("fast");
+			$(".alert_window.early_bird_buy_now[job_id='" + job_id + "'").fadeIn("fast");
+			
+			//self._callWindow( e.target );
+		});
+
+		// Ajax buy now call
+		$("button.early_bird_buy_now").click(function(e) {
+
+			var job_id = $( e.target ).attr('job_id');
+			e.preventDefault();
+
+			var obj = $("form.early_bird_buy_now_form[job_id='" + job_id + "'").serialize();
+
+			// Ajax
+			/*
+			$.ajax({ type: "POST",
+					url: "/",
+					data: obj,
+					datatype: "json",
+					success: function(response) {
+
+					}
+				});
+				*/
+
+			// hide calling button
+			$(".early-bird-buy-now-caller[job_id='" + job_id + "'").hide();
+
+			// show request pending thing
+			$('.early-bird-request-pending[job_id="' + job_id + '"').show();
+		});
+
+		$(".early-bird-end-work-caller").click(function(e) {
+
+			var button = e.target;
+			var job_id = $( button ).attr('job_id');
+
+			$(".alert_window.early_bird_end_work[job_id='" + job_id + "'").fadeIn("fast");
+		});
+
+		// Ajax cancel now call
+		$("button.early_bird_cancel_work").click(function(e) {
+
+			var job_id = $( e.target ).attr('job_id');
+			e.preventDefault();
+
+			var obj = $("form.early_bird_cancel_work_form[job_id='" + job_id + "'").serialize();
+
+			// Ajax
+			/*
+			$.ajax({ type: "POST",
+					url: "/",
+					data: obj,
+					datatype: "json",
+					success: function(response) {
+
+					}
+				});
+				*/
+
+			// hide calling button
+			$(".early-bird-end-work-caller[job_id='" + job_id + "'").hide();
+			$(".early-bird-working[job_id='" + job_id + "'").hide();
+
+			// show request pending thing
+			$('.early-bird-ended[job_id="' + job_id + '"').show();
 		});
 
 		$(".alert_window__block .cancel").click(function() {
 			$(".alert_window").fadeOut("fast");
 		});
+	},
+	_callWindow: function(target) {
+
+		var job_id = $( target ).attr('job_id');
+
+		$(".alert_window.early_bird_job[job_id='" + job_id + "'").fadeIn("fast");
+	},
+	_renderTemplate: function() {
+
+		var t = this._options.template;
+
+		var keys = data.keys();
+
+		/*
+		t.content.querySelector('.entry-id').value = this._id;
+		t.content.querySelector('.entry-text').innerText = this._text;
+		t.content.querySelector('.entry-date').innerText = this._date;
+		*/
+
+		// create clone
+		var clone = document.importNode(t.content, true);
+
+		// create a reference to self
+		// 	document fragment (ie clone) will empty after append child
+		// 	, so need to make a copy of the nodes here
+		//this._node = [].slice.call(clone.children, 0)[0];
+
+		return clone;
+		//element.appendChild(clone);
 	}
 }

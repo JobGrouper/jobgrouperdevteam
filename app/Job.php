@@ -170,6 +170,10 @@ class Job extends Model
         }
     }
 
+    public function getEarlyBirdMarkupAttribute() {
+
+	    return 0;
+    }
 
 
     /*
