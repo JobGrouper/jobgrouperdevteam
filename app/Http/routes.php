@@ -188,6 +188,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/startWorkNow', 'BuyerAdjustmentController@startWorkNow');
 
     Route::post('/earlyBirdBuyers/sendRequest', 'EarlyBirdBuyerController@sendRequest');
+    Route::put('/earlyBirdBuyers/confirmRequest', ['middleware' => 'check_role', 'uses' => 'EarlyBirdBuyerController@confirmRequest']);
 });
 
 

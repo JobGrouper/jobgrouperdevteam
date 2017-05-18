@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\EarlyBirdBuyer;
 use App\Job;
 use App\User;
 use Illuminate\Http\Request;
@@ -56,8 +57,39 @@ class EarlyBirdBuyerController extends Controller
 		}
 	}
 
-	public function confirmRequest() {
+	public function confirmRequest(Request $request) {
+		$v = Validator::make($request->all(),[
+			'early_bird_buyer_id' => 'required',
+			'status' => 'required:requested,denied,working,ended',
+		]);
 
+		if ($v->fails()) {
+			return response([
+				'status' => 'error',
+				'data' => $v->errors(),
+				'message' => 'validation failed',
+			], 200);
+		}
+		else{
+			$earlyBirdBuyer = EarlyBirdBuyer::find($request->early_bird_buyer_id);
+
+			if (!$earlyBirdBuyer) {
+				return response([
+					'status' => 'error',
+					'data' => NULL,
+					'message' => 'EarlyBirdBuyer with id ' . $request->early_bird_buyer_id . ' does not exist',
+				], 200);
+			}
+
+			$earlyBirdBuyer->status = $request->status;
+			$earlyBirdBuyer->save();
+
+			return response([
+				'status' => 'success',
+				'data' => null,
+				'message' => null,
+			], 200);
+		}
 	}
 
 	public function cancelRequest() {
