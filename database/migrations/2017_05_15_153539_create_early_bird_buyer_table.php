@@ -18,12 +18,14 @@ class CreateEarlyBirdBuyerTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('employee_id')->unsigned();
             $table->integer('job_id')->unsigned();
+	    $table->integer('sale_id')->unsigned();
             $table->enum('status', array('requested', 'denied', 'working', 'ended'))->default('requested');
             $table->timestamps();
 
 	    // fks
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('employee_id')->references('id')->on('users');
+	    $table->foreign('sale_id')->references('id')->on('sales');
             $table->foreign('job_id')->references('id')->on('jobs');
         });
     }

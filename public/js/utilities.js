@@ -707,6 +707,61 @@ jg.EarlyBirdActivator.prototype = {
 		$(".alert_window__block .cancel").click(function() {
 			$(".alert_window").fadeOut("fast");
 		});
+
+
+		/// EMPLOYER EVENTS
+		//
+		$("button.early_bird_agree").click(function(e) {
+			e.preventDefault();
+
+			var id = $( e.target ).attr('user_id');
+			var obj = $("form.early_bird_accept_form[user_id='" + id + "'").serialize();
+			alert('Agree ' + obj);
+			/*
+			$.ajax({ type: "POST",
+					url: "/",
+					data: obj,
+					datatype: "json",
+					success: function(response) {
+
+					}
+				});
+				*/
+		});
+
+		$("button.early_bird_deny").click(function(e) {
+			e.preventDefault();
+			var id = $( e.target ).attr('user_id');
+			var obj = $("form.early_bird_accept_form[user_id='" + id + "'").serialize();
+			alert('Deny ' + obj);
+			/*
+			$.ajax({ type: "POST",
+					url: "/",
+					data: obj,
+					datatype: "json",
+					success: function(response) {
+
+					}
+				});
+				*/
+		});
+
+		$("button.early_bird_cancel").click(function(e) {
+			e.preventDefault();
+			var id = $( e.target ).attr('user_id');
+			var obj = $("form.early_bird_cancel_form[user_id='" + id + "'").serialize();
+			alert('Cancel ' + obj);
+			/*
+			$.ajax({ type: "POST",
+					url: "/",
+					data: obj,
+					datatype: "json",
+					success: function(response) {
+
+					}
+				});
+				*/
+		});
 	},
 	_callWindow: function(target) {
 

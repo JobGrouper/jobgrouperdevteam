@@ -15,6 +15,7 @@ class EarlyBirdBuyer extends Model
         'user_id',
         'employee_id',
         'job_id',
+	'sale_id',
         'status',
     ];
 
@@ -32,5 +33,9 @@ class EarlyBirdBuyer extends Model
 
     public function job(){
         return $this->belongsTo(Job::class);
+    }
+
+    public function sale() {
+	return $this->belongsTo(Sale::class);
     }
 }

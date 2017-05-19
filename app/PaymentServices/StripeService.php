@@ -1106,6 +1106,95 @@ class StripeService implements PaymentServiceInterface {
 		return $plan;
 	}
 
+	/*
+	 * Creates a Plan associated with a Seller (Managed Account) 
+	 *
+	 * @params
+	 * 	(string) account_id
+	 * 	(job) job
+	 *	(array) plan_params
+	 * @return
+	 * 	...
+	 * @throws
+	 * 	Exceptions for missing parameters
+	 */
+	public function createPlanBare($user, $job, $testing=False) {
+
+		$response = NULL;
+		$error_response = NULL;
+
+		// Retrieve account
+		$managed_account = DB::table('stripe_managed_accounts')->where('user_id', '=', $user->id)->first();
+
+		$plan_id = $this->generatePlanId($job->title);
+
+		try {
+
+			// Add application fee to plan
+			$surcharge = $job->salary * .15;
+			$amount = ($job->salary + $surcharge) * 100; // value must be in cents for Stripe
+
+			// something
+
+			// Create plan
+			$plan = Plan::create(array(
+			  "amount" => $amount, 
+			  "interval" => "month",
+			  "name" => $job->title,
+			  "currency" => 'USD',
+			  "id" => $plan_id),
+			  array("stripe_account" => $managed_account->id)
+			);
+
+		} catch(\Stripe\Error\Card $e) {
+			$error_response = $this->constructErrorResponse($e);
+			
+			// user error
+			$error_response['user'] = true;
+
+		} catch (\Stripe\Error\RateLimit $e) {
+		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+			// user error (possibly)
+			$error_response['user'] = true;
+
+		} catch (\Stripe\Error\Authentication $e) {
+		  // Authentication with Stripe's API failed
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\Base $e) {
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (Exception $e) {
+		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
+
+		}
+
+		// Add plan to database
+		DB::table('stripe_plans')->insert(
+			[
+				'id' => $plan->id ,
+				'managed_account_id' => $managed_account->id,
+				'job_id' => $job->id,
+				'activated' => 1,
+				'created_at' => Carbon::now()
+			]
+		);
+
+		return $plan;
+	}
+
 	public function createPlanInDB($plan_id, $managed_account_id, $job_id) {
 
 		// Add plan to database
@@ -1275,6 +1364,57 @@ class StripeService implements PaymentServiceInterface {
 			'connected_customer_id' => $customer_id, 'activated' => 1,
 			'created_at' => Carbon::now()]
 		);
+	}
+
+	/*
+	 * Updating subscription to sit with a different plan
+	 *
+	 */
+	public function changeSubscriptionPlan() {
+
+		$response = NULL;
+		$error_response = NULL;
+
+		$subscription = \Subscription::retrieve('subscription');
+
+		try {
+			$subscription->plan = 'new_plan_id';
+			$response = $subscription->save();
+
+		} catch (\Stripe\Error\RateLimit $e) {
+		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\Authentication $e) {
+		  // Authentication with Stripe's API failed
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\Base $e) {
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (Exception $e) {
+		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
+		}
+
+		// Add subscription to database
+		DB::table('stripe_subscriptions')->where('id', $subscription->id)->
+			update(['plan_id' => 'new_plan_id']);
+
+		if ($response) {
+			return $response;
+		} else {
+			return $error_response;
+		}
 	}
 
 	public function cancelSubscription($plan, $customer, $account_id) {

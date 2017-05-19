@@ -63,6 +63,10 @@ class Sale extends Model
         return $this->belongsTo('App\User', 'buyer_id');
     }
 
+    public function early_bird_buyer() {
+	return $this->hasOne('App\EarlyBirdBuyer');
+    }
+
     /**
      * Get orders`s close order requests
      */
