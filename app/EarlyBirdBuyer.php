@@ -15,7 +15,7 @@ class EarlyBirdBuyer extends Model
         'user_id',
         'employee_id',
         'job_id',
-	'sale_id',
+	    'sale_id',
         'status',
     ];
 

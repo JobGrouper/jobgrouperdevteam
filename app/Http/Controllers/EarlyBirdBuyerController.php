@@ -20,6 +20,7 @@ class EarlyBirdBuyerController extends Controller
 		$v = Validator::make($request->all(),[
 			'employee_id' => 'required',
 			'job_id' => 'required',
+			'sale_id' => 'required',
 		]);
 
 		if ($v->fails()) {
@@ -58,9 +59,10 @@ class EarlyBirdBuyerController extends Controller
 	}
 
 	public function confirmRequest(Request $request) {
+		$user = Auth::user();
+
 		$v = Validator::make($request->all(),[
 			'early_bird_buyer_id' => 'required',
-			'status' => 'required:requested,denied,working,ended',
 		]);
 
 		if ($v->fails()) {
@@ -71,7 +73,10 @@ class EarlyBirdBuyerController extends Controller
 			], 200);
 		}
 		else{
-			$earlyBirdBuyer = EarlyBirdBuyer::find($request->early_bird_buyer_id);
+			$earlyBirdBuyer = EarlyBirdBuyer::where('id', $request->early_bird_buyer_id)
+				->where('employee_id', $user->id)
+				->where('status', 'requested')
+				->first();
 
 			if (!$earlyBirdBuyer) {
 				return response([
@@ -81,7 +86,7 @@ class EarlyBirdBuyerController extends Controller
 				], 200);
 			}
 
-			$earlyBirdBuyer->status = $request->status;
+			$earlyBirdBuyer->status = 'working';
 			$earlyBirdBuyer->save();
 
 			return response([
@@ -107,7 +112,10 @@ class EarlyBirdBuyerController extends Controller
 			], 200);
 		}
 		else {
-			$earlyBirdBuyer = $user->early_bird_buyers()->where('id', $request->early_bird_buyer_id)->where('status', 'requested')->first();
+			$earlyBirdBuyer = $user->early_bird_buyers()
+				->where('id', $request->early_bird_buyer_id)
+				->where('status', 'requested')
+				->first();
 
 			if (!$earlyBirdBuyer) {
 				return response([
@@ -127,8 +135,43 @@ class EarlyBirdBuyerController extends Controller
 		}
 	}
 
-	public function denyRequest() {
+	public function denyRequest(Request $request) {
+		$user = Auth::user();
 
+		$v = Validator::make($request->all(),[
+			'early_bird_buyer_id' => 'required',
+		]);
+
+		if ($v->fails()) {
+			return response([
+				'status' => 'error',
+				'data' => $v->errors(),
+				'message' => 'validation failed',
+			], 200);
+		}
+		else{
+			$earlyBirdBuyer = EarlyBirdBuyer::where('id', $request->early_bird_buyer_id)
+				->where('employee_id', $user->id)
+				->where('status', 'requested')
+				->first();
+
+			if (!$earlyBirdBuyer) {
+				return response([
+					'status' => 'error',
+					'data' => NULL,
+					'message' => 'EarlyBirdBuyer with id ' . $request->early_bird_buyer_id . ' does not exist',
+				], 200);
+			}
+
+			$earlyBirdBuyer->status = 'denied';
+			$earlyBirdBuyer->save();
+
+			return response([
+				'status' => 'success',
+				'data' => null,
+				'message' => null,
+			], 200);
+		}
 	}
 
 	private function startEarlyBird() {
