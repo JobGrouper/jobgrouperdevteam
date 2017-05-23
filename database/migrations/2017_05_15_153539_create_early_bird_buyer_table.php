@@ -19,7 +19,7 @@ class CreateEarlyBirdBuyerTable extends Migration
             $table->integer('employee_id')->unsigned();
             $table->integer('job_id')->unsigned();
 	        $table->integer('sale_id')->unsigned();
-            $table->enum('status', array('requested', 'denied', 'working', 'ended'))->default('requested');
+            $table->enum('status', array('requested', 'denied', 'working', 'ended', 'cancelled'))->default('requested');
             $table->timestamps();
 
 	        // fks
