@@ -43,8 +43,6 @@ class EarlyBirdBuyerController extends Controller
 				], 200);
 			}
 
-			dd($sale);
-
 			$employee = User::where('id', $request->employee_id)->where('user_type', 'employee')->first();
 			if (!$employee) {
 				return response([
