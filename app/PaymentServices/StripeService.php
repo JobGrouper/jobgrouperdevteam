@@ -2,7 +2,6 @@
 
 namespace App\PaymentServices;
 
-use App\User;
 use Illuminate\Support\Facades\Log;
 use App\Interfaces\PaymentServiceInterface;
 
@@ -1276,7 +1275,7 @@ class StripeService implements PaymentServiceInterface {
 		$plan_id = NULL;
 		$customer_id = NULL;
 		$account_id = NULL;
-		
+
 		if (is_array($plan)) {
 		  $plan_id = $plan['id'];
 		}
@@ -1367,18 +1366,33 @@ class StripeService implements PaymentServiceInterface {
 	}
 
 	/*
+	 * Retrieve subscription
+	 *
+	 */
+	public function retrieveSubscription($plan, $customer, $account) {
+		
+		$subscription_record = DB::table('stripe_subscriptions')->where([
+			['plan_id', '=', $plan->id],
+			['connected_customer_id', '=', $customer->id]
+		])->first();
+
+		return Subscription::retrieve( array('id' => $subscription_record->id),
+	       			array('stripe_account' => $account->id));
+	}
+
+	/*
 	 * Updating subscription to sit with a different plan
 	 *
 	 */
-	public function changeSubscriptionPlan() {
+	public function changeSubscriptionPlan($subscription, $plan) {
 
 		$response = NULL;
 		$error_response = NULL;
 
-		$subscription = \Subscription::retrieve('subscription');
+		//$subscription = Subscription::retrieve($subscription->id);
 
 		try {
-			$subscription->plan = 'new_plan_id';
+			$subscription->plan = $plan->id;
 			$response = $subscription->save();
 
 		} catch (\Stripe\Error\RateLimit $e) {
@@ -1408,7 +1422,7 @@ class StripeService implements PaymentServiceInterface {
 
 		// Add subscription to database
 		DB::table('stripe_subscriptions')->where('id', $subscription->id)->
-			update(['plan_id' => 'new_plan_id']);
+			update(['plan_id' => $plan->id]);
 
 		if ($response) {
 			return $response;

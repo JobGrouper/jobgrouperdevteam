@@ -20,6 +20,7 @@ error_log
 *.swo
 *.swn
 *.swm
+*.swl
 *~
 *.un*
 git-help.txt

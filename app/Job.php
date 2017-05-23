@@ -334,6 +334,13 @@ class Job extends Model
     }
 
     /**
+     * Get job`s early_bird_buyers.
+     */
+    public function early_bird_buyers() {
+	return $this->hasMany('App\EarlyBirdBuyer', 'job_id');
+    }
+
+    /**
      * Get job`s employee requests.
      */
     public function employee_exit_requests()
@@ -344,10 +351,6 @@ class Job extends Model
     public function buyer_adjustment_requests() {
 
 	    return $this->hasMany('App\BuyerAdjustmentRequest', 'job_id');
-    }
-
-    public function early_bird_buyers(){
-        return $this->hasMany(Job::class);
     }
 
     /**

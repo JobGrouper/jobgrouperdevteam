@@ -40,7 +40,7 @@ class StopEarlyBirdOP extends Operation {
 
 		// DEACTIVATE STRIPE SUBSCRIPTION IN DB
 		$customer = $this->psi->retrieveCustomer($user);
-		$subscription = $this->psi->retrieveSubscription()
+		$subscription = $this->psi->retrieveSubscription();
 
 		
 		DB::table('stripe_subscriptions')->update(['active', 0])->where('plan_id', $plan->id)

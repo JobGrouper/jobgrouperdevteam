@@ -1,10 +1,11 @@
 <?php
+
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 use \Carbon\Carbon;
-use App\Operations\EmployeeExitOP;
+use App\Operations\StartNewEarlyBirdOP;
 
 use \App\User;
 use \App\Job;
@@ -18,7 +19,7 @@ use \Stripe\Token;
 use \Stripe\Plan;
 use \Stripe\Subscription;
 
-class EmployeeExitOPTest extends TestCase {
+class StartNewEarlyBirdOPTest extends TestCase {
 
 	use DatabaseTransactions;
 
@@ -31,7 +32,7 @@ class EmployeeExitOPTest extends TestCase {
 	public function setUp() {
 
 		parent::setUp();
-		$this->op = \App::make('App\Operations\EmployeeExitOP');
+		$this->op = \App::make('App\Operations\StartNewEarlyBirdOP');
 	}
 
 	public function tearDown() {
@@ -57,12 +58,11 @@ class EmployeeExitOPTest extends TestCase {
 
 	public function testConstruct() {
 
-		$this->assertInstanceOf(EmployeeExitOP::class, $this->op);
+		$this->assertInstanceOf(StartNewEarlyBirdOP::class, $this->op);
 	}
 
 	public function testGo() {
 
-		$this->markTestSkipped();
 		// create User:Employee
 		//
 		$employee = User::create([
@@ -141,6 +141,13 @@ class EmployeeExitOPTest extends TestCase {
 			'job_id' => $job->id
 		]);
 
+		$early_bird = $buyer->early_bird_buyers()->create([
+			'user_id' => $buyer->id,
+			'employee_id' => $employee->id,
+			'job_id' => $job->id,
+			'sale_id' => $order->id,
+			'status' => 'requested']);
+		/*
 		// set plan id
 		$this->plan_id = "plan_00000000TESTEE";
 
@@ -180,14 +187,10 @@ class EmployeeExitOPTest extends TestCase {
 			'connected_customer_id' => $this->customer_id,
 			'activated' => 1
 			]);
-
-		// Create Employee Exit Request
-                $employeeExitRequest = $employee->employee_exit_requests()->create([
-			'job_id' => $job->id,
-			'status' => 'approved',
-			'created_at' => Carbon::now()->subWeeks(3)->toDateTimeString()
-                ]);
-
-		$this->op->go($employeeExitRequest);
+		 */
+		$this->op->go($job, $early_bird);
 	}
+
 }
+
+?>
