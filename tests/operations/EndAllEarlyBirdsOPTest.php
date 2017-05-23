@@ -5,7 +5,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 use \Carbon\Carbon;
-use App\Operations\StopEarlyBirdOP;
+use App\Operations\EndAllEarlyBirdsOP;
 
 use \App\User;
 use \App\Job;
@@ -19,7 +19,7 @@ use \Stripe\Token;
 use \Stripe\Plan;
 use \Stripe\Subscription;
 
-class StopEarlyBirdOPTest extends TestCase {
+class EndAllEarlyBirdsOPTest extends TestCase {
 
 	use DatabaseTransactions;
 
@@ -32,7 +32,7 @@ class StopEarlyBirdOPTest extends TestCase {
 	public function setUp() {
 
 		parent::setUp();
-		$this->op = \App::make('App\Operations\StopEarlyBirdOP');
+		$this->op = \App::make('App\Operations\EndAllEarlyBirdsOP');
 	}
 
 	public function tearDown() {
@@ -58,12 +58,11 @@ class StopEarlyBirdOPTest extends TestCase {
 
 	public function testConstruct() {
 
-		$this->assertInstanceOf(StopEarlyBirdOP::class, $this->op);
+		$this->assertInstanceOf(EndAllEarlyBirdsOP::class, $this->op);
 	}
 
 	public function testGo() {
 
-		$this->markTestSkipped();
 		// create User:Employee
 		//
 		$employee = User::create([
@@ -115,7 +114,7 @@ class StopEarlyBirdOPTest extends TestCase {
 
 		// create Job
 		$job = Job::create([
-		    'title' => 'Test Job',
+		    'title' => 'PHPUnit End All Early Birds Test',
 		    'description' => "A job for testing",
 		    'salary' => 50.00,
 		    'max_clients_count' => 5,
@@ -148,7 +147,7 @@ class StopEarlyBirdOPTest extends TestCase {
 			'job_id' => $job->id,
 			'sale_id' => $order->id,
 			'status' => 'requested']);
-
+		/*
 		// set plan id
 		$this->plan_id = "plan_00000000TESTEE";
 
@@ -156,7 +155,7 @@ class StopEarlyBirdOPTest extends TestCase {
 		$this->plan = Plan::create(array(
 			  "amount" => 1000,
 			  "interval" => "month",
-			  "name" => "PHPUnit StopEarlyBird Plan",
+			  "name" => "PHPUnit EmployeeExit Plan",
 			  "currency" => "usd",
 			  "id" => $this->plan_id
 			),
@@ -188,8 +187,8 @@ class StopEarlyBirdOPTest extends TestCase {
 			'connected_customer_id' => $this->customer_id,
 			'activated' => 1
 			]);
-
-		$this->op->go($job, $early_bird);
+		 */
+		$this->op->go($job);
 	}
 
 }

@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
+use DB;
+
 use Auth;
 
 class Job extends Model
@@ -279,6 +281,11 @@ class Job extends Model
         $this->status = 'waiting';
         $this->next_payment_date = 0;
         $this->make_hot();
+    }
+
+    public function endAllEarlyBirds() {
+	    DB::table('early_bird_buyers')->where('job_id', $this->id)
+		    ->update(['status' => 'ended']);
     }
 
 
