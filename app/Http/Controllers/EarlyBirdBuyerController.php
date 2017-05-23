@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\EarlyBirdBuyer;
 use App\Job;
+use App\Sale;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -21,8 +22,9 @@ class EarlyBirdBuyerController extends Controller
 		$v = Validator::make($request->all(),[
 			'employee_id' => 'required',
 			'job_id' => 'required',
-			'sale_id' => 'required',
 		]);
+
+
 
 		if ($v->fails()) {
 			return response([
@@ -32,6 +34,17 @@ class EarlyBirdBuyerController extends Controller
 			], 200);
 		}
 		else {
+			$sale = Sale::where('job_id', $request->job_id)->where('buyer_id', $user->id)->first();
+			if (!$sale) {
+				return response([
+					'status' => 'error',
+					'data' => NULL,
+					'message' => 'sale for job with id ' . $request->job_id . ' and user id '.$user->id.' does not exist',
+				], 200);
+			}
+
+			dd($sale);
+
 			$employee = User::where('id', $request->employee_id)->where('user_type', 'employee')->first();
 			if (!$employee) {
 				return response([
@@ -163,7 +176,8 @@ class EarlyBirdBuyerController extends Controller
 			$job = $earlyBirdBuyer->job()->first();
 			$employee = $earlyBirdBuyer->employee()->first();
 
-			$earlyBirdBuyer->delete();
+			$earlyBirdBuyer->status = 'cancelled';
+			$earlyBirdBuyer->save();
 
 			// send mail to employee
 			Mail::send('emails.early_bird_buyers_request_cenceled_to_employee', ['user' => $user, 'job' => $job], function($u) use ($employee)
