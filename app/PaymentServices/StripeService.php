@@ -1471,9 +1471,15 @@ class StripeService implements PaymentServiceInterface {
 
 		}
 
-		$this->deleteSubscriptionInDB($subscription_record);
+		//$this->deleteSubscriptionInDB($subscription_record);
+		$this->cancelSubscriptionInDB($subscription_record);
 
 		return $response;
+	}
+
+	public function cancelSubscriptionInDB($subscription) {
+		DB::table('stripe_subscriptions')->where('id', '=', $subscription->id)
+			->update(['activated' => 0]);
 	}
 
 	public function deleteSubscriptionInDB($subscription) {

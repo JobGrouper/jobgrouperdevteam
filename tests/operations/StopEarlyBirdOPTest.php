@@ -62,7 +62,6 @@ class StopEarlyBirdOPTest extends TestCase {
 	}
 
 	public function testGo() {
-		$this->markTestSkipped();
 
 		// create User:Employee
 		//
@@ -142,7 +141,13 @@ class StopEarlyBirdOPTest extends TestCase {
 			'job_id' => $job->id
 		]);
 
-		/*
+		$early_bird = $buyer->early_bird_buyers()->create([
+			'user_id' => $buyer->id,
+			'employee_id' => $employee->id,
+			'job_id' => $job->id,
+			'sale_id' => $order->id,
+			'status' => 'requested']);
+
 		// set plan id
 		$this->plan_id = "plan_00000000TESTEE";
 
@@ -150,7 +155,7 @@ class StopEarlyBirdOPTest extends TestCase {
 		$this->plan = Plan::create(array(
 			  "amount" => 1000,
 			  "interval" => "month",
-			  "name" => "PHPUnit EmployeeExit Plan",
+			  "name" => "PHPUnit StopEarlyBird Plan",
 			  "currency" => "usd",
 			  "id" => $this->plan_id
 			),
@@ -182,7 +187,8 @@ class StopEarlyBirdOPTest extends TestCase {
 			'connected_customer_id' => $this->customer_id,
 			'activated' => 1
 			]);
-		 */
+
+		$this->op->go($job, $early_bird);
 	}
 
 }
