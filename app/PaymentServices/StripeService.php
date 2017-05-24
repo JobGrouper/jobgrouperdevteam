@@ -1117,7 +1117,7 @@ class StripeService implements PaymentServiceInterface {
 	 * @throws
 	 * 	Exceptions for missing parameters
 	 */
-	public function createPlanBare($user, $job, $testing=False) {
+	public function createPlanBare($user, $job, $options, $testing=False) {
 
 		$response = NULL;
 		$error_response = NULL;
@@ -1129,15 +1129,9 @@ class StripeService implements PaymentServiceInterface {
 
 		try {
 
-			// Add application fee to plan
-			$surcharge = $job->salary * .15;
-			$amount = ($job->salary + $surcharge) * 100; // value must be in cents for Stripe
-
-			// something
-
 			// Create plan
 			$plan = Plan::create(array(
-			  "amount" => $amount, 
+			  "amount" => $options['amount'], 
 			  "interval" => "month",
 			  "name" => $job->title,
 			  "currency" => 'USD',
