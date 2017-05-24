@@ -191,6 +191,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/earlyBirdBuyers/confirmRequest', ['uses' => 'EarlyBirdBuyerController@confirmRequest']);
     Route::post('/earlyBirdBuyers/cancelRequest', ['uses' => 'EarlyBirdBuyerController@cancelRequest']);
     Route::post('/earlyBirdBuyers/denyRequest', ['uses' => 'EarlyBirdBuyerController@denyRequest']);
+    Route::post('/earlyBirdBuyers/stopEarlyBird', ['uses' => 'EarlyBirdBuyerController@stopEarlyBird']);
 });
 
 

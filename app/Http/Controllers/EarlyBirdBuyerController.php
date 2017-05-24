@@ -285,4 +285,63 @@ class EarlyBirdBuyerController extends Controller
 			], 200);
 		}
 	}
+
+	public function stopEarlyBird(Request $request, StopEarlyBirdOP $stop_early_bird) {
+
+		$v = Validator::make($request->all(),[
+			'early_bird_buyer_id' => 'required',
+		]);
+
+		if ($v->fails()) {
+			return response([
+				'status' => 'error',
+				'data' => $v->errors(),
+				'message' => 'validation failed',
+			], 200);
+		}
+		else{
+			$earlyBirdBuyer = EarlyBirdBuyer::where('id', $request->early_bird_buyer_id)
+				->where('employee_id', $employee->id)
+				->where('status', 'requested')
+				->first();
+
+			if (!$earlyBirdBuyer) {
+				return response([
+					'status' => 'error',
+					'data' => NULL,
+					'message' => 'EarlyBirdBuyer with id ' . $request->early_bird_buyer_id . ' does not exist',
+				], 200);
+			}
+
+			$earlyBirdBuyer->status = 'denied';
+			$earlyBirdBuyer->save();
+
+			$job = $earlyBirdBuyer->job()->first();
+
+			$stop_early_bird->go($job, $earlyBirdBuyer);
+
+			/*
+			// send mail to employee
+			Mail::send('emails.early_bird_buyers_request_denied_to_employee', ['user' => $user, 'job' => $job], function($u) use ($employee)
+			{
+				$u->from('admin@jobgrouper.com');
+				$u->to($employee->email);
+				$u->subject('subject');
+			});
+			// send mail to buyer
+			Mail::send('emails.early_bird_buyers_request_denied_to_buyer', ['user' => $user, 'job' => $job], function($u) use ($user)
+			{
+				$u->from('admin@jobgrouper.com');
+				$u->to($user->email);
+				$u->subject('subject');
+			});
+			 */
+
+			return response([
+				'status' => 'success',
+				'data' => null,
+				'message' => null,
+			], 200);
+		}
+	}
 }

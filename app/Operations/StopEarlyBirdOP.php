@@ -34,7 +34,6 @@ class StopEarlyBirdOP extends Operation {
 		 update other early birds
 		 emails
 		 */
-		//$job;
 		$employee = $job->employee()->first();
 		$buyer = $early_bird_buyer->user()->first();
 
