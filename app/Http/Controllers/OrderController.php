@@ -282,6 +282,9 @@ class OrderController extends Controller
 
 			$employee = $job->employee()->first();
 			$psi->createPlan($employee, $job);
+
+			// End all early bird buyers
+
 		}
 		else {
 

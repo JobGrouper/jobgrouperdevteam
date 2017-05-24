@@ -66,6 +66,10 @@ class EmployeeExitRequestController extends Controller
                 $job->employee_id = null;
                 $job->save();
                 $employee->employee_requests()->where('job_id', $job->id)->delete();
+
+		// End all early bird buyers
+
+
                 $responseData['error'] = false;
                 $responseData['status'] = 1;
                 $responseData['info'] = 'Job successfully deleted';
