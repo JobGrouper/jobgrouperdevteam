@@ -650,16 +650,14 @@ jg.EarlyBirdActivator.prototype = {
 			var obj = $("form.early_bird_buy_now_form[job_id='" + job_id + "'").serialize();
 
 			// Ajax
-			/*
 			$.ajax({ type: "POST",
-					url: "/",
+					url: "/api/earlyBirdBuyers/sendRequest",
 					data: obj,
 					datatype: "json",
 					success: function(response) {
 
 					}
 				});
-				*/
 
 			// hide calling button
 			$(".early-bird-buy-now-caller[job_id='" + job_id + "'").hide();
@@ -674,6 +672,37 @@ jg.EarlyBirdActivator.prototype = {
 			var job_id = $( button ).attr('job_id');
 
 			$(".alert_window.early_bird_end_work[job_id='" + job_id + "'").fadeIn("fast");
+		});
+
+		// Ajax cancel now call
+		$("button.early_bird_cancel_request").click(function(e) {
+
+			e.preventDefault();
+
+			var job_id = $( e.target ).attr('job_id');
+			var early_bird_id = $( e.target ).attr('early_bird_buyer_id');
+
+			var obj = {
+				'job_id': job_id,
+				'early_bird_buyer_id': early_bird_id
+			};
+
+			// Ajax
+			$.ajax({ type: "POST",
+					url: "/api/earlyBirdBuyers/cancelRequest",
+					data: obj,
+					datatype: "json",
+					success: function(response) {
+
+						// hide calling button
+						$("button.early_bird_cancel_request[job_id='" + job_id + "'").hide();
+						$("button.early-bird-request-pending[job_id='" + job_id + "'").hide();
+
+						// show request pending thing
+						$('button.early_bird_request_cancelled[job_id="' + job_id + '"').show();
+					}
+				});
+
 		});
 
 		// Ajax cancel now call
@@ -716,34 +745,30 @@ jg.EarlyBirdActivator.prototype = {
 
 			var id = $( e.target ).attr('user_id');
 			var obj = $("form.early_bird_accept_form[user_id='" + id + "'").serialize();
-			alert('Agree ' + obj);
-			/*
+
 			$.ajax({ type: "POST",
-					url: "/",
+					url: "/api/earlyBirdBuyers/confirmRequest",
 					data: obj,
 					datatype: "json",
 					success: function(response) {
 
 					}
 				});
-				*/
 		});
 
 		$("button.early_bird_deny").click(function(e) {
 			e.preventDefault();
 			var id = $( e.target ).attr('user_id');
 			var obj = $("form.early_bird_accept_form[user_id='" + id + "'").serialize();
-			alert('Deny ' + obj);
-			/*
+
 			$.ajax({ type: "POST",
-					url: "/",
+					url: "/api/earlyBirdBuyers/denyRequest",
 					data: obj,
 					datatype: "json",
 					success: function(response) {
-
+						
 					}
 				});
-				*/
 		});
 
 		$("button.early_bird_cancel").click(function(e) {

@@ -344,7 +344,7 @@ class Job extends Model
      * Get job`s early_bird_buyers.
      */
     public function early_bird_buyers() {
-	return $this->hasMany('App\EarlyBirdBuyer', 'job_id');
+	return $this->hasMany('App\EarlyBirdBuyer', 'job_id')->where('status', '<>', 'cancelled');
     }
 
     /**
