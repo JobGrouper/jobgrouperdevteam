@@ -8,7 +8,7 @@ use App\Job;
 use App\User;
 use Illuminate\Http\Request;
 
-
+use App\Operations\AdjustAllEarlyBirdsOP;
 
 use App\Http\Requests;
 use Auth;
@@ -19,7 +19,7 @@ use App\Interfaces\PaymentServiceInterface;
 
 class BuyerAdjustmentController extends Controller
 {
-    public function create(Request $request, PaymentServiceInterface $psi){
+    public function create(Request $request, PaymentServiceInterface $psi, AdjustAllEarlyBirdsOP $adjust_all){
 
 	// 
 	// VALIDATION
@@ -102,6 +102,7 @@ class BuyerAdjustmentController extends Controller
 		$request->new_client_min != $job->min_clients_count) {
 
 		// Adjust all Early Birds
+		$adjust_all->go($job);
 	}
 
 	//
