@@ -38,6 +38,10 @@ class EndAllEarlyBirdsOP extends Operation {
 		 * Update all Stripe subscriptions
 		 * - 	- if job is starting
 		 */
+		if (isset($options['plan'])) {
+
+		//	$current_early_bird_buyers = $job->early_bird_buyers()->where('status', 'working')->get();
+		}
 
 		// And that's the end!
 	}

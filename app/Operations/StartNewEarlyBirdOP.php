@@ -27,14 +27,7 @@ class StartNewEarlyBirdOP extends Operation {
 
 	public function go(Job $job = NULL, EarlyBirdBuyer $early_bird_buyer = NULL) {
 
-		/*
-		 ! calculate markup
-		 create new plan
-		 create stripe subscription
-		 update other early birds
-		 */
 		//
-		// $job;
 		$employee = $job->employee()->first();
 		$buyer = $early_bird_buyer->user()->first();
 

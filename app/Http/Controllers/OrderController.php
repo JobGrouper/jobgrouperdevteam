@@ -211,7 +211,7 @@ class OrderController extends Controller
     }
 
 
-    public function update(Request $request, PaymentServiceInterface $psi){
+    public function update(Request $request, PaymentServiceInterface $psi, EndAllEarlyBirdsOP $op){
 
 	$this->validate($request, [
 		    'card_number' => 'required',
@@ -281,10 +281,7 @@ class OrderController extends Controller
 		if($job->status != 'working'){
 
 			$employee = $job->employee()->first();
-			$psi->createPlan($employee, $job);
-
-			// End all early bird buyers
-
+			$plan = $psi->createPlan($employee, $job);
 		}
 		else {
 

@@ -54,22 +54,41 @@ class StripePlanActivation extends Job implements ShouldQueue
 
 	// Making a copy
 	$job = $this->stripe_job;
+	$plan = $this->plan;
+	$employee_account = $this->seller_account;
 	
 	// Gather everyone
-	$buyers = $this->stripe_job->confirmed_buyers()->get();
+	//$buyers = $this->stripe_job->confirmed_buyers()->get();
+	$buyers = $this->stripe_job->confirmed_buyers()->with('early_bird_buyers')->get();
 
         //
 	foreach ($buyers as $buyer) {
 
 		if (!$testing) {
 
-			$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $buyer->id)->
-				where('managed_account_id', '=', $this->seller_account->id)->first();
+			if ($buyer->early_bird_buyer != NULL 
+				&& $buyer->early_bird_buyer->status == 'working') {
 
-			$customer = $psi->retrieveCustomer($customer_record->id, $this->seller_account->id);
+				// Update early bird subscription
+				$customer = $psi->retrieveCustomerFromUser($buyer, $job, $employee_account->id);
+				$subscription = $psi->retrieveSubscription($plan, $customer, $employee_account);
+				$psi->changeSubscriptionPlan($subscription, $plan);
 
-			// create subscription
-			$response = $psi->createSubscription($this->plan, $customer, $this->seller_account);
+				// end early_bird_buyer
+				$buyer->early_bird_buyer->status = 'ended';
+				$buyer->early_bird_buyer->save();
+			}
+			else {
+				// Create a new subscription
+				//
+				$customer_record = DB::table('stripe_connected_customers')->where('user_id', '=', $buyer->id)->
+					where('managed_account_id', '=', $this->seller_account->id)->first();
+
+				$customer = $psi->retrieveCustomer($customer_record->id, $this->seller_account->id);
+
+				// create subscription
+				$response = $psi->createSubscription($this->plan, $customer, $this->seller_account);
+			}
 		}
 
 		// Send email to user, saying that 

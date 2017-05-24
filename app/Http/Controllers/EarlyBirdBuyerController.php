@@ -13,6 +13,9 @@ use Auth;
 use Illuminate\Support\Facades\Validator;
 use Mail;
 
+use App\Operations\StartNewEarlyBirdOP;
+use App\Operations\StopEarlyBirdOP;
+
 use \Carbon\Carbon;
 
 class EarlyBirdBuyerController extends Controller
@@ -98,7 +101,7 @@ class EarlyBirdBuyerController extends Controller
 		}
 	}
 
-	public function confirmRequest(Request $request) {
+	public function confirmRequest(Request $request, StartNewEarlyBirdOP $op) {
 		$employee = Auth::user();
 
 		$v = Validator::make($request->all(),[
@@ -131,6 +134,8 @@ class EarlyBirdBuyerController extends Controller
 
 			$job = $earlyBirdBuyer->job()->first();
 			$user = $earlyBirdBuyer->user()->first();
+
+			$op->go($job, $earlyBirdBuyer);
 
 			// send mail to employee
 			Mail::send('emails.early_bird_buyers_request_confirmed_to_employee', ['user' => $user, 'job' => $job], function($u) use ($employee)

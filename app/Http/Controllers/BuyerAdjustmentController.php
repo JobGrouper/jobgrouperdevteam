@@ -8,6 +8,8 @@ use App\Job;
 use App\User;
 use Illuminate\Http\Request;
 
+
+
 use App\Http\Requests;
 use Auth;
 use Validator;
@@ -92,8 +94,6 @@ class BuyerAdjustmentController extends Controller
 
             $employee = $job->employee()->first();
             $psi->createPlan($employee, $job);
-
-	    // End All Early Birds
 	    
 	    return ['status' => 'success', 'message' => 'Adjustment successful, work is beginning'];
         }
@@ -424,8 +424,6 @@ class BuyerAdjustmentController extends Controller
         if($job->sales_count >= $job->min_clients_count && null != $job->employee_id && $job->status != 'working'){
 
             $psi->createPlan($employee, $job);
-
-	    // End all Early Birds
         }
 
         return response([
