@@ -5,7 +5,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 use \Carbon\Carbon;
-use App\Operations\StartNewEarlyBirdOP;
+use App\Operations\AdjustAllEarlyBirdsOP;
 
 use \App\User;
 use \App\Job;
@@ -19,7 +19,7 @@ use \Stripe\Token;
 use \Stripe\Plan;
 use \Stripe\Subscription;
 
-class StartNewEarlyBirdOPTest extends TestCase {
+class AdjustAllEarlyBirdsOPTest extends TestCase {
 
 	use DatabaseTransactions;
 
@@ -32,7 +32,7 @@ class StartNewEarlyBirdOPTest extends TestCase {
 	public function setUp() {
 
 		parent::setUp();
-		$this->op = \App::make('App\Operations\StartNewEarlyBirdOP');
+		$this->op = \App::make('App\Operations\AdjustAllEarlyBirdsOP');
 	}
 
 	public function tearDown() {
@@ -58,7 +58,7 @@ class StartNewEarlyBirdOPTest extends TestCase {
 
 	public function testConstruct() {
 
-		$this->assertInstanceOf(StartNewEarlyBirdOP::class, $this->op);
+		$this->assertInstanceOf(AdjustAllEarlyBirdsOP::class, $this->op);
 	}
 
 	public function testGo() {
@@ -148,6 +148,46 @@ class StartNewEarlyBirdOPTest extends TestCase {
 			'job_id' => $job->id,
 			'sale_id' => $order->id,
 			'status' => 'requested']);
+
+		// set plan id
+		$this->plan_id = "plan_00000000TESTEE";
+
+		// Create plan
+		$this->plan = Plan::create(array(
+			  "amount" => 1000,
+			  "interval" => "month",
+			  "name" => "PHPUnit AdjustEarlyBird Plan",
+			  "currency" => "usd",
+			  "id" => $this->plan_id
+			),
+			array('stripe_account' => $this->account_id));
+
+		// Link Job with Plan from Stripe Managed Account and Connected Customer
+		DB::table('stripe_plans')->insert([
+			'id' => $this->plan_id,
+			'managed_account_id' => $this->account_id,
+			'job_id' => $job->id,
+			'activated' => 1
+			]);
+
+
+		// Create subscription
+		$subscription = Subscription::create(array(
+			"customer" => $this->customer_id,
+			"plan" => $this->plan_id),
+			array('stripe_account' => $this->account_id));
+
+		$this->subscription = $subscription;
+
+		// Link Subscription
+		//   which will create invoice
+		//   which will create a charge...maybe
+		DB::table('stripe_subscriptions')->insert([
+			'id' => $this->subscription->id,
+			'plan_id' => $this->plan_id,
+			'connected_customer_id' => $this->customer_id,
+			'activated' => 1
+			]);
 
 		$this->op->go($job, $early_bird);
 	}
