@@ -173,8 +173,14 @@ class Job extends Model
     }
 
     public function getEarlyBirdMarkupAttribute() {
+        $current_early_bird_count = $this->early_bird_buyers()->where('status', 'working')->get()->count();
+        $min_clients_count = $this->min_clients_count;
+        $surcharge = $this->salary * 0.15;
+        $normal_total = ($this->salary + $surcharge);
+        $xtra_markup = (0.15 * ( $current_early_bird_count / $min_clients_count ));
+        $total_price_will_be = $normal_total + $xtra_markup;
 
-	    return 0;
+	    return $total_price_will_be;
     }
 
 
