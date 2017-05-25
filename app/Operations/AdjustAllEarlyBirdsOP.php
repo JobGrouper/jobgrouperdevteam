@@ -53,6 +53,11 @@ class AdjustAllEarlyBirdsOP extends Operation {
 				$subscription = $this->psi->retrieveSubscription($old_plan, $customer, $employee_account);
 				$this->psi->changeSubscriptionPlan($subscription, $new_plan);
 			}
+
+			///////////////
+			// Deactivate old plan
+			//
+			$this->psi->deactivatePlan( $old_plan );
 		}
 
 	}

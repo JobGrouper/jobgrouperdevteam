@@ -68,11 +68,19 @@ class StopEarlyBirdOP extends Operation {
 			// Update subscriptions for other early birds
 			//
 			foreach($current_early_bird_buyers as $prevvy_buyer) {
-				//$psi->changeSubscriptionPlan($prevvy_buyer);
-				$customer = $this->psi->retrieveCustomerFromUser($prevvy_buyer, $job, $employee_account->id);
+
+				$customer = $this->psi->retrieveCustomerFromUser($prevvy_buyer->user, $job, $employee_account->id);
 				$subscription = $this->psi->retrieveSubscription($old_plan, $customer, $employee_account);
 				$this->psi->changeSubscriptionPlan($subscription, $new_plan);
 			}
+
+		}
+
+		/////////
+		// Deactivate old plan
+		//
+		if ($old_plan) {
+			$this->psi->deactivatePlan($old_plan);
 		}
 
 	}

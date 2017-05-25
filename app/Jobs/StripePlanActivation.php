@@ -21,6 +21,7 @@ class StripePlanActivation extends Job implements ShouldQueue
     public $psi;
     public $seller_account;
     public $plan;
+    public $old_plan;
     public $stripe_job;
 
     /**
@@ -29,13 +30,14 @@ class StripePlanActivation extends Job implements ShouldQueue
      * @return void
      * @params PaymentServiceInterface psi
      */
-    public function __construct($psi, $job, $plan, $seller_account)
+    public function __construct($psi, $job, $plan, $seller_account, $old_plan=NULL)
     {
         //
 	$this->psi = $psi;
 	$this->stripe_job = $job;
 	$this->plan = $plan;
 	$this->seller_account = $seller_account;
+	$this->old_plan = $old_plan;
     }
 
     /**
@@ -52,9 +54,10 @@ class StripePlanActivation extends Job implements ShouldQueue
 	   $testing = true;
 	}
 
-	// Making a copy
+	// Making copies
 	$job = $this->stripe_job;
 	$plan = $this->plan;
+	$old_plan = $this->old_plan;
 	$employee_account = $this->seller_account;
 	
 	// Gather everyone
@@ -72,11 +75,13 @@ class StripePlanActivation extends Job implements ShouldQueue
 
 			if ($early_bird && $early_bird->status == 'working') {
 
-				// Get old plan
+				if ($old_plan == NULL) {
+					throw new \Exception('StripePlanActivation: no old plan given');
+				}
 
 				// Update early bird subscription
 				$customer = $psi->retrieveCustomerFromUser($buyer, $job, $employee_account->id);
-				$subscription = $psi->retrieveSubscriptionByCustomer($customer, $employee_account);
+				$subscription = $psi->retrieveSubscription($old_plan, $customer, $employee_account);
 				$psi->changeSubscriptionPlan($subscription, $plan);
 
 				// end early_bird_buyer

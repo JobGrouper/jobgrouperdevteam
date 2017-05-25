@@ -264,7 +264,12 @@ class OrderController extends Controller
 			withErrors(['Server error. Try again later.']);
 	}
 
-	$source = $psi->updateCustomerSource($user, $token, $account['id']);
+	/*
+	$customer->source = $token->id;
+	$source = $customer->save();
+	 */
+	$source = $psi->updateCustomerSourceSimple($customer, $token);
+	//$source = $psi->updateCustomerSource($user, $token, $account['id']);
 	
 	if (isset($source['id'])) {
 	  $order->status = 'in_progress';

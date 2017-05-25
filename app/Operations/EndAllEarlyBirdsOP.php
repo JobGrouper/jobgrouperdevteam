@@ -43,6 +43,8 @@ class EndAllEarlyBirdsOP extends Operation {
 		//	$current_early_bird_buyers = $job->early_bird_buyers()->where('status', 'working')->get();
 		}
 
+		// deactivate plan
+
 		// And that's the end!
 	}
 }

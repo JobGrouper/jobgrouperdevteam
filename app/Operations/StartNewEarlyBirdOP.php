@@ -64,6 +64,13 @@ class StartNewEarlyBirdOP extends Operation {
 			$this->psi->changeSubscriptionPlan($subscription, $new_plan);
 		}
 
+		/////////
+		// Deactivate old plan
+		//
+		if ($old_plan) {
+			$this->psi->deactivatePlan($old_plan);
+		}
+
 		// And that's the end!
 	}
 }
