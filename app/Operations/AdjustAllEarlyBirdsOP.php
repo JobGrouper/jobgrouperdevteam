@@ -49,7 +49,7 @@ class AdjustAllEarlyBirdsOP extends Operation {
 			// Update subscriptions for other early birds
 			//
 			foreach($current_early_bird_buyers as $prevvy_buyer) {
-				$customer = $this->psi->retrieveCustomerFromUser($prevvy_buyer, $job, $employee_account->id);
+				$customer = $this->psi->retrieveCustomerFromUser($prevvy_buyer->user, $job, $employee_account->id);
 				$subscription = $this->psi->retrieveSubscription($old_plan, $customer, $employee_account);
 				$this->psi->changeSubscriptionPlan($subscription, $new_plan);
 			}

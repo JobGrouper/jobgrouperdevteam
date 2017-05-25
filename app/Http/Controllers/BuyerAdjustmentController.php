@@ -99,7 +99,7 @@ class BuyerAdjustmentController extends Controller
         }
 	else if($job->sales_count < $job->min_clients_count && 
 		$job->employee_id != NULL && $job->status != 'working' &&
-		$request->new_client_min != $job->min_clients_count) {
+		$changes['min_change'] != NULL) {
 
 		// Adjust all Early Birds
 		$adjust_all->go($job);

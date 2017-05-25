@@ -23,10 +23,10 @@ class CreateEarlyBirdBuyerTable extends Migration
             $table->timestamps();
 
 	        // fks
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('employee_id')->references('id')->on('users');
-	        $table->foreign('sale_id')->references('id')->on('sales');
-            $table->foreign('job_id')->references('id')->on('jobs');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('employee_id')->references('id')->on('users')->onDelete('cascade');
+	    $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade');
+            $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
         });
     }
 

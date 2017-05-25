@@ -761,7 +761,7 @@ class StripeService implements PaymentServiceInterface {
 			$customer = Customer::retrieve(array('id' => $customer_record->id), 
 						array('stripe_account' => $account_id));
 
-			$customer->source = $token;
+			$customer->source = $token->id;
 
 			try {
 				$response = $customer->save();
@@ -1130,7 +1130,7 @@ class StripeService implements PaymentServiceInterface {
 		try {
 
 			// Create plan
-			$plan = Plan::create(array(
+			$response = Plan::create(array(
 			  "amount" => $options['amount'], 
 			  "interval" => "month",
 			  "name" => $job->title,
@@ -1174,18 +1174,26 @@ class StripeService implements PaymentServiceInterface {
 
 		}
 
-		// Add plan to database
-		DB::table('stripe_plans')->insert(
-			[
-				'id' => $plan->id ,
-				'managed_account_id' => $managed_account->id,
-				'job_id' => $job->id,
-				'activated' => 1,
-				'created_at' => Carbon::now()
-			]
-		);
+		if (isset($error_response)) {
+			var_dump($error_response);
+			return $error_response;
+		}
+		else {
 
-		return $plan;
+			// Add plan to database
+			DB::table('stripe_plans')->insert(
+				[
+					'id' => $response->id ,
+					'managed_account_id' => $managed_account->id,
+					'job_id' => $job->id,
+					'activated' => 1,
+					'created_at' => Carbon::now()
+				]
+			);
+
+			return $response;
+		}
+
 	}
 
 	public function createPlanInDB($plan_id, $managed_account_id, $job_id) {
@@ -1369,6 +1377,15 @@ class StripeService implements PaymentServiceInterface {
 			['plan_id', '=', $plan->id],
 			['connected_customer_id', '=', $customer->id]
 		])->first();
+
+		return Subscription::retrieve( array('id' => $subscription_record->id),
+	       			array('stripe_account' => $account->id));
+	}
+
+	public function retrieveSubscriptionByCustomer($customer, $account) {
+		
+		$subscription_record = DB::table('stripe_subscriptions')->where(
+			'connected_customer_id', '=', $customer->id)->first();
 
 		return Subscription::retrieve( array('id' => $subscription_record->id),
 	       			array('stripe_account' => $account->id));

@@ -58,25 +58,30 @@ class StripePlanActivation extends Job implements ShouldQueue
 	$employee_account = $this->seller_account;
 	
 	// Gather everyone
-	//$buyers = $this->stripe_job->confirmed_buyers()->get();
-	$buyers = $this->stripe_job->confirmed_buyers()->with('early_bird_buyers')->get();
+	$buyers = $this->stripe_job->confirmed_buyers()->get();
+	$early_bird_buyers = $this->stripe_job->early_bird_buyers()->get();
+	$keyed_early_birds = $early_bird_buyers->keyBy('user_id');
 
         //
 	foreach ($buyers as $buyer) {
 
 		if (!$testing) {
 
-			if ($buyer->early_bird_buyer != NULL 
-				&& $buyer->early_bird_buyer->status == 'working') {
+			// check for early bird
+			$early_bird = $keyed_early_birds[ $buyer->id ];
+
+			if ($early_bird && $early_bird->status == 'working') {
+
+				// Get old plan
 
 				// Update early bird subscription
 				$customer = $psi->retrieveCustomerFromUser($buyer, $job, $employee_account->id);
-				$subscription = $psi->retrieveSubscription($plan, $customer, $employee_account);
+				$subscription = $psi->retrieveSubscriptionByCustomer($customer, $employee_account);
 				$psi->changeSubscriptionPlan($subscription, $plan);
 
 				// end early_bird_buyer
-				$buyer->early_bird_buyer->status = 'ended';
-				$buyer->early_bird_buyer->save();
+				$early_bird->status = 'ended';
+				$early_bird->save();
 			}
 			else {
 				// Create a new subscription
