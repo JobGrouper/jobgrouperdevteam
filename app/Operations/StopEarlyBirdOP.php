@@ -37,7 +37,11 @@ class StopEarlyBirdOP extends Operation {
 		$employee = $job->employee()->first();
 		$buyer = $early_bird_buyer->user()->first();
 
-		$current_early_bird_buyers = $job->early_bird_buyers()->where('status', 'working')->get();
+		// End early bird
+		$early_bird_buyer->status = 'ended';
+		$early_bird_buyer->save();
+
+		$current_early_bird_buyers = $job->early_bird_buyers()->with('user')->where('status', 'working')->get();
 
 		$employee_account = $this->psi->retrieveAccountFromUser($employee);
 		$old_plan = $this->psi->retrievePlan($job, $employee_account->id);
@@ -47,10 +51,6 @@ class StopEarlyBirdOP extends Operation {
 		//$subscription = $this->psi->retrieveSubscription();
 		$customer = $this->psi->retrieveCustomerFromUser($buyer, $job, $employee_account->id);
 		//$subscription = $this->psi->retrieveSubscription($new_plan, $customer, $employee_account);
-
-		// End early bird
-		$early_bird_buyer->status = 'ended';
-		$early_bird_buyer->save();
 
 		// Cancel Subscription in Stripe
 		//

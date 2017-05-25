@@ -30,8 +30,14 @@ class StartNewEarlyBirdOP extends Operation {
 		//
 		$employee = $job->employee()->first();
 		$buyer = $early_bird_buyer->user()->first();
-		$current_early_bird_buyers = $job->early_bird_buyers()->where('status', 'working')->get();
-	
+		$current_early_bird_buyers = $job->early_bird_buyers()->with('user')->where('status', 'working')->get();
+		$employee_account = $this->psi->retrieveAccountFromUser($employee);
+
+		$old_plan = NULL;
+		if (count($current_early_bird_buyers) > 0) {
+		  $old_plan = $this->psi->retrievePlan($job, $employee_account->id);
+		}
+
 		/////////////
 		// Create new plan
 		$new_plan = $this->psi->createPlanBare($employee, $job, array(
@@ -40,8 +46,6 @@ class StartNewEarlyBirdOP extends Operation {
 		/////////////
 		// Create Stripe Subscription
 		//
-		$employee_account = $this->psi->retrieveAccountFromUser($employee);
-		$old_plan = $this->psi->retrievePlan($job, $employee_account->id);
 		$customer = $this->psi->retrieveCustomerFromUser($buyer, $job, $employee_account->id);
 		$new_subscription = $this->psi->createSubscription($new_plan, $customer, $employee_account);
 
@@ -55,7 +59,7 @@ class StartNewEarlyBirdOP extends Operation {
 		//
 		foreach($current_early_bird_buyers as $prevvy_buyer) {
 			//TEST:: $subscription = $this->psi->retrieveSubscription($new_plan, $customer, $employee_account);
-			$customer = $this->psi->retrieveCustomerFromUser($prevvy_buyer, $job, $employee_account->id);
+			$customer = $this->psi->retrieveCustomerFromUser($prevvy_buyer->user, $job, $employee_account->id);
 			$subscription = $this->psi->retrieveSubscription($old_plan, $customer, $employee_account);
 			$this->psi->changeSubscriptionPlan($subscription, $new_plan);
 		}

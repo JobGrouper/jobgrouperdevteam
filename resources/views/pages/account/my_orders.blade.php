@@ -52,8 +52,8 @@
 					<p>You can request that {{ $employee->full_name }}
 					begin working with you right now, before the job
 					officially starts.</p>
-					<p>The job will proceed at a {{ $job->early_bird_markup }}
-					% markup. This price will change if other buyers decide to start
+					<p>The job will proceed at a marked up rate of ${{ number_format($job->early_bird_markup, 2) }}/month.
+					This price will change if other buyers decide to start
  					work early, or the job officially begins.</p>
 					<form class="early_bird_buy_now_form" job_id="{{ $job->id }}">
 						<input type="hidden" name="job_id" value="{{ $job->id }}"/>
@@ -67,6 +67,7 @@
 		    </div>
 		    @endif
 
+		    @if ($order->early_bird_buyer)
         	    <div class="alert_window early_bird_end_work" job_id="{{ $job->id }}">
             		<div class="alert_window__block">
 				<p>Cancel's work immediately. You will not receive a refund for
@@ -75,11 +76,13 @@
 					<input type="hidden" name="job_id" value="{{ $job->id }}"/>
 					<input type="hidden" name="user_id" value="{{ $user->id }}"/>
 					<input type="hidden" name="order_id" value="{{ $order->id }}"/>
+					<input type="hidden" name="early_bird_buyer_id" value="{{ $order->early_bird_buyer->id }}"/>
 					<button class="early_bird_cancel_work" job_id="{{ $job->id }}">Cancel Work</button>
 				</form>
                 		<div class="cancel"></div>
 			</div>
 		    </div>
+		    @endif
 
                     <div class="workers_item clearfix" data-id="{{$order->id}}" id="block_{{$order->id}}" data-hasEmployee="<?=($employee ? $employee->id : '0')?>">
 

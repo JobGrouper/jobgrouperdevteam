@@ -129,8 +129,12 @@ class EarlyBirdBuyerController extends Controller
 				], 200);
 			}
 
+			/*
+			 * Handle this within the operations
+			 *
 			$earlyBirdBuyer->status = 'working';
 			$earlyBirdBuyer->save();
+			 */
 
 			$job = $earlyBirdBuyer->job()->first();
 			$user = $earlyBirdBuyer->user()->first();
@@ -300,10 +304,7 @@ class EarlyBirdBuyerController extends Controller
 			], 200);
 		}
 		else{
-			$earlyBirdBuyer = EarlyBirdBuyer::where('id', $request->early_bird_buyer_id)
-				->where('employee_id', $employee->id)
-				->where('status', 'requested')
-				->first();
+			$earlyBirdBuyer = EarlyBirdBuyer::where('id', $request->early_bird_buyer_id)->first();
 
 			if (!$earlyBirdBuyer) {
 				return response([
@@ -313,8 +314,10 @@ class EarlyBirdBuyerController extends Controller
 				], 200);
 			}
 
+			/*
 			$earlyBirdBuyer->status = 'denied';
 			$earlyBirdBuyer->save();
+			 */
 
 			$job = $earlyBirdBuyer->job()->first();
 

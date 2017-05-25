@@ -324,6 +324,7 @@
 					<p>Working</p>
 					<form class="early_bird_cancel_form" user_id="{{ $order->buyer->id }}">
 						<input type="hidden" name="job_id" value="{{ $job->id }}"/>
+						<input type="hidden" name="early_bird_buyer_id" value="{{ $order->early_bird_buyer->id }}"/>
 						<input type="hidden" name="user_id" value="{{ $order->buyer->id }}"/>
 						<button class="early_bird_cancel" user_id="{{ $order->buyer->id }}">Cancel</button>
 					</form>

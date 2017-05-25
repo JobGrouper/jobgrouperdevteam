@@ -714,23 +714,20 @@ jg.EarlyBirdActivator.prototype = {
 			var obj = $("form.early_bird_cancel_work_form[job_id='" + job_id + "'").serialize();
 
 			// Ajax
-			/*
 			$.ajax({ type: "POST",
-					url: "/",
+					url: "/api/earlyBirdBuyers/stopEarlyBird",
 					data: obj,
 					datatype: "json",
 					success: function(response) {
 
+						// hide calling button
+						$(".early-bird-end-work-caller[job_id='" + job_id + "'").hide();
+						$(".early-bird-working[job_id='" + job_id + "'").hide();
+
+						// show request pending thing
+						$('.early-bird-ended[job_id="' + job_id + '"').show();
 					}
 				});
-				*/
-
-			// hide calling button
-			$(".early-bird-end-work-caller[job_id='" + job_id + "'").hide();
-			$(".early-bird-working[job_id='" + job_id + "'").hide();
-
-			// show request pending thing
-			$('.early-bird-ended[job_id="' + job_id + '"').show();
 		});
 
 		$(".alert_window__block .cancel").click(function() {
@@ -775,17 +772,15 @@ jg.EarlyBirdActivator.prototype = {
 			e.preventDefault();
 			var id = $( e.target ).attr('user_id');
 			var obj = $("form.early_bird_cancel_form[user_id='" + id + "'").serialize();
-			alert('Cancel ' + obj);
-			/*
+
 			$.ajax({ type: "POST",
-					url: "/",
+					url: "/api/earlyBirdBuyers/stopEarlyBird",
 					data: obj,
 					datatype: "json",
 					success: function(response) {
 
 					}
 				});
-				*/
 		});
 	},
 	_callWindow: function(target) {

@@ -32,7 +32,7 @@ class AdjustAllEarlyBirdsOP extends Operation {
 		 */
 		$employee = $job->employee()->first();
 
-		$current_early_bird_buyers = $job->early_bird_buyers()->where('status', 'working')->get();
+		$current_early_bird_buyers = $job->early_bird_buyers()->with('user')->where('status', 'working')->get();
 
 		$employee_account = $this->psi->retrieveAccountFromUser($employee);
 		$old_plan = $this->psi->retrievePlan($job, $employee_account->id);
