@@ -4,12 +4,13 @@
 
 @section('autoload_scripts')
 
-@if($employeeRequest)
-    @if($employeeRequest->status == 'approved' && !$adjustment_request)
 <script>
 	var buyer_adjuster;
 	var seller_activator;
 	jg.Autoloader(function() {
+
+	@if($employeeRequest)
+	    @if($employeeRequest->status == 'approved' && !$adjustment_request)
 
 		buyer_adjuster = new jg.BuyerAdjuster({
 			root: document.getElementById('buyer_adjuster'),
@@ -20,13 +21,14 @@
 			request: true
 		});
 
+	   @endif
+	@endif
+
 		seller_activator = new jg.EarlyBirdActivator({
 
 		});
 	});
 </script>
-   @endif
-@endif
 
 @endsection
 

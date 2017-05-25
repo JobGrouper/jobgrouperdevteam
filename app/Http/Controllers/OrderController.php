@@ -211,7 +211,7 @@ class OrderController extends Controller
     }
 
 
-    public function update(Request $request, PaymentServiceInterface $psi, EndAllEarlyBirdsOP $op){
+    public function update(Request $request, PaymentServiceInterface $psi){
 
 	$this->validate($request, [
 		    'card_number' => 'required',
