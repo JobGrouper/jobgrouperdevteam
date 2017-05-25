@@ -78,14 +78,14 @@ class EarlyBirdBuyerController extends Controller
 
 			/*
 			// send mail to employee
-			Mail::send('emails.early_bird_buyers_new_request_to_employee', ['user' => $user, 'job' => $job], function($u) use ($employee)
+			Mail::send('emails.early_bird_buyers_new_request_to_employee', ['user' => $user, 'job' => $job, 'employee' => $employee], function($u) use ($employee)
 			{
 				$u->from('admin@jobgrouper.com');
 				$u->to($employee->email);
 				$u->subject('subject');
 			});
 			// send mail to buyer
-			Mail::send('emails.early_bird_buyers_request_cenceled_to_buyer', ['user' => $user, 'job' => $job], function($u) use ($user)
+			Mail::send('emails.early_bird_buyers_request_cenceled_to_buyer', ['user' => $user, 'job' => $job, 'employee' => $employee], function($u) use ($user)
 			{
 				$u->from('admin@jobgrouper.com');
 				$u->to($user->email);
