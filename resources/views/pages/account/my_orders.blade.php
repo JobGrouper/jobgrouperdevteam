@@ -159,24 +159,26 @@
                             @if($order->card_set)
                                 <!--<p class="credit_card"><span class="wrap"><span style="font-weight: 700">Credit Card:</span> <span class="number"></span></span><a href="/change_credit_card/{{$order->id}}">Change card</a></p>-->
 				<div class="early_bird_buyer_panel">
-				@if($order->early_bird_buyer)
-				   	@if($order->early_bird_buyer->status == 'requested')
-					   <span class="status early-bird-request-pending" job_id="{{$job->id}}">Request Pending</span>
-					   <button class="early_bird_cancel_request" job_id="{{$job->id}}" early_bird_buyer_id="{{ $order->early_bird_buyer->id }}">Cancel Request</button>
-					   <span class="status early_bird_request_cancelled" job_id="{{$job->id}}" early_bird_buyer_id="{{ $order->early_bird_buyer->id }}" style="display:none">Request Cancelled</span>
-					@elseif($order->early_bird_buyer->status == 'denied')
-					   <span class="status early-bird-request-denied">Request Denied</span>
-					@elseif($order->early_bird_buyer->status == 'working')
-					   <span class="status early-bird-working" job_id="{{ $job->id }}">Started Early</span>
-					   <button class="early-bird-end-work-caller" job_id="{{$job->id}}">Cancel Work</button>
-					   <span class="status early-bird-ended hidden" job_id="{{$job->id}}" style="display:none;">Early Bird Ended</span>
-					@elseif($order->early_bird_buyer->status == 'ended')
-					   <span class="status early-bird-ended">Early Bird Ended</span>
-				   	@endif
-				@else
-					@if($job->employee_id != NULL)
-					   <button class="early-bird-buy-now-caller" job_id="{{$job->id}}">Buy Early</button>
-					   <span class="status early-bird-request-pending" job_id="{{$job->id}}" style="display:none;">Request Pending</span>
+				@if($job->status == 'waiting')
+					@if($order->early_bird_buyer)
+						@if($order->early_bird_buyer->status == 'requested')
+						   <span class="status early-bird-request-pending" job_id="{{$job->id}}">Request Pending</span>
+						   <button class="early_bird_cancel_request" job_id="{{$job->id}}" early_bird_buyer_id="{{ $order->early_bird_buyer->id }}">Cancel Request</button>
+						   <span class="status early_bird_request_cancelled" job_id="{{$job->id}}" early_bird_buyer_id="{{ $order->early_bird_buyer->id }}" style="display:none">Request Cancelled</span>
+						@elseif($order->early_bird_buyer->status == 'denied')
+						   <span class="status early-bird-request-denied">Request Denied</span>
+						@elseif($order->early_bird_buyer->status == 'working')
+						   <span class="status early-bird-working" job_id="{{ $job->id }}">Started Early</span>
+						   <button class="early-bird-end-work-caller" job_id="{{$job->id}}">Cancel Work</button>
+						   <span class="status early-bird-ended hidden" job_id="{{$job->id}}" style="display:none;">Early Bird Ended</span>
+						@elseif($order->early_bird_buyer->status == 'ended')
+						   <span class="status early-bird-ended">Early Bird Ended</span>
+						@endif
+					@else
+						@if($job->employee_id != NULL)
+						   <button class="early-bird-buy-now-caller" job_id="{{$job->id}}">Buy Early</button>
+						   <span class="status early-bird-request-pending" job_id="{{$job->id}}" style="display:none;">Request Pending</span>
+						@endif
 					@endif
 				@endif
 				</div>
