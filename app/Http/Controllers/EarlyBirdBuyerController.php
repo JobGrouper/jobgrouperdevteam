@@ -102,6 +102,7 @@ class EarlyBirdBuyerController extends Controller
 	}
 
 	public function confirmRequest(Request $request, StartNewEarlyBirdOP $op) {
+
 		$employee = Auth::user();
 
 		$v = Validator::make($request->all(),[
@@ -232,6 +233,7 @@ class EarlyBirdBuyerController extends Controller
 	}
 
 	public function denyRequest(Request $request) {
+
 		$employee = Auth::user();
 
 		$v = Validator::make($request->all(),[

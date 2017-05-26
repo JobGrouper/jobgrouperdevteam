@@ -46,21 +46,25 @@
                         ?>
 
 		    @if($employee)
-        	    <div class="alert_window early_bird_buy_now" job_id="{{ $job->id }}">
+        	    <div class="alert_window early_bird early_bird_buy_now" job_id="{{ $job->id }}">
             		<div class="alert_window__block">
 				<div>
-					<p>You can request that {{ $employee->full_name }}
-					begin working with you right now, before the job
-					officially starts.</p>
-					<p>The job will proceed at a marked up rate of ${{ number_format($job->early_bird_markup, 2) }}/month.
-					This price will change if other buyers decide to start
- 					work early, or the job officially begins.</p>
-					<form class="early_bird_buy_now_form" job_id="{{ $job->id }}">
-						<input type="hidden" name="job_id" value="{{ $job->id }}"/>
-						<input type="hidden" name="user_id" value="{{ $user->id }}"/>
-						<input type="hidden" name="order_id" value="{{ $order->id }}"/>
-						<button class="early_bird_buy_now" job_id="{{ $job->id }}">Send Request</button>
-					</form>
+					<div class="text">
+						<p>You can request that {{ $employee->full_name }}
+						begin working with you right now, before the job
+						officially starts.</p>
+						<p>The job will proceed at a marked up rate of ${{ number_format($job->early_bird_markup, 2) }}/month.
+						This price will change if other buyers decide to start
+						work early, or the job officially begins.</p>
+					</div>
+					<div class="submit">
+						<form class="early_bird_buy_now_form" job_id="{{ $job->id }}">
+							<input type="hidden" name="job_id" value="{{ $job->id }}"/>
+							<input type="hidden" name="user_id" value="{{ $user->id }}"/>
+							<input type="hidden" name="order_id" value="{{ $order->id }}"/>
+							<button class="early_bird_buy_now" job_id="{{ $job->id }}">Send Request</button>
+						</form>
+					</div>
 				</div>
                 		<div class="cancel"></div>
 			</div>
@@ -68,17 +72,23 @@
 		    @endif
 
 		    @if ($order->early_bird_buyer)
-        	    <div class="alert_window early_bird_end_work" job_id="{{ $job->id }}">
+        	    <div class="alert_window early_bird early_bird_end_work" job_id="{{ $job->id }}">
             		<div class="alert_window__block">
-				<p>Cancel's work immediately. You will not receive a refund for
-				the rest of the month's time.</p>
-				<form class="early_bird_cancel_work_form" job_id="{{ $job->id }}">
-					<input type="hidden" name="job_id" value="{{ $job->id }}"/>
-					<input type="hidden" name="user_id" value="{{ $user->id }}"/>
-					<input type="hidden" name="order_id" value="{{ $order->id }}"/>
-					<input type="hidden" name="early_bird_buyer_id" value="{{ $order->early_bird_buyer->id }}"/>
-					<button class="early_bird_cancel_work" job_id="{{ $job->id }}">Cancel Work</button>
-				</form>
+				<div>
+					<div class="text">
+						<p>Cancel's work immediately. You will not receive a refund for
+						the rest of the month's time.</p>
+					</div>
+					<div class="submit">
+						<form class="early_bird_cancel_work_form" job_id="{{ $job->id }}">
+							<input type="hidden" name="job_id" value="{{ $job->id }}"/>
+							<input type="hidden" name="user_id" value="{{ $user->id }}"/>
+							<input type="hidden" name="order_id" value="{{ $order->id }}"/>
+							<input type="hidden" name="early_bird_buyer_id" value="{{ $order->early_bird_buyer->id }}"/>
+							<button class="early_bird_cancel_work" job_id="{{ $job->id }}">Cancel Work</button>
+						</form>
+					</div>
+				</div>
                 		<div class="cancel"></div>
 			</div>
 		    </div>
@@ -114,16 +124,19 @@
 
                             <p><a href="/job/{{$job->id}}">{{$job->title}}</a></p>
 
+                            <p class="salary">${{$job->salary}}/month</p>
                             <p class="month">{{$job->description}}</p>
 
                         </div>
 
+			<!--
                         <div class="order_salary">
 
                             <p>${{$job->salary}}/month</p>
 
+				-->
                             {{--<p class="month">work {{$order->created_at->diffInMonths() + 1}} month{{(($order->created_at->diffInMonths() + 1) > 1 ? 's' : '') }}</p>--}}
-				<!--
+			<!--
                             <p class="month">
                                 @if($order->paid_to)
                                     Paid to {{$order->paid_to}}
@@ -132,9 +145,10 @@
                                     This job will time out in {{Carbon\Carbon::now()->diffInMinutes(Carbon\Carbon::parse($order->updated_at)->addMinutes(5)) }} minutes
                                 @endif
                             </p>
-				-->
                         </div>
+				-->
 
+			<div class="right_stuff">
                         {{--@if($closeRequest)--}}
                         @if($order->status == 'closed')
                             {{--<button class="Request">Request Sent</button>--}}
@@ -144,26 +158,28 @@
 
                             @if($order->card_set)
                                 <!--<p class="credit_card"><span class="wrap"><span style="font-weight: 700">Credit Card:</span> <span class="number"></span></span><a href="/change_credit_card/{{$order->id}}">Change card</a></p>-->
+				<div class="early_bird_buyer_panel">
 				@if($order->early_bird_buyer)
 				   	@if($order->early_bird_buyer->status == 'requested')
-					   <button class="early-bird-request-pending" job_id="{{$job->id}}">Request Pending</button>
+					   <span class="status early-bird-request-pending" job_id="{{$job->id}}">Request Pending</span>
 					   <button class="early_bird_cancel_request" job_id="{{$job->id}}" early_bird_buyer_id="{{ $order->early_bird_buyer->id }}">Cancel Request</button>
-					   <button class="early_bird_request_cancelled" job_id="{{$job->id}}" early_bird_buyer_id="{{ $order->early_bird_buyer->id }}" style="display:none">Request Cancelled</button>
+					   <span class="status early_bird_request_cancelled" job_id="{{$job->id}}" early_bird_buyer_id="{{ $order->early_bird_buyer->id }}" style="display:none">Request Cancelled</span>
 					@elseif($order->early_bird_buyer->status == 'denied')
-					   <button class="early-bird-request-denied">Request Denied</button>
+					   <span class="status early-bird-request-denied">Request Denied</span>
 					@elseif($order->early_bird_buyer->status == 'working')
-					   <button class="early-bird-working" job_id="{{ $job->id }}">Currently Working</button></br>
-					   <button class="early-bird-end-work-caller" job_id="{{$job->id}}">Cancel Early Work</button>
-					   <button class="early-bird-ended" job_id="{{$job->id}}" style="display:none;">Early Bird Ended</button>
+					   <span class="status early-bird-working" job_id="{{ $job->id }}">Started Early</span>
+					   <button class="early-bird-end-work-caller" job_id="{{$job->id}}">Cancel Work</button>
+					   <span class="status early-bird-ended hidden" job_id="{{$job->id}}" style="display:none;">Early Bird Ended</span>
 					@elseif($order->early_bird_buyer->status == 'ended')
-					   <button class="early-bird-ended">Early Bird Ended</button>
+					   <span class="status early-bird-ended">Early Bird Ended</span>
 				   	@endif
 				@else
 					@if($job->employee_id != NULL)
-					   <button class="early-bird-buy-now-caller" job_id="{{$job->id}}">Buy Now</button>
-					   <button class="early-bird-request-pending" job_id="{{$job->id}}" style="display:none;">Request Pending</button>
+					   <button class="early-bird-buy-now-caller" job_id="{{$job->id}}">Buy Early</button>
+					   <span class="status early-bird-request-pending" job_id="{{$job->id}}" style="display:none;">Request Pending</span>
 					@endif
 				@endif
+				</div>
                             @elseif(!$order->card_set && $job->employee_id == NULL)
                                 <button class="purchasebtn">Waiting on Employee</button>
 			    @elseif(!$order->card_set && $job->employee_id != NULL)
@@ -179,6 +195,8 @@
                             {{--<button class="Request">Request Sent</button>--}}
 
                         @endif
+			</div>
+			<div class="clear">&nbsp;</div>
 
                     </div>
 

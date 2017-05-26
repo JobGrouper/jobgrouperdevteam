@@ -88,8 +88,17 @@
 	}
 }
 
+@media only screen and (min-width : 992px) and (max-width : 1200px) {
+
+	.myjobs .workers_item .salary {
+		margin-right:0px;
+	}
+}
 
 @media only screen and (min-width : 992px) {
+    	.myjobs .workers_item div.right_stuff {
+      		float:left;
+	}
 	.myjobs .workers_item .purchasebtn {
 		right: 0;
 		top: 70px;
@@ -248,6 +257,10 @@
 	.myjobs {
 		padding-bottom: 220px;
 	}
+	.myjobs .workers_item .right_stuff {
+		margin:0px auto;
+		text-align:center;
+	}
 	.myjobs .workers_item {
 		padding-bottom: 140px;
 		text-align: center;
@@ -258,10 +271,16 @@
 	}
 	.myjobs .workers_item button {
 		left: 50%;
-		margin-left: -85px;
 		bottom: 20px;
 		top: auto;
 		margin-top: 0;
+	}
+	.myjobs .workers_item span.status {
+		margin: 0px auto;
+		margin-bottom:4px;
+	}
+	.myjobs .workers_item button {
+
 	}
 	.myorders .workers_item .order_salary {
 		float: none;

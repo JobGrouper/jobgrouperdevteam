@@ -16,6 +16,14 @@ jg.isArray = function( variable ) {
 	  return false;
 }
 
+jg.addSpinner = function( selector ) {
+
+	$('<img/>', {
+		src: '/img/default.svg',
+		alt: 'Loading...'
+	}).appendTo( selector );
+}
+
 jg.renderTemplate = function() {
 
 	var t = this._options.template;
@@ -743,11 +751,28 @@ jg.EarlyBirdActivator.prototype = {
 			var id = $( e.target ).attr('user_id');
 			var obj = $("form.early_bird_accept_form[user_id='" + id + "'").serialize();
 
+			jg.addSpinner( 'div.loading[user_id="' + id + '"' );
+
+			$( "button.early_bird_agree[user_id='" + id + "'" ).prop('disabled', 'disabled');
+			$( "button.early_bird_deny[user_id='" + id + "'" ).prop('disabled', 'disabled');
+
 			$.ajax({ type: "POST",
 					url: "/api/earlyBirdBuyers/confirmRequest",
 					data: obj,
 					datatype: "json",
 					success: function(response) {
+
+						$('div.loading[user_id="' + id + '"').hide();
+
+						$('div.question[user_id="' + id + '"').hide();
+
+						if (response.status == 'success') {
+							$('p.early_bird_error[user_id="' + id + '"').text('Early Bird Accepted.');
+						} else {
+							$('p.early_bird_error[user_id="' + id + '"').text('Something went wrong. Try again later');
+						}
+
+						$('p.early_bird_error[user_id="' + id + '"').removeClass('hidden');
 
 					}
 				});
@@ -758,20 +783,44 @@ jg.EarlyBirdActivator.prototype = {
 			var id = $( e.target ).attr('user_id');
 			var obj = $("form.early_bird_accept_form[user_id='" + id + "'").serialize();
 
+			jg.addSpinner( 'div.loading[user_id="' + id + '"' );
+
+			$( "button.early_bird_agree[user_id='" + id + "'" ).prop('disabled', 'disabled');
+			$( "button.early_bird_deny[user_id='" + id + "'" ).prop('disabled', 'disabled');
+
 			$.ajax({ type: "POST",
 					url: "/api/earlyBirdBuyers/denyRequest",
 					data: obj,
 					datatype: "json",
 					success: function(response) {
 						
+
+						$('div.loading[user_id="' + id + '"').hide();
+
+						$('div.question[user_id="' + id + '"').hide();
+
+						if (response.status == 'success') {
+							$('p.early_bird_error[user_id="' + id + '"').text('Early Bird Denied.');
+
+						} else {
+							$('p.early_bird_error[user_id="' + id + '"').text('Something went wrong. Try again later');
+						}
+
+						$('p.early_bird_error[user_id="' + id + '"').removeClass('hidden');
 					}
 				});
 		});
 
 		$("button.early_bird_cancel").click(function(e) {
+
 			e.preventDefault();
 			var id = $( e.target ).attr('user_id');
 			var obj = $("form.early_bird_cancel_form[user_id='" + id + "'").serialize();
+
+			jg.addSpinner( 'div.loading[user_id="' + id + '"' );
+
+			$( "button.early_bird_cancel[user_id='" + id + "'" ).prop('disabled', 'disabled');
+
 
 			$.ajax({ type: "POST",
 					url: "/api/earlyBirdBuyers/stopEarlyBird",
@@ -779,6 +828,18 @@ jg.EarlyBirdActivator.prototype = {
 					datatype: "json",
 					success: function(response) {
 
+						$('div.loading[user_id="' + id + '"').hide();
+
+						$('div.question[user_id="' + id + '"').hide();
+
+						if (response.status == 'success') {
+							$('p.early_bird_error[user_id="' + id + '"').text('Early work has ended.');
+
+						} else {
+							$('p.early_bird_error[user_id="' + id + '"').text('Something went wrong. Try again later');
+						}
+
+						$('p.early_bird_error[user_id="' + id + '"').removeClass('hidden');
 					}
 				});
 		});
