@@ -58,11 +58,26 @@ class StartNewEarlyBirdOP extends Operation {
 		// Update subscriptions for other early birds
 		//
 		foreach($current_early_bird_buyers as $prevvy_buyer) {
-			//TEST:: $subscription = $this->psi->retrieveSubscription($new_plan, $customer, $employee_account);
 			$customer = $this->psi->retrieveCustomerFromUser($prevvy_buyer->user, $job, $employee_account->id);
 			$subscription = $this->psi->retrieveSubscription($old_plan, $customer, $employee_account);
 			$this->psi->changeSubscriptionPlan($subscription, $new_plan);
+
+			Mail::queue('emails.early_bird_buyers_rate_changed_to_buyer', ['data' => 
+				['job' => $job]], function($u) use ($prevvy_buyer)
+			{
+				$u->from('admin@jobgrouper.com');
+				$u->to($prevvy_buyer->user->email);
+				$u->subject('Early Bird Rate Change');
+			});
 		}
+
+		Mail::queue('emails.early_bird_buyers_rate_changed_to_employee', ['data' => 
+			['job' => $job]], function($u) use ($employee)
+		{
+			$u->from('admin@jobgrouper.com');
+			$u->to($employee->email);
+			$u->subject('Early Bird Rate Change');
+		});
 
 		/////////
 		// Deactivate old plan

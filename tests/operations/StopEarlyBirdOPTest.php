@@ -119,6 +119,7 @@ class StopEarlyBirdOPTest extends TestCase {
 		    'description' => "A job for testing",
 		    'salary' => 50.00,
 		    'max_clients_count' => 5,
+		    'min_clients_count' => 4,
 		    'category_id' => 1,
 		]);
 

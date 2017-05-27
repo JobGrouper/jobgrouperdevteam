@@ -46,14 +46,9 @@ class StopEarlyBirdOP extends Operation {
 		$employee_account = $this->psi->retrieveAccountFromUser($employee);
 		$old_plan = $this->psi->retrievePlan($job, $employee_account->id);
 
-		// DEACTIVATE STRIPE SUBSCRIPTION IN DB
-		//$customer = $this->psi->retrieveCustomer($user);
-		//$subscription = $this->psi->retrieveSubscription();
-		$customer = $this->psi->retrieveCustomerFromUser($buyer, $job, $employee_account->id);
-		//$subscription = $this->psi->retrieveSubscription($new_plan, $customer, $employee_account);
-
-		// Cancel Subscription in Stripe
+		// DEACTIVATE SUBSCRIPTION
 		//
+		$customer = $this->psi->retrieveCustomerFromUser($buyer, $job, $employee_account->id);
 		$this->psi->cancelSubscription($old_plan, $customer, $employee_account->id);
 
 		if (count($current_early_bird_buyers) > 0) {
@@ -72,8 +67,33 @@ class StopEarlyBirdOP extends Operation {
 				$customer = $this->psi->retrieveCustomerFromUser($prevvy_buyer->user, $job, $employee_account->id);
 				$subscription = $this->psi->retrieveSubscription($old_plan, $customer, $employee_account);
 				$this->psi->changeSubscriptionPlan($subscription, $new_plan);
+
+				Mail::queue('emails.early_bird_buyers_rate_changed_to_buyer', ['data' => 
+					['job' => $job]], function($u) use ($prevvy_buyer)
+				{
+					$u->from('admin@jobgrouper.com');
+					$u->to($prevvy_buyer->user->email);
+					$u->subject('Early Bird Rate Change');
+				});
 			}
 
+			Mail::queue('emails.early_bird_buyers_rate_changed_to_employee', ['data' => 
+				['job' => $job]], function($u) use ($employee)
+			{
+				$u->from('admin@jobgrouper.com');
+				$u->to($employee->email);
+				$u->subject('Early Bird Rate Change');
+			});
+		}
+		else {  // Let employee know that there are no more early birds
+
+			Mail::queue('emails.early_bird_buyers_no_more_to_employee', ['data' => 
+				[]], function($u) use ($employee)
+			{
+				$u->from('admin@jobgrouper.com');
+				$u->to($employee->email);
+				$u->subject('Early Birds Have Ended');
+			});
 		}
 
 		/////////

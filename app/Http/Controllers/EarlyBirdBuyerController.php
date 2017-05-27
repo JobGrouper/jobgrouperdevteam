@@ -77,22 +77,20 @@ class EarlyBirdBuyerController extends Controller
 				'created_at' => Carbon::now()
 			]);
 
-			/*
 			// send mail to employee
-			Mail::send('emails.early_bird_buyers_new_request_to_employee', ['user' => $user, 'job' => $job, 'employee' => $employee], function($u) use ($employee)
+			Mail::queue('emails.early_bird_buyers_new_request_to_employee', ['user' => $user, 'job' => $job, 'employee' => $employee], function($u) use ($employee)
 			{
 				$u->from('admin@jobgrouper.com');
 				$u->to($employee->email);
-				$u->subject('subject');
+				$u->subject('New Early Bird Request');
 			});
 			// send mail to buyer
-			Mail::send('emails.early_bird_buyers_request_cenceled_to_buyer', ['user' => $user, 'job' => $job, 'employee' => $employee], function($u) use ($user)
+			Mail::queue('emails.early_bird_buyers_new_request_to_buyer', ['job' => $job, 'employee' => $employee], function($u) use ($user)
 			{
 				$u->from('admin@jobgrouper.com');
 				$u->to($user->email);
-				$u->subject('subject');
+				$u->subject('Early Bird Request Sent');
 			});
-			 */
 
 			return response([
 				'status' => 'success',
@@ -144,18 +142,18 @@ class EarlyBirdBuyerController extends Controller
 			$op->go($job, $earlyBirdBuyer);
 
 			// send mail to employee
-			Mail::send('emails.early_bird_buyers_request_confirmed_to_employee', ['buyer' => $buyer, 'job' => $job, 'employee' => $employee], function($u) use ($employee)
+			Mail::queue('emails.early_bird_buyers_request_confirmed_to_employee', ['buyer' => $buyer, 'job' => $job, 'employee' => $employee], function($u) use ($employee)
 			{
 				$u->from('admin@jobgrouper.com');
 				$u->to($employee->email);
-				$u->subject('/*subject*/');
+				$u->subject('New Early Bird Confirmed');
 			});
 			// send mail to buyer
-			Mail::send('emails.early_bird_buyers_request_confirmed_to_buyer', ['buyer' => $buyer, 'job' => $job, 'employee' => $employee], function($u) use ($buyer)
+			Mail::queue('emails.early_bird_buyers_request_confirmed_to_buyer', ['buyer' => $buyer, 'job' => $job, 'employee' => $employee], function($u) use ($buyer)
 			{
 				$u->from('admin@jobgrouper.com');
 				$u->to($buyer->email);
-				$u->subject('/*subject*/');
+				$u->subject('Early Bird Access Has Begun');
 			});
 
 			return response([
@@ -212,18 +210,18 @@ class EarlyBirdBuyerController extends Controller
 			$earlyBirdBuyer->delete();
 
 			// send mail to employee
-			Mail::send('emails.early_bird_buyers_request_cenceled_to_employee', ['user' => $user, 'job' => $job], function($u) use ($employee)
+			Mail::queue('emails.early_bird_buyers_request_cancelled_to_employee', ['data' => ['buyer' => $user, 'job' => $job]], function($u) use ($employee)
 			{
 				$u->from('admin@jobgrouper.com');
 				$u->to($employee->email);
-				$u->subject('/*subject*/');
+				$u->subject('Early Bird Request Cancelled');
 			});
 			// send mail to buyer
-			Mail::send('emails.early_bird_buyers_request_cenceled_to_buyer', ['user' => $user, 'job' => $job], function($u) use ($user)
+			Mail::queue('emails.early_bird_buyers_request_cancelled_to_buyer', ['data' => ['user' => $user, 'job' => $job]], function($u) use ($user)
 			{
 				$u->from('admin@jobgrouper.com');
 				$u->to($user->email);
-				$u->subject('/*subject*/');
+				$u->subject('Early Bird Request Cancelled');
 			});
 
 			return response([
@@ -269,22 +267,21 @@ class EarlyBirdBuyerController extends Controller
 			$job = $earlyBirdBuyer->job()->first();
 			$buyer = $earlyBirdBuyer->user()->first();
 
-			/*
 			// send mail to employee
-			Mail::send('emails.early_bird_buyers_request_denied_to_employee', ['buyer' => $buyer, 'job' => $job], function($u) use ($employee)
+			Mail::queue('emails.early_bird_buyers_request_denied_to_employee', ['buyer' => $buyer, 'job' => $job], function($u) use ($employee)
 			{
 				$u->from('admin@jobgrouper.com');
 				$u->to($employee->email);
-				$u->subject('subject');
+				$u->subject('Early Bird Request Denied');
 			});
+
 			// send mail to buyer
-			Mail::send('emails.early_bird_buyers_request_denied_to_buyer', ['buyer' => $buyer, 'job' => $job], function($u) use ($user)
+			Mail::queue('emails.early_bird_buyers_request_denied_to_buyer', ['buyer' => $buyer, 'job' => $job], function($u) use ($buyer)
 			{
 				$u->from('admin@jobgrouper.com');
-				$u->to($user->email);
-				$u->subject('subject');
+				$u->to($buyer->email);
+				$u->subject('Early Bird Request Denied');
 			});
-			 */
 
 			return response([
 				'status' => 'success',
@@ -324,25 +321,25 @@ class EarlyBirdBuyerController extends Controller
 			 */
 
 			$job = $earlyBirdBuyer->job()->first();
+			$employee = $job->employee->first();
+			$buyer = $earlyBirdBuyer->user->first();
 
 			$stop_early_bird->go($job, $earlyBirdBuyer);
 
-			/*
 			// send mail to employee
-			Mail::send('emails.early_bird_buyers_request_denied_to_employee', ['user' => $user, 'job' => $job], function($u) use ($employee)
+			Mail::queue('emails.early_bird_buyers_stopped_to_employee', ['data' => ['buyer' => $buyer, 'job' => $job]], function($u) use ($employee)
 			{
 				$u->from('admin@jobgrouper.com');
 				$u->to($employee->email);
-				$u->subject('subject');
+				$u->subject('Early Bird Ended');
 			});
 			// send mail to buyer
-			Mail::send('emails.early_bird_buyers_request_denied_to_buyer', ['user' => $user, 'job' => $job], function($u) use ($user)
+			Mail::queue('emails.early_bird_buyers_stopped_to_buyer', ['data' => ['job' => $job]], function($u) use ($buyer)
 			{
 				$u->from('admin@jobgrouper.com');
 				$u->to($user->email);
-				$u->subject('subject');
+				$u->subject('Early Bird Ended');
 			});
-			 */
 
 			return response([
 				'status' => 'success',
