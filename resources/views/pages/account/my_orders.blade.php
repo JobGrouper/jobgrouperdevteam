@@ -57,7 +57,10 @@
 						This price will change if other buyers decide to start
 						work early, or the job officially begins.</p>
 					</div>
-					<div class="submit">
+					<div class="early_bird_buy_now loading center" job_id="{{ $job->id }}">
+					</div>
+					<div class="submit" job_id="{{ $job->id }}">
+						<div class="early_bird_error center" job_id="{{ $job->id }}"></div>
 						<form class="early_bird_buy_now_form" job_id="{{ $job->id }}">
 							<input type="hidden" name="job_id" value="{{ $job->id }}"/>
 							<input type="hidden" name="user_id" value="{{ $user->id }}"/>
@@ -76,10 +79,13 @@
             		<div class="alert_window__block">
 				<div>
 					<div class="text">
-						<p>Cancel's work immediately. You will not receive a refund for
+						<p>End early bird access now. You will not receive a refund for
 						the rest of the month's time.</p>
 					</div>
-					<div class="submit">
+					<div class="early_bird_end_work loading center" job_id="{{ $job->id }}">
+					</div>
+					<div class="early_bird_end_work submit" job_id="{{ $job->id }}">
+						<div class="early_bird_end_work early_bird_error center" job_id="{{ $job->id }}"></div>
 						<form class="early_bird_cancel_work_form" job_id="{{ $job->id }}">
 							<input type="hidden" name="job_id" value="{{ $job->id }}"/>
 							<input type="hidden" name="user_id" value="{{ $user->id }}"/>
@@ -149,6 +155,8 @@
 				-->
 
 			<div class="right_stuff">
+			   <div class="loading" job_id="{{ $order->job_id }}"></div>
+			   <div class="job_button_error center" job_id="{{ $order->job_id }}"></div>
                         {{--@if($closeRequest)--}}
                         @if($order->status == 'closed')
                             {{--<button class="Request">Request Sent</button>--}}
@@ -170,7 +178,7 @@
 						@elseif($order->early_bird_buyer->status == 'working')
 						   <span class="status early-bird-working" job_id="{{ $job->id }}">Started Early</span>
 						   <button class="early-bird-end-work-caller" job_id="{{$job->id}}">Cancel Work</button>
-						   <span class="status early-bird-ended hidden" job_id="{{$job->id}}" style="display:none;">Early Bird Ended</span>
+						   <span class="status early-bird-ended hidden" job_id="{{$job->id}}">Early Bird Ended</span>
 						@elseif($order->early_bird_buyer->status == 'ended')
 						   <span class="status early-bird-ended">Early Bird Ended</span>
 						@endif

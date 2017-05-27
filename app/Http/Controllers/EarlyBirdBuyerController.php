@@ -22,6 +22,7 @@ class EarlyBirdBuyerController extends Controller
 {
 
 	public function sendRequest(Request $request) {
+
 		$user = Auth::user();
 
 		$v = Validator::make($request->all(),[
@@ -167,6 +168,7 @@ class EarlyBirdBuyerController extends Controller
 
 
 	public function cancelRequest(Request $request) {
+
 		$user = Auth::user();
 
 		$v = Validator::make($request->all(),[

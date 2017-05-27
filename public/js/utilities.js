@@ -652,10 +652,13 @@ jg.EarlyBirdActivator.prototype = {
 		// Ajax buy now call
 		$("button.early_bird_buy_now").click(function(e) {
 
-			var job_id = $( e.target ).attr('job_id');
 			e.preventDefault();
+			var job_id = $( e.target ).attr('job_id');
 
 			var obj = $("form.early_bird_buy_now_form[job_id='" + job_id + "'").serialize();
+
+			$( e.target ).prop('disabled', true);
+			jg.addSpinner(".early_bird_buy_now.loading[job_id='" + job_id + "'");
 
 			// Ajax
 			$.ajax({ type: "POST",
@@ -664,14 +667,25 @@ jg.EarlyBirdActivator.prototype = {
 					datatype: "json",
 					success: function(response) {
 
+						// hide spinner
+						$(".early_bird_buy_now.loading[job_id='" + job_id + "'").empty();
+
+						if (response.status == 'success') {
+							$(".early_bird_error[job_id='" + job_id + "'").addClass("green");
+							$(".early_bird_error[job_id='" + job_id + "'").text("Request Submitted.");
+						} else {
+							$('.early-bird-request-pending[job_id="' + job_id + '"').text('Try Again Later.');
+							$(".early_bird_error[job_id='" + job_id + "'").addClass("red");
+							$(".early_bird_error[job_id='" + job_id + "'").text("We've made an error. Please try again later.");
+						}
+
+						// hide calling button
+						$(".early-bird-buy-now-caller[job_id='" + job_id + "'").hide();
+
+						// show request pending thing
+						$('.early-bird-request-pending[job_id="' + job_id + '"').show();
 					}
 				});
-
-			// hide calling button
-			$(".early-bird-buy-now-caller[job_id='" + job_id + "'").hide();
-
-			// show request pending thing
-			$('.early-bird-request-pending[job_id="' + job_id + '"').show();
 		});
 
 		$(".early-bird-end-work-caller").click(function(e) {
@@ -682,13 +696,16 @@ jg.EarlyBirdActivator.prototype = {
 			$(".alert_window.early_bird_end_work[job_id='" + job_id + "'").fadeIn("fast");
 		});
 
-		// Ajax cancel now call
+		// Ajax cancel request call
 		$("button.early_bird_cancel_request").click(function(e) {
 
 			e.preventDefault();
 
 			var job_id = $( e.target ).attr('job_id');
 			var early_bird_id = $( e.target ).attr('early_bird_buyer_id');
+
+			$( e.target ).prop('disabled', true);
+			jg.addSpinner(".loading[job_id='" + job_id + "'");
 
 			var obj = {
 				'job_id': job_id,
@@ -702,12 +719,19 @@ jg.EarlyBirdActivator.prototype = {
 					datatype: "json",
 					success: function(response) {
 
-						// hide calling button
-						$("button.early_bird_cancel_request[job_id='" + job_id + "'").hide();
-						$("button.early-bird-request-pending[job_id='" + job_id + "'").hide();
+						// clear spinner
+						$( ".loading[job_id='" + job_id + "'" ).empty();
 
-						// show request pending thing
-						$('button.early_bird_request_cancelled[job_id="' + job_id + '"').show();
+						if (response.status == 'success') {
+
+							$(".early_bird_request_cancelled[job_id='" + job_id + "'").show();
+							$("button.early_bird_cancel_request[job_id='" + job_id + "'").hide();
+
+							// hide calling button
+							$(".early-bird-request-pending[job_id='" + job_id + "'").hide();
+						} else {
+							$(".job_button_error[job_id='" + job_id + "'").text('We\'ve made an error. Try again later.');
+						}
 					}
 				});
 
@@ -720,6 +744,8 @@ jg.EarlyBirdActivator.prototype = {
 			e.preventDefault();
 
 			var obj = $("form.early_bird_cancel_work_form[job_id='" + job_id + "'").serialize();
+			jg.addSpinner(".early_bird_end_work.loading[job_id='" + job_id + "'");
+			$("button.early_bird_cancel_work[job_id='" + job_id + "'").prop('disabled', true);
 
 			// Ajax
 			$.ajax({ type: "POST",
@@ -728,12 +754,24 @@ jg.EarlyBirdActivator.prototype = {
 					datatype: "json",
 					success: function(response) {
 
-						// hide calling button
-						$(".early-bird-end-work-caller[job_id='" + job_id + "'").hide();
-						$(".early-bird-working[job_id='" + job_id + "'").hide();
+						$(".early_bird_end_work.loading[job_id='" + job_id + "'").empty();
 
-						// show request pending thing
-						$('.early-bird-ended[job_id="' + job_id + '"').show();
+						if (response.status == 'success') {
+							// hide calling button
+							$(".early-bird-end-work-caller[job_id='" + job_id + "'").hide();
+							$(".early-bird-working[job_id='" + job_id + "'").hide();
+
+							// show request pending thing
+							$('.early-bird-ended[job_id="' + job_id + '"').removeClass('hidden');
+
+							$(".early_bird_error[job_id='" + job_id + "'").addClass("green");
+							$(".early_bird_error[job_id='" + job_id + "'").text("Early Bird has been ended.");
+						}
+						else {
+							$('.early-bird-request-pending[job_id="' + job_id + '"').text('Try Again Later.');
+							$(".early_bird_error[job_id='" + job_id + "'").addClass("red");
+							$(".early_bird_error[job_id='" + job_id + "'").text("We've made an error. Please try again later.");
+						}
 					}
 				});
 		});

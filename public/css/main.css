@@ -33,6 +33,14 @@ img {
   text-align:center;
 }
 
+.red {
+  color:#ff0d0d;
+}
+
+.green {
+  color:#32a81b;
+}
+
 .main_header {
   background-image: url(../img/base.png);
   background-size: cover;
@@ -1136,13 +1144,17 @@ img {
     .myjobs .workers_item div.right_stuff {
 
     }
+     .myjobs .workers_item div.right_stuff .job_button_error {
+	width:170px;
+	margin-bottom:6px;
+     } 
     .myjobs .workers_item button {
      /* position: absolute;
       top: 50%;
       right: 0;
       */
       width: 170px;
-      height: 40px;
+      min-height: 40px;
       text-transform: uppercase;
       color: #fff;
       font-weight: 700;
@@ -1157,11 +1169,14 @@ img {
       .myjobs .workers_item button:hover {
         background-color: #72B3A6;
       }
+      .myjobs .workers_item button:disabled {
+	background-color:gray;
+      }
     .myjobs .workers_item span.status {
       display:block;
       text-align:center;
       width: 170px;
-      height: 40px;
+      min-height: 40px;
       padding: 9px;
       text-transform: uppercase;
       color: #fff;
@@ -2535,6 +2550,11 @@ img {
       .alert_window.early_bird button:hover {
         background-color: #72B3A6;
       }
+      .alert_window.early_bird button:disabled {
+	background-color: gray;
+      }
+  .alert_window.early_bird .early_bird_error {
+    margin-bottom:6px;
   }
 
 .defis {
