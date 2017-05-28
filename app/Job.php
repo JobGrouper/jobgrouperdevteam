@@ -178,18 +178,18 @@ class Job extends Model
         $surcharge = $this->salary * 0.15;
         $normal_total = ($this->salary + $surcharge);
 
+
 	// Calculate the extra markup
 	$xtra_markup = .15 * $this->salary;
 
 	if ($current_early_bird_count > 0) {
-        	$xtra_markup = $this->salary * (0.15 * ( $current_early_bird_count / $min_clients_count ));
+        	$xtra_markup = $this->salary * (0.15 * ( 1 - ( $current_early_bird_count / $min_clients_count )));
 	}
 
         $total_price_will_be = $normal_total + $xtra_markup;
 
 	    return $total_price_will_be;
     }
-
 
     /*
      * Depending on level of user, returns appropriate "sale" number

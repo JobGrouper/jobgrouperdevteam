@@ -3,7 +3,7 @@
 @section('content')
 <p>A buyer of <a href="{{env('APP_URL').'/job/'.$job->id}}">{{$job->title}}</a> has paid for 
 "early bird" access to your services. This means that, for the higher rate of 
-${{$job->early_bird_markup}} per month, this buyer has requested to start work now. You may 
+${{ number_format($job->early_bird_markup, 2) }} per month, this buyer has requested to start work now. You may 
 communicate with your buyer by clicking the "message" link under his name on the Job page.</p>
 
 

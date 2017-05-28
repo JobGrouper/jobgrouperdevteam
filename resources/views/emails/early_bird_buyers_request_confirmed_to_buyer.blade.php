@@ -2,7 +2,7 @@
 
 @section('content')
 <p>{{ $employee->full_name }} has accepted your request for "early bird" access to their services 
-at the increased rate of ${{$job->early_bird_markup}} per month. You can communicate with 
+at the increased rate of ${{ number_format($job->early_bird_markup, 2) }} per month. You can communicate with 
 {{ $employee->full_name }} through your <a href="{{ env('APP_URL'). '/my_orders' }}">My Orders</a> page.</p>
 
 <p>Other buyers may also purchase early bird services, when that happens, the increased rate that 

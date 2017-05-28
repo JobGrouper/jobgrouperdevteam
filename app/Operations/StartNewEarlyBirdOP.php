@@ -49,10 +49,6 @@ class StartNewEarlyBirdOP extends Operation {
 		$customer = $this->psi->retrieveCustomerFromUser($buyer, $job, $employee_account->id);
 		$new_subscription = $this->psi->createSubscription($new_plan, $customer, $employee_account);
 
-		// Set buyer to working
-		$early_bird_buyer->status = 'working';
-		$early_bird_buyer->save();
-
 		////////////
 		//
 		// Update subscriptions for other early birds
@@ -71,13 +67,37 @@ class StartNewEarlyBirdOP extends Operation {
 			});
 		}
 
-		Mail::queue('emails.early_bird_buyers_rate_changed_to_employee', ['data' => 
-			['job' => $job]], function($u) use ($employee)
+		if (count($current_early_bird_buyers) > 0) {
+			Mail::queue('emails.early_bird_buyers_rate_changed_to_employee', ['data' => 
+				['job' => $job]], function($u) use ($employee)
+			{
+				$u->from('admin@jobgrouper.com');
+				$u->to($employee->email);
+				$u->subject('Early Bird Rate Change');
+			});
+		}
+
+		// send mail to employee
+		Mail::queue('emails.early_bird_buyers_request_confirmed_to_employee', ['buyer' => $buyer, 'job' => $job, 'employee' => $employee], function($u) use ($employee)
 		{
 			$u->from('admin@jobgrouper.com');
 			$u->to($employee->email);
-			$u->subject('Early Bird Rate Change');
+			$u->subject('New Early Bird Confirmed');
 		});
+		// send mail to buyer
+		Mail::queue('emails.early_bird_buyers_request_confirmed_to_buyer', ['buyer' => $buyer, 'job' => $job, 'employee' => $employee], function($u) use ($buyer)
+		{
+			$u->from('admin@jobgrouper.com');
+			$u->to($buyer->email);
+			$u->subject('Early Bird Access Has Begun');
+		});
+
+		// Set buyer to working
+		// 	- it's down here because as soon as you change status
+		// 	- markup is altered
+		$early_bird_buyer->status = 'working';
+		$early_bird_buyer->save();
+
 
 		/////////
 		// Deactivate old plan
