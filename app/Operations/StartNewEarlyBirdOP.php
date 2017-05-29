@@ -30,13 +30,13 @@ class StartNewEarlyBirdOP extends Operation {
 		//
 		$employee = $job->employee()->first();
 		$buyer = $early_bird_buyer->user()->first();
-		$current_early_bird_buyers = $job->early_bird_buyers()->with('user')->where('status', 'working')->get();
 		$employee_account = $this->psi->retrieveAccountFromUser($employee);
 
-		$old_plan = NULL;
-		if (count($current_early_bird_buyers) > 0) {
-		  $old_plan = $this->psi->retrievePlan($job, $employee_account->id);
-		}
+		$old_plan = $this->psi->retrievePlan($job, $employee_account->id);
+
+		// Set buyer to working
+		$early_bird_buyer->status = 'working';
+		$early_bird_buyer->save();
 
 		/////////////
 		// Create new plan
@@ -48,6 +48,11 @@ class StartNewEarlyBirdOP extends Operation {
 		//
 		$customer = $this->psi->retrieveCustomerFromUser($buyer, $job, $employee_account->id);
 		$new_subscription = $this->psi->createSubscription($new_plan, $customer, $employee_account);
+
+		//
+		// Prepare to update subscriptions
+		//
+		$current_early_bird_buyers = $job->early_bird_buyers()->with('user')->where('status', 'working')->where('user_id', '<>', $buyer->id)->get();
 
 		////////////
 		//
@@ -91,13 +96,6 @@ class StartNewEarlyBirdOP extends Operation {
 			$u->to($buyer->email);
 			$u->subject('Early Bird Access Has Begun');
 		});
-
-		// Set buyer to working
-		// 	- it's down here because as soon as you change status
-		// 	- markup is altered
-		$early_bird_buyer->status = 'working';
-		$early_bird_buyer->save();
-
 
 		/////////
 		// Deactivate old plan

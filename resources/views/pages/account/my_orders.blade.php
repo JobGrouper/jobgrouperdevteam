@@ -34,15 +34,10 @@
                     @foreach($orders as $order)
                         <?php
                             $job = $order->job()->first();
+			    $early_bird_count = $job->early_bird_buyers()->where('status', 'working')->count();
+			    $early_bird_markup = $job->calculateEarlyBirdMarkup( $early_bird_count + 1 );
                             $employee = $job->employee()->first();
                             $closeRequest = $order->close_order_requests()->where('originator_id', '=', $buyer->id)->first();
-
-			    // testing
-			    /*
-			    $early_bird = new StdClass();
-			    $early_bird->status = 'working';
-				*/
-
                         ?>
 
 		    @if($employee)
@@ -53,7 +48,7 @@
 						<p>You can request that {{ $employee->full_name }}
 						begin working with you right now, before the job
 						officially starts.</p>
-						<p>The job will proceed at a marked up rate of ${{ number_format($job->early_bird_markup, 2) }}/month.
+						<p>The job will proceed at a marked up rate of ${{ number_format($early_bird_markup, 2) }}/month.
 						This price will change if other buyers decide to start
 						work early, or the job officially begins.</p>
 					</div>

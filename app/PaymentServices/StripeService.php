@@ -1266,8 +1266,13 @@ class StripeService implements PaymentServiceInterface {
 		$plan_record = DB::table('stripe_plans')->where('job_id', '=', $job->id)->
 			where('activated', '=', 1)->first();
 
-		return Plan::retrieve(array('id' => $plan_record->id),
-			array('stripe_account' => $account_id));
+		if ($plan_record != NULL) {
+			return Plan::retrieve(array('id' => $plan_record->id),
+				array('stripe_account' => $account_id));
+		}
+		else {
+			return NULL; // or rather, return $plan_record
+		}
 	}
 
 	public function deactivatePlan($plan) {

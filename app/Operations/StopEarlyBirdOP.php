@@ -35,21 +35,23 @@ class StopEarlyBirdOP extends Operation {
 		 emails
 		 */
 		$employee = $job->employee()->first();
-		$buyer = $early_bird_buyer->user()->first();
-
-		// End early bird
-		$early_bird_buyer->status = 'ended';
-		$early_bird_buyer->save();
-
-		$current_early_bird_buyers = $job->early_bird_buyers()->with('user')->where('status', 'working')->get();
-
 		$employee_account = $this->psi->retrieveAccountFromUser($employee);
+		$buyer = $early_bird_buyer->user()->first();
 		$old_plan = $this->psi->retrievePlan($job, $employee_account->id);
 
 		// DEACTIVATE SUBSCRIPTION
 		//
 		$customer = $this->psi->retrieveCustomerFromUser($buyer, $job, $employee_account->id);
 		$this->psi->cancelSubscription($old_plan, $customer, $employee_account->id);
+
+		// End early bird
+		$early_bird_buyer->status = 'ended';
+		$early_bird_buyer->save();
+
+		//
+		// Update Subscriptions for the rest of the Early Birds
+		//
+		$current_early_bird_buyers = $job->early_bird_buyers()->with('user')->where('status', 'working')->get();
 
 		if (count($current_early_bird_buyers) > 0) {
 
@@ -58,9 +60,7 @@ class StopEarlyBirdOP extends Operation {
 			$new_plan = $this->psi->createPlanBare($employee, $job, array(
 				'amount' => $job->early_bird_markup * 100));
 
-			////////////
-			//
-			// Update subscriptions for other early birds
+			// Subscription Loop
 			//
 			foreach($current_early_bird_buyers as $prevvy_buyer) {
 

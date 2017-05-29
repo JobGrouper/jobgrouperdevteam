@@ -173,22 +173,44 @@ class Job extends Model
     }
 
     public function getEarlyBirdMarkupAttribute() {
+
         $current_early_bird_count = $this->early_bird_buyers()->where('status', 'working')->get()->count();
+
+	if ($current_early_bird_count == 0) {
+		return 0;
+	}
+
         $min_clients_count = $this->min_clients_count;
         $surcharge = $this->salary * 0.15;
         $normal_total = ($this->salary + $surcharge);
 
-
 	// Calculate the extra markup
-	$xtra_markup = .15 * $this->salary;
-
-	if ($current_early_bird_count > 0) {
-        	$xtra_markup = $this->salary * (0.15 * ( 1 - ( $current_early_bird_count / $min_clients_count )));
-	}
+	$xtra_markup = $this->salary * (0.15 * ( 1 - ( ($current_early_bird_count - 1) / $min_clients_count )));
 
         $total_price_will_be = $normal_total + $xtra_markup;
 
 	    return $total_price_will_be;
+    }
+
+    public function calculateEarlyBirdMarkup($n) {
+
+	if ($n == 0) {
+		return 0;
+	}
+	else if ($n < 0) {
+		return -1;
+	}
+
+        $min_clients_count = $this->min_clients_count;
+        $surcharge = $this->salary * 0.15;
+        $normal_total = ($this->salary + $surcharge);
+
+	// Calculate the extra markup
+	$xtra_markup = $this->salary * (0.15 * ( 1 - ( ($n - 1) / $min_clients_count )));
+
+        $total_price_will_be = $normal_total + $xtra_markup;
+
+        return $total_price_will_be;
     }
 
     /*
