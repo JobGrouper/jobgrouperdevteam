@@ -732,6 +732,14 @@ jg.EarlyBirdActivator.prototype = {
 						} else {
 							$(".job_button_error[job_id='" + job_id + "'").text('We\'ve made an error. Try again later.');
 						}
+					},
+					error: function() {
+
+						// clear spinner
+						$( ".loading[job_id='" + job_id + "'" ).empty();
+
+						// error message
+						$(".job_button_error[job_id='" + job_id + "'").text('We\'ve made an error. Try again later.');
 					}
 				});
 
