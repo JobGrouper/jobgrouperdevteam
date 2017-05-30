@@ -70,10 +70,10 @@ class StripePlanActivation extends Job implements ShouldQueue
 
 		if (!$testing) {
 
-			// check for early bird
-			$early_bird = $keyed_early_birds[ $buyer->id ];
+			if (isset($keyed_early_birds[ $buyer->id ]) &&
+				$keyed_early_birds[ $buyer->id ]->status == 'working') {
 
-			if ($early_bird && $early_bird->status == 'working') {
+				$early_bird = $keyed_early_birds[ $buyer->id ];
 
 				if ($old_plan == NULL) {
 					throw new \Exception('StripePlanActivation: no old plan given');
