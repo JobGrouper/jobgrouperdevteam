@@ -250,4 +250,8 @@ class User extends Authenticatable
     }
 
 
+    public function connectedCustomers(){
+        return $this->hasMany(StripeConnectedCustomer::class);
+    }
+
 }
