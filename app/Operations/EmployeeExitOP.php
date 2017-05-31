@@ -45,12 +45,18 @@ class EmployeeExitOP extends Operation {
 	    }
 	    $job->save();
 
+	    $total_refund = 0;
+
 	    foreach ($buyers as $buyer){
 
 		// create refund
 		//$psi->createRefund($previousEmployee->id, $buyer->id);
 		$op = \App::make('App\Operations\CreateRefundOP');
 		$refund = $op->go($previousEmployee, $buyer);
+
+		// increment
+		$refund_amount = $this->refundToDollars( $refund->amount );
+		$total_refund += $refund_amount;
 
 		// cancel subscription
 		$plan_record = DB::table('stripe_plans')->
@@ -71,7 +77,11 @@ class EmployeeExitOP extends Operation {
 		    $this->psi->createCustomer($buyer, $job, ['email' => $buyer->email], $account);
 		}
 
-		Mail::send('emails.buyer_refund_employee_exit', [], function($u) use ($buyer) {
+		Mail::send('emails.buyer_refund_employee_exit', ['data' => 
+				['job' => $job,
+				'employee' => $previousEmployee,
+				'refund_amount' => $refund_amount ]], 
+		function($u) use ($buyer) {
 			$u->from('admin@jobgrouper.com');
 			$u->to($buyer->email);
 			$u->subject('A refund is on it\'s way');
@@ -79,7 +89,12 @@ class EmployeeExitOP extends Operation {
 		
 		if($buyers->count() <= 10){
 		    //todo send email to employee about refund
-			Mail::send('emails.seller_refund_employee_exit', [], function($u) use ($previousEmployee) {
+			Mail::send('emails.seller_refund_employee_exit', [
+					'data' => [
+						'job' => $job,
+						'buyer' => $buyer,
+						'refund_amount' => $refund_amount]], 
+			function($u) use ($previousEmployee) {
 				$u->from('admin@jobgrouper.com');
 				$u->to($previousEmployee->email);
 				$u->subject('A refund for one of your buyers has been created');
@@ -89,11 +104,14 @@ class EmployeeExitOP extends Operation {
 
 	    if($buyers->count() > 10){
 		//todo send email to employee about all refunds
-		Mail::send('emails.seller_refund_employee_exit', [], function($u) use ($previousEmployee) {
-			$u->from('admin@jobgrouper.com');
-			$u->to($previousEmployee->email);
-			$u->subject('A refund for one of your buyers has been created');
-		});
+		    Mail::send('emails.seller_refund_employee_exit_total', [
+		    			'data' => [
+						'total_refund' => $total_refund]], 
+			function($u) use ($previousEmployee) {
+				$u->from('admin@jobgrouper.com');
+				$u->to($previousEmployee->email);
+				$u->subject('Your buyers are being refunded.');
+			});
 	    }
 
 	    // TODO
@@ -101,4 +119,10 @@ class EmployeeExitOP extends Operation {
 	    $job->employee_requests()->where('employee_id', $er->employee_id)->delete();
 	}
 
+	/* 
+	 * Refunds are given in cents (integer), convert to dollars (float)
+	 */
+	private function refundToDollars($refund_amount) {
+		return $refund_amount / 100;
+	}
 }
