@@ -16,6 +16,52 @@ jg.isArray = function( variable ) {
 	  return false;
 }
 
+jg.addSpinner = function( selector ) {
+
+	$('<img/>', {
+		src: '/img/default.svg',
+		alt: 'Loading...'
+	}).appendTo( selector );
+}
+
+jg.renderTemplate = function() {
+
+	var t = this._options.template;
+
+	var keys = data.keys();
+
+	for (var i = 0; i < keys.length; i++) {
+
+		var selector = data[ keys[i] ]['selector'];
+		var value = data[ keys[i] ]['value'];
+
+		/*
+		 * The main problem is *HERE*
+		 *
+		 * How do I know what attribute to set?
+		 *
+		 */
+		t.content.querySelector( selector ).value = value;
+	}
+
+	/*
+	t.content.querySelector('.entry-id').value = this._id;
+	t.content.querySelector('.entry-text').innerText = this._text;
+	t.content.querySelector('.entry-date').innerText = this._date;
+	*/
+
+	// create clone
+	var clone = document.importNode(t.content, true);
+
+	// create a reference to self
+	// 	document fragment (ie clone) will empty after append child
+	// 	, so need to make a copy of the nodes here
+	//this._node = [].slice.call(clone.children, 0)[0];
+
+	return clone;
+	//element.appendChild(clone);
+}
+
 jg.ElementMap = function(element) {
 
 	var child = element.firstChild;
@@ -578,3 +624,299 @@ jg.BuyerAdjuster.prototype = {
 		return message;
 	}
 };
+
+jg.EarlyBirdActivator = function(user_options) {
+
+	this._init();
+}
+
+jg.EarlyBirdActivator.prototype = {
+
+	_init: function() {
+
+		var self = this;
+
+		//
+		// PRIME EVENTS
+		//
+		$(".early-bird-buy-now-caller").click(function(e) {
+
+			var button = e.target;
+			var job_id = $( button ).attr('job_id');
+
+			$(".alert_window.early_bird_buy_now[job_id='" + job_id + "'").fadeIn("fast");
+			
+			//self._callWindow( e.target );
+		});
+
+		// Ajax buy now call
+		$("button.early_bird_buy_now").click(function(e) {
+
+			e.preventDefault();
+			var job_id = $( e.target ).attr('job_id');
+
+			var obj = $("form.early_bird_buy_now_form[job_id='" + job_id + "'").serialize();
+
+			$( e.target ).prop('disabled', true);
+			jg.addSpinner(".early_bird_buy_now.loading[job_id='" + job_id + "'");
+
+			// Ajax
+			$.ajax({ type: "POST",
+					url: "/api/earlyBirdBuyers/sendRequest",
+					data: obj,
+					datatype: "json",
+					success: function(response) {
+
+						// hide spinner
+						$(".early_bird_buy_now.loading[job_id='" + job_id + "'").empty();
+
+						if (response.status == 'success') {
+							$(".early_bird_error[job_id='" + job_id + "'").addClass("green");
+							$(".early_bird_error[job_id='" + job_id + "'").text("Request Submitted.");
+						} else {
+							$('.early-bird-request-pending[job_id="' + job_id + '"').text('Try Again Later.');
+							$(".early_bird_error[job_id='" + job_id + "'").addClass("red");
+							$(".early_bird_error[job_id='" + job_id + "'").text("We've made an error. Please try again later.");
+						}
+
+						// hide calling button
+						$(".early-bird-buy-now-caller[job_id='" + job_id + "'").hide();
+
+						// show request pending thing
+						$('.early-bird-request-pending[job_id="' + job_id + '"').show();
+					}
+				});
+		});
+
+		$(".early-bird-end-work-caller").click(function(e) {
+
+			var button = e.target;
+			var job_id = $( button ).attr('job_id');
+
+			$(".alert_window.early_bird_end_work[job_id='" + job_id + "'").fadeIn("fast");
+		});
+
+		// Ajax cancel request call
+		$("button.early_bird_cancel_request").click(function(e) {
+
+			e.preventDefault();
+
+			var job_id = $( e.target ).attr('job_id');
+			var early_bird_id = $( e.target ).attr('early_bird_buyer_id');
+
+			$( e.target ).prop('disabled', true);
+			jg.addSpinner(".loading[job_id='" + job_id + "'");
+
+			var obj = {
+				'job_id': job_id,
+				'early_bird_buyer_id': early_bird_id
+			};
+
+			// Ajax
+			$.ajax({ type: "POST",
+					url: "/api/earlyBirdBuyers/cancelRequest",
+					data: obj,
+					datatype: "json",
+					success: function(response) {
+
+						// clear spinner
+						$( ".loading[job_id='" + job_id + "'" ).empty();
+
+						if (response.status == 'success') {
+
+							$(".early_bird_request_cancelled[job_id='" + job_id + "'").show();
+							$("button.early_bird_cancel_request[job_id='" + job_id + "'").hide();
+
+							// hide calling button
+							$(".early-bird-request-pending[job_id='" + job_id + "'").hide();
+						} else {
+							$(".job_button_error[job_id='" + job_id + "'").text('We\'ve made an error. Try again later.');
+						}
+					},
+					error: function() {
+
+						// clear spinner
+						$( ".loading[job_id='" + job_id + "'" ).empty();
+
+						// error message
+						$(".job_button_error[job_id='" + job_id + "'").text('We\'ve made an error. Try again later.');
+					}
+				});
+
+		});
+
+		// Ajax cancel now call
+		$("button.early_bird_cancel_work").click(function(e) {
+
+			var job_id = $( e.target ).attr('job_id');
+			e.preventDefault();
+
+			var obj = $("form.early_bird_cancel_work_form[job_id='" + job_id + "'").serialize();
+			jg.addSpinner(".early_bird_end_work.loading[job_id='" + job_id + "'");
+			$("button.early_bird_cancel_work[job_id='" + job_id + "'").prop('disabled', true);
+
+			// Ajax
+			$.ajax({ type: "POST",
+					url: "/api/earlyBirdBuyers/stopEarlyBird",
+					data: obj,
+					datatype: "json",
+					success: function(response) {
+
+						$(".early_bird_end_work.loading[job_id='" + job_id + "'").empty();
+
+						if (response.status == 'success') {
+							// hide calling button
+							$(".early-bird-end-work-caller[job_id='" + job_id + "'").hide();
+							$(".early-bird-working[job_id='" + job_id + "'").hide();
+
+							// show request pending thing
+							$('.early-bird-ended[job_id="' + job_id + '"').removeClass('hidden');
+
+							$(".early_bird_error[job_id='" + job_id + "'").addClass("green");
+							$(".early_bird_error[job_id='" + job_id + "'").text("Early Bird has been ended.");
+						}
+						else {
+							$('.early-bird-request-pending[job_id="' + job_id + '"').text('Try Again Later.');
+							$(".early_bird_error[job_id='" + job_id + "'").addClass("red");
+							$(".early_bird_error[job_id='" + job_id + "'").text("We've made an error. Please try again later.");
+						}
+					}
+				});
+		});
+
+		$(".alert_window__block .cancel").click(function() {
+			$(".alert_window").fadeOut("fast");
+		});
+
+
+		/// EMPLOYER EVENTS
+		//
+		$("button.early_bird_agree").click(function(e) {
+			e.preventDefault();
+
+			var id = $( e.target ).attr('user_id');
+			var obj = $("form.early_bird_accept_form[user_id='" + id + "'").serialize();
+
+			jg.addSpinner( 'div.loading[user_id="' + id + '"' );
+
+			$( "button.early_bird_agree[user_id='" + id + "'" ).prop('disabled', 'disabled');
+			$( "button.early_bird_deny[user_id='" + id + "'" ).prop('disabled', 'disabled');
+
+			$.ajax({ type: "POST",
+					url: "/api/earlyBirdBuyers/confirmRequest",
+					data: obj,
+					datatype: "json",
+					success: function(response) {
+
+						$('div.loading[user_id="' + id + '"').hide();
+
+						$('div.question[user_id="' + id + '"').hide();
+
+						if (response.status == 'success') {
+							$('p.early_bird_error[user_id="' + id + '"').text('Early Bird Accepted.');
+						} else {
+							$('p.early_bird_error[user_id="' + id + '"').text('Something went wrong. Try again later');
+						}
+
+						$('p.early_bird_error[user_id="' + id + '"').removeClass('hidden');
+
+					}
+				});
+		});
+
+		$("button.early_bird_deny").click(function(e) {
+			e.preventDefault();
+			var id = $( e.target ).attr('user_id');
+			var obj = $("form.early_bird_accept_form[user_id='" + id + "'").serialize();
+
+			jg.addSpinner( 'div.loading[user_id="' + id + '"' );
+
+			$( "button.early_bird_agree[user_id='" + id + "'" ).prop('disabled', 'disabled');
+			$( "button.early_bird_deny[user_id='" + id + "'" ).prop('disabled', 'disabled');
+
+			$.ajax({ type: "POST",
+					url: "/api/earlyBirdBuyers/denyRequest",
+					data: obj,
+					datatype: "json",
+					success: function(response) {
+						
+
+						$('div.loading[user_id="' + id + '"').hide();
+
+						$('div.question[user_id="' + id + '"').hide();
+
+						if (response.status == 'success') {
+							$('p.early_bird_error[user_id="' + id + '"').text('Early Bird Denied.');
+
+						} else {
+							$('p.early_bird_error[user_id="' + id + '"').text('Something went wrong. Try again later');
+						}
+
+						$('p.early_bird_error[user_id="' + id + '"').removeClass('hidden');
+					}
+				});
+		});
+
+		$("button.early_bird_cancel").click(function(e) {
+
+			e.preventDefault();
+			var id = $( e.target ).attr('user_id');
+			var obj = $("form.early_bird_cancel_form[user_id='" + id + "'").serialize();
+
+			jg.addSpinner( 'div.loading[user_id="' + id + '"' );
+
+			$( "button.early_bird_cancel[user_id='" + id + "'" ).prop('disabled', 'disabled');
+
+
+			$.ajax({ type: "POST",
+					url: "/api/earlyBirdBuyers/stopEarlyBird",
+					data: obj,
+					datatype: "json",
+					success: function(response) {
+
+						$('div.loading[user_id="' + id + '"').hide();
+
+						$('div.question[user_id="' + id + '"').hide();
+
+						if (response.status == 'success') {
+							$('p.early_bird_error[user_id="' + id + '"').text('Early work has ended.');
+
+						} else {
+							$('p.early_bird_error[user_id="' + id + '"').text('Something went wrong. Try again later');
+						}
+
+						$('p.early_bird_error[user_id="' + id + '"').removeClass('hidden');
+					}
+				});
+		});
+	},
+	_callWindow: function(target) {
+
+		var job_id = $( target ).attr('job_id');
+
+		$(".alert_window.early_bird_job[job_id='" + job_id + "'").fadeIn("fast");
+	},
+	_renderTemplate: function() {
+
+		var t = this._options.template;
+
+		var keys = data.keys();
+
+		/*
+		t.content.querySelector('.entry-id').value = this._id;
+		t.content.querySelector('.entry-text').innerText = this._text;
+		t.content.querySelector('.entry-date').innerText = this._date;
+		*/
+
+		// create clone
+		var clone = document.importNode(t.content, true);
+
+		// create a reference to self
+		// 	document fragment (ie clone) will empty after append child
+		// 	, so need to make a copy of the nodes here
+		//this._node = [].slice.call(clone.children, 0)[0];
+
+		return clone;
+		//element.appendChild(clone);
+	}
+}

@@ -10,6 +10,8 @@ use App\Sale;
 use Illuminate\Http\Request;
 use App\Interfaces\PaymentServiceInterface;
 
+use App\Operations\StopEarlyBirdOP;
+
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -101,9 +103,9 @@ class OrderController extends Controller
      * Closing the order
      * Originator can be seller ot buyer
      */
-    public function close(Request $request, PaymentServiceInterface $psi){
+    public function close(Request $request, PaymentServiceInterface $psi, StopEarlyBirdOP $stop_early_bird){
         $responseData= array();
-
+	$user = Auth::user();
         $order = Sale::find($request->order_id);
 
         //If job has free place for buyer make it hot
@@ -125,8 +127,9 @@ class OrderController extends Controller
 
             // get user who is closing order
             //   and managed account
-            $user = DB::table('users')->where('id', $order->buyer_id)->first();
+            //$user = DB::table('users')->where('id', $order->buyer_id)->first();
             $seller_record = DB::table('stripe_managed_accounts')->where('user_id', $job->employee_id)->first();
+
 
 	    // Cancel subscription
 	    // 	Must be subscribed if sale in progress and job is working
@@ -136,12 +139,25 @@ class OrderController extends Controller
 		    $customer = $psi->retrieveCustomerFromUser($user, $job, $seller_record->id);
 		    $subscription_response = $psi->cancelSubscription($plan, $customer, $seller_record->id);
 	    }
+	    else {
+
+		    // Check for and delete early bird buyer
+		    //
+		    $early_bird_buyer = $user->early_bird_buyers()->where('sale_id', $order->id)
+			    ->where('job_id', $job->id)->where('status', 'working')->first();
+
+		    if ($early_bird_buyer) {
+
+			    // stop early bird
+			    $stop_early_bird->go($job, $early_bird_buyer);
+		    }
+	    }
 
             // Delete payment service records
             $response = $psi->deleteCustomer($user, $job, $seller_record->id);
 
             //mail to seller
-            Mail::send('emails.buyer_leaving_job', ['buyer' => Auth::user(), 'job' => $job], function($u)
+            Mail::send('emails.buyer_leaving_job', ['buyer' => $user, 'job' => $job], function($u)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to('admin@jobgrouper.com');
@@ -149,7 +165,7 @@ class OrderController extends Controller
             });
 
             //mail to admin
-            Mail::send('emails.buyer_leaving_job', ['buyer' => Auth::user(), 'job' => $job], function($u) use ($seller)
+            Mail::send('emails.buyer_leaving_job', ['buyer' => $user, 'job' => $job], function($u) use ($seller)
             {
                 $u->from('admin@jobgrouper.com');
                 $u->to($seller->email);
@@ -264,7 +280,12 @@ class OrderController extends Controller
 			withErrors(['Server error. Try again later.']);
 	}
 
-	$source = $psi->updateCustomerSource($user, $token, $account['id']);
+	/*
+	$customer->source = $token->id;
+	$source = $customer->save();
+	 */
+	$source = $psi->updateCustomerSourceSimple($customer, $token);
+	//$source = $psi->updateCustomerSource($user, $token, $account['id']);
 	
 	if (isset($source['id'])) {
 	  $order->status = 'in_progress';
@@ -281,7 +302,7 @@ class OrderController extends Controller
 		if($job->status != 'working'){
 
 			$employee = $job->employee()->first();
-			$psi->createPlan($employee, $job);
+			$plan = $psi->createPlan($employee, $job);
 		}
 		else {
 

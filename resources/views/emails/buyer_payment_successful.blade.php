@@ -14,11 +14,11 @@
 	  </tr>
 	  <tr>
 		<td>Markup</td>
-		<td>${{ number_format( $job->salary * 0.15, 2) }}</td>
+		<td>${{ number_format( $job->markup, 2) }}</td>
 	  </tr>
 	  <tr>
 		<td>Total</td>
-		<td>${{ number_format( $job->salary + ( $job->salary * 0.15), 2) }}</td>
+		<td>${{ number_format( $job->salary + $job->markup , 2) }}</td>
 	  </tr>
 	</tbody>
 </table>

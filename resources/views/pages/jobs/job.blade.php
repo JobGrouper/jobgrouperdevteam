@@ -4,11 +4,13 @@
 
 @section('autoload_scripts')
 
-@if($employeeRequest)
-    @if($employeeRequest->status == 'approved' && !$adjustment_request)
 <script>
 	var buyer_adjuster;
+	var seller_activator;
 	jg.Autoloader(function() {
+
+	@if($employeeRequest)
+	    @if($employeeRequest->status == 'approved' && !$adjustment_request)
 
 		buyer_adjuster = new jg.BuyerAdjuster({
 			root: document.getElementById('buyer_adjuster'),
@@ -18,10 +20,15 @@
 			},
 			request: true
 		});
+
+	   @endif
+	@endif
+
+		seller_activator = new jg.EarlyBirdActivator({
+
+		});
 	});
 </script>
-   @endif
-@endif
 
 @endsection
 
@@ -280,6 +287,67 @@
                 </div>
 
             </div>
+
+            @if(!Auth::guest() && Auth::user()->user_type == 'employee')
+	    <div class="row job_buyers">
+		@if( count($orders) > 0 )
+			<h3>Buyers</h3>
+			<hr>
+		@else
+			<p>No buyers have signed up yet</p>
+		@endif
+		
+		@foreach($orders as $order)
+		    <div class="buyer">
+			<div class="info">
+				    <div class="img_wrapper">
+					<a href="/account/{{$order->buyer->id}}"><img src="{{ asset($order->buyer->image_url)}}" alt="alt"></a>
+				    </div>
+
+				    <div class="text">
+					<h4><a href="/account/{{$order->buyer->id}}">{{$order->buyer->full_name}}</a></h4>
+				    </div>
+			</div>
+			<div class="jgpanel">
+			@if( isset( $order->early_bird_buyer ) )
+				@if( $order->early_bird_buyer->status == 'requested')
+				<div class="center">
+					<div class="question" user_id="{{ $order->buyer->id }}">
+						<p>This user has asked to start work now.</p>
+						
+						<form class="early_bird_accept_form" user_id="{{ $order->buyer->id }}">
+							<input type="hidden" name="job_id" value="{{ $job->id }}"/>
+							<input type="hidden" name="user_id" value="{{ $order->buyer->id }}"/>
+							<input type="hidden" name="early_bird_buyer_id" value="{{ $order->early_bird_buyer->id }}"/>
+							<button class="early_bird_agree" user_id="{{ $order->buyer->id }}">Okay</button>
+							<button class="early_bird_deny" user_id="{{ $order->buyer->id }}">No, thanks</button>
+						</form>
+					</div>
+					<div class="loading" user_id="{{ $order->buyer->id }}"></div>
+					<p class="early_bird_error hidden" user_id="{{ $order->buyer->id }}"></p>
+				</div>
+				@elseif( $order->early_bird_buyer->status == 'working' )
+				<div class="center">
+					<div class="question" user_id="{{ $order->buyer->id }}">
+						<p>This user has purchased early access.</p>
+						<form class="early_bird_cancel_form" user_id="{{ $order->buyer->id }}">
+							<input type="hidden" name="job_id" value="{{ $job->id }}"/>
+							<input type="hidden" name="early_bird_buyer_id" value="{{ $order->early_bird_buyer->id }}"/>
+							<input type="hidden" name="user_id" value="{{ $order->buyer->id }}"/>
+							<button class="early_bird_cancel" user_id="{{ $order->buyer->id }}">Cancel</button>
+						</form>
+					</div>
+					<div class="loading" user_id="{{ $order->buyer->id }}"></div>
+					<p class="early_bird_error hidden" user_id="{{ $order->buyer->id }}"></p>
+				</div>
+				@endif
+			@endif
+			</div>
+			<div class="clear">&nbsp;</div>
+		    </div>
+		@endforeach
+	    </div>
+	    @endif
 
         </div>
 

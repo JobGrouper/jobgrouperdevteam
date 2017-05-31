@@ -761,7 +761,7 @@ class StripeService implements PaymentServiceInterface {
 			$customer = Customer::retrieve(array('id' => $customer_record->id), 
 						array('stripe_account' => $account_id));
 
-			$customer->source = $token;
+			$customer->source = $token->id;
 
 			try {
 				$response = $customer->save();
@@ -851,6 +851,61 @@ class StripeService implements PaymentServiceInterface {
 		}
 
 		return $response;
+	}
+
+	public function updateCustomerSourceSimple($customer, $token, $account_id=NULL) {
+
+		$response = NULL;
+		$error_response = NULL;
+
+		try {
+			$customer->source = $token->id;
+			$response = $customer->save();
+
+		} catch(\Stripe\Error\Card $e) {
+			$error_response = $this->constructErrorResponse($e);
+			
+			// user error
+			$error_response['user'] = true;
+
+		} catch (\Stripe\Error\RateLimit $e) {
+		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+			// user error (possibly)
+			$error_response['user'] = true;
+
+		} catch (\Stripe\Error\Authentication $e) {
+		  // Authentication with Stripe's API failed
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\Base $e) {
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (Exception $e) {
+		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
+
+		}
+
+		if ($error_response) {
+			return $error_response;
+		}
+		else {
+			$this->updateCustomerSourceInDB($response['sources']['data'][0]['id'], $customer->id, 
+				$response['sources']['data'][0]['last4']);
+
+			return $response;
+		}
 	}
 
 	public function updateCustomerSourceInDB($source_id, $customer_id, $last_four) {
@@ -1060,6 +1115,12 @@ class StripeService implements PaymentServiceInterface {
 
 		}
 
+		///////////////
+		// Retrieve and Deactivate old plan
+		//
+		$old_plan = $this->retrievePlan($job, $managed_account->id);
+		$this->deactivatePlan( $old_plan );
+
 		// Add plan to database
 		DB::table('stripe_plans')->insert(
 			[
@@ -1070,19 +1131,7 @@ class StripeService implements PaymentServiceInterface {
 				'created_at' => Carbon::now()
 			]
 		);
-		/*
-		$res = DB::select("SELECT id FROM stripe_plans WHERE managed_account_id = ? AND job_id = ?", [$managed_account->id, $job->id]);
-		if(!count($res)){
-			DB::table('stripe_plans')->insert(
-				[
-					'id' => $plan->id ,
-					'managed_account_id' => $managed_account->id,
-					'job_id' => $job->id,
-					'activated' => 1
-				]
-			);
-		}
-		 */
+
 		// Update job status
 		$job->status = 'working';
 		$job->save();
@@ -1090,7 +1139,7 @@ class StripeService implements PaymentServiceInterface {
 		if (!$testing) {
 
 			// Queue up subscription job
-			dispatch( new StripePlanActivation($this, $job, $plan, $managed_account));
+			dispatch( new StripePlanActivation($this, $job, $plan, $managed_account, $old_plan));
 
 			// Email admin that plan is being created
 			//
@@ -1103,6 +1152,96 @@ class StripeService implements PaymentServiceInterface {
 		}
 
 		return $plan;
+	}
+
+	/*
+	 * Creates a Plan associated with a Seller (Managed Account) 
+	 *
+	 * @params
+	 * 	(string) account_id
+	 * 	(job) job
+	 *	(array) plan_params
+	 * @return
+	 * 	...
+	 * @throws
+	 * 	Exceptions for missing parameters
+	 */
+	public function createPlanBare($user, $job, $options, $testing=False) {
+
+		$response = NULL;
+		$error_response = NULL;
+
+		// Retrieve account
+		$managed_account = DB::table('stripe_managed_accounts')->where('user_id', '=', $user->id)->first();
+
+		$plan_id = $this->generatePlanId($job->title);
+
+		try {
+
+			// Create plan
+			$response = Plan::create(array(
+			  "amount" => $options['amount'], 
+			  "interval" => "month",
+			  "name" => $job->title,
+			  "currency" => 'USD',
+			  "id" => $plan_id),
+			  array("stripe_account" => $managed_account->id)
+			);
+
+		} catch(\Stripe\Error\Card $e) {
+			$error_response = $this->constructErrorResponse($e);
+			
+			// user error
+			$error_response['user'] = true;
+
+		} catch (\Stripe\Error\RateLimit $e) {
+		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+			// user error (possibly)
+			$error_response['user'] = true;
+
+		} catch (\Stripe\Error\Authentication $e) {
+		  // Authentication with Stripe's API failed
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\Base $e) {
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (Exception $e) {
+		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
+
+		}
+
+		if (isset($error_response)) {
+			return $error_response;
+		}
+		else {
+
+			// Add plan to database
+			DB::table('stripe_plans')->insert(
+				[
+					'id' => $response->id ,
+					'managed_account_id' => $managed_account->id,
+					'job_id' => $job->id,
+					'activated' => 1,
+					'created_at' => Carbon::now()
+				]
+			);
+
+			return $response;
+		}
+
 	}
 
 	public function createPlanInDB($plan_id, $managed_account_id, $job_id) {
@@ -1124,10 +1263,31 @@ class StripeService implements PaymentServiceInterface {
 
 	public function retrievePlan($job, $account_id) {
 
-		$plan_record = DB::table('stripe_plans')->where('job_id', '=', $job->id)->first();
+		$plan_record = DB::table('stripe_plans')->where('job_id', '=', $job->id)->
+			where('activated', '=', 1)->first();
 
-		return Plan::retrieve(array('id' => $plan_record->id),
-			array('stripe_account' => $account_id));
+		if ($plan_record != NULL) {
+			return Plan::retrieve(array('id' => $plan_record->id),
+				array('stripe_account' => $account_id));
+		}
+		else {
+			return NULL; // or rather, return $plan_record
+		}
+	}
+
+	public function deactivatePlan($plan) {
+
+		$plan_id = NULL;
+
+		if (is_string($plan)) {
+		  $plan_id = $plan;
+		}
+		else {
+		  $plan_id = $plan->id;
+		}
+
+		DB::table('stripe_plans')->where('id', '=', $plan->id)->update([
+			'activated' => 0]);
 	}
 
 	public function deletePlan($user, $job, $account_id) {
@@ -1186,7 +1346,7 @@ class StripeService implements PaymentServiceInterface {
 		$plan_id = NULL;
 		$customer_id = NULL;
 		$account_id = NULL;
-		
+
 		if (is_array($plan)) {
 		  $plan_id = $plan['id'];
 		}
@@ -1276,6 +1436,81 @@ class StripeService implements PaymentServiceInterface {
 		);
 	}
 
+	/*
+	 * Retrieve subscription
+	 *
+	 */
+	public function retrieveSubscription($plan, $customer, $account) {
+		
+		$subscription_record = DB::table('stripe_subscriptions')->where([
+			['plan_id', '=', $plan->id],
+			['connected_customer_id', '=', $customer->id]
+		])->first();
+
+		return Subscription::retrieve( array('id' => $subscription_record->id),
+	       			array('stripe_account' => $account->id));
+	}
+
+	public function retrieveSubscriptionByCustomer($customer, $account) {
+		
+		$subscription_record = DB::table('stripe_subscriptions')->where(
+			'connected_customer_id', '=', $customer->id)->first();
+
+		return Subscription::retrieve( array('id' => $subscription_record->id),
+	       			array('stripe_account' => $account->id));
+	}
+
+	/*
+	 * Updating subscription to sit with a different plan
+	 *
+	 */
+	public function changeSubscriptionPlan($subscription, $plan) {
+
+		$response = NULL;
+		$error_response = NULL;
+
+		//$subscription = Subscription::retrieve($subscription->id);
+
+		try {
+			$subscription->plan = $plan->id;
+			$response = $subscription->save();
+
+		} catch (\Stripe\Error\RateLimit $e) {
+		  // Too many requests made to the API too quickly
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+		  // Invalid parameters were supplied to Stripe's API
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\Authentication $e) {
+		  // Authentication with Stripe's API failed
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+		  // Network communication with Stripe failed
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (\Stripe\Error\Base $e) {
+		   // Generic Stripe error
+			$error_response = $this->constructErrorResponse($e);
+
+		} catch (Exception $e) {
+		  // Something else happened, completely unrelated to Stripe
+			$error_response = $this->constructErrorResponse($e);
+		}
+
+		// Add subscription to database
+		DB::table('stripe_subscriptions')->where('id', $subscription->id)->
+			update(['plan_id' => $plan->id]);
+
+		if ($response) {
+			return $response;
+		} else {
+			return $error_response;
+		}
+	}
+
 	public function cancelSubscription($plan, $customer, $account_id) {
 
 		$response = NULL;
@@ -1316,9 +1551,15 @@ class StripeService implements PaymentServiceInterface {
 
 		}
 
-		$this->deleteSubscriptionInDB($subscription_record);
+		//$this->deleteSubscriptionInDB($subscription_record);
+		$this->cancelSubscriptionInDB($subscription_record);
 
 		return $response;
+	}
+
+	public function cancelSubscriptionInDB($subscription) {
+		DB::table('stripe_subscriptions')->where('id', '=', $subscription->id)
+			->update(['activated' => 0]);
 	}
 
 	public function deleteSubscriptionInDB($subscription) {

@@ -74,6 +74,7 @@ class StripeInvoicePaid extends Job implements ShouldQueue
 
 		$employee = User::find($employee_record->user_id);
 
+
 		// Get plan
 		$plan_record = DB::table('stripe_plans')->
 			where('id', $plan_id)->first();
