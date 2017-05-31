@@ -16,6 +16,31 @@ body {
 img {
   max-width: 100%;
 }
+
+.hidden {
+  display:none;
+}
+
+.clear {
+  clear:both;
+}
+
+.center {
+  text-align:center;
+}
+
+.loading {
+  text-align:center;
+}
+
+.red {
+  color:#ff0d0d;
+}
+
+.green {
+  color:#32a81b;
+}
+
 .main_header {
   background-image: url(../img/base.png);
   background-size: cover;
@@ -1081,14 +1106,17 @@ img {
       margin-right: 50px;
       width: 400px;
       word-wrap: break-word;
-      font-size: 23px; }
+      font-size: 30px; }
+    .myjobs .workers_item .salary p.salary{
+      font-size: 20px;
+    }
       .myjobs .workers_item .order_salary {
         float: left;
-        word-wrap: break-word;
         width: 135px;
         padding-top: 16px;
         font-weight: 700;
         font-size: 20px;
+	margin-right:40px;
       }
       .myjobs .workers_item .credit_card {
         display: inline-block;
@@ -1113,17 +1141,25 @@ img {
       .myjobs .workers_item .salary .month {
         font-size: 16px;
         margin-top: 10px; }
+    .myjobs .workers_item div.right_stuff {
+
+    }
+     .myjobs .workers_item div.right_stuff .job_button_error {
+	width:170px;
+	margin-bottom:6px;
+     } 
     .myjobs .workers_item button {
-      position: absolute;
+     /* position: absolute;
       top: 50%;
-      margin-top: -20px;
       right: 0;
+      */
       width: 170px;
-      height: 40px;
+      min-height: 40px;
       text-transform: uppercase;
       color: #fff;
       font-weight: 700;
       background-color: #F24941;
+      margin-bottom:4px;
       border: none;
       -webkit-transition: background-color .3s ease;
       -o-transition: background-color .3s ease;
@@ -1132,6 +1168,28 @@ img {
               border-radius: 4px; }
       .myjobs .workers_item button:hover {
         background-color: #72B3A6;
+      }
+      .myjobs .workers_item button:disabled {
+	background-color:gray;
+      }
+    .myjobs .workers_item span.status {
+      display:block;
+      text-align:center;
+      width: 170px;
+      min-height: 40px;
+      padding: 9px;
+      text-transform: uppercase;
+      color: #fff;
+      font-weight: 700;
+      background-color: #FF7C00;
+      margin-bottom:4px;
+      border: none;
+      -webkit-transition: background-color .3s ease;
+      -o-transition: background-color .3s ease;
+      transition: background-color .3s ease;
+      -webkit-border-radius: 4px;
+              border-radius: 4px; 
+      }
       }
     .myjobs .workers_item .purchasebtn {
       right: 185px;
@@ -1142,9 +1200,11 @@ img {
       z-index: 1;
       background-color: transparent;
       color: #373737;
+      border: 2px solid #373737;
     }
     .myjobs .workers_item .cancelbtn:hover {
-    	background-color: transparent;
+    	background-color: #c20c0c;
+	color: #FBFBFB;
     }
     .myjobs .workers_item .Request {
       background-color: #72B3A6;
@@ -2436,7 +2496,7 @@ img {
   z-index: 10;
   display: none; }
   .alert_window__block {
-    position: absolute;
+    position: fixed;
     left: 50%;
     top: 50%;
     margin-top: -160px;
@@ -2463,6 +2523,39 @@ img {
       background-position: 100% 0%;
       margin-top: 45px; }
 
+.alert_window .early_bird_buy_now {
+
+}
+  .alert_window.early_bird .text {
+    margin-top:40px;
+  }
+
+  .alert_window.early_bird .submit {
+    text-align:center;
+    margin-top:40px;
+  }
+    .alert_window.early_bird .submit button {
+      width: 170px;
+      height: 40px;
+      text-transform: uppercase;
+      color: #fff;
+      font-weight: 700;
+      background-color: #F24941;
+      border: none;
+      -webkit-transition: background-color .3s ease;
+      -o-transition: background-color .3s ease;
+      transition: background-color .3s ease;
+      -webkit-border-radius: 4px;
+              border-radius: 4px; }
+      .alert_window.early_bird button:hover {
+        background-color: #72B3A6;
+      }
+      .alert_window.early_bird button:disabled {
+	background-color: gray;
+      }
+  .alert_window.early_bird .early_bird_error {
+    margin-bottom:6px;
+  }
 
 .defis {
 	display: none;
@@ -2661,6 +2754,50 @@ img {
 .job_item h1 .job_item__title .potent_span {
   font-style: italic;
 }
+
+.job_buyers {
+  padding:18px;
+
+} .job_buyers .buyer {
+    margin-top: 20px;
+    border-bottom: 2px solid #ECECEC;
+  }
+  .job_buyers .buyer .info {
+    float:left;
+    width:80px;
+    text-align:center;
+  }
+  .job_buyers .buyer .info .img_wrapper {
+     height:68px;
+     width:68px;
+     margin:0px auto;
+   }
+   .job_buyers .buyer .jgpanel {
+     float:left;
+     margin-left:20px;
+     padding:18px;
+   }
+   .job_buyers .buyer .jgpanel button {
+      margin-top: -20px;
+      width: 130px;
+      height: 30px;
+      text-transform: uppercase;
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      background-color: #F24941;
+      border: none;
+      -webkit-transition: background-color .3s ease;
+      -o-transition: background-color .3s ease;
+      transition: background-color .3s ease;
+      -webkit-border-radius: 4px;
+              border-radius: 4px; }
+      .job_buyers .buyer .jgpanel button:hover {
+        background-color: #72B3A6;
+      }
+      .job_buyers .buyer .jgpanel button:disabled {
+	background-color:gray;
+      }
 
 .card_wrapper {
   position: relative;

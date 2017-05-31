@@ -6,6 +6,8 @@ use App\EmployeeExitRequest;
 use App\User;
 use Illuminate\Http\Request;
 
+use App\Operations\EndAllEarlyBirdsOP;
+
 use App\Http\Requests;
 use Auth;
 use App\Job;
@@ -16,7 +18,7 @@ class EmployeeExitRequestController extends Controller
     /**
      * Creating new  request from employee to exit from  the job card
      */
-    public function store(Request $request){
+    public function store(Request $request, EndAllEarlyBirdsOP $end_all_early_birds){
         $responseData = array();
 
         $employee = Auth::user();
@@ -66,6 +68,10 @@ class EmployeeExitRequestController extends Controller
                 $job->employee_id = null;
                 $job->save();
                 $employee->employee_requests()->where('job_id', $job->id)->delete();
+
+		// End all early bird buyers
+		$end_all_early_birds->go($job);
+
                 $responseData['error'] = false;
                 $responseData['status'] = 1;
                 $responseData['info'] = 'Job successfully deleted';

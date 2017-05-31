@@ -718,21 +718,9 @@ class StripeIntegrationTest extends TestCase
 		    'first_name' => 'Hello',
 		    'last_name' => 'There',
 		    'user_type' => 'buyer',
-		    'email' => 'fred@airmail.com',
+		    'email' => 'fredto@airmail.com',
 		    'password' => bcrypt('password')
 		]);
-
-		$account_id = 'acct_id';
-		$customer_id = 'cust_id';
-
-		// create managed account
-		$this->psi->insertAccountIntoDB($account_id, $seller->id);
-
-		// create customer
-		$this->psi->createCustomerInDB($buyer, 
-			array('id' => $customer_id),
-			$account_id
-		);
 
 		// Create a fake-oh job
 		 $job = Job::create([
@@ -742,6 +730,103 @@ class StripeIntegrationTest extends TestCase
 		    'max_clients_count' => 5,
 		    'category_id' => 1,
 		]);
+
+		$account_id = 'acct_id';
+		$customer_id = 'cust_id';
+
+		// create managed account
+		$this->psi->insertAccountIntoDB($account_id, $seller->id);
+
+		$customer = ['id' => $customer_id];
+
+		// create customer
+		$this->psi->createCustomerInDB($buyer, $job,
+			$customer,
+			$account_id
+		);
+
+		// Create plan in id
+		$plan_id = 'this_the_plan';
+		$this->psi->createPlanInDB($plan_id, $account_id, $job->id);
+
+		// create event
+		$event = ['user_id' => $account_id,
+			'data' => ['object' => [
+				'customer' => $customer_id,
+				'lines' => [
+					'data' => [ 
+						0 => [ 
+							'plan' => [
+								'id' => $plan_id ]
+							]
+						]
+					]
+				]
+			]];
+
+		dispatch( new StripeInvoicePaid($event) );
+	}
+
+	public function testEarlyBirdInvoicePaidWebhook() {
+
+		// create buyer
+		//
+		$buyer = User::create([
+		    'first_name' => 'Teddy',
+		    'last_name' => 'Thanopoklos',
+		    'user_type' => 'buyer',
+		    'email' => 'teddy1@bearmail.com',
+		    'password' => bcrypt('password'),
+		]);
+
+		// create employee
+		//
+		//Creating new user
+		$seller = User::create([
+		    'first_name' => 'Hello',
+		    'last_name' => 'There',
+		    'user_type' => 'buyer',
+		    'email' => 'fredto@airmail.com',
+		    'password' => bcrypt('password')
+		]);
+
+		// Create a fake-oh job
+		 $job = Job::create([
+		    'title' => 'Test Job',
+		    'description' => "A job for testing",
+		    'salary' => 50.00,
+		    'max_clients_count' => 15,
+		    'min_clients_count' => 10,
+		    'category_id' => 1,
+		]);
+
+		// Create an Order
+		$order = $buyer->orders()->create(
+			['job_id' => $job->id]);
+
+		$order->status = 'in_progress';
+		$order->save();
+
+		$early_bird = $buyer->early_bird_buyers()->create([
+			'user_id' => $buyer->id,
+			'employee_id' => $seller->id,
+			'job_id' => $job->id,
+			'sale_id' => $order->id,
+			'status' => 'working']);
+
+		$account_id = 'acct_id';
+		$customer_id = 'cust_id';
+
+		// create managed account
+		$this->psi->insertAccountIntoDB($account_id, $seller->id);
+
+		$customer = ['id' => $customer_id];
+
+		// create customer
+		$this->psi->createCustomerInDB($buyer, $job,
+			$customer,
+			$account_id
+		);
 
 		// Create plan in id
 		$plan_id = 'this_the_plan';
@@ -950,6 +1035,7 @@ class StripeIntegrationTest extends TestCase
 
 	public function testAccountUpdatedRequest() {
 
+		$this->markTestSkipped();
 		// create buyer
 		//
 		$user = User::create([

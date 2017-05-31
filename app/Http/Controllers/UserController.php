@@ -87,10 +87,9 @@ class UserController extends Controller
             return redirect('/');
         }
 
-        $orders = $buyer->orders()->where('status', 'in_progress')->orWhere('status', '=', 'pending')->get();
-  
+        $orders = $buyer->orders()->with('early_bird_buyer')->where('status', 'in_progress')->orWhere('status', '=', 'pending')->get();
 
-        return view('pages.account.my_orders', ['orders' => $orders]);
+        return view('pages.account.my_orders', ['orders' => $orders, 'user' => $buyer, 'early_bird' => NULL]);
     }
 
     public function showPayments(){

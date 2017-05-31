@@ -111,14 +111,10 @@ class JobController extends Controller
 
 
         //$sales = $job->buyers()->get();
-        $orders = $job->sales()->whereIn('status', ['in_progress', 'pending'])->get();
+        $orders = $job->sales()->whereIn('status', ['in_progress', 'pending'])->with('buyer', 'early_bird_buyer')->get();
 	$purchases = $orders->filter(function($order) {
 		return $order->status == 'in_progress';
 	});
-
-		if ($jobOrdered && !$jobPaid) {
-
-		}
 
         return view('pages.jobs.job', ['user' => $user, 'job' => $job, 'category' => $category, 'employee' => $employee, 'employeeStatus' => $emploeeStatus, 'orders' => $orders, 'purchases' => $purchases, 'employeeRequest' => $employeeRequest, 'jobOrdered' => $jobOrdered, 'jobPaid' => $jobPaid, 'user_order_info' => $user_order_info, 'adjustment_request' => $adjustment_request]);
     }

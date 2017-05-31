@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
+use DB;
+
 use Auth;
 
 class Job extends Model
@@ -170,7 +172,65 @@ class Job extends Model
         }
     }
 
+    public function getEarlyBirdMarkupAttribute() {
 
+        $current_early_bird_count = $this->early_bird_buyers()->where('status', 'working')->get()->count();
+
+	if ($current_early_bird_count == 0) {
+		return 0;
+	}
+
+        $min_clients_count = $this->min_clients_count;
+        $surcharge = $this->salary * 0.15;
+        $normal_total = ($this->salary + $surcharge);
+
+	// Calculate the extra markup
+	$xtra_markup = $this->salary * (0.15 * ( 1 - ( ($current_early_bird_count - 1) / $min_clients_count )));
+
+        $total_price_will_be = $normal_total + $xtra_markup;
+
+	    return $total_price_will_be;
+    }
+
+    public function calculateEarlyBirdMarkup($n) {
+
+	if ($n == 0) {
+		return 0;
+	}
+	else if ($n < 0) {
+		return -1;
+	}
+
+        $min_clients_count = $this->min_clients_count;
+        $surcharge = $this->salary * 0.15;
+        $normal_total = ($this->salary + $surcharge);
+
+	// Calculate the extra markup
+	$xtra_markup = $this->salary * (0.15 * ( 1 - ( ($n - 1) / $min_clients_count )));
+
+        $total_price_will_be = $normal_total + $xtra_markup;
+
+        return $total_price_will_be;
+    }
+
+    /*
+     * Calculates markup at current time
+     */
+    public function getMarkupAttribute() {
+
+        $current_early_bird_count = $this->early_bird_buyers()->where('status', 'working')->get()->count();
+
+	if ($current_early_bird_count == 0) {
+		return $this->salary * 0.15;
+	}
+
+        $surcharge = $this->salary * 0.15;
+
+	// Calculate the extra markup
+	$xtra_markup = $this->salary * (0.15 * ( 1 - ( ($current_early_bird_count - 1) / $this->min_clients_count )));
+
+	return $xtra_markup + $surcharge;
+    }
 
     /*
      * Depending on level of user, returns appropriate "sale" number
@@ -277,6 +337,11 @@ class Job extends Model
         $this->make_hot();
     }
 
+    public function endAllEarlyBirds() {
+	    DB::table('early_bird_buyers')->where('job_id', $this->id)
+		    ->update(['status' => 'ended']);
+    }
+
 
     /**
      * Get user of job.
@@ -327,6 +392,13 @@ class Job extends Model
     public function employee_requests()
     {
         return $this->hasMany('App\EmployeeRequest', 'job_id');
+    }
+
+    /**
+     * Get job`s early_bird_buyers.
+     */
+    public function early_bird_buyers() {
+	return $this->hasMany('App\EarlyBirdBuyer', 'job_id');
     }
 
     /**
