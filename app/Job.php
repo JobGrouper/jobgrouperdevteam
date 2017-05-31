@@ -225,9 +225,9 @@ class Job extends Model
 	}
 
 	// Calculate the extra markup
-	$xtra_markup = $this->salary * (0.15 * ( 1 - ( ($current_early_bird_count - 1) / $min_clients_count )));
+	$xtra_markup = $this->salary * (0.15 * ( 1 - ( ($current_early_bird_count - 1) / $this->min_clients_count )));
 
-	return $total_price_will_be;
+	return $xtra_markup;
     }
 
     /*
