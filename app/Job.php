@@ -224,10 +224,12 @@ class Job extends Model
 		return $this->salary * 0.15;
 	}
 
+        $surcharge = $this->salary * 0.15;
+
 	// Calculate the extra markup
 	$xtra_markup = $this->salary * (0.15 * ( 1 - ( ($current_early_bird_count - 1) / $this->min_clients_count )));
 
-	return $xtra_markup;
+	return $xtra_markup + $surcharge;
     }
 
     /*
