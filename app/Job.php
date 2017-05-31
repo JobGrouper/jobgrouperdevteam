@@ -214,6 +214,23 @@ class Job extends Model
     }
 
     /*
+     * Calculates markup at current time
+     */
+    public function getMarkupAttribute() {
+
+        $current_early_bird_count = $this->early_bird_buyers()->where('status', 'working')->get()->count();
+
+	if ($current_early_bird_count == 0) {
+		return $this->salary * 0.15;
+	}
+
+	// Calculate the extra markup
+	$xtra_markup = $this->salary * (0.15 * ( 1 - ( ($current_early_bird_count - 1) / $min_clients_count )));
+
+	return $total_price_will_be;
+    }
+
+    /*
      * Depending on level of user, returns appropriate "sale" number
      * Not an accessor
      * 

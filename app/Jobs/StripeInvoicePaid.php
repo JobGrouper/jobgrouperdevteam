@@ -74,13 +74,14 @@ class StripeInvoicePaid extends Job implements ShouldQueue
 
 		$employee = User::find($employee_record->user_id);
 
+
 		// Get plan
 		$plan_record = DB::table('stripe_plans')->
 			where('id', $plan_id)->first();
 
 		$job = \App\Job::find($plan_record->job_id);
 
-		Mail::send('emails.buyer_payment_successful', ['employee' => $employee->full_name, 'job' => $job], function($u) use ($buyer, $job)
+		Mail::send('emails.buyer_payment_successful', ['employee' => $employee->full_name, 'job' => $job, 'salary' => $salary], function($u) use ($buyer, $job)
 		{
 		    $u->from('admin@jobgrouper.com');
 		    $u->to($buyer->email);
