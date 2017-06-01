@@ -2,7 +2,7 @@
 
 @section('content')
 
-<p>As you know, {{ $data['employee']->fullname }} has left the {{ $data['job']->title }} job. We also know 
+<p>As you know, {{ $data['employee']->full_name }} has left the {{ $data['job']->title }} job. We also know 
 that you have paid for a full month of services that can no longer be completed. Well, it's 
 only fair that you get a refund to cover that.</p>
 
