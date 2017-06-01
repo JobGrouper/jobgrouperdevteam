@@ -18,6 +18,7 @@ error_log
 .env
 *.swp
 *.swo
+*.swk
 *.swn
 *.swm
 *.swl
