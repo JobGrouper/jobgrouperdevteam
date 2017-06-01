@@ -2,7 +2,7 @@
 
 @section('content')
 <p>{{$user->full_name}} has requested "early bird" access to your services.
-This means that, for the higher rate of ${{$job->early_bird_markup}} per month, 
+This means that, for the higher rate of ${{ number_format( $job->next_markup, 2) }} per month, 
 this buyer has requested to start work now.</p>
 
 <p>You can decide if you would like to accept their request or deny it from 
