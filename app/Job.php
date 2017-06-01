@@ -233,6 +233,15 @@ class Job extends Model
     }
 
     /*
+     * Gets the next markup
+     */
+    public function getNextMarkupAttribute() {
+
+        $current_early_bird_count = $this->early_bird_buyers()->where('status', 'working')->get()->count();
+	return $this->calculateEarlyBirdMarkup( $current_early_bird_count + 1);
+    }
+
+    /*
      * Depending on level of user, returns appropriate "sale" number
      * Not an accessor
      * 

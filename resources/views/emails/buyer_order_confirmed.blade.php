@@ -11,5 +11,9 @@ visit your account's <a href='{{ env("SERVICE_APP_URL") }}/my_orders'>My Orders<
 <p>Work will begin once the minimum number of buyers has been reached. We'll be sure to let you know
 when that happens. Until then, thanks for using JobGrouper!
 </p>
+
+<p><i>On the other hand, if you'd like to get started sooner rather than later, you can navigate 
+to your <a href='{{ env("SERVICE_APP_URL") }}/my_orders'>my orders</a> page 
+and click "buy early" for this job. The early-bird-buyer process will allow you to start work immediately.</i></p>
 @endif
 @endsection
