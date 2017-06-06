@@ -2,6 +2,13 @@ $(document).ready(function() {
 
 var jg = jg || {};
 
+jg.addSpinner = function( selector ) {
+	$('<img/>', {
+		src: '/img/default.svg',
+		alt: 'Loading...'
+	}).appendTo( selector );
+}
+
 	var header_open = false;
 	$('.header_welcome__btn').click(function(){
 
@@ -1521,18 +1528,29 @@ $(".myjobs .workers_item .close_order_btn").on("click", function(e) {
 	var order_id = $(this).attr("data-order_id");
 	var self = $(this);
 	if (confirm("Are you sure you want to close this order?")){
+		//Add spinner
+		$( e.target ).prop('disabled', true);
+		jg.addSpinner(".loading[order_id='" + order_id + "'");
 
 		$.ajax({
 			type: "POST",
 			url: "/api/order/close/" + order_id,
 			dataType: "json",
 			success: function(response) {
-				console.log(response);
+				// clear spinner
+				$( ".loading[order_id='" + order_id + "'" ).empty();
 				if (response.error == false) {
 					self.parent().hide();
 				} else {
 					alert(response.info);
 				}
+			},
+			error: function() {
+				// clear spinner
+				$( ".loading[order_id='" + order_id + "'" ).empty();
+				// error message
+				$(".job_button_error[order_id='" + order_id + "'").addClass("red");
+				$(".job_button_error[order_id='" + order_id + "'").text('We\'ve made an error. Try again later.');
 			}
 		});
 	}

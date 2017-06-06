@@ -150,8 +150,8 @@
 				-->
 
 			<div class="right_stuff">
-			   <div class="loading" job_id="{{ $order->job_id }}"></div>
-			   <div class="job_button_error center" job_id="{{ $order->job_id }}"></div>
+			   <div class="loading" job_id="{{ $order->job_id }}"  order_id="{{ $order->id }}"></div>
+			   <div class="job_button_error center" job_id="{{ $order->job_id }}"  order_id="{{ $order->id }}"></div>
                         {{--@if($closeRequest)--}}
                         @if($order->status == 'closed')
                             {{--<button class="Request">Request Sent</button>--}}
