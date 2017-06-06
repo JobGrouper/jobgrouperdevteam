@@ -1435,12 +1435,17 @@ $(".view_sidebar .buttons .apply").on("click", function(e) {
 	var jobId = window.location.href.split("/");
 	var job_id = jobId[jobId.length - 1];
 	if (confirm("Is your profile filled out completely? Your profile is the sole basis for which you are selected for jobs at JobGrouper.")) {
+		//Add spinner
+		$( e.target ).prop('disabled', true);
+		jg.addSpinner(".loading");
+
 		$.ajax({
 			type: "POST",
 			url:  "/api/employeeRequest/" + job_id,
 			dataType: "json",
 			success: function(response) {
 				console.log(response);
+				$( ".loading").empty();
 				if (response.status == 0) {
 					$(".view_sidebar .buttons").hide();
 					$(".view_sidebar .statebuttons .pending").show();
@@ -1460,6 +1465,13 @@ $(".view_sidebar .buttons .apply").on("click", function(e) {
 						})
 					},1000)
 				}
+			},
+			error: function() {
+				// clear spinner
+				$( ".loading").empty();
+				// error message
+				$(".job_button_error").addClass("red");
+				$(".job_button_error").text('We\'ve made an error. Try again later.');
 			}
 		});
 	}

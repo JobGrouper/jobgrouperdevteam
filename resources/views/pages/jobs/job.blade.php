@@ -184,6 +184,8 @@
                         </div>
 
                         <div class="buttons">
+                            <div class="loading"></div>
+                            <div class="job_button_error center"></div>
 
                             @if (Auth::guest())
 			       @if( $job->sales_count < $job->max_clients_count )
