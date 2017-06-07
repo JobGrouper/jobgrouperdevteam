@@ -141,9 +141,11 @@
                         <h1 class="active">
                             <span class="job_item__title"><a href="/job/{{$jobAwaitingActivation->id}}">{{$jobAwaitingActivation->title}}</a></span>
                             <p class="myjobs_text">{{$jobAwaitingActivation->description}}</p>
-                            <button job-id="{{$jobAwaitingActivation->id}}" class="request_close leave_api">Leave job
-                            </button>
                         </h1>
+                        <div class="loading" job_id="{{$jobAwaitingActivation->id}}"></div>
+                        <div class="job_button_error center" job_id="{{$jobAwaitingActivation->id}}"></div>
+                        <button job-id="{{$jobAwaitingActivation->id}}" class="request_close leave_api">Leave job
+                        </button>
 
                         <div class="jobs_acc">
 

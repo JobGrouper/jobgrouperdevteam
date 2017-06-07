@@ -1,13 +1,6 @@
 $(document).ready(function() {
 
-var jg = jg || {};
-
-jg.addSpinner = function( selector ) {
-	$('<img/>', {
-		src: '/img/default.svg',
-		alt: 'Loading...'
-	}).appendTo( selector );
-}
+// var jg = jg || {};
 
 	var header_open = false;
 	$('.header_welcome__btn').click(function(){
@@ -122,21 +115,35 @@ jg.addSpinner = function( selector ) {
 	}
 	
 	
-	$(".job_item h1 .request_close.leave_api").click(function() {
+	$(".request_close").click(function(e) {
+		alert();
 		var job_id = $(this).attr("job-id");
 		var self = $(this);
+
+		//Add spinner
+		$( e.target ).prop('disabled', true);
+		jg.addSpinner(".loading");
+
 		$.ajax({
 			type: "POST",
 			url: "/api/employeeExitRequest/" + job_id,
 			datatype: "json",
 			success: function(response) {
 				console.log(response);
+				$( ".loading").empty();
 				if(response.status == 0) {
-					self.hide();
-					self.next().fadeIn("fast");
+					// self.hide();
+					// self.next().fadeIn("fast");
 				} else {
-					self.parent().parent().hide();
+					self.parent().hide();
 				}
+			},
+			error: function() {
+				// clear spinner
+				$( ".loading[job_id='" + job_id + "']").empty();
+				// error message
+				$(".job_button_error[job_id='" + job_id + "']").addClass("red");
+				$(".job_button_error[job_id='" + job_id + "']").text('We\'ve made an error. Try again later.');
 			}
 		});
 	});
