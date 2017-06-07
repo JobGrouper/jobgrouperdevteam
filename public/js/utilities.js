@@ -506,6 +506,9 @@ jg.BuyerAdjuster.prototype = {
 		   return;
 		}
 
+		//Add spinner
+		jg.addSpinner(".loading");
+
 		$.ajax({
 			type: "POST",
 			url: "/api/buyerAdjustment",
@@ -522,6 +525,14 @@ jg.BuyerAdjuster.prototype = {
 				  self._setMessage('The adjustment has gone through', 'success');
 				  self._disableButtons();
 				}
+				// hide spinner
+				$(".loading").empty();
+			},
+			error: function(){
+				self._setMessage('We\'ve made an error. Try again later.', 'error');
+				self._disableButtons();
+				// hide spinner
+				$(".loading").empty();
 			}
 		});
 	},
