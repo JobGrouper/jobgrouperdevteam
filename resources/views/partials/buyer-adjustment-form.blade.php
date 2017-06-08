@@ -32,6 +32,7 @@
 		</div>
 		</div>
 	</div>
+	<div class="loading"></div>
 	<div class="adjustment-message">
 		<p id="ba-message-field"></p>
 	</div>

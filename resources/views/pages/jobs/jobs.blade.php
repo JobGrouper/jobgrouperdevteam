@@ -9,7 +9,7 @@
                 <div class="items clearfix">
                 @if(count($jobs) > 0)
                     @foreach($jobs as $job)
-                            <div class="col-md-3 col-sm-6 col-xs-12">
+                            <div class="col-md-3 col-sm-6 col-xs-12" job_id="{{ $job->id }}">
                                 <a href="/job/{{$job->id}}">
                                 <div class="items_item">
                                     <div class="img_wrapper"><img src="{{ asset($job->image_url)}}" alt="alt"></div>

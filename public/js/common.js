@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-var jg = jg || {};
+// var jg = jg || {};
 
 	var header_open = false;
 	$('.header_welcome__btn').click(function(){
@@ -115,21 +115,34 @@ var jg = jg || {};
 	}
 	
 	
-	$(".job_item h1 .request_close.leave_api").click(function() {
+	$(".request_close").click(function(e) {
 		var job_id = $(this).attr("job-id");
 		var self = $(this);
+
+		//Add spinner
+		$( e.target ).prop('disabled', true);
+		jg.addSpinner(".loading[job_id='" + job_id + "'");
+
 		$.ajax({
 			type: "POST",
 			url: "/api/employeeExitRequest/" + job_id,
 			datatype: "json",
 			success: function(response) {
 				console.log(response);
+				$(".loading[job_id='" + job_id + "'").empty();
 				if(response.status == 0) {
-					self.hide();
-					self.next().fadeIn("fast");
+					// self.hide();
+					// self.next().fadeIn("fast");
 				} else {
-					self.parent().parent().hide();
+					self.parent().hide();
 				}
+			},
+			error: function() {
+				// clear spinner
+				$( ".loading[job_id='" + job_id + "']").empty();
+				// error message
+				$(".job_button_error[job_id='" + job_id + "']").addClass("red");
+				$(".job_button_error[job_id='" + job_id + "']").text('We\'ve made an error. Try again later.');
 			}
 		});
 	});
@@ -1470,12 +1483,17 @@ $(".view_sidebar .buttons .apply").on("click", function(e) {
 	var jobId = window.location.href.split("/");
 	var job_id = jobId[jobId.length - 1];
 	if (confirm("Is your profile filled out completely? Your profile is the sole basis for which you are selected for jobs at JobGrouper.")) {
+		//Add spinner
+		$( e.target ).prop('disabled', true);
+		jg.addSpinner(".loading");
+
 		$.ajax({
 			type: "POST",
 			url:  "/api/employeeRequest/" + job_id,
 			dataType: "json",
 			success: function(response) {
 				console.log(response);
+				$( ".loading").empty();
 				if (response.status == 0) {
 					$(".view_sidebar .buttons").hide();
 					$(".view_sidebar .statebuttons .pending").show();
@@ -1495,6 +1513,13 @@ $(".view_sidebar .buttons .apply").on("click", function(e) {
 						})
 					},1000)
 				}
+			},
+			error: function() {
+				// clear spinner
+				$( ".loading").empty();
+				// error message
+				$(".job_button_error").addClass("red");
+				$(".job_button_error").text('We\'ve made an error. Try again later.');
 			}
 		});
 	}
@@ -1563,18 +1588,29 @@ $(".myjobs .workers_item .close_order_btn").on("click", function(e) {
 	var order_id = $(this).attr("data-order_id");
 	var self = $(this);
 	if (confirm("Are you sure you want to close this order?")){
+		//Add spinner
+		$( e.target ).prop('disabled', true);
+		jg.addSpinner(".loading[order_id='" + order_id + "'");
 
 		$.ajax({
 			type: "POST",
 			url: "/api/order/close/" + order_id,
 			dataType: "json",
 			success: function(response) {
-				console.log(response);
+				// clear spinner
+				$( ".loading[order_id='" + order_id + "'" ).empty();
 				if (response.error == false) {
 					self.parent().hide();
 				} else {
 					alert(response.info);
 				}
+			},
+			error: function() {
+				// clear spinner
+				$( ".loading[order_id='" + order_id + "'" ).empty();
+				// error message
+				$(".job_button_error[order_id='" + order_id + "'").addClass("red");
+				$(".job_button_error[order_id='" + order_id + "'").text('We\'ve made an error. Try again later.');
 			}
 		});
 	}
