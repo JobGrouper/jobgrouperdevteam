@@ -105,7 +105,7 @@
 
                         <div class="rating">
                             @if($employee)
-                                <div class="stars"><div class="yellow"></div></div>
+                                <!--<div class="stars"><div class="yellow"></div></div>-->
                             @endif
                             <div class="rating_name">
                                 @if($employee)

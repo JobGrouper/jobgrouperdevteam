@@ -39,6 +39,7 @@
                                                 <div class="img_wrapper">
                                                     <img src="{{ asset($buyer->image_url) }}" alt="alt">
                                                 </div>
+						<!--
                                                 <div class="rating">
                                                     <div class="stars">
                                                         <div class="yellow"></div>
@@ -47,6 +48,7 @@
                                                     <a href="/messages/{{$buyer->id}}">message
                                                         ({{$employee->getNewMessages($buyer->id)}} new)</a>
                                                 </div>
+						-->
                                                 <div class="salary">
                                                     <p>${{$job->salary}}/month</p>
                                                     <p class="month">work {{$order->created_at->diffInMonths() + 1}}
@@ -101,6 +103,7 @@
                                             <div class="img_wrapper">
                                                 <img src="{{ asset($buyer->image_url) }}" alt="alt">
                                             </div>
+						<!--
                                             <div class="rating">
                                                 <div class="stars">
                                                     <div class="yellow"></div>
@@ -109,6 +112,7 @@
                                                 <a href="/messages/{{$buyer->id}}">message
                                                     ({{$employee->getNewMessages($buyer->id)}} new)</a>
                                             </div>
+						-->
 
                                             <div class="salary">
                                                 <p>${{$job->salary}}/month</p>

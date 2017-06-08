@@ -36,11 +36,13 @@
                                 </div>
                             @endif
                         </div>
+			<!--
                         <div class="rating">
                             <p>Feedback Score</p>
                             <div class="stars"><div class="yellow" style="width: {{$user['rate']}}% !important;"></div></div>
                             <a href="/messages/{{ $user['id'] }}"><button>Send message</button></a>
                         </div>
+			-->
                     </div>
                     <div class="profile_text">
                         @if($user['description'])
