@@ -1009,7 +1009,8 @@ img {
     font-weight: 600;
     position: relative;
     padding-right: 260px; }
-  .myjobs h1 .request_close {
+
+  .myjobs .request_close {
     position: absolute;
     top: 50%;
     right: 10px;
@@ -1028,6 +1029,19 @@ img {
     -webkit-border-radius: 4px;
     border-radius: 4px;
   }
+
+  .myjobs .job_button_error {
+    position: absolute;
+    top: 20%;
+    right: 0%;
+  }
+
+  .myjobs .loading {
+    position: absolute;
+    top: 60%;
+    right: 100px;
+  }
+
   .myjobs h1 .sent {
     position: absolute;
     top: 35px;
@@ -2674,6 +2688,7 @@ img {
   color: #61BD4F !important;
 }
 .job_item {
+  position: relative;
   margin-bottom: 40px;
 }
 .job_item .job_item__title {

@@ -1190,6 +1190,10 @@ div.adjustment-info > div.border {
   padding: 10px 0;
 }
 
+div.loading {
+  text-align: center;
+}
+
 div.adjustment-tools {
   margin-top:45px;
 }

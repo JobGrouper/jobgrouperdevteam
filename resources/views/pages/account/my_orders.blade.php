@@ -105,7 +105,7 @@
 
                         <div class="rating">
                             @if($employee)
-                                <div class="stars"><div class="yellow"></div></div>
+                                <!--<div class="stars"><div class="yellow"></div></div>-->
                             @endif
                             <div class="rating_name">
                                 @if($employee)
@@ -150,8 +150,8 @@
 				-->
 
 			<div class="right_stuff">
-			   <div class="loading" job_id="{{ $order->job_id }}"></div>
-			   <div class="job_button_error center" job_id="{{ $order->job_id }}"></div>
+			   <div class="loading" job_id="{{ $order->job_id }}"  order_id="{{ $order->id }}"></div>
+			   <div class="job_button_error center" job_id="{{ $order->job_id }}"  order_id="{{ $order->id }}"></div>
                         {{--@if($closeRequest)--}}
                         @if($order->status == 'closed')
                             {{--<button class="Request">Request Sent</button>--}}

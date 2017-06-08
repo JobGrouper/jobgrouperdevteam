@@ -96,15 +96,17 @@
 
                     </div>
 
+			<!--
                     <div class="rating">
 
                         <p>Feedback Score</p>
 
                         <div class="stars"><div class="yellow" style="width: {{$user['rate']}}% !important;"></div></div>
 
-                        <!-- <button>Send message</button> -->
+                        <button>Send message</button>
 
                     </div>
+			-->
 
                     <div class="edit_profile" title="Edit profile"><img src="{{ asset('img/Profile/edit_pencil.png') }}" alt="alt"></div>
 

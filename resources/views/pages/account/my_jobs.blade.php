@@ -39,6 +39,7 @@
                                                 <div class="img_wrapper">
                                                     <img src="{{ asset($buyer->image_url) }}" alt="alt">
                                                 </div>
+						<!--
                                                 <div class="rating">
                                                     <div class="stars">
                                                         <div class="yellow"></div>
@@ -47,6 +48,7 @@
                                                     <a href="/messages/{{$buyer->id}}">message
                                                         ({{$employee->getNewMessages($buyer->id)}} new)</a>
                                                 </div>
+						-->
                                                 <div class="salary">
                                                     <p>${{$job->salary}}/month</p>
                                                     <p class="month">work {{$order->created_at->diffInMonths() + 1}}
@@ -101,6 +103,7 @@
                                             <div class="img_wrapper">
                                                 <img src="{{ asset($buyer->image_url) }}" alt="alt">
                                             </div>
+						<!--
                                             <div class="rating">
                                                 <div class="stars">
                                                     <div class="yellow"></div>
@@ -109,6 +112,7 @@
                                                 <a href="/messages/{{$buyer->id}}">message
                                                     ({{$employee->getNewMessages($buyer->id)}} new)</a>
                                             </div>
+						-->
 
                                             <div class="salary">
                                                 <p>${{$job->salary}}/month</p>
@@ -141,9 +145,11 @@
                         <h1 class="active">
                             <span class="job_item__title"><a href="/job/{{$jobAwaitingActivation->id}}">{{$jobAwaitingActivation->title}}</a></span>
                             <p class="myjobs_text">{{$jobAwaitingActivation->description}}</p>
-                            <button job-id="{{$jobAwaitingActivation->id}}" class="request_close leave_api">Leave job
-                            </button>
                         </h1>
+                        <div class="loading" job_id="{{$jobAwaitingActivation->id}}"></div>
+                        <div class="job_button_error center" job_id="{{$jobAwaitingActivation->id}}"></div>
+                        <button job-id="{{$jobAwaitingActivation->id}}" class="request_close leave_api">Leave job
+                        </button>
 
                         <div class="jobs_acc">
 
