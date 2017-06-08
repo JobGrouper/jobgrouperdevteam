@@ -116,13 +116,12 @@ $(document).ready(function() {
 	
 	
 	$(".request_close").click(function(e) {
-		alert();
 		var job_id = $(this).attr("job-id");
 		var self = $(this);
 
 		//Add spinner
 		$( e.target ).prop('disabled', true);
-		jg.addSpinner(".loading");
+		jg.addSpinner(".loading[job_id='" + job_id + "'");
 
 		$.ajax({
 			type: "POST",
@@ -130,7 +129,7 @@ $(document).ready(function() {
 			datatype: "json",
 			success: function(response) {
 				console.log(response);
-				$( ".loading").empty();
+				$(".loading[job_id='" + job_id + "'").empty();
 				if(response.status == 0) {
 					// self.hide();
 					// self.next().fadeIn("fast");
