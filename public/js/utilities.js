@@ -695,7 +695,21 @@ jg.EarlyBirdActivator.prototype = {
 
 						// show request pending thing
 						$('.early-bird-request-pending[job_id="' + job_id + '"').show();
-					}
+					},
+				error: function() {
+					// clear spinner
+					$( ".loading[job_id='" + job_id + "'" ).empty();
+
+					// hide calling button
+					$(".early-bird-end-work-caller[job_id='" + job_id + "'").hide();
+					$(".early-bird-working[job_id='" + job_id + "'").hide();
+
+					// show request pending thing
+					$('.early-bird-ended[job_id="' + job_id + '"').removeClass('hidden');
+
+					$(".early_bird_error[job_id='" + job_id + "'").addClass("red");
+					$(".early_bird_error[job_id='" + job_id + "'").text("We\'ve made an error. Try again later.");
+				}
 				});
 		});
 
@@ -791,6 +805,20 @@ jg.EarlyBirdActivator.prototype = {
 							$(".early_bird_error[job_id='" + job_id + "'").addClass("red");
 							$(".early_bird_error[job_id='" + job_id + "'").text("We've made an error. Please try again later.");
 						}
+					},
+					error: function() {
+						// clear spinner
+						$( ".loading[job_id='" + job_id + "'" ).empty();
+
+						// hide calling button
+						$(".early-bird-end-work-caller[job_id='" + job_id + "'").hide();
+						$(".early-bird-working[job_id='" + job_id + "'").hide();
+
+						// show request pending thing
+						$('.early-bird-ended[job_id="' + job_id + '"').removeClass('hidden');
+
+						$(".early_bird_error[job_id='" + job_id + "'").addClass("red");
+						$(".early_bird_error[job_id='" + job_id + "'").text("We\'ve made an error. Try again later.");
 					}
 				});
 		});
@@ -831,6 +859,12 @@ jg.EarlyBirdActivator.prototype = {
 
 						$('p.early_bird_error[user_id="' + id + '"').removeClass('hidden');
 
+					},
+					error: function () {
+						$('div.loading[user_id="' + id + '"').hide();
+						$('p.early_bird_error[user_id="' + id + '"').text('Something went wrong. Try again later');
+						$('p.early_bird_error[user_id="' + id + '"').addClass("red");
+						$('p.early_bird_error[user_id="' + id + '"').removeClass('hidden');
 					}
 				});
 		});
@@ -864,7 +898,13 @@ jg.EarlyBirdActivator.prototype = {
 						}
 
 						$('p.early_bird_error[user_id="' + id + '"').removeClass('hidden');
-					}
+					},
+				error: function () {
+					$('div.loading[user_id="' + id + '"').hide();
+					$('p.early_bird_error[user_id="' + id + '"').text('Something went wrong. Try again later');
+					$('p.early_bird_error[user_id="' + id + '"').addClass("red");
+					$('p.early_bird_error[user_id="' + id + '"').removeClass('hidden');
+				}
 				});
 		});
 
@@ -897,7 +937,13 @@ jg.EarlyBirdActivator.prototype = {
 						}
 
 						$('p.early_bird_error[user_id="' + id + '"').removeClass('hidden');
-					}
+					},
+				error: function () {
+					$('div.loading[user_id="' + id + '"').hide();
+					$('p.early_bird_error[user_id="' + id + '"').text('Something went wrong. Try again later');
+					$('p.early_bird_error[user_id="' + id + '"').addClass("red");
+					$('p.early_bird_error[user_id="' + id + '"').removeClass('hidden');
+				}
 				});
 		});
 	},

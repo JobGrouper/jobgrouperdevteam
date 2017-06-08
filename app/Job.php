@@ -423,6 +423,14 @@ class Job extends Model
 	    return $this->hasMany('App\BuyerAdjustmentRequest', 'job_id');
     }
 
+    public function plans() {
+        return $this->hasMany(StripePlan::class);
+    }
+
+    public function connectedCustomer() {
+        return $this->hasMany(StripeConnectedCustomer::class);
+    }
+
     /**
      * Scopes
      */

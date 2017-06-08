@@ -27,4 +27,8 @@ class StripeConnectedCustomer extends Model
     public function managed_account(){
         return $this->belongsTo(StripeManagedAccount::class);
     }
+
+    public function subscription(){
+        return $this->hasOne(StripeSubscription::class, 'connected_customer_id');
+    }
 }
