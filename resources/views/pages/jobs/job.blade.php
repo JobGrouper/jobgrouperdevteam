@@ -106,7 +106,7 @@
                 @if($employee['fb_url'])
 				    <div class="fb">
                         <img src="{{asset('img/Profile/fb.png')}}" alt="alt">
-                            {{ $user['fb_url'] }}
+                            <a href="https://www.facebook.com/{{ $employee['fb_url'] }}">Facebook</a>
 				        </img>
 				    </div>
                 @endif
@@ -114,7 +114,7 @@
                 @if($employee['linkid_url'])
                     <div class="twitter">
                         <img src="{{ asset('img/Profile/link.png') }}" alt="alt">
-                            {{ $employee['linkid_url'] }}
+                            <a href="http://www.linkedin.com/in/{{ $employee['linkid_url'] }}">LinkedIn</a>
                         </img>
                     </div>
                 @endif
@@ -122,7 +122,7 @@
                 @if($employee['git_url'])
 				<div class="twitter">
                     <img src="{{ asset('img/Profile/github.png')}}" alt="alt">
-                          {{ $employee['git_url'] }}
+                          <a href="https://github.com/{{ $employee['git_url'] }}">Github</a>
                     </img>
 				</div>
                 @endif

@@ -46,13 +46,13 @@
                                 <img src="{{ asset('img/Profile/link.png') }}" alt="alt">
                                 <span>
                                     @if($user['linkid_url'])
-                                    {{ $user['linkid_url'] }}
+                                    <a href="http://www.linkedin.com/in/{{ $user['linkid_url'] }}">LinkedIn</a>
                                     @else
                                     No information yet.
                                     @endif
                                 </span>
                                 <div class="editlinkedin">
-                                    <img src="{{ asset('img/Profile/link.png') }}" alt="alt">
+                                    <img src="{{ asset('img/Profile/link.png') }}" alt="alt">http://www.linkedin.com/in/
                                     <input type="text" value="{{ $user['linkid_url'] }}"><!-- <button id="linkedinchange">Save</button><button class="close"><img src="{{ asset("img/Profile/cancel.png") }}" alt="alt"></button> -->
                                 </div>
                             </div>
@@ -62,13 +62,13 @@
                                 <img src="{{ asset('img/Profile/fb.png')}}" alt="alt">
                                 <span>
                                     @if($user['fb_url'])
-                                    {{ $user['fb_url'] }}
+                                    <a href="https://www.facebook.com/{{ $user['fb_url'] }}">Facebook</a>
                                     @else
                                     No information yet.
                                     @endif
                                 </span>
                                 <div class="editfacebook">
-                                   <img src="{{ asset('img/Profile/fb.png')}}" alt="alt">
+                                   <img src="{{ asset('img/Profile/fb.png')}}" alt="alt">https://www.facebook.com/
                                    <input type="text" value="{{ $user['fb_url'] }}"><!-- <button id="facebookchange">Save</button><button class="close"><img src="{{ asset("img/Profile/cancel.png") }}" alt="alt"></button> -->
                                </div>
                            </div>
@@ -77,13 +77,13 @@
                             <img src="{{ asset('img/Profile/github.png')}}" alt="alt">
                             <span>
                                 @if($user['git_url'])
-                                {{ $user['git_url'] }}
+                                <a href="https://github.com/{{ $user['git_url'] }}">Github</a>
                                 @else
                                 No information yet.
                                 @endif
                             </span>
                             <div class="editgithub">
-                                <img src="{{ asset('img/Profile/github.png') }}" alt="alt">
+                                <img src="{{ asset('img/Profile/github.png') }}" alt="alt">https://github.com/
                                 <input type="text" value="{{ $user['git_url'] }}">
                             </div>
                         </div>

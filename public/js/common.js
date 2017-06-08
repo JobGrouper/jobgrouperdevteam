@@ -520,12 +520,15 @@ $(document).ready(function() {
   $(".profile_info .savebtn_top #profiletop_save").click(function() {
   	var obj = {
   		first_name: $(".profile_info .social .edittitle .edit_name").val(),
-			last_name: $(".profile_info .social .edittitle .edit_surname").val(),
+		last_name: $(".profile_info .social .edittitle .edit_surname").val(),
+  		linkid_base: 'https://www.linkedin.com/in/',
   		linkid_url: $(".editlinkedin input").val(),
+  		fb_base: 'https://www.facebook.com/',
   		fb_url: $(".editfacebook input").val(),
-    	git_url: $(".editgithub input").val()
-    }
-    console.log('aAlaalLaLalaalalla');
+  		git_base: 'https://github.com/',
+		git_url: $(".editgithub input").val()
+	    }
+
 	  if($(".editlinkedin input").val().length == 0){
 
 		  $(".social_link.linkedin span").text('No information yet.');
@@ -541,49 +544,88 @@ $(document).ready(function() {
 		  $(".social_link.github span").text('No information yet.');
 
 	  }
-    if($(".profile_info .social .edittitle .edit_name").val().length > 0 || $(".profile_info .social .edittitle .edit_surname").val().length > 0) {
-    	 $.ajax({
-				type: "PUT",
-				url: "/api/user/update",
-				data: obj,
-				datatype: "json",
-				success: function(response) {
-					console.log(response);
 
-					// Unfinished, so leaving comments in
-					//
-					$(".profile_info .savebtn_top").hide();
-					$(".profile_info .social .name").show();
-					$(".profile_info .social .edittitle").hide();
-					$(".profile_info .social .name").text(obj.first_name + " " + obj.last_name);
-					if ($(".editlinkedin input").val() !== "") {
-						$(".linkedin span").text(obj.linkid_url);
-					//	$(".linkedin span").html("<a href=" + obj.linkid_url + ">" + obj.linkid_url + "</a>");
-					} else {
-					//	$(".linkedin span").text(obj.linkid_url);
-					}
-					$(".profile_info .linkedin span, .profile_info .linkedin >img").show();
-					$(".profile_info .linkedin .editlinkedin").hide();
-					if ($(".editfacebook input").val() !== "") {
-						$(".facebook span").text(obj.fb_url);
-					//	$(".facebook span").html("<a href=" + obj.fb_url + ">" + obj.fb_url + "</a>");
-					} else {
-					//	$(".facebook span").text(obj.fb_url);
-					}
-					$(".profile_info .facebook span, .profile_info .facebook >img").show();
-					$(".profile_info .facebook .editfacebook").hide();
-					if ($(".editgithub input").val() !== "") {
-						$(".github span").text(obj.git_url);
-					//	$(".github span").html("<a href=" + obj.git_url + ">" + obj.git_url + "</a>");
-					} else {
-					//	$(".github span").text(obj.git_url);
-					}
-					$(".profile_info .github span, .profile_info .github >img").show();
-					$(".profile_info .github .editgithub").hide();
-				}
-			});
 
-    } else {
+	    if($(".profile_info .social .edittitle .edit_name").val().length > 0 || $(".profile_info .social .edittitle .edit_surname").val().length > 0) {
+
+		 var emptyText = 'No information yet.';
+
+		 // A function for adding the links in case no
+		 // links are present
+		 //
+		 $.fn.addlink = function(link, text) {
+			$( '<a/>', {
+				'href': link,
+				'text': text
+				}).appendTo( this.selector );
+		 };
+
+		 // Update call
+		 //
+		 $.ajax({
+					type: "PUT",
+					url: "/api/user/update",
+					data: obj,
+					datatype: "json",
+					success: function(response) {
+						console.log(response);
+
+						// Unfinished, so leaving comments in
+						//
+						$(".profile_info .savebtn_top").hide();
+						$(".profile_info .social .name").show();
+						$(".profile_info .social .edittitle").hide();
+						$(".profile_info .social .name").text(obj.first_name + " " + obj.last_name);
+						if ($(".editlinkedin input").val() !== "") {
+							if ( $(".linkedin span a").length == 0) {
+								$(".linkedin span").empty();
+								$(".linkedin span").addlink(obj.linkid_base + obj.linkid_url, "LinkedIn");
+							}
+							else {
+								$(".linkedin span a").text('LinkedIn');
+								$(".linkedin span a").attr('href', obj.linkid_base + obj.linkid_url);
+							}
+						//	$(".linkedin span").text(obj.linkid_url);
+						//	$(".linkedin span").html("<a href=" + obj.linkid_url + ">" + obj.linkid_url + "</a>");
+						} else {
+						//	$(".linkedin span").text(obj.linkid_url);
+						}
+						$(".profile_info .linkedin span, .profile_info .linkedin >img").show();
+						$(".profile_info .linkedin .editlinkedin").hide();
+						if ($(".editfacebook input").val() !== "") {
+							if ( $(".facebook span a").length == 0) {
+								$(".facebook span").empty();
+								$(".facebook span").addlink(obj.fb_base + obj.fb_url, "Facebook");
+							}
+							else {
+								$(".facebook span a").text("Facebook");
+								$(".facebook span a").attr('href', obj.fb_base + obj.fb_url);
+							}
+						//	$(".facebook span").html("<a href=" + obj.fb_url + ">" + obj.fb_url + "</a>");
+						} else {
+						//	$(".facebook span").text(obj.fb_url);
+						}
+						$(".profile_info .facebook span, .profile_info .facebook >img").show();
+						$(".profile_info .facebook .editfacebook").hide();
+						if ($(".editgithub input").val() !== "") {
+							if ( $(".github span a").length == 0) {
+								$(".github span").empty();
+								$(".github span").addlink(obj.git_base + obj.git_url, "Github");
+							}
+							else {
+								$(".github span a").text("GitHub");
+								$(".github span a").attr("href", obj.git_base + obj.git_url);
+							}
+						//	$(".github span").html("<a href=" + obj.git_url + ">" + obj.git_url + "</a>");
+						} else {
+						//	$(".github span").text(obj.git_url);
+						}
+						$(".profile_info .github span, .profile_info .github >img").show();
+						$(".profile_info .github .editgithub").hide();
+					}
+				});
+
+	    } else {
 			alert("Please enter your first or last name!");
 		}
    
