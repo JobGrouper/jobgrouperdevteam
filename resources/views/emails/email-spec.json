@@ -4,6 +4,23 @@
             "job_name": "Test Job"
         }
     },
+    "admin_job_begun": {
+        "render_data": {
+            "job_name": "Test Job"
+        }
+    },
+    "admin_new_job_application": {
+        "render_data": {
+            "employee_name": "Test Employee",
+            "job_name": "Test Job",
+            "id": 3
+        }
+    },
+    "buyer_adjustment_made_to_admin": {
+        "render_data": {
+            "job_title": "Test Job"
+        }
+    },
     "buyer_adjustment_made_to_buyers": {
         "scenarios": [
 	    "max_change_increase",
@@ -15,14 +32,14 @@
 	],
         "render_data": {
 	    "common": {
-	        "job_title": "Job",
-		"job_id": 1,
-		"changes": {
-		    "new_maximum": 12,
-		    "new_minimum": 6,
-		    "max_change": null,
-		    "min_change": null
-		}
+			"job_title": "Job",
+			"job_id": 1,
+			"changes": {
+				"new_maximum": 12,
+				"new_minimum": 6,
+				"max_change": null,
+				"min_change": null
+			}
 	    },
 	    "max_change_increase": {
 	        "changes": {
@@ -54,6 +71,291 @@
 	    }
 	}
     },
+	"buyer_adjustment_made_to_employee": {
+		"scenarios": [
+			"max_change_increase",
+			"max_change_decrease",
+			"min_change_increase",
+			"min_change_decrease",
+			"both_min_and_max",
+			"no_change"
+		],
+		"render_data": {
+			"common": {
+				"job_title": "Job",
+				"job_id": 1,
+				"changes": {
+					"new_maximum": 12,
+					"new_minimum": 6,
+					"max_change": null,
+					"min_change": null
+				}
+			},
+			"max_change_increase": {
+				"changes": {
+					"max_change": "increase"
+				}
+			},
+			"max_change_decrease": {
+				"changes": {
+					"max_change": "decrease"
+				}
+			},
+			"min_change_increase": {
+				"changes": {
+					"min_change": "increase"
+				}
+			},
+			"min_change_decrease": {
+				"changes": {
+					"min_change": "decrease"
+				}
+			},
+			"both_min_and_max": {
+				"changes": {
+					"min_change": "decrease",
+					"max_change": "increase"
+				}
+			},
+			"no_change": {
+			}
+		}
+	},
+	"buyer_adjustment_request_approved_to_buyers": {
+		"scenarios": [
+			"max_change_increase",
+			"max_change_decrease",
+			"min_change_increase",
+			"min_change_decrease",
+			"both_min_and_max",
+			"no_change"
+		],
+		"render_data": {
+			"common": {
+				"job_title": "Job",
+				"job_id": 1,
+				"employee_first_name":"Test",
+				"employee_name":"Test Employee",
+				"changes": {
+
+					"new_maximum": 12,
+					"new_minimum": 6,
+					"max_change": null,
+					"min_change": null
+				}
+			},
+			"max_change_increase": {
+				"changes": {
+					"max_change": "increase"
+				}
+			},
+			"max_change_decrease": {
+				"changes": {
+					"max_change": "decrease"
+				}
+			},
+			"min_change_increase": {
+				"changes": {
+					"min_change": "increase"
+				}
+			},
+			"min_change_decrease": {
+				"changes": {
+					"min_change": "decrease"
+				}
+			},
+			"both_min_and_max": {
+				"changes": {
+					"min_change": "decrease",
+					"max_change": "increase"
+				}
+			},
+			"no_change": {
+			}
+		}
+	},
+	"buyer_adjustment_request_approved_to_employee": {
+		"scenarios": [
+			"no_modified",
+			"request_min_modified",
+			"request_max_modified",
+			"both_min_and_max"
+		],
+		"render_data": {
+			"common": {
+				"job_title": "Job",
+				"job_id": 1,
+				"changes": {
+					"new_maximum": 12,
+					"new_minimum": 6,
+					"max_change": null,
+					"min_change": null
+				}
+			},
+			"no_modified": {
+				"changes": {
+					"request_modified": 0
+				}
+			},
+			"request_min_modified": {
+				"changes": {
+					"request_modified": 1,
+					"request_min_modified": 1,
+					"request_max_modified": 0,
+					"new_minimum": 4
+				}
+			},
+			"request_max_modified": {
+				"changes": {
+					"request_modified": 1,
+					"request_min_modified": 0,
+					"request_max_modified": 1,
+					"new_maximum": 10
+				}
+			},
+			"both_min_and_max": {
+				"changes": {
+					"request_modified": 1,
+					"request_min_modified": 1,
+					"request_max_modified": 1,
+					"new_minimum": 4,
+					"new_maximum": 10
+				}
+			}
+		}
+	},
+	"buyer_adjustment_request_denied_to_admin": {
+		"render_data": {
+			"employee_name": "Test Employee",
+			"job_title": "Test Job"
+		}
+	},
+	"buyer_adjustment_request_denied_to_buyers": {
+		"render_data": {
+			"job_title": "Test Job"
+		}
+	},
+	"buyer_adjustment_request_denied_to_employee": {
+		"render_data": {
+			"job_title": "Test Job"
+		}
+	},
+    "buyer_adjustment_request_start_work_to_admin": {
+		"render_data": {
+			"job_title": "Test Job",
+			"employee_name": "Test Employee"
+		}
+	},
+    "buyer_adjustment_request_start_work_to_buyers": {
+		"render_data": {
+			"job_title": "Test Job",
+			"employee_name": "Test Employee"
+		}
+	},
+    "buyer_adjustment_request_start_work_to_employee": {
+		"render_data": {
+			"job_title": "Test Job"
+		}
+	},
+	"buyer_adjustment_request_to_admin": {
+		"scenarios": [
+			"max_change",
+			"min_change",
+			"both_min_and_max"
+		],
+		"render_data": {
+			"common": {
+				"job_title": "Job",
+				"employee_name": "Test Employee",
+				"job_id": 1,
+				"changes": {
+					"current_minimum": 6,
+					"current_maximum": 12
+				}
+			},
+			"max_change": {
+				"changes": {
+					"max_change": 1,
+					"min_change": 0,
+					"new_maximum": 10
+				}
+			},
+			"min_change": {
+				"changes": {
+					"max_change": 0,
+					"min_change": 1,
+					"new_minimum": 5
+				}
+			},
+			"both_min_and_max": {
+				"changes": {
+					"max_change": 1,
+					"min_change": 1,
+					"new_maximum": 10,
+					"new_minimum": 5
+				}
+			}
+		}
+	},
+    "buyer_adjustment_request_to_buyers": {
+		"scenarios": [
+			"max_change",
+			"min_change_decrease",
+			"min_change_increase",
+			"both_min_increase_and_max",
+			"both_min_decrease_and_max"
+		],
+		"render_data": {
+			"common": {
+				"job_title": "Job",
+				"employee_name": "Test Employee",
+				"job_id": 1,
+				"changes": {
+					"current_minimum": 6,
+					"current_maximum": 12
+				}
+			},
+			"max_change": {
+				"changes": {
+					"max_change": 1,
+					"min_change": 0,
+					"new_maximum": 10
+				}
+			},
+			"min_change_decrease": {
+				"changes": {
+					"max_change": 0,
+					"min_change": "decrease",
+					"new_minimum": 5
+
+				}
+			},
+			"min_change_increase": {
+				"changes": {
+					"max_change": 0,
+					"min_change": "increase",
+					"new_minimum": 7
+
+				}
+			},
+			"both_min_increase_and_max": {
+				"changes": {
+					"max_change": 1,
+					"min_change": "increase",
+					"new_maximum": 10,
+					"new_minimum": 7
+				}
+			},
+			"both_min_decrease_and_max": {
+				"changes": {
+					"max_change": 1,
+					"min_change": "decrease",
+					"new_maximum": 10,
+					"new_minimum": 3
+				}
+			}
+		}
+	},
     "payment_seller_successful": {
 
     },
