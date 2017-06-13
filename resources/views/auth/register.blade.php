@@ -8,7 +8,7 @@
         <form role="form" method="POST" action="{{ url('/custom_register') }}">
             {{ csrf_field() }}
             <h2>Sign Up</h2>
-	    <p class="red">We're currently working on Facebook registration. Please sign up via email for now.</p>
+	    <!--<p class="red">We're currently working on Facebook registration. Please sign up via email for now.</p>-->
 	    @foreach ($errors->all() as $error)
 		<p>** {{ $error }} **</p>
 	    @endforeach
@@ -21,8 +21,7 @@
                 <label class="buyer employee_radio" for="employee">Prospective employee</label>
             </div>
             <div class="login_social buyers_only">
-                <!--<a href="/social_login/facebook">-->
-                <a>
+                <a href="/social_login/facebook">
                     <span class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i>Facebook</span>
                 </a>
 	        <a href="/social_login/twitter">

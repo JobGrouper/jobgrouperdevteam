@@ -6,12 +6,13 @@
             <form role="form" method="POST" action="{{ url('/auth/login') }}">
                 {{ csrf_field() }}
                 <h2>Log In</h2>
+		<!--
 		<p class="red">We're currently working on Facebook log in. If you registered with us via Facebook, please create
 		a new account via email.</p>
+		-->
                 <a href="/register" style="display: block; text-align: center; margin-bottom: 20px;">or register</a>
                 <div class="login_social">
-                    <!--<a href="/social_login/facebook">-->
-		    <a>
+                    <a href="/social_login/facebook">
                         <span class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i>Facebook</span>
                     </a>
                     <a href="/social_login/twitter">
