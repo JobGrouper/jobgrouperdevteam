@@ -26,49 +26,6 @@
                                 <span class="sent before">Leave request sent</span>
                             @endif
                         </h1>
-                        <div class="jobs_acc">
-                            <div class="workers">
-                                @if(count($job->sales()->get()) > 0)
-                                    @foreach($job->sales()->where('status', 'in_progress')->orWhere('status', '=', 'pending')->get() as $order)
-                                        <?php
-                                            $buyer = $order->buyer()->first();
-                                            $closeRequest = $order->close_order_requests()->where('originator_id', '=', $employee->id)->first();
-                                        ?>
-                                        @if($buyer)
-                                            <div class="workers_item clearfix" data-id="{{$order->id}}">
-                                                <div class="img_wrapper">
-                                                    <img src="{{ asset($buyer->image_url) }}" alt="alt">
-                                                </div>
-						<!--
-                                                <div class="rating">
-                                                    <div class="stars">
-                                                        <div class="yellow"></div>
-                                                    </div>
-                                                    <div class="rating_name">{{$buyer->fullname}}</div>
-                                                    <a href="/messages/{{$buyer->id}}">message
-                                                        ({{$employee->getNewMessages($buyer->id)}} new)</a>
-                                                </div>
-						-->
-                                                <div class="salary">
-                                                    <p>${{$job->salary}}/month</p>
-                                                    <p class="month">work {{$order->created_at->diffInMonths() + 1}}
-                                                        month{{(($order->created_at->diffInMonths() + 1) > 1 ? 's' : '') }}</p>
-                                                </div>
-                                                @if($order->status == 'closed')
-                                                    <button class="Request">Order closed</button>
-                                                @else
-                                                    <button class="request_buyer_removal cancelbtn"
-                                                            data-order_id="{{$order->id}}">Report Buyer
-                                                    </button>
-                                                @endif
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                @else
-                                    No orders yet
-                                @endif
-                            </div>
-                        </div>
                     </div>
                 @endforeach
             @else
@@ -91,49 +48,6 @@
                             {{--<span class="sent before">Leave request sent</span>--}}
                             {{--@endif--}}
                         </h1>
-                        <div class="jobs_acc">
-                            <div class="workers">
-                                @if(count($job->sales()->get()) > 0)
-                                    @foreach($job->sales()->whereIn('status', ['in_progress', 'pending'])->get() as $order)
-                                        <?php
-                                            $buyer = $order->buyer()->first();
-                                            $closeRequest = $order->close_order_requests()->where('originator_id', '=', $employee->id)->first();
-                                        ?>
-                                        <div class="workers_item clearfix" data-id="{{$order->id}}">
-                                            <div class="img_wrapper">
-                                                <img src="{{ asset($buyer->image_url) }}" alt="alt">
-                                            </div>
-						<!--
-                                            <div class="rating">
-                                                <div class="stars">
-                                                    <div class="yellow"></div>
-                                                </div>
-                                                <div class="rating_name">{{$buyer->fullname}}</div>
-                                                <a href="/messages/{{$buyer->id}}">message
-                                                    ({{$employee->getNewMessages($buyer->id)}} new)</a>
-                                            </div>
-						-->
-
-                                            <div class="salary">
-                                                <p>${{$job->salary}}/month</p>
-                                                <p class="month">work {{$order->created_at->diffInMonths() + 1}}
-                                                    month{{(($order->created_at->diffInMonths() + 1) > 1 ? 's' : '') }}</p>
-                                            </div>
-                                            @if($order->status == 'closed')
-                                                <button class="Request">Order closed</button>
-                                            @else
-                                                <button class="request_buyer_removal cancelbtn"
-                                                        data-order_id="{{$order->id}}">Report Buyer
-                                                </button>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                @else
-                                    No orders yet
-                                @endif
-
-                            </div>
-                        </div>
                     </div>
                 @endforeach
             @endif
@@ -171,10 +85,6 @@
                             <button request-id="{{$employeeRequest->id}}" class="request_close close_api">Cancel
                             </button>
                         </h1>
-
-                        <div class="jobs_acc">
-
-                        </div>
                     </div>
                 @endforeach
             @else
