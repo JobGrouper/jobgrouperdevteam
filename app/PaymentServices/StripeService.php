@@ -1119,7 +1119,11 @@ class StripeService implements PaymentServiceInterface {
 		// Retrieve and Deactivate old plan
 		//
 		$old_plan = $this->retrievePlan($job, $managed_account->id);
-		$this->deactivatePlan( $old_plan );
+
+		// ...if it exists, that is
+		if ($old_plan) {
+		  $this->deactivatePlan( $old_plan );
+		}
 
 		// Add plan to database
 		DB::table('stripe_plans')->insert(
